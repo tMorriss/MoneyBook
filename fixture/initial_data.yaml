@@ -1,0 +1,97 @@
+# Direction
+- model: web.Direction
+  pk: 0
+  fields:
+    name: 収入
+- model: web.Direction
+  pk: 1
+  fields:
+    name: 支出
+
+# Method
+- model: web.Method
+  pk: 1
+  fields:
+    order: 4
+    name: 現金
+    chargeable: false
+- model: web.Method
+  pk: 2
+  fields:
+    order: 3
+    name: 銀行
+    chargeable: false
+- model: web.Method
+  pk: 3
+  fields:
+    order: 0
+    name: nanaco
+    chargeable: true
+- model: web.Method
+  pk: 4
+  fields:
+    order: 0
+    name: Edy
+    chargeable: true
+- model: web.Method
+  pk: 5
+  fields:
+    order: 1
+    name: PayPay
+    chargeable: true
+- model: web.Method
+  pk: 6
+  fields:
+    order: 2
+    name: Kyash
+    chargeable: true
+
+# Genre
+- model: web.Genre
+  pk: -4
+  fields:
+    name: 収入
+- model: web.Genre
+  pk: -3
+  fields:
+    name: 貯金
+- model: web.Genre
+  pk: -2
+  fields:
+    name: 内部移動
+- model: web.Genre
+  pk: -1
+  fields:
+    name: 計算外
+- model: web.Genre
+  pk: 0
+  fields:
+    name: その他
+- model: web.Genre
+  pk: 1
+  fields:
+    name: 食費
+- model: web.Genre
+  pk: 2
+  fields:
+    name: インフラ
+- model: web.Genre
+  pk: 3
+  fields:
+    name: 必需品
+- model: web.Genre
+  pk: 4
+  fields:
+    name: 交際費
+- model: web.Genre
+  pk: 5
+  fields:
+    name: 娯楽
+- model: web.Genre
+  pk: 6
+  fields:
+    name: 交際費
+- model: web.Genre
+  pk: 7
+  fields:
+    name: 家賃
