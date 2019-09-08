@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'web.apps.WebConfig',
     'django.contrib.humanize',
+    'web.app.AccountsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -124,3 +125,5 @@ STATIC_URL = '/static/'
 APP_NAME = "MoneyBook"
 
 NUMBER_GROUPING = 3
+# ログイン後トップページにリダイレクト
+LOGIN_REDIRECT_URL = '/'
