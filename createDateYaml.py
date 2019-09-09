@@ -2,7 +2,7 @@ import pandas as pd
 import mysql.connector
 
 con = mysql.connector.connect(host='localhost', port=3306, user='moneybook', password='want2money', database='moneybook')
-query = "SELECT * FROM data WHERE date_format(date, '%Y-%m')='2019-08' ORDER BY date"
+query = "SELECT * FROM data WHERE date_format(date, '%Y-%m')='2019-08' or date_format(date, '%Y-%m')='2019-09' ORDER BY date"
 result = pd.read_sql(query, con)
 resultStr = ""
 for iRow in range(len(result)):
