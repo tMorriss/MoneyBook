@@ -1,19 +1,29 @@
 {% extends "web/_base.html" %}
+{% load static %}
 
 {% block title %}{{ app_name }}{% endblock %}
 
+{% block style %}
+<link rel="stylesheet" type="text/css" href="{% static 'web/index.css' %}">
+{% endblock %}
+
 {% block content %}
-{% if monthly_data %}
-<table>
-    {% for d in monthly_data %}
-        <tr>
-            <td>{{ d.date|date:"Y/m/d" }}</td>
-            <td>{{ d.item  }}</td>
-            <td>{{ d.price  }}</td>
-            <td>{{ d.method  }}</td>
-            <td>{{ d.genre  }}</td>
-        </tr>
-    {% endfor %}
-</table>
-{% endif %}
+<section class="flex-main">
+    <h1>一覧表示</h1>
+    <table class="tbl-inout tbl-boarder" align="center"><tr><th>日付</th><th>品目</th><th>金額</th><th>支払い方法</th><th>分類</th><th>編集</th>
+        {% for d in monthly_data %}
+            <tr class="data-row 
+                {% if d.checked and d.direction.pk == 1 %} tr-outgo
+                {% elif d.checked and d.direction.pk == 0 %} tr-income
+                {% endif %}">
+                <td>{{ d.date|date:"Y/m/d" }}</td>
+                <td>{{ d.item }}</td>
+                <td>{{ d.price }}</td>
+                <td>{{ d.method }}</td>
+                <td>{% if d.temp %}立替{% else %}{{ d.genre }}{% endif %}</td>
+                <td class='a-edit'><a href="#">編集</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+</section>
 {% endblock %}

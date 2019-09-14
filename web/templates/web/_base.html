@@ -2,8 +2,11 @@
 <html>
     <head>
         <title>{% block title %}{% endblock %}</title>
-        
+        {% load static %}
+        <link rel="shortcut icon" href="{% static 'web/favicon.ico' %}">
         <link href="https://fonts.googleapis.com/css?family=Parisienne" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="{% static 'web/style.css' %}">
+        {% block style %}{% endblock %}
         <meta charset="UTF-8">
     </head>
     <body>
@@ -18,7 +21,7 @@
         <nav>
             <ul>
                 <li><a href="{% url 'web:index' %}">ホーム</a></li>
-                <li><a href="#">追加</a></li>
+                <li><a href="{% url 'web:add' %}">追加</a></li>
                 <li><a href="#">統計</a></li>
                 <li><a href="#">検索</a></li>
                 <li><a href="#">ツール</a></li>

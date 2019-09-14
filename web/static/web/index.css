@@ -1,0 +1,66 @@
+.hidden-row {
+    display: none;
+}
+
+.window-title {
+    position: relative;
+    top: -17px;
+    background: #FFF;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.tbl-window {
+    border: solid 2px #000;
+    margin: 15px auto 20px auto;
+    padding: 0 10px 10px 10px;
+    border-radius: 15px;
+}
+
+.green-button {
+    background: #0f0;
+    border-radius: 5px;
+    border: 0.5px #000 solid;
+}
+
+#chart_container {
+    height: 25vw;
+    width: 25vw;
+}
+
+@media screen and (max-width: 980px) {
+    #chart_container {
+        height: 100vw;
+        width: 100vw;
+    }
+}
+
+/* 残高 */
+.tbl-all-balance {
+    background: #008000;
+    color: #fff;
+    margin-bottom: 20px;
+}
+
+/* フィルタ，残高と統計 */
+#filter-fixed, #statistic-fixed {
+    /* 一旦スクロール固定を解除 */
+    /* position: sticky;
+    top: 0px; */
+    background: #fff;
+}
+.both-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+/* スマホ */
+@media screen and (max-width: 980px) {
+    .both-nav {
+        display: block;
+    }
+}
+
+.flex-main {
+    flex-grow: 1;
+    margin: 0 1px;
+}
