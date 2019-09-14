@@ -7,6 +7,23 @@
         <meta charset="UTF-8">
     </head>
     <body>
+        <header>
+            <div class="header-cont1">
+                <h1><a href="{% url 'index' %}" class="logo">{{ app_name }}</a></h1>
+            </div>
+            <div class="header-cont2">
+                (ユーザ名)さん(<a href="#">ログアウト</a>)
+            </div>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="{% url 'index' %}">ホーム</a></li>
+                <li><a href="#">追加</a></li>
+                <li><a href="#">統計</a></li>
+                <li><a href="#">検索</a></li>
+                <li><a href="#">ツール</a></li>
+            </ul>
+        </nav>
         {% block content %}{% endblock %}
     </body>
 </html>
