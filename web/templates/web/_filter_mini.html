@@ -1,0 +1,52 @@
+{% load static %}
+<h1>フィルタ</h1>
+        <table class="tbl-window view-filter">
+            <tr><td>
+                <table class="tbl-common" style="margin: 1vw auto;">
+                    <tr>
+                        <td rowspan="2">
+                            <a href="#"><img src="{% static 'web/images/left.png' %}" alt="←" width="30vw" valign="middle"></a>
+                        </td>
+                        <td class="jump-date">
+                            <input type="text" name="year" id="jump_year" style="width:6ex" class="righter" value="{{ year }}" onkeypress="key_press_move(event.keyCode)" onfocus="deleteValue(this)">年
+                            <input type="text" name="month" id="jump_month" style="width:5ex" class="righter" value="{{ month }}" onkeypress="key_press_move(event.keyCode)" onfocus="deleteValue(this)">月
+                        </td>
+                        <td rowspan="2">
+                            <a href="#"><img src="{% static 'web/images/right.png' %}" alt="→" width="30 vw" valign="middle"></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input type="button" class="btn-apply" value="更新" onclick="move_month({{ year }}, {{ month }})"></td>
+                    </tr>
+                </table>
+            </td></tr>
+            <tr>
+                <td class="radio-green">
+                    {% for m in methods %}
+                        <input type="checkbox" class="check_filter" onChange="apply_filter()" name="filter-method[]" id="method-{{ m.pk }}" value="{{ m.pk }}" checked>
+                        <label for="method-{{ m.pk }}">{{ m.name }}</label>
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr><td>
+                <table class="radio-green" style="margin-top: 1vw;">
+                    <tr><td>
+                        {% for g in first_genres %}
+                            <input type="checkbox" class="check_filter" onChange="apply_filter()" name="filter-class[]" id="class-{{ g.pk }}" value="{{ g.pk }}" checked>
+                            <label for="class-{{ g.pk }}">{{ g.name }}</label>
+                        {% endfor %}
+                    </td></tr>
+                    <tr><td>
+                        {% for g in latter_genres %}
+                            <input type="checkbox" class="check_filter" onChange="apply_filter()" name="filter-class[]" id="class-{{ g.pk }}" value="{{ g.pk }}" checked>';
+                            <label for="class-{{ g.pk }}">{{ g.name }}</label>
+                        {% endfor %}
+                        </td>
+                    </tr>
+                </table>
+            </td></tr>
+            <tr><td>
+                <input type="button" value="全選択" class="btn-apply" onclick="select_all()">
+                <input type="button" value="全解除" class="btn-cancel" onclick="clear_filter()">
+            </td></tr>
+        </table>

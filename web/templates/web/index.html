@@ -1,29 +1,60 @@
 {% extends "web/_base.html" %}
 {% load static %}
+{% load humanize %}
 
 {% block title %}{{ app_name }}{% endblock %}
 
 {% block style %}
 <link rel="stylesheet" type="text/css" href="{% static 'web/index.css' %}">
+<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+<script type="text/javascript">
+    window.onload = function() {
+        var chart = new CanvasJS.Chart("chart_container", {
+            animationEnabled: true,
+            title: {text: "支出内訳"},
+            data: [{
+                type: "pie",
+                startAngle: 270,
+                radius: "80%",
+                yValueFormatString: "#,###,##0\"円\"",
+                indexLabel: "{label} {y}",
+                dataPoints: [
+                    {% for k,v in genres_outgo.items %}{y: {{ v }}, label: "{{ k.name }}"},
+                    {% endfor %}
+                ]
+            }]
+        });
+        chart.render();
+    }
+</script>
 {% endblock %}
 
 {% block content %}
-<section class="flex-main">
-    <h1>一覧表示</h1>
-    <table class="tbl-inout tbl-boarder" align="center"><tr><th>日付</th><th>品目</th><th>金額</th><th>支払い方法</th><th>分類</th><th>編集</th>
-        {% for d in monthly_data %}
-            <tr class="data-row 
-                {% if d.checked and d.direction.pk == 1 %} tr-outgo
-                {% elif d.checked and d.direction.pk == 0 %} tr-income
-                {% endif %}">
-                <td>{{ d.date|date:"Y/m/d" }}</td>
-                <td>{{ d.item }}</td>
-                <td>{{ d.price }}</td>
-                <td>{{ d.method }}</td>
-                <td>{% if d.temp %}立替{% else %}{{ d.genre }}{% endif %}</td>
-                <td class='a-edit'><a href="#">編集</a></td>
-            </tr>
-        {% endfor %}
-    </table>
-</section>
+<div class="both-nav">
+    <div id="filter-fixed" class="nav">
+        {% include "web/_add_mini.html" %}
+        {% include "web/_filter_mini.html" %}
+    </div>
+    <section class="flex-main">
+        <h1>一覧表示</h1>
+        <table class="tbl-inout tbl-boarder" align="center"><tr><th>日付</th><th>品目</th><th>金額</th><th>支払い方法</th><th>分類</th><th>編集</th>
+            {% for d in monthly_data %}
+                <tr class="data-row 
+                    {% if d.checked and d.direction.pk == 1 %} tr-outgo
+                    {% elif d.checked and d.direction.pk == 0 %} tr-income
+                    {% endif %}">
+                    <td>{{ d.date|date:"Y/m/d" }}</td>
+                    <td class="lefter">{{ d.item }}</td>
+                    <td class="righter">{{ d.price|intcomma }}</td>
+                    <td>{{ d.method }}</td>
+                    <td>{% if d.temp %}立替{% else %}{{ d.genre }}{% endif %}</td>
+                    <td class='a-edit'><a href="#">編集</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+    </section>
+    <div id="statistic-fixed" class="nav">
+        {% include "web/_balance_statisticMini.html" %}
+    </div>
+</div>
 {% endblock %}

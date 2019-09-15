@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'web.apps.WebConfig',
+    'django.contrib.humanize',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -121,3 +122,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 APP_NAME = "MoneyBook"
+
+NUMBER_GROUPING = 3

@@ -12,37 +12,37 @@
 - model: web.Method
   pk: 1
   fields:
-    order: 4
+    show_order: 4
     name: 現金
     chargeable: false
 - model: web.Method
   pk: 2
   fields:
-    order: 3
+    show_order: 3
     name: 銀行
     chargeable: false
 - model: web.Method
   pk: 3
   fields:
-    order: 0
+    show_order: 0
     name: nanaco
     chargeable: true
 - model: web.Method
   pk: 4
   fields:
-    order: 0
+    show_order: 0
     name: Edy
     chargeable: true
 - model: web.Method
   pk: 5
   fields:
-    order: 1
+    show_order: 1
     name: PayPay
     chargeable: true
 - model: web.Method
   pk: 6
   fields:
-    order: 2
+    show_order: 2
     name: Kyash
     chargeable: true
 
@@ -95,3 +95,9 @@
   pk: 7
   fields:
     name: 家賃
+
+# FixedCost
+- model: web.FixedCost
+  pk: 1
+  fields:
+    price: 110000
