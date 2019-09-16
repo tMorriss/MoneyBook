@@ -32,6 +32,9 @@ class Method(models.Model):
     def list():
         return Method.objects.filter(show_order__gt=0).order_by('show_order')
 
+    def unUsedList():
+        return Method.objects.filter(show_order__lte=0).order_by('id')
+
 class Genre(models.Model):
     name = models.CharField(max_length=10)
 

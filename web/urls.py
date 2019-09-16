@@ -5,5 +5,6 @@ app_name = 'web'
 urlpatterns = [
     path('', views.index, name='index'),
     path('add', views.add, name='add'),
-    path('statistics', views.statistics, name='statistics')
+    path('statistics', views.statistics, name='statistics'),
+    path('search', views.search, name='search'),
 ]
