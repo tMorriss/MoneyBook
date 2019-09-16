@@ -3,7 +3,8 @@ from django.http import HttpResponse
 from .models import *
 from django.template import loader
 from django.conf import settings
-from datetime import datetime
+from datetime import date, datetime
+import calendar
 
 def index(request):
     if "year" in request.GET and "month" in request.GET:
@@ -17,7 +18,7 @@ def index(request):
     # 全データ
     allData = Data.getAllData()
     # 今月のデータ
-    monthlyData = Data.getMonthData(int(year), int(month))
+    monthlyData = Data.sort_date_descending(Data.getMonthData(int(year), int(month)))
     # 支払い方法リスト
     methods = Method.list()
     # 支払い方法ごとの残高
@@ -88,21 +89,46 @@ def statistics(request):
     # 月ごとの収入、支出
     monthList = list(range(1, 13))
     monthIOB = []
-    monthIncome = {}
-    monthOutgo = {}
-    for m in monthList:
-        monthIncome[m] = Data.getIncomeSum(Data.getMonthData(now.year, m))
-        monthOutgo[m] = Data.getOutgoSum(Data.getMonthData(now.year, m))
-        i = Data.getIncomeSum(Data.getMonthData(now.year, m))
-        o = Data.getOutgoSum(Data.getMonthData(now.year, m))
-        monthIOB.append(InOutBalance(m, i, o, i-o))
+    monthAllIOB = []
+    beforeBalances = []
+    infraCosts = []
+    FoodCosts = []
+    for iMonth in range(len(monthList)):
+        monthlyData = Data.getMonthData(now.year, monthList[iMonth])
+        monthlyNormalData = Data.getNormalData(monthlyData)
+        t = Data.getTempAndDeposit(monthlyData)
+        i = Data.getIncomeSum(monthlyNormalData) - t
+        o = Data.getOutgoSum(monthlyNormalData) - t
+
+        # if i != 0 and o != 0:
+        monthIOB.append(InOutBalance(monthList[iMonth], i, o, i - o))
+        
+        monthlyDataWithoutInMove = Data.getDataWithoutInmove(monthlyData)
+        i = Data.getIncomeSum(monthlyDataWithoutInMove) - t
+        o = Data.getOutgoSum(monthlyDataWithoutInMove) - t
+        monthAllIOB.append(InOutBalance(monthList[iMonth], i, o, i - o))
+
+        d = Data.getRangeData(None, datetime(now.year, monthList[iMonth], calendar.monthrange(now.year, monthList[iMonth])[1]))
+        beforeBalances.append(LabelValue(monthList[iMonth], Data.getIncomeSum(d) - Data.getOutgoSum(d)))
+
+        e = Data.getSum(Data.getKeywordData(monthlyData, "電気代"), 1)
+        g = Data.getSum(Data.getKeywordData(monthlyData, "ガス代"), 1)
+        w = Data.getSum(Data.getKeywordData(monthlyData, "水道代"), 1)
+        if (w > 0):
+            if iMonth > 0:
+                infraCosts[iMonth - 1].water = w / 2
+        infraCosts.append(InfraCost(monthList[iMonth], e + g + w / 2, e, g, w))
+
+        FoodCosts.append(LabelValue(monthList[iMonth], Data.getFoodCosts(monthlyData)))
 
     content = {
         'year': now.year,
         'month': now.month,
         'month_list': monthList,
         'month_io_list': monthIOB,
-        'month_income': monthIncome,
-        'month_outgo': monthOutgo,
+        'month_all_io_list': monthAllIOB,
+        'before_balance': beforeBalances,
+        'infra_costs': infraCosts,
+        'food_costs': FoodCosts,
     }
     return render(request, 'web/statistics.html', content)

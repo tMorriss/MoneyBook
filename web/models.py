@@ -1,8 +1,7 @@
 from django.db import models, connection
 from django.db.models import Sum
-from datetime import date
+from datetime import date, datetime
 import calendar
-from datetime import datetime
 
 class FixedCostPlan(models.Model):
     price = models.IntegerField(default=0)
@@ -62,14 +61,23 @@ class Data(models.Model):
     # 全データを持ってくる
     def getAllData():
         return Data.objects.all()
+
+    # 指定期間のデータを持ってくる
+    def getRangeData(start, end):
+        if start == None:
+            return Data.objects.filter(date__lte=end)
+        elif end == None:
+            return Data.objects.filter(date__gte=start)
+        else:
+            return Data.objects.filter(date__range=(start, end))
+
     # 指定月のデータを持ってくる
     def getMonthData(year, month):
-        y = str(year)
-        m = '{0:02d}'.format(month)
-        start = y + "-" + m + "-1"
-        end = y + "-" + m + "-" + str(calendar.monthrange(year, month)[1])
-        return Data.objects.filter(date__range=(start, end)).order_by('-date', '-id')
+        start = date(year, month, 1)
+        end = date(year, month, calendar.monthrange(year, month)[1])
+        return Data.getRangeData(start, end)
 
+    # 収入や支出の合計
     def getSum(data, direction):
         v = data.filter(direction=direction).aggregate(Sum('price'))['price__sum']
         if v == None:
@@ -84,16 +92,24 @@ class Data(models.Model):
 
     # methodでフィルタ
     def getMethodData(data, methodId):
-        return data.filter(method=methodId).order_by('date')
+        return data.filter(method=methodId)
     # genreでフィルタ
     def getGenreData(data, genreId):
-        return data.filter(genre=genreId).order_by('date')
+        return data.filter(genre=genreId)
 
     # 立替と貯金をフィルタ
     def getTempAndDeposit(data):
         temp = data.filter(temp=1).aggregate(Sum('price'))['price__sum']
+        if temp == None:
+            temp = 0
         deposit = data.filter(genre=-3).aggregate(Sum('price'))['price__sum']
+        if deposit == None:
+            deposit = 0
         return temp + deposit
+
+    # 内部移動だけを排除
+    def getDataWithoutInmove(data):
+        return data.exclude(genre=-2)
 
     # 計算外と内部移動を排除
     def getNormalData(data):
@@ -108,9 +124,38 @@ class Data(models.Model):
         variableGenres = [0, 3, 4, 5, 6]
         return data.filter(genre__in=variableGenres)
 
+    def getFoodCosts(data):
+        i = Data.getSum(Data.getGenreData(data, 1).filter(temp=1), 0)
+        o = Data.getSum(Data.getGenreData(data, 1), 1)
+        return o - i
+
+    # 日付順にソート
+    def sort_date_ascending(data):
+        return data.order_by('date', 'id')
+    # 日付の逆にソート
+    def sort_date_descending(data):
+        return data.order_by('-date', '-id')
+
+    # キーワード検索
+    def getKeywordData(data, keyword):
+        return data.filter(item__contains=keyword)
+
 class InOutBalance:
     def __init__(self, l, i, o, b):
         self.label = l
         self.income = i
         self.outgo = o
         self.balance = b
+
+class LabelValue:
+    def __init__(self, l, v):
+        self.label = l
+        self.value = v
+
+class InfraCost:
+    def __init__(self, l, t, e, g, w):
+        self.label = l
+        self.total = t
+        self.electricity = e
+        self.gus = g
+        self.water = w
