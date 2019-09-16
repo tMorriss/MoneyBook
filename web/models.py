@@ -4,14 +4,14 @@ from datetime import date
 import calendar
 from datetime import datetime
 
-class FixedCost(models.Model):
+class FixedCostPlan(models.Model):
     price = models.IntegerField(default=0)
 
     def __str__(self):
         return self.price
 
     def get():
-        return FixedCost.objects.all().first().price
+        return FixedCostPlan.objects.all().first().price
 
 class Direction(models.Model):
     name = models.CharField(max_length=2)

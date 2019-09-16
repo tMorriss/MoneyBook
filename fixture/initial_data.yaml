@@ -97,7 +97,7 @@
     name: 家賃
 
 # FixedCost
-- model: web.FixedCost
+- model: web.FixedCostPlan
   pk: 1
   fields:
     price: 110000

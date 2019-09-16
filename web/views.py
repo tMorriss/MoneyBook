@@ -59,7 +59,7 @@ def index(request):
         'total_inout': totalIncome - totalOutgo,
         'fixed_outgo': fixedOutgo,
         'variable_outgo': variableOutgo,
-        'variable_remain': totalIncome - max(FixedCost.get(), fixedOutgo) - variableOutgo,
+        'variable_remain': totalIncome - max(FixedCostPlan.get(), fixedOutgo) - variableOutgo,
         'all_income': Data.getIncomeSum(monthlyData),
         'all_outgo': Data.getOutgoSum(monthlyData),
         'genres_outgo': positiveGenresOutgo,

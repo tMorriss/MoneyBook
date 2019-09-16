@@ -4,26 +4,83 @@
 
 {% block content %}
 <section>
+    <h1>銀行チャージ</h1>
+    <form action="{% url 'web:add' %}" method="post">
+        <table class="tbl-add tbl-common fcs-blue">
+            <tr>
+                <th>日付</th>
+                <td>
+                    <input type="text" id="c_year" style="width:6ex" class="righter" onkeypress="key_press_charge(event.keyCode)" value="{{ year }}">年
+                    <input type="text" id="c_month" style="width:5ex" class="righter" onkeypress="key_press_charge(event.keyCode)" value="{{ month }}">月
+                    <input type="text" id="c_day" style="width:5ex" class="righter" onkeypress="key_press_charge(event.keyCode)" autofocus>日
+                </td>
+            </tr>
+            <tr><th>金額</th><td><input type="text" id="c_price" style="width:10ex" class="righter" onkeypress="key_press_charge(event.keyCode)">円</td></tr>
+            <tr>
+                <th>移動先</th>
+                <td class="radio-green">
+                    {% for m in methods %}
+                        <input type="radio" name="c_method" value="{{ m.pk }}" id="c_method-{{ m.pk }}"{% if m == methods.first %} checked{% endif %} onkeypress="key_pressadd(event.keyCode)">
+                        <label for="c_method-{{ m.pk }}">{{ m.name }}</label>
+                    {% endfor %}
+                </td>
+            </tr>
+        </table>
+        <input type="button" value="追加" class="btn-apply" onclick="send_charge()">
+    </form>
+    <h1>内部移動追加</h1>
+    <form action="{% url 'web:add' %}" method="post">
+        <table class="tbl-add tbl-common fcs-blue">
+            <tr>
+                <th>日付</th>
+                <td>
+                    <input type="text" id="m_year" style="width:6ex" class="righter" onkeypress="key_press_charge(event.keyCode)" value="{{ year }}">年
+                    <input type="text" id="m_month" style="width:5ex" class="righter" onkeypress="key_press_charge(event.keyCode)" value="{{ month }}">月
+                    <input type="text" id="m_day" style="width:5ex" class="righter" onkeypress="key_press_charge(event.keyCode)" autofocus>日
+                </td>
+            </tr>
+            <tr><th>金額</th><td><input type="text" id="m_price" style="width:10ex" class="righter" onkeypress="key_press_charge(event.keyCode)">円</td></tr>
+            <tr>
+                <th>移動元</th>
+                <td class="radio-green">
+                    {% for m in methods %}
+                        <input type="radio" name="m_before_method" value="{{ m.pk }}" id="m_before_method-{{ m.pk }}"{% if m == methods.first %} checked{% endif %} onkeypress="key_pressadd(event.keyCode)">
+                        <label for="m_before_method-{{ m.pk }}">{{ m.name }}</label>
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <th>移動先</th>
+                <td class="radio-green">
+                    {% for m in methods %}
+                        <input type="radio" name="m_after_method" value="{{ m.pk }}" id="m_after_method-{{ m.pk }}"{% if m == methods.first %} checked{% endif %} onkeypress="key_pressadd(event.keyCode)">
+                        <label for="m_after_method-{{ m.pk }}">{{ m.name }}</label>
+                    {% endfor %}
+                </td>
+            </tr>
+        </table>
+        <input type="button" value="追加" class="btn-apply" onclick="send_intra_move()">
+    </form>
     <h1>収入支出追加</h1>
-    <form action="url 'web:add' %}" method="post">
+    <form action="{% url 'web:add' %}" method="post">
         {% csrf_token %}
         <table class="tbl-add tbl-common fcs-blue">
             <tr>
                 <th>日付</th>
                 <td>
-                    <input type="text" id="m_year" style="width:6ex" class="righter" onkeypress="key_press_add(event.keyCode)" value={{ year }}>年
-                    <input type="text" id="m_month" style="width:5ex" class="righter" onkeypress="key_press_add(event.keyCode)" value={{ month }}>月
-                    <input type="text" id="m_day" style="width:5ex" class="righter" onkeypress="key_press_add(event.keyCode)">日
+                    <input type="text" id="a_year" style="width:6ex" class="righter" onkeypress="key_press_add(event.keyCode)" value={{ year }}>年
+                    <input type="text" id="a_month" style="width:5ex" class="righter" onkeypress="key_press_add(event.keyCode)" value={{ month }}>月
+                    <input type="text" id="a_day" style="width:5ex" class="righter" onkeypress="key_press_add(event.keyCode)">日
                 </td>
             </tr>
-            <tr><th>品目</th><td><input type="text" id="m_item" style="width:30ex" onkeypress="key_press_intra(event.keyCode)"></td></tr>
-            <tr><th>金額</th><td><input type="text" id="m_price" style="width:10ex" class="righter" onkeypress="key_press_intra(event.keyCode)">円</td></tr>
+            <tr><th>品目</th><td><input type="text" id="a_item" style="width:30ex" onkeypress="key_press_intra(event.keyCode)"></td></tr>
+            <tr><th>金額</th><td><input type="text" id="a_price" style="width:10ex" class="righter" onkeypress="key_press_intra(event.keyCode)">円</td></tr>
             <tr>
                 <th>方向</th>
                 <td class="radio-green">
                     {% for d in directions %}
-                        <input type="radio" name="m_direction" value="{{ d.pk }}" id="m_direction-{{ d.pk }}"{% if d == directions.first %} checked{% endif %} onkeypress="key_press_add(event.keyCode)">
-                        <label for="m_direction-{{ d.pk }}">{{ d.name }}</label>
+                        <input type="radio" name="a_direction" value="{{ d.pk }}" id="a_direction-{{ d.pk }}"{% if d == directions.first %} checked{% endif %} onkeypress="key_press_add(event.keyCode)">
+                        <label for="a_direction-{{ d.pk }}">{{ d.name }}</label>
                     {% endfor %}
                 </td>
             </tr>
@@ -31,8 +88,8 @@
                 <th>支払い方法</th>
                 <td class="radio-green">
                     {% for m in methods %}
-                        <input type="radio" name="m_method" value="{{ m.pk }}" id="m_method-{{ m.pk }}"{% if m == methods.first %} checked{% endif %} onkeypress="key_pressadd(event.keyCode)">
-                        <label for="m_method-{{ m.pk }}">{{ m.name }}</label>
+                        <input type="radio" name="a_method" value="{{ m.pk }}" id="a_method-{{ m.pk }}"{% if m == methods.first %} checked{% endif %} onkeypress="key_pressadd(event.keyCode)">
+                        <label for="a_method-{{ m.pk }}">{{ m.name }}</label>
                     {% endfor %}
                 </td>
             </tr>
@@ -40,12 +97,12 @@
                 <th>分類</th>
                 <td class="radio-green">
                     {% for g in first_genres %}
-                        <input type="radio" name="m_genre" value="{{ g.pk }}" id="m_genre-{{ g.pk }}"{% if g == first_genres.first %} checked{% endif %} onkeypress="key_press_add(event.keyCode)">
-                        <label for="m_genre-{{ g.pk }}">{{ g.name }}</label>
+                        <input type="radio" name="a_genre" value="{{ g.pk }}" id="a_genre-{{ g.pk }}"{% if g == first_genres.first %} checked{% endif %} onkeypress="key_press_add(event.keyCode)">
+                        <label for="a_genre-{{ g.pk }}">{{ g.name }}</label>
                     {% endfor %}
                     {% for g in latter_genres %}
-                        <input type="radio" name="m_genre" value="{{ g.pk }}" id="m_genre-{{ g.pk }}" onkeypress="key_press_add(event.keyCode)">
-                        <label for="m_genre-{{ g.pk }}">{{ g.name }}</label>
+                        <input type="radio" name="a_genre" value="{{ g.pk }}" id="a_genre-{{ g.pk }}" onkeypress="key_press_add(event.keyCode)">
+                        <label for="a_genre-{{ g.pk }}">{{ g.name }}</label>
                     {% endfor %}
                 </td>
             </tr>
@@ -53,8 +110,8 @@
                 <th>立替</th>
                 <td class="radio-green">
                     {% for k,v in temps.items %}
-                        <input type="radio" name="m_tmp" value="{{ k }}" id="m_temp-{{ k }}"{% if k == 0 %} checked{% endif %} onkeypress="key_press_add(event.keyCode)">
-                        <label for="m_tmp-{{ k }}">{{ v }}</label>
+                        <input type="radio" name="a_tmp" value="{{ k }}" id="a_temp-{{ k }}"{% if k == 0 %} checked{% endif %} onkeypress="key_press_add(event.keyCode)">
+                        <label for="a_tmp-{{ k }}">{{ v }}</label>
                     {% endfor %}
                 </td>
             </tr>
