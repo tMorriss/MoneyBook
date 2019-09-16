@@ -21,14 +21,15 @@ def index(request):
     # 支払い方法リスト
     methods = Method.list()
     # 支払い方法ごとの残高
-    methodsBalance = {}
-    monthlyMethodsIncome = {}
-    monthlyMethodsOutgo = {}
+    methodsIOB = []
+    methodsMonthlyIOB = []
     for m in methods:
         d = Data.getMethodData(allData, m.pk)
-        methodsBalance[m] = Data.getIncomeSum(d) - Data.getOutgoSum(d)
-        monthlyMethodsIncome[m] = Data.getIncomeSum(Data.getMethodData(monthlyData, m.pk))
-        monthlyMethodsOutgo[m] = Data.getOutgoSum(Data.getMethodData(monthlyData, m.pk))
+        methodsIOB.append(InOutBalance(m, None, None, Data.getIncomeSum(d) - Data.getOutgoSum(d)))
+
+        i = Data.getIncomeSum(Data.getMethodData(monthlyData, m.pk))
+        o = Data.getOutgoSum(Data.getMethodData(monthlyData, m.pk))
+        methodsMonthlyIOB.append(InOutBalance(m, i, o, None))
 
     # 立替と貯金
     monthlyTempAndDeposit = Data.getTempAndDeposit(monthlyData)
@@ -52,8 +53,7 @@ def index(request):
         'methods': methods,
         'first_genres': Genre.first_list(),
         'latter_genres': Genre.latter_list(),
-        'all_balance': Data.getSum(allData, 0) - Data.getSum(allData, 1),
-        'methods_balance': methodsBalance,
+        'total_balance': Data.getSum(allData, 0) - Data.getSum(allData, 1),
         'total_income': totalIncome,
         'total_outgo': totalOutgo,
         'total_inout': totalIncome - totalOutgo,
@@ -63,8 +63,8 @@ def index(request):
         'all_income': Data.getIncomeSum(monthlyData),
         'all_outgo': Data.getOutgoSum(monthlyData),
         'genres_outgo': positiveGenresOutgo,
-        'methods_income': monthlyMethodsIncome,
-        'methods_outgo': monthlyMethodsOutgo,
+        'methods_iob': methodsIOB,
+        'methods_monthly_iob': methodsMonthlyIOB,
     }
     return render(request, 'web/index.html', content)
 
@@ -81,3 +81,28 @@ def add(request):
         'temps': {0:"No", 1:"Yes"},
     }
     return render(request, 'web/add.html', content)
+
+def statistics(request):
+    now = datetime.now()
+
+    # 月ごとの収入、支出
+    monthList = list(range(1, 13))
+    monthIOB = []
+    monthIncome = {}
+    monthOutgo = {}
+    for m in monthList:
+        monthIncome[m] = Data.getIncomeSum(Data.getMonthData(now.year, m))
+        monthOutgo[m] = Data.getOutgoSum(Data.getMonthData(now.year, m))
+        i = Data.getIncomeSum(Data.getMonthData(now.year, m))
+        o = Data.getOutgoSum(Data.getMonthData(now.year, m))
+        monthIOB.append(InOutBalance(m, i, o, i-o))
+
+    content = {
+        'year': now.year,
+        'month': now.month,
+        'month_list': monthList,
+        'month_io_list': monthIOB,
+        'month_income': monthIncome,
+        'month_outgo': monthOutgo,
+    }
+    return render(request, 'web/statistics.html', content)

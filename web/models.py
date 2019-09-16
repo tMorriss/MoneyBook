@@ -108,3 +108,9 @@ class Data(models.Model):
         variableGenres = [0, 3, 4, 5, 6]
         return data.filter(genre__in=variableGenres)
 
+class InOutBalance:
+    def __init__(self, l, i, o, b):
+        self.label = l
+        self.income = i
+        self.outgo = o
+        self.balance = b

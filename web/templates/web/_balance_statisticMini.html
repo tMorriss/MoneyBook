@@ -3,20 +3,20 @@
 <table class="tbl-all-balance">
     <tr>
         <td>総残高</td>
-        <td>{{ all_balance|intcomma }}</td>
+        <td>{{ total_balance|intcomma }}</td>
     </tr>
 </table>
 
 <!-- 支払い方法一覧 -->
 <table class="tbl-common">
     <tr>
-        {% for m in methods_balance.keys %}
-            <th>{{ m.name }}</th>
+        {% for m in methods_iob %}
+            <th>{{ m.label }}</th>
         {% endfor %}
     </tr>
     <tr>
-        {% for v in methods_balance.values %}
-            <td>{{ v|intcomma }}</td>
+        {% for m in methods_iob %}
+            <td>{{ m.balance|intcomma }}</td>
         {% endfor %}
     </tr>
 </table>
@@ -60,15 +60,14 @@
 <table class="tbl-common">
     <tr>
         <th></th>
-        <!-- Genre名一覧 -->
-        {% for m in methods_income.keys %}<th>{{ m }}</th>{% endfor %}
+        {% for m in methods_iob %}<th>{{ m.label }}</th>{% endfor %}
     </tr>
     <tr>
         <th>収入</th>
-        {% for v in methods_income.values %}<td>{{ v|intcomma }}</td>{% endfor %}
+        {% for m in methods_monthly_iob %}<td>{{ m.income|intcomma }}</td>{% endfor %}
     </tr>
     <tr>
         <th>支出</th>
-        {% for v in methods_outgo.values %}<td>{{ v|intcomma }}</td>{% endfor %}
+        {% for m in methods_monthly_iob %}<td>{{ m.outgo|intcomma }}</td>{% endfor %}
     </tr>
 </table>
