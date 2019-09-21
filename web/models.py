@@ -133,15 +133,66 @@ class Data(models.Model):
         return o - i
 
     # 日付順にソート
-    def sort_date_ascending(data):
+    def sortDateAscending(data):
         return data.order_by('date', 'id')
     # 日付の逆にソート
-    def sort_date_descending(data):
+    def sortDateDescending(data):
         return data.order_by('-date', '-id')
 
     # キーワード検索
     def getKeywordData(data, keyword):
         return data.filter(item__contains=keyword)
+
+    def getCashData(data):
+        return Data.getMethodData(data, 1)
+
+    def getBankData(data):
+        return Data.getMethodData(data, 2)
+
+    def getUncheckedData(data):
+        return Data.sortDateAscending(data.filter(checked=0))
+
+class CheckedDate(models.Model):
+    method = models.ForeignKey(Method, on_delete=models.CASCADE)
+    date = models.DateField()
+
+    def get(pk):
+        return CheckedDate.objects.get(pk=pk)
+
+class CreditCheckedDate(models.Model):
+    show_order = models.IntegerField(default=0)
+    name = models.CharField(max_length=200)
+    date = models.DateField()
+    price = models.IntegerField(default=0)
+
+    def getAll():
+        return CreditCheckedDate.objects.all().order_by("show_order")
+
+class CachebackCheckedDate(models.Model):
+    show_order = models.IntegerField(default=0)
+    name = models.CharField(max_length=200)
+    date = models.DateField()
+
+    def getAll():
+        return CachebackCheckedDate.objects.all().order_by("show_order")
+
+class BankBalance(models.Model):
+    show_order = models.IntegerField(default=0)
+    name = models.CharField(max_length=200)
+    price = models.IntegerField(default=0)
+
+    def getAll():
+        return BankBalance.objects.all().order_by("show_order")
+
+class SeveralCosts(models.Model):
+    name = models.CharField(max_length=200)
+    price = models.IntegerField(default=0)
+
+    def getFixedCostMark():
+        return SeveralCosts.objects.get(name="FixedCostMark").price
+
+    def getActualCashBalance():
+        return SeveralCosts.objects.get(name="ActualCashBalance").price
 
 class InOutBalance:
     def __init__(self, l, i, o, b):
@@ -149,6 +200,12 @@ class InOutBalance:
         self.income = i
         self.outgo = o
         self.balance = b
+
+class BalanceDate:
+    def __init__(self, m, b, d):
+        self.method = m
+        self.balance = b
+        self.date = d
 
 class LabelValue:
     def __init__(self, l, v):

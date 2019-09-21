@@ -101,3 +101,93 @@
   pk: 1
   fields:
     price: 110000
+
+# CheckedDate
+- model: web.CheckedDate
+  pk: 1
+  fields:
+    method: 1
+    date: 2019-09-11
+- model: web.CheckedDate
+  pk: 2
+  fields:
+    method: 2
+    date: 2019-09-14
+- model: web.CheckedDate
+  pk: 3
+  fields:
+    method: 3
+    date: 2019-07-06
+- model: web.CheckedDate
+  pk: 4
+  fields:
+    method: 4
+    date: 2019-06-28
+- model: web.CheckedDate
+  pk: 5
+  fields:
+    method: 5
+    date: 2019-09-11
+- model: web.CheckedDate
+  pk: 6
+  fields:
+    method: 6
+    date: 2019-09-21
+
+# CreditCheckedDate
+- model: web.CreditCheckedDate
+  pk: 1
+  fields:
+    show_order: 1
+    name: THE POINT
+    date: 2019-09-27
+    price: 0
+- model: web.CreditCheckedDate
+  pk: 2
+  fields:
+    show_order: 2
+    name: WallMart
+    date: 2019-09-27
+    price: 0
+- model: web.CreditCheckedDate
+  pk: 3
+  fields:
+    show_order: 3
+    name: JRE CARD
+    date: 2019-09-27
+    price: 0
+- model: web.CreditCheckedDate
+  pk: 4
+  fields:
+    show_order: 4
+    name: Yahoo!カード
+    date: 2019-09-27
+    price: 0
+
+# CachebackCheckedDate
+- model: web.CachebackCheckedDate
+  pk: 1
+  fields:
+    show_order: 1
+    name: Paypay
+    date: 2019-09-27
+
+# BankBalance
+- model: web.BankBalance
+  pk: 1
+  fields:
+    show_order: 1
+    name: みずほ
+    price: 400000
+
+# SeveralCosts
+- model: web.SeveralCosts
+  pk: 1
+  fields:
+    name: FixedCostMark
+    price: 110000
+- model: web.SeveralCosts
+  pk: 2
+  fields:
+    name: ActualCashBalance
+    price: 50000

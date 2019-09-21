@@ -1,0 +1,115 @@
+{% extends "web/_base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}{{ app_name }} Tools{% endblock %}
+
+{% block content %}
+<section>
+    <h1>現金差額計算</h1>
+    <table class="tbl-common">
+        <tr>
+            <th>記録</th>
+            <td id="written_balance" class="righter">{{ cash_balance| intcomma }}</td>
+        </tr>
+        <tr>
+            <th>実際</th>
+            <td><input type="text" class="righter" id="actual_balance" style="width:10ex" onfocus="delete_value('actual_balance')" onblur="separate_value('actual_balance')" onkeypress="key_press_diff(event.keyCode)" value="{{ actual_cash_balance| intcomma }}"></td>
+        </tr>
+        <tr><th>差額</th><td id="balance_diff" class="righter"></td></tr>
+    </table>
+    <input type="button" class="btn-apply" value="計算" onclick="calculate_diff()" onkeypress="key_press_diff(event.keyCode)">
+
+    <h1>確認済み日付</h1>
+    <table class="tbl-add tbl-common">
+        <tr>
+            <td colspan="3">
+                <input type="text" name="year" style="width:6ex" class="righter" id="check-year" value="{{ year }}">年
+                <input type="text" name="month" style="width:5ex" class="righter" id="check-month" value="{{ month }}">月
+                <input type="text" name="day" style="width:5ex" class="righter" id="check-day" value="{{ day }}">日
+            </td>
+        </tr>
+        {% for m in methods_bd %}
+            <tr>
+                <td><input type="button" class="btn-apply" value="{{ m.method.name }}" onclick="update_checked_date({{ m.method.pk }})"></td>
+                <td>現在: {{ m.date|date:"Y"}}年{{ m.date|date:"m" }}月{{ m.date|date:"d" }}日</td>
+                <td class="righter">{{ m.balance|intcomma }}円</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <h1>各種確認日</h1>
+    <table class="tbl-add tbl-common">
+        <tr>
+            <td colspan="3">
+                <input type="text" name="year" style="width:6ex" class="righter" id="check-year" value="{{ year }}">年
+                <input type="text" name="month" style="width:5ex" class="righter" id="check-month">月
+                <input type="text" name="day" style="width:5ex" class="righter" id="check-day">日
+            </td>
+        </tr>
+        {% for c in credit_checked_date %}
+            <tr>
+                <td><input type="button" class="btn-apply" value="{{ c.name }}" onclick="update_credit_checked_date({{ c.pk }})"></td>
+                <td>最新確定引き落とし日: {{ c.date|date:"Y"}}年{{ c.date|date:"m" }}月{{ c.date|date:"d" }}日</td>
+            </tr>
+        {% endfor %}
+        {% for c in cacheback_checked_date %}
+            <tr>
+                <td><input type="button" class="btn-apply" value="{{ c.name }}" onclick="update_credit_checked_date({{ c.pk }})"></td>
+                <td>キャッシュバック確認: {{ c.date|date:"Y"}}年{{ c.date|date:"m" }}月{{ c.date|date:"d" }}日</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <h1>固定費目標額</h1>
+    <table class="tbl-common">
+        <tr>
+            <td><input type="text" class="righter" id="txt-fixed-cost" style="width:10ex" onfocus="unseparate_value('txt-fixed-cost')" onblur="separate_value('txt-fixed-cost')" onkeypress="key_press_fixed(event.keyCode)" value="{{ fixed_cost_mark| intcomma }}"></td>
+            <td><input type="button" value="更新" class="btn-apply" onclick="update_fixed_cost()" onkeypress="key_press_fixed(event.keyCode)"></td>
+        </tr>
+    </table>
+
+    <h1 id="unchecked-transaction">未承認トランザクション</h1>
+    <table class="tbl-inout tbl-boarder">
+        <tr><th>日付</th><th>品目</th><th>金額</th><th>支払い方法</th><th>分類</th><th>編集</th><th>チェック</th></tr>
+        {% for d in unchecked_data %}
+        <tr class="data-row">
+            <td>{{ d.date|date:"Y/m/d" }}</td>
+            <td class="lefter">{{ d.item }}</td>
+            <td class="righter">{{ d.price|intcomma }}</td>
+            <td>{{ d.method }}</td>
+            <td>{% if d.temp %}立替{% else %}{{ d.genre }}{% endif %}</td>
+            <td class='a-edit'><a href="#">編集</a></td>
+            <td class="a-edit"><a href="#">OK</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h1>現在銀行計算</h1>
+    <table class="tbl-common">
+        <tr>
+            <th>記録</th>
+            <td>{{ bank_written| intcomma }}</td>
+        </tr>
+        <tr><th></th><td></td></tr>
+        {% for b in banks %}
+            <tr>
+                <th>{{ b.name }}</th>
+                <td><input type="text" class="righter" name="now_banks" id="bank-{{ b.pk }}" style="width:7ex" onfocus="unseparate_value('bank-{{ b.pk }}')" onblur="separate_value('bank-{{ b.pk }}')" onkeypress="key_press_now_bank(event.keyCode)" value="{{ b.price| intcomma }}"></td>
+            </tr>
+        {% endfor %}
+        {% for c in credit_checked_date %}
+            <tr>
+                <th>{{ c.name }}</th>
+                <td><input type="text" class="righter" name="next_credit" id="credit-{{ c.pk }}" style="width:7ex" onfocus="unseparate_value('credit-{{ c.pk }}')" onblur="separate_value('credit-{{ c.pk }}')" onkeypress="key_press_now_bank(event.keyCode)" value="{{ c.price| intcomma }}"></td>
+            </tr>
+        {% endfor %}
+        <tr><th></th><td></td></tr>
+        <tr>
+            <th>差額(記録-予定)</th>
+            <td></td>
+        </tr>
+    </table>
+    <input type="button" class="btn-apply" value="計算" onclick="calculate_now_bank()" />
+</section>
+{% endblock %}

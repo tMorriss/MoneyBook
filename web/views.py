@@ -18,7 +18,7 @@ def index(request):
     # 全データ
     allData = Data.getAllData()
     # 今月のデータ
-    monthlyData = Data.sort_date_descending(Data.getMonthData(int(year), int(month)))
+    monthlyData = Data.sortDateDescending(Data.getMonthData(int(year), int(month)))
     # 支払い方法リスト
     methods = Method.list()
     # 支払い方法ごとの残高
@@ -54,7 +54,7 @@ def index(request):
         'methods': methods,
         'first_genres': Genre.first_list(),
         'latter_genres': Genre.latter_list(),
-        'total_balance': Data.getSum(allData, 0) - Data.getSum(allData, 1),
+        'total_balance': Data.getIncomeSum(allData) - Data.getOutgoSum(allData),
         'total_income': totalIncome,
         'total_outgo': totalOutgo,
         'total_inout': totalIncome - totalOutgo,
@@ -111,9 +111,9 @@ def statistics(request):
         d = Data.getRangeData(None, datetime(now.year, monthList[iMonth], calendar.monthrange(now.year, monthList[iMonth])[1]))
         beforeBalances.append(LabelValue(monthList[iMonth], Data.getIncomeSum(d) - Data.getOutgoSum(d)))
 
-        e = Data.getSum(Data.getKeywordData(monthlyData, "電気代"), 1)
-        g = Data.getSum(Data.getKeywordData(monthlyData, "ガス代"), 1)
-        w = Data.getSum(Data.getKeywordData(monthlyData, "水道代"), 1)
+        e = Data.getOutgoSum(Data.getKeywordData(monthlyData, "電気代"))
+        g = Data.getOutgoSum(Data.getKeywordData(monthlyData, "ガス代"))
+        w = Data.getOutgoSum(Data.getKeywordData(monthlyData, "水道代"))
         if (w > 0):
             if iMonth > 0:
                 infraCosts[iMonth - 1].water = w / 2
@@ -153,3 +153,50 @@ def search(request):
     }
     content.update(queryContent)
     return render(request, 'web/search.html', content)
+
+def tools(request):
+    now = datetime.now()
+    # 全データ
+    allData = Data.getAllData()
+    # 実際の現金残高
+    actualCashBalance = SeveralCosts.getActualCashBalance()
+    # 支払い方法リスト
+    methods = Method.list()
+    # 支払い方法ごとの残高
+    methodsBD = []
+    for m in methods:
+        d = Data.getMethodData(allData, m.pk)
+        methodsBD.append(BalanceDate(m, Data.getIncomeSum(d) - Data.getOutgoSum(d), CheckedDate.get(m.pk).date))
+    # クレカ確認日
+    creditCheckedDate = CreditCheckedDate.getAll()
+    # キャッシュバック確認日
+    cachebackCheckedDate = CachebackCheckedDate.getAll()
+    # 銀行残高
+    bankBalance = BankBalance.getAll()
+    # 固定費目標額
+    fixedCostMark = SeveralCosts.getFixedCostMark()
+    # 未承認トランザクション
+    uncheckedData = Data.getUncheckedData(allData)
+    # 現在銀行
+    banks = BankBalance.getAll()
+    # 銀行残高
+    allBankData = Data.getBankData(allData)
+    bankWritten = Data.getIncomeSum(allBankData) - Data.getOutgoSum(allBankData)
+
+    content = {
+        'app_name': settings.APP_NAME,
+        'cash_balance': Data.getIncomeSum(Data.getCashData(Data.getAllData())) - Data.getOutgoSum(Data.getCashData(Data.getAllData())),
+        'year': now.year,
+        'month': now.month,
+        'day': now.day,
+        'actual_cash_balance': actualCashBalance,
+        'methods_bd': methodsBD,
+        'credit_checked_date': creditCheckedDate,
+        'cacheback_checked_date': cachebackCheckedDate,
+        'bank_balance': bankBalance,
+        'fixed_cost_mark': fixedCostMark,
+        'unchecked_data': uncheckedData,
+        'banks': banks,
+        'bank_written': bankWritten,
+    }
+    return render(request, "web/tools.html", content)

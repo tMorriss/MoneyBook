@@ -3,7 +3,7 @@
 <table class="tbl-all-balance">
     <tr>
         <td>総残高</td>
-        <td>{{ total_balance|intcomma }}</td>
+        <td>{{ total_balance|intcomma }}円</td>
     </tr>
 </table>
 
@@ -34,7 +34,7 @@
     </tr>
     <tr>
         <th>収支</th>
-        <td class="righter">{% if total_inout >= 0 %}+{% else %}-{% endif %}{{ total_inout|intcomma }}</td>
+        <td class="righter">{% if total_inout >= 0 %}+{% endif %}{{ total_inout|intcomma }}</td>
     </tr>
     <tr>
         <th>変動費</th>
