@@ -49,7 +49,7 @@
                     <td class="righter">{{ d.price|intcomma }}</td>
                     <td>{{ d.method }}</td>
                     <td>{% if d.temp %}立替{% else %}{{ d.genre }}{% endif %}</td>
-                    <td class='a-edit'><a href="#">編集</a></td>
+                    <td class='a-edit'><a href="{% url 'web:edit' d.pk %}">編集</a></td>
                 </tr>
             {% endfor %}
         </table>

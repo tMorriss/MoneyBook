@@ -143,14 +143,21 @@ class Data(models.Model):
     def getKeywordData(data, keyword):
         return data.filter(item__contains=keyword)
 
+    # 現金のデータを取得
     def getCashData(data):
         return Data.getMethodData(data, 1)
 
+    # 銀行のデータを取得
     def getBankData(data):
         return Data.getMethodData(data, 2)
 
+    # 未チェックのデータを取得
     def getUncheckedData(data):
         return Data.sortDateAscending(data.filter(checked=0))
+
+    # 指定データを取得
+    def get(pk):
+        return Data.objects.get(pk=pk)
 
 class CheckedDate(models.Model):
     method = models.ForeignKey(Method, on_delete=models.CASCADE)
