@@ -1,12 +1,12 @@
 {% extends "web/_base.html" %}
 {% load static %}
-{% load humanize %}
 
 {% block title %}{{ app_name }}{% endblock %}
 
 {% block style %}
-<link rel="stylesheet" type="text/css" href="{% static 'web/index.css' %}">
-<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'index.css' %}">
+<script type="text/javascript" src="{% static 'canvasjs.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'common.js' %}"></script>
 <script type="text/javascript">
     window.onload = function() {
         var chart = new CanvasJS.Chart("chart_container", {
@@ -26,6 +26,71 @@
         });
         chart.render();
     }
+    function send_add_row() {
+        // 全額チャージだったらチャージ
+        if ($('#is-charge').attr('checked')) {
+            // $.ajax({
+            //     url: "{% url 'web:add' %}",
+            //     type: "POST",
+            //     data: {
+            //         "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+            //         "date": $('#a_year').val() + "-" + $('#a_month').val() + "-" + $('#a_day').val(),
+            //         "item": "チャージ",
+            //         "price": $('#a_price').val(),
+            //         "direction": "1",
+            //         "method": $('input[name="a_method"]:checked').val(),
+            //     }
+            // })
+        }
+
+        $.ajax({
+            url: "{% url 'web:add' %}",
+            type: "POST",
+            data: {
+                "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+                "date": $('#a_year').val() + "-" + $('#a_month').val() + "-" + $('#a_day').val(),
+                "year": $('#a_year').val(),
+                "month": $('#a_month').val(),
+                "item": $('#a_item').val(),
+                "price": $('#a_price').val(),
+                "direction": "1",
+                "method": $('input[name="a_method"]:checked').val(),
+                "genre": $('input[name="a_genre"]:checked').val(),
+                "temp": "False",
+            }
+        })
+        // 成功時
+        .done((data) => {
+            // 表の書き換え
+            $('#transactions').html(data);
+            // メッセージ表示
+            show_result_msg("Success!", reset_add_form);
+        })
+        // 失敗時
+        .fail((data) => {
+            // メッセージ表示
+            show_result_msg("Error...");
+        });
+    }
+    function key_press_add(code) {
+        // エンターキーなら実行
+        if (code === 13) {
+            send_add_row();
+        }
+    }
+
+    function reset_add_form() {
+        // フォームをリセット
+        $('#a_day').val('');
+        $('#a_item').val('');
+        $('#a_price').val('');
+        $('input[name=a_method]').val(['{{ methods.first.pk }}']);
+        $('input[name=genre]').val(['{{ first_genres.first.pk }}']);
+        $('#is-charge').removeAttr('checked').prop('checked', false).change();
+
+        // フォーカス
+        $('#a_day').focus();
+    }
 </script>
 {% endblock %}
 
@@ -37,25 +102,13 @@
     </div>
     <section class="flex-main">
         <h1>一覧表示</h1>
-        <table class="tbl-inout tbl-boarder">
-            <tr><th>日付</th><th>品目</th><th>金額</th><th>支払い方法</th><th>分類</th><th>編集</th>
-            {% for d in monthly_data %}
-                <tr class="data-row 
-                    {% if d.checked and d.direction.pk == 1 %} tr-outgo
-                    {% elif d.checked and d.direction.pk == 0 %} tr-income
-                    {% endif %}">
-                    <td>{{ d.date|date:"Y/m/d" }}</td>
-                    <td class="lefter">{{ d.item }}</td>
-                    <td class="righter">{{ d.price|intcomma }}</td>
-                    <td>{{ d.method }}</td>
-                    <td>{% if d.temp %}立替{% else %}{{ d.genre }}{% endif %}</td>
-                    <td class='a-edit'><a href="{% url 'web:edit' d.pk %}">編集</a></td>
-                </tr>
-            {% endfor %}
-        </table>
+        <div id="transactions">
+            {% include "web/_monthly_table.html" %}
+        </div>
     </section>
     <div id="statistic-fixed" class="nav">
         {% include "web/_balance_statisticMini.html" %}
     </div>
 </div>
+{% include "web/_result_message.html" %}
 {% endblock %}

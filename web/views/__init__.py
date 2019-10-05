@@ -1,4 +1,3 @@
-from .views_in import *
 from .indexView import *
 from .addView import *
 from .statisticsView import *

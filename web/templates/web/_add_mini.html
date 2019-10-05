@@ -1,51 +1,50 @@
 <h1>収入支出追加</h1>
-        <form>
-            <table class="tbl-add tbl-common fcs-blue">
-                <tr>
-                    <th>日付</th>
-                    <td>
-                        <input type="text" id="send-year" style="width:6ex" class="righter" onkeypress="key_press_add(event.keyCode)" value="{{ year }}">年
-                        <input type="text" id="send-month" style="width:5ex" class="righter" onkeypress="key_press_add(event.keyCode)" value="{{ month }}">月
-                        <input type="text" id="send-day" style="width:5ex" class="righter" onkeypress="key_press_add(event.keyCode)" autofocus>日
-                    </td>
-                </tr>
-                <tr><th>品目</th><td><input type="text" name="item" id="send-item" style="width:30ex" onkeypress="key_press_add(event.keyCode)"></td></tr>
-                <tr><th>金額</th><td><input type="text" name="price" id="send-price" style="width:10ex" class="righter" onkeypress="key_press_add(event.keyCode)">円</td></tr>
-                <tr>
-                    <th>支払い方法</th>
-                    <td class="radio-green">
-                        {% for m in methods %}
-                            <input type="radio" name="m_method" value="{{ m.pk }}" id="m_method-{{ m.pk }}"{% if m == methods.first %} checked{% endif %} onkeypress="key_pressadd(event.keyCode)">
-                            <label for="m_method-{{ m.pk }}">{{ m.name }}</label>
+    {% csrf_token %}
+    <table class="tbl-add tbl-common fcs-blue">
+        <tr>
+            <th>日付</th>
+            <td>
+                <input type="text" id="a_year" style="width:6ex" class="righter" onkeypress="key_press_add(event.keyCode)" value="{{ year }}" readonly="readonly">年
+                <input type="text" id="a_month" style="width:5ex" class="righter" onkeypress="key_press_add(event.keyCode)" value="{{ month }}" readonly="readonly">月
+                <input type="text" id="a_day" style="width:5ex" class="righter" onkeypress="key_press_add(event.keyCode)" autofocus>日
+            </td>
+        </tr>
+        <tr><th>品目</th><td><input type="text" name="a_item" id="a_item" style="width:30ex" onkeypress="key_press_add(event.keyCode)"></td></tr>
+        <tr><th>金額</th><td><input type="text" name="a_price" id="a_price" style="width:10ex" class="righter" onkeypress="key_press_add(event.keyCode)">円</td></tr>
+        <tr>
+            <th>支払い方法</th>
+            <td class="radio-green">
+                {% for m in methods %}
+                    <input type="radio" value="{{ m.pk }}" name="a_method" id="a_method-{{ m.pk }}"{% if m == methods.first %} checked{% endif %} onkeypress="key_press_add(event.keyCode)">
+                    <label for="a_method-{{ m.pk }}">{{ m.name }}</label>
+                {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <th>分類</th>
+            <td class="radio-green">
+                <table class="radio-green">
+                    <tr><td>
+                        {% for g in first_genres %}
+                            <input type="radio" value="{{ g.pk }}" name="a_genre" id="a_genre-{{ g.pk }}"{% if g == first_genres.first %} checked{% endif %} onkeypress="key_press_add(event.keyCode)">
+                            <label for="a_genre-{{ g.pk }}">{{ g.name }}</label>
                         {% endfor %}
-                    </td>
-                </tr>
-                <tr>
-                    <th>分類</th>
-                    <td class="radio-green">
-                        <table class="radio-green">
-                            <tr><td>
-                                {% for g in first_genres %}
-                                    <input type="radio" name="m_genre" value="{{ g.pk }}" id="m_genre-{{ g.pk }}"{% if g == first_genres.first %} checked{% endif %} onkeypress="key_press_add(event.keyCode)">
-                                    <label for="m_genre-{{ g.pk }}">{{ g.name }}</label>
-                                {% endfor %}
-                            </td></tr>
-                            <tr><td>
-                                {% for g in latter_genres %}
-                                    <input type="radio" name="m_genre" value="{{ g.pk }}" id="m_genre-{{ g.pk }}" onkeypress="key_press_add(event.keyCode)">
-                                    <label for="m_genre-{{ g.pk }}">{{ g.name }}</label>
-                                {% endfor %}
-                            </td></tr>
-                        </table>
-                    </td>
-                </tr>
-                <tr>
-                    <th>全額チャージ</th>
-                    <td class="radio-green">
-                        <input type="checkbox" name="is-charge" value="1" id="is-charge-true" onkeypress="key_press_add(event.keyCode)">
-                        <label for="is-charge-true">Yes</label>
-                    </td>
-                </tr>
-            </table>
-            <input type="button" value="追加" class="btn-apply" onclick="send_add_row()">
-        </form>
+                    </td></tr>
+                    <tr><td>
+                        {% for g in latter_genres %}
+                            <input type="radio" value="{{ g.pk }}" name="a_genre" id="a_genre-{{ g.pk }}" onkeypress="key_press_add(event.keyCode)">
+                            <label for="a_genre-{{ g.pk }}">{{ g.name }}</label>
+                        {% endfor %}
+                    </td></tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <th>全額チャージ</th>
+            <td class="radio-green">
+                <input type="checkbox" value="1" id="is-charge" onkeypress="key_press_add(event.keyCode)">
+                <label for="is-charge">Yes</label>
+            </td>
+        </tr>
+    </table>
+    <input type="button" value="追加" class="btn-apply" onclick="send_add_row()">

@@ -1,7 +1,7 @@
 from django import forms
 from .models import *
 
-class DataForm(forms.Form):
+class DataForm(forms.ModelForm):
     class Meta:
         model = Data
-        fields = '__all__'
+        exclude = ['checked']

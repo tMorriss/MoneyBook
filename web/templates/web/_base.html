@@ -3,9 +3,10 @@
     <head>
         <title>{% block title %}{% endblock %}</title>
         {% load static %}
-        <link rel="shortcut icon" href="{% static 'web/favicon.ico' %}">
+        <link rel="shortcut icon" href="{% static 'favicon.ico' %}">
         <link href="https://fonts.googleapis.com/css?family=Parisienne" rel="stylesheet">
-        <link rel="stylesheet" type="text/css" href="{% static 'web/style.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+        <script src="{% static 'jquery-3.4.1.min.js' %}"></script>
         {% block style %}{% endblock %}
         <meta charset="UTF-8">
     </head>

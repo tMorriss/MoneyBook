@@ -5,8 +5,8 @@
 {% block title %}{{ app_name }} Statistics{% endblock %}
 
 {% block style %}
-<link rel="stylesheet" type="text/css" href="{% static 'web/statistics.css' %}">
-<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'statistics.css' %}">
+<script type="text/javascript" src="{% static 'canvasjs.min.js' %}"></script>
 <script type="text/javascript">
     window.onload = function() {
         var chart = new CanvasJS.Chart("barplot_inout", {
@@ -169,13 +169,13 @@
     <table class="tbl-common">
         <tr>
             <td rowspan="2">
-                <a href="#"><img src="{% static 'web/images/left.png' %}" alt="←" width="40px" valign="middle"></a>
+                <a href="#"><img src="{% static 'images/left.png' %}" alt="←" width="40px" valign="middle"></a>
             </td>
             <td class="jump-date">
                 <input type="text" name="year" id="jump_year" style="width:6ex" class="righter" value="{{ year }}" onkeypress="key_press_move(event.keyCode)" onfocus="deleteValue(this)">年
             </td>
             <td rowspan="2">
-                <a href="#"><img src="{% static 'web/images/right.png' %}" alt="→" width="40px" valign="middle"></a>
+                <a href="#"><img src="{% static 'images/right.png' %}" alt="→" width="40px" valign="middle"></a>
             </td>
         </tr>
         <tr>
