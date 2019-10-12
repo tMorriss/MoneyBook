@@ -3,15 +3,7 @@ from django.shortcuts import render
 from datetime import datetime
 from web.models import *
 
-def index(request):
-    if "year" in request.GET and "month" in request.GET:
-        year = request.GET.get("year")
-        month = request.GET.get("month")
-    else:
-        now = datetime.now()
-        year = now.year
-        month = str(now.month).zfill(2)
-
+def index_month(request, year, month):
     # 全データ
     allData = Data.getAllData()
     # 今月のデータ
@@ -65,3 +57,9 @@ def index(request):
         'methods_monthly_iob': methodsMonthlyIOB,
     }
     return render(request, 'web/index.html', content)
+
+def index(request):
+    now = datetime.now()
+    year = now.year
+    month = str(now.month).zfill(2)
+    return index_month(request, year, month)
