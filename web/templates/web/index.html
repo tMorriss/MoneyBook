@@ -3,7 +3,7 @@
 
 {% block title %}{{ app_name }}{% endblock %}
 
-{% block style %}
+{% block header %}
 <link rel="stylesheet" type="text/css" href="{% static 'index.css' %}">
 <script type="text/javascript" src="{% static 'canvasjs.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'common.js' %}"></script>
@@ -27,22 +27,6 @@
         chart.render();
     }
     function send_add_row() {
-        // 全額チャージだったらチャージ
-        if ($('#is-charge').attr('checked')) {
-            // $.ajax({
-            //     url: "{% url 'web:add' %}",
-            //     type: "POST",
-            //     data: {
-            //         "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
-            //         "date": $('#a_year').val() + "-" + $('#a_month').val() + "-" + $('#a_day').val(),
-            //         "item": "チャージ",
-            //         "price": $('#a_price').val(),
-            //         "direction": "1",
-            //         "method": $('input[name="a_method"]:checked').val(),
-            //     }
-            // })
-        }
-
         $.ajax({
             url: "{% url 'web:add' %}",
             type: "POST",
@@ -57,19 +41,45 @@
                 "method": $('input[name="a_method"]:checked').val(),
                 "genre": $('input[name="a_genre"]:checked').val(),
                 "temp": "False",
+                "checked": "False",
             }
         })
         // 成功時
         .done((data) => {
-            // 表の書き換え
-            $('#transactions').html(data);
-            // メッセージ表示
-            show_result_msg("Success!", reset_add_form);
+            if ($('#is-charge').prop('checked')) {
+                $.ajax({
+                    url: "{% url 'web:add_intra_move' %}",
+                    type: "POST",
+                    data: {
+                        "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+                        "year": $('#a_year').val(),
+                        "month": $('#a_month').val(),
+                        "day": $('#a_day').val(),
+                        "price": $('#a_price').val(),
+                        "before_method": 2,
+                        "after_method": $('input[name="a_method"]:checked').val(),
+                    }
+                })
+                // 成功時
+                .done((data) => {
+                    update_success(data);
+                })
+                // 失敗時
+                .fail((data) => {
+                    // メッセージ表示
+                    show_result_msg("Error...", empty);
+                    // 抜ける
+                    return;
+                });
+            }
+            else {
+                update_success(data);
+            }
         })
         // 失敗時
         .fail((data) => {
             // メッセージ表示
-            show_result_msg("Error...");
+            show_result_msg("Error...", empty);
         });
     }
     function key_press_add(code) {
@@ -79,18 +89,26 @@
         }
     }
 
+    function update_success(data) {
+        // 表の書き換え
+        $('#transactions').html(data);
+        // メッセージ表示
+        show_result_msg("Success!", reset_add_form);
+    }
+
     function reset_add_form() {
         // フォームをリセット
         $('#a_day').val('');
         $('#a_item').val('');
         $('#a_price').val('');
         $('input[name=a_method]').val(['{{ methods.first.pk }}']);
-        $('input[name=genre]').val(['{{ first_genres.first.pk }}']);
+        $('input[name=a_genre]').val(['{{ first_genres.first.pk }}']);
         $('#is-charge').removeAttr('checked').prop('checked', false).change();
 
         // フォーカス
         $('#a_day').focus();
     }
+
 </script>
 {% endblock %}
 

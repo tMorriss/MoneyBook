@@ -18,6 +18,9 @@ class Direction(models.Model):
     def __str__(self):
         return self.name
 
+    def get(pk):
+        return Direction.objects.get(pk=pk)
+
     def list():
         return Direction.objects.order_by('pk')
 
@@ -28,6 +31,9 @@ class Method(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get(pk):
+        return Method.objects.get(pk=pk)
 
     def list():
         return Method.objects.filter(show_order__gt=0).order_by('show_order')
@@ -40,6 +46,9 @@ class Genre(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get(pk):
+        return Genre.objects.get(pk=pk)
 
     def list():
         return Genre.objects.order_by('pk')

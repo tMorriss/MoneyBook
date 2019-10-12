@@ -30,7 +30,6 @@ class AddView(View):
 
             year = request.POST.get('year')
             month = request.POST.get('month')
-            print(year)
             
             # 今月のデータ
             monthlyData = Data.sortDateDescending(Data.getMonthData(int(year), int(month)))
@@ -44,7 +43,6 @@ class AddView(View):
             return render(request, 'web/_monthly_table.html', content)
 
         else:
-            # return HttpResponseBadRequest("Validation Error")
             resData = {}
             errorList = []
             for a in newData.errors:

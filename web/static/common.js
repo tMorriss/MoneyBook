@@ -39,3 +39,5 @@ function fadeOutTimer(elm, opaValue, callback) {
         callback();
     }
 }
+
+function empty() {}

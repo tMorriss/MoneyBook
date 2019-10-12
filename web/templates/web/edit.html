@@ -4,76 +4,119 @@
 
 {% block title %}{{ app_name }} Edit{% endblock %}
 
+{% block header %}
+<script type="text/javascript" src="{% static 'common.js' %}"></script>
+<script type="text/javascript">
+    function send_update_row() {
+        $.ajax({
+            url: "{% url 'web:edit' data.pk %}",
+            type: "POST",
+            data: {
+                "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+                "date": $('#year').val() + "-" + $('#month').val() + "-" + $('#day').val(),
+                "item": $('#item').val(),
+                "price": $('#price').val(),
+                "direction": $('input[name="direction"]:checked').val(),
+                "method": $('input[name="method"]:checked').val(),
+                "genre": $('input[name="genre"]:checked').val(),
+                "temp": $('input[name="temp"]:checked').val(),
+                "checked": $('input[name="checked"]:checked').val(),
+            }
+        })
+        // 成功時
+        .done((data) => {
+            history.back();
+        })
+        // 失敗時
+        .fail((data) => {
+            // メッセージ表示
+            show_result_msg("Error...", empty);
+        });
+        
+        function key_press_update(code) {
+            // エンターキーなら
+            if (code === 13) {
+                send_update_row();
+            }
+        }
+    }
+</script>
+{% endblock %}
+
 {% block content %}
 <section>
-    <table class="tbl-add tbl-common fcs-blue">
-        <tr>
-            <th>日付</th>
-            <td>
-                <input type="text" id="year" style="width:6ex" class="righter" value="{{ data.date| date:'Y' }}" onkeypress="key_press_update(event.keyCode)">年
-                <input type="text" id="month" style="width:5ex" class="righter" value="{{ data.date| date:'m' }}" onkeypress="key_press_update(event.keyCode)">月
-                <input type="text" id="day" style="width:5ex" class="righter" value="{{ data.date| date:'d' }}" onkeypress="key_press_update(event.keyCode)">日
-            </td>
-        </tr>
-        <tr><th>品目</th><td><input type="text" id="item" size="25" value="{{ data.item }}" onkeypress="key_press_update(event.keyCode)"></td></tr>
-        <tr><th>金額</th><td><input type="text" id="price" size="10" class="righter" value="{{ data.price }}" onkeypress="key_press_update(event.keyCode)">円</td></tr>
-        <tr>
-            <th>方向</th>
-            <td class="radio-green">
-                {% for d in directions %}
-                    <input type="radio" name="direction" value="{{ d.pk }}" id="direction-{{ d.pk }}"{% if d == data.direction %} checked{% endif %} onkeypress="key_press_add(event.keyCode)">
-                    <label for="direction-{{ d.pk }}">{{ d.name }}</label>
-                {% endfor %}
-            </td>
-        </tr>
-        <tr>
-            <th>支払い方法</th>
-            <td class="radio-green">
-                {% for m in methods %}
-                    <input type="radio" name="method" value="{{ m.pk }}" id="method-{{ m.pk }}"{% if m == data.method %} checked{% endif %} onkeypress="key_pressadd(event.keyCode)">
-                    <label for="method-{{ m.pk }}">{{ m.name }}</label>
-                {% endfor %}
-            </td>
-        </tr>
-        <tr>
-            <th>分類</th>
-            <td class="radio-green">
-                {% for g in first_genres %}
-                    <input type="radio" name="genre" value="{{ g.pk }}" id="genre-{{ g.pk }}"{% if g == data.genre %} checked{% endif %} onkeypress="key_press_add(event.keyCode)">
-                    <label for="genre-{{ g.pk }}">{{ g.name }}</label>
-                {% endfor %}
-                {% for g in latter_genres %}
-                    <input type="radio" name="genre" value="{{ g.pk }}" id="genre-{{ g.pk }}"{% if g == data.genre %} checked{% endif %}  onkeypress="key_press_add(event.keyCode)">
-                    <label for="genre-{{ g.pk }}">{{ g.name }}</label>
-                {% endfor %}
-            </td>
-        </tr>
-        <tr>
-            <th>立替</th>
-            <td class="radio-green">
-                {% for k,v in temps.items %}
-                    <input type="radio" name="temp" value="{{ k }}" id="temp-{{ k }}"{% if k == data.temp %} checked{% endif %} onkeypress="key_press_add(event.keyCode)">
-                    <label for="temp-{{ k }}">{{ v }}</label>
-                {% endfor %}
-            </td>
-        </tr>
-        <tr>
-            <th>チェック済み</th>
-            <td class="radio-green">
-                {% for k, v in checked.items %}
-                    <input type="radio" name="checked" value="{{ k }}" id="checked-{{ k }}"{% if k == data.checked %} checked{% endif %} onkeypress="key_press_add(event.keyCode)">
-                    <label for="checked-{{ k }}">{{ v }}</label>
-                {% endfor %}
-            </td>
-        </tr>
-    </table>
+    <form>
+        {% csrf_token %}
+        <table class="tbl-add tbl-common fcs-blue">
+            <tr>
+                <th>日付</th>
+                <td>
+                    <input type="text" id="year" style="width:6ex" class="righter" value="{{ data.date| date:'Y' }}" onkeypress="key_press_update(event.keyCode)">年
+                    <input type="text" id="month" style="width:5ex" class="righter" value="{{ data.date| date:'m' }}" onkeypress="key_press_update(event.keyCode)">月
+                    <input type="text" id="day" style="width:5ex" class="righter" value="{{ data.date| date:'d' }}" onkeypress="key_press_update(event.keyCode)">日
+                </td>
+            </tr>
+            <tr><th>品目</th><td><input type="text" id="item" size="25" value="{{ data.item }}" onkeypress="key_press_update(event.keyCode)"></td></tr>
+            <tr><th>金額</th><td><input type="text" id="price" size="10" class="righter" value="{{ data.price }}" onkeypress="key_press_update(event.keyCode)">円</td></tr>
+            <tr>
+                <th>方向</th>
+                <td class="radio-green">
+                    {% for d in directions %}
+                        <input type="radio" name="direction" value="{{ d.pk }}" id="direction-{{ d.pk }}"{% if d == data.direction %} checked{% endif %} onkeypress="key_press_update(event.keyCode)">
+                        <label for="direction-{{ d.pk }}">{{ d.name }}</label>
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <th>支払い方法</th>
+                <td class="radio-green">
+                    {% for m in methods %}
+                        <input type="radio" name="method" value="{{ m.pk }}" id="method-{{ m.pk }}"{% if m == data.method %} checked{% endif %} onkeypress="key_press_update(event.keyCode)">
+                        <label for="method-{{ m.pk }}">{{ m.name }}</label>
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <th>分類</th>
+                <td class="radio-green">
+                    {% for g in first_genres %}
+                        <input type="radio" name="genre" value="{{ g.pk }}" id="genre-{{ g.pk }}"{% if g == data.genre %} checked{% endif %} onkeypress="key_press_update(event.keyCode)">
+                        <label for="genre-{{ g.pk }}">{{ g.name }}</label>
+                    {% endfor %}
+                    {% for g in latter_genres %}
+                        <input type="radio" name="genre" value="{{ g.pk }}" id="genre-{{ g.pk }}"{% if g == data.genre %} checked{% endif %}  onkeypress="key_press_update(event.keyCode)">
+                        <label for="genre-{{ g.pk }}">{{ g.name }}</label>
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <th>立替</th>
+                <td class="radio-green">
+                    {% for k,v in temps.items %}
+                        <input type="radio" name="temp" value="{{ k }}" id="temp-{{ k }}"{% if k == data.temp %} checked{% endif %} onkeypress="key_press_update(event.keyCode)">
+                        <label for="temp-{{ k }}">{{ v }}</label>
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <th>チェック済み</th>
+                <td class="radio-green">
+                    {% for k, v in checked.items %}
+                        <input type="radio" name="checked" value="{{ k }}" id="checked-{{ k }}"{% if k == data.checked %} checked{% endif %} onkeypress="key_press_update(event.keyCode)">
+                        <label for="checked-{{ k }}">{{ v }}</label>
+                    {% endfor %}
+                </td>
+            </tr>
+        </table>
 
-    <table class="tbl-buttons">
-        <tr>
-            <td><input type="button" value="更新" class="btn-apply" onclick="send_update_row()"></td>
-            <td><input type="button" value="戻る" class="btn-cancel" onclick="javascript:window.history.back()"></td>
-            <td><input type="button" value="削除" class="btn-delete" onclick="send_delete_row()"></td>
-        </tr>
-    </table>
+        <table class="tbl-buttons">
+            <tr>
+                <td><input type="button" value="更新" class="btn-apply" onclick="send_update_row()"></td>
+                <td><input type="button" value="戻る" class="btn-cancel" onclick="javascript:window.history.back()"></td>
+                <td><input type="button" value="削除" class="btn-delete" onclick="send_delete_row()"></td>
+            </tr>
+        </table>
+    </form>
 </section>
+{% include "web/_result_message.html" %}
 {% endblock %}
