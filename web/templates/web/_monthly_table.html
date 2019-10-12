@@ -6,7 +6,8 @@
         <tr class="data-row 
             {% if d.checked and d.direction.pk == 1 %} tr-outgo
             {% elif d.checked and d.direction.pk == 0 %} tr-income
-            {% endif %}">
+            {% endif %}
+            method-{{ d.method.pk }} class-{{ d.genre.pk }}">
             <td>{{ d.date|date:"Y/m/d" }}</td>
             <td class="lefter">{{ d.item }}</td>
             <td class="righter">{{ d.price|intcomma }}</td>

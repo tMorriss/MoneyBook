@@ -7,8 +7,11 @@
 <link rel="stylesheet" type="text/css" href="{% static 'index.css' %}">
 <script type="text/javascript" src="{% static 'canvasjs.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'common.js' %}"></script>
+<script type="text/javascript" src="{% static 'index.js' %}"></script>
 <script type="text/javascript">
     window.onload = function() {
+        apply_filter()
+
         var chart = new CanvasJS.Chart("chart_container", {
             animationEnabled: true,
             title: {text: "支出内訳"},
@@ -89,24 +92,16 @@
         }
     }
 
-    function update_success(data) {
-        // 表の書き換え
-        $('#transactions').html(data);
-        // メッセージ表示
-        show_result_msg("Success!", reset_add_form);
+    function move_month() {
+        year = document.getElementById("jump_year").value;
+        month = document.getElementById("jump_month").value;
+        window.location.href = "{% url 'web:index' %}" + year + "/" + month;
     }
-
-    function reset_add_form() {
-        // フォームをリセット
-        $('#a_day').val('');
-        $('#a_item').val('');
-        $('#a_price').val('');
-        $('input[name=a_method]').val(['{{ methods.first.pk }}']);
-        $('input[name=a_genre]').val(['{{ first_genres.first.pk }}']);
-        $('#is-charge').removeAttr('checked').prop('checked', false).change();
-
-        // フォーカス
-        $('#a_day').focus();
+    function key_press_move(code) {
+        //エンターキーなら
+        if (code === 13) {
+            move_month();
+        }
     }
 
 </script>
