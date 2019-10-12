@@ -10,4 +10,5 @@ urlpatterns = [
     path('search', searchView.search, name='search'),
     path('tools', toolsView.tools, name='tools'),
     path('edit/<int:pk>', EditView.as_view(), name='edit'),
+    path('delete', DeleteView.as_view(), name='delete')
 ]

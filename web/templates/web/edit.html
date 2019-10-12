@@ -32,13 +32,33 @@
             // メッセージ表示
             show_result_msg("Error...", empty);
         });
-        
-        function key_press_update(code) {
-            // エンターキーなら
-            if (code === 13) {
-                send_update_row();
-            }
+    }
+    function key_press_update(code) {
+        // エンターキーなら
+        if (code === 13) {
+            send_update_row();
         }
+    }
+
+    function send_delete_row() {
+        $.ajax({
+            url: "{% url 'web:delete' %}",
+            type: "POST",
+            data: {
+                "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+                "pk": "{{ data.pk }}",
+            }
+        })
+        // 成功時
+        .done((data) => {
+            history.back();
+        })
+        // 失敗時
+        .fail((data) => {
+            // メッセージ表示
+            show_result_msg("Error...", empty);
+        });
+        
     }
 </script>
 {% endblock %}
