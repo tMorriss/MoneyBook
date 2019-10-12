@@ -3,9 +3,7 @@ from django.shortcuts import render
 from datetime import datetime
 from web.models import *
 
-def statistics(request):
-    now = datetime.now()
-
+def statistics_month(request, year):
     # 月ごとの収入、支出
     monthList = list(range(1, 13))
     monthIOB = []
@@ -14,7 +12,7 @@ def statistics(request):
     infraCosts = []
     FoodCosts = []
     for iMonth in range(len(monthList)):
-        monthlyData = Data.getMonthData(now.year, monthList[iMonth])
+        monthlyData = Data.getMonthData(year, monthList[iMonth])
         monthlyNormalData = Data.getNormalData(monthlyData)
         t = Data.getTempAndDeposit(monthlyData)
         i = Data.getIncomeSum(monthlyNormalData) - t
@@ -28,7 +26,7 @@ def statistics(request):
         o = Data.getOutgoSum(monthlyDataWithoutInMove) - t
         monthAllIOB.append(InOutBalance(monthList[iMonth], i, o, i - o))
 
-        d = Data.getRangeData(None, datetime(now.year, monthList[iMonth], calendar.monthrange(now.year, monthList[iMonth])[1]))
+        d = Data.getRangeData(None, datetime(year, monthList[iMonth], calendar.monthrange(year, monthList[iMonth])[1]))
         beforeBalances.append(LabelValue(monthList[iMonth], Data.getIncomeSum(d) - Data.getOutgoSum(d)))
 
         e = Data.getOutgoSum(Data.getKeywordData(monthlyData, "電気代"))
@@ -43,8 +41,7 @@ def statistics(request):
 
     content = {
         'app_name': settings.APP_NAME,
-        'year': now.year,
-        'month': now.month,
+        'year': year,
         'month_list': monthList,
         'month_io_list': monthIOB,
         'month_all_io_list': monthAllIOB,
@@ -53,3 +50,7 @@ def statistics(request):
         'food_costs': FoodCosts,
     }
     return render(request, 'web/statistics.html', content)
+
+def statistics(request):
+    now = datetime.now()
+    return statistics_month(request, now.year)

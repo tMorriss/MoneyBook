@@ -7,6 +7,7 @@
 {% block header %}
 <link rel="stylesheet" type="text/css" href="{% static 'statistics.css' %}">
 <script type="text/javascript" src="{% static 'canvasjs.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'common.js' %}"></script>
 <script type="text/javascript">
     window.onload = function() {
         var chart = new CanvasJS.Chart("barplot_inout", {
@@ -157,8 +158,19 @@
             }]
         });
         chart.render();
-        
     }
+    
+    function move_year() {
+        year = document.getElementById("jump_year").value;
+        window.location.href = "{% url 'web:statistics' %}/" + year;
+    }
+    function key_press_move(code) {
+        //エンターキーなら
+        if (code === 13) {
+            move_year();
+        }
+    }
+
 </script>
 {% endblock %}
 
@@ -169,17 +181,17 @@
     <table class="tbl-common">
         <tr>
             <td rowspan="2">
-                <a href="#"><img src="{% static 'images/left.png' %}" alt="←" width="40px" valign="middle"></a>
+                <a href="{% url 'web:statistics_month' year|add:'-1' %}"><img src="{% static 'images/left.png' %}" alt="←" width="40px" valign="middle"></a>
             </td>
             <td class="jump-date">
                 <input type="text" name="year" id="jump_year" style="width:6ex" class="righter" value="{{ year }}" onkeypress="key_press_move(event.keyCode)" onfocus="deleteValue(this)">年
             </td>
             <td rowspan="2">
-                <a href="#"><img src="{% static 'images/right.png' %}" alt="→" width="40px" valign="middle"></a>
+                <a href="{% url 'web:statistics_month' year|add:'1' %}"><img src="{% static 'images/right.png' %}" alt="→" width="40px" valign="middle"></a>
             </td>
         </tr>
         <tr>
-            <td><input type="button" class="btn-apply" value="更新" onclick="move_month()"></td>
+            <td><input type="button" class="btn-apply" value="更新" onclick="move_year()"></td>
         </tr>
     </table>
     <h2>月ごとの収支</h2>

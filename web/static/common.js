@@ -40,4 +40,9 @@ function fadeOutTimer(elm, opaValue, callback) {
     }
 }
 
-function empty() {}
+function empty() { }
+
+// テキストの中身を削除
+function deleteValue(elm) {
+    elm.value = "";
+}

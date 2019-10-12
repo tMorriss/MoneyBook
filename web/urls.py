@@ -8,6 +8,7 @@ urlpatterns = [
     path('add', AddView.as_view(), name='add'),
     path('add/intra-move', AddIntraMoveView.as_view(), name='add_intra_move'),
     path('statistics', statisticsView.statistics, name='statistics'),
+    path('statistics/<int:year>', statisticsView.statistics_month, name='statistics_month'),
     path('search', searchView.search, name='search'),
     path('tools', toolsView.tools, name='tools'),
     path('edit/<int:pk>', EditView.as_view(), name='edit'),
