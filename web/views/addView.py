@@ -20,7 +20,7 @@ class AddView(View):
             'latter_genres': Genre.latter_list(),
             'temps': {0: "No", 1: "Yes"},
         }
-        return render(request, 'web/add.html', content)
+        return render(request, 'add.html', content)
 
     def post(self, request, *args, **kwargs):
         newData = DataForm(request.POST)
@@ -40,7 +40,7 @@ class AddView(View):
             }
 
             # 追加後のmonthlyテーブルを返す
-            return render(request, 'web/_monthly_table.html', content)
+            return render(request, '_monthly_table.html', content)
 
         else:
             resData = {}

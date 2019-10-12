@@ -49,7 +49,7 @@ def statistics_month(request, year):
         'infra_costs': infraCosts,
         'food_costs': FoodCosts,
     }
-    return render(request, 'web/statistics.html', content)
+    return render(request, 'statistics.html', content)
 
 def statistics(request):
     now = datetime.now()

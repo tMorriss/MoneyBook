@@ -1,4 +1,4 @@
-{% extends "web/_base.html" %}
+{% extends "_base.html" %}
 {% load static %}
 
 {% block title %}{{ app_name }}{% endblock %}
@@ -110,18 +110,18 @@
 {% block content %}
 <div class="both-nav">
     <div id="filter-fixed" class="nav">
-        {% include "web/_add_mini.html" %}
-        {% include "web/_filter_mini.html" %}
+        {% include "_add_mini.html" %}
+        {% include "_filter_mini.html" %}
     </div>
     <section class="flex-main">
         <h1>一覧表示</h1>
         <div id="transactions">
-            {% include "web/_monthly_table.html" %}
+            {% include "_monthly_table.html" %}
         </div>
     </section>
     <div id="statistic-fixed" class="nav">
-        {% include "web/_balance_statisticMini.html" %}
+        {% include "_balance_statisticMini.html" %}
     </div>
 </div>
-{% include "web/_result_message.html" %}
+{% include "_result_message.html" %}
 {% endblock %}

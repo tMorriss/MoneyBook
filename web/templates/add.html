@@ -1,4 +1,4 @@
-{% extends "web/_base.html" %}
+{% extends "_base.html" %}
 {% load static %}
 
 {% block title %}{{ app_name }} Add{% endblock %}
@@ -263,5 +263,5 @@
         <input type="button" value="追加" class="btn-apply" onclick="send_add_row()" onkeypress="key_press_add(event.keyCode)">
     </form>
 </section>
-{% include "web/_result_message.html" %}
+{% include "_result_message.html" %}
 {% endblock %}

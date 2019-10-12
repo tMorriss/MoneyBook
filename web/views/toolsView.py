@@ -48,4 +48,4 @@ def tools(request):
         'banks': banks,
         'bank_written': bankWritten,
     }
-    return render(request, "web/tools.html", content)
+    return render(request, "tools.html", content)

@@ -20,4 +20,4 @@ def search(request):
         'checked': {0: "No", 1: "Yes"},
     }
     content.update(queryContent)
-    return render(request, 'web/search.html', content)
+    return render(request, 'search.html', content)

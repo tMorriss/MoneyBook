@@ -25,7 +25,7 @@ class EditView(View):
             'temps': {0:"No", 1:"Yes"},
             'checked': {0: "No", 1: "Yes"},
         }
-        return render(request, "web/edit.html", content)
+        return render(request, "edit.html", content)
 
     def post(self, request, *args, **kwargs):
         pk = kwargs["pk"]

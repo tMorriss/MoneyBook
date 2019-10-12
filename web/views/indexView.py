@@ -56,7 +56,7 @@ def index_month(request, year, month):
         'methods_iob': methodsIOB,
         'methods_monthly_iob': methodsMonthlyIOB,
     }
-    return render(request, 'web/index.html', content)
+    return render(request, 'index.html', content)
 
 def index(request):
     now = datetime.now()
