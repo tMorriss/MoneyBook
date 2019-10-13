@@ -10,7 +10,7 @@ for iRow in range(len(result)):
     resultStr += "  pk: " + str(iRow + 1) + "\n"
     resultStr += "  fields: \n"
     resultStr += "    date: " + str(result.iat[iRow, 1]) + "\n"
-    resultStr += "    item: " + str(result.iat[iRow, 2]) + "\n"
+    resultStr += "    item: " + str(result.iat[iRow, 2]).replace("amp;","") + "\n"
     resultStr += "    price: " + str(result.iat[iRow, 3]) + "\n"
     resultStr += "    method: " + str(result.iat[iRow, 4]) + "\n"
     resultStr += "    direction: " + str(result.iat[iRow, 5]) + "\n"

@@ -2,7 +2,7 @@
 
 <table class="tbl-inout tbl-boarder">
     <tr><th>日付</th><th>品目</th><th>金額</th><th>支払い方法</th><th>分類</th><th>編集</th>
-    {% for d in monthly_data %}
+    {% for d in show_data %}
         <tr class="data-row 
             {% if d.checked and d.direction.pk == 1 %} tr-outgo
             {% elif d.checked and d.direction.pk == 0 %} tr-income

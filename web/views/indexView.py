@@ -39,7 +39,7 @@ def index_month(request, year, month):
         'app_name': settings.APP_NAME,
         'year': year,
         'month': month,
-        'monthly_data': monthlyData,
+        'show_data': monthlyData,
         'methods': methods,
         'first_genres': Genre.first_list(),
         'latter_genres': Genre.latter_list(),

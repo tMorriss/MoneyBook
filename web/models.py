@@ -76,12 +76,12 @@ class Data(models.Model):
 
     # 指定期間のデータを持ってくる
     def getRangeData(start, end):
-        if start == None:
-            return Data.objects.filter(date__lte=end)
-        elif end == None:
-            return Data.objects.filter(date__gte=start)
-        else:
-            return Data.objects.filter(date__range=(start, end))
+        data = Data.getAllData()
+        if start != None:
+            data = data.filter(date__gte=start)
+        if end != None:
+            data = data.filter(date__lte=end)
+        return data
 
     # 指定月のデータを持ってくる
     def getMonthData(year, month):
@@ -167,6 +167,34 @@ class Data(models.Model):
     # 指定データを取得
     def get(pk):
         return Data.objects.get(pk=pk)
+
+    # 金額でフィルタ
+    def filterPrice(data, lower, upper):
+        if lower != None:
+            data = data.filter(price__gte=lower)
+        if upper != None:
+            data = data.filter(price__lte=upper)
+        return data
+
+    # directionリストでフィルタ
+    def filterDirections(data, directions):
+        return data.filter(direction__in=directions)
+
+    # methodリストでフィルタ
+    def filterMethods(data, methods):
+        return data.filter(method__in=methods)
+
+    # genreリストでフィルタ
+    def filterGenres(data, genres):
+        return data.filter(genre__in=genres)
+
+    # tempリストでフィルタ
+    def filterTemps(data, temps):
+        return data.filter(temp__in=temps)
+
+    # checkedリストでフィルタ
+    def filterCheckeds(data, checkeds):
+        return data.filter(checked__in=checkeds)
 
 class CheckedDate(models.Model):
     method = models.ForeignKey(Method, on_delete=models.CASCADE)

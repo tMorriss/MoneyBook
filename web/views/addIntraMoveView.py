@@ -50,10 +50,10 @@ class AddIntraMoveView(View):
                 monthlyData = Data.sortDateDescending(Data.getMonthData(int(year), int(month)))
                 content = {
                     'app_name': settings.APP_NAME,
-                    'monthly_data': monthlyData,
+                    'show_data': monthlyData,
                 }
                 # 追加後のmonthlyテーブルを返す
-                return render(request, '_monthly_table.html', content)
+                return render(request, '_data_table.html', content)
 
             except:
                 return HttpResponseBadRequest()
