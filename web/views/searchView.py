@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.shortcuts import render
 from web.models import *
+from datetime import date
 
 def search(request):
     content = {
@@ -33,11 +34,21 @@ def search(request):
     if "is_query" in request.GET:
         # 日付
         startDate = None
-        if "start_year" in request.GET and "start_month" in request.GET and "start_day" in request.GET and request.GET.get("start_year") != "" and request.GET.get("start_month") != "" and request.GET.get("start_day") != "":
-            startDate = request.GET.get("start_year") + "-" + request.GET.get("start_month") + "-" + request.GET.get("start_day")
+        if "start_year" in request.GET and "start_month" in request.GET and "start_day" in request.GET:
+            if request.GET.get("start_year") != "" and request.GET.get("start_month") != "" and request.GET.get("start_day") != "":
+                try:
+                    date(int(request.GET.get("start_year")), int(request.GET.get("start_month")), int(request.GET.get("start_day")))
+                    startDate = request.GET.get("start_year") + "-" + request.GET.get("start_month") + "-" + request.GET.get("start_day")
+                except:
+                    startDate = None
         endDate = None
-        if "end_year" in request.GET and "end_month" in request.GET and "end_day" in request.GET and request.GET.get("end_year") != "" and request.GET.get("end_month") != "" and request.GET.get("end_day") != "":
-            endDate = request.GET.get("end_year") + "-" + request.GET.get("end_month") + "-" + request.GET.get("end_day")
+        if "end_year" in request.GET and "end_month" in request.GET and "end_day" in request.GET:
+            if request.GET.get("end_year") != "" and request.GET.get("end_month") != "" and request.GET.get("end_day") != "":
+                try:
+                    date(int(request.GET.get("end_year")), int(request.GET.get("end_month")), int(request.GET.get("end_day")))
+                    endDate = request.GET.get("end_year") + "-" + request.GET.get("end_month") + "-" + request.GET.get("end_day")
+                except:
+                    endDate = None
         data = Data.getRangeData(startDate, endDate)
 
         # 品目
@@ -48,25 +59,46 @@ def search(request):
 
         # 金額
         if "lower_price" in request.GET and request.GET.get("lower_price") != "":
-            data = Data.filterPrice(data, int(request.GET.get("lower_price")), None)
+            try:
+                data = Data.filterPrice(data, int(request.GET.get("lower_price")), None)
+            except:
+                data = data
         if "upper_price" in request.GET and request.GET.get("upper_price") != "":
-            data = Data.filterPrice(data, None, int(request.GET.get("upper_price")))
+            try:
+                data = Data.filterPrice(data, None, int(request.GET.get("upper_price")))
+            except:
+                data = data
 
         # 方向
         if "direction" in request.GET:
-            data = Data.filterDirections(data, content["direction"])
+            try:
+                data = Data.filterDirections(data, content["direction"])
+            except:
+                data = data
         # 支払い方法
         if "method" in request.GET:
-            data = Data.filterMethods(data, content["method"])
+            try:
+                data = Data.filterMethods(data, content["method"])
+            except:
+                data = data
         # 分類
         if "genre" in request.GET:
-            data = Data.filterGenres(data, content["genre"])
+            try:
+                data = Data.filterGenres(data, content["genre"])
+            except:
+                data = data
         # 立替
         if "temp" in request.GET:
-            data = Data.filterTemps(data, content["temp"])
+            try:
+                data = Data.filterTemps(data, content["temp"])
+            except:
+                data = data
         # チェック済み
         if "checked" in request.GET:
-            data = Data.filterCheckeds(data, content["checked"])
+            try:
+                data = Data.filterCheckeds(data, content["checked"])
+            except:
+                data = data
         
         content.update({"show_data": data})
 
