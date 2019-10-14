@@ -203,6 +203,11 @@ class CheckedDate(models.Model):
     def get(pk):
         return CheckedDate.objects.get(pk=pk)
 
+    def set(pk, newDate):
+        obj = CheckedDate.objects.get(pk=pk)
+        obj.date = newDate
+        obj.save()
+
 class CreditCheckedDate(models.Model):
     show_order = models.IntegerField(default=0)
     name = models.CharField(max_length=200)
@@ -212,6 +217,16 @@ class CreditCheckedDate(models.Model):
     def getAll():
         return CreditCheckedDate.objects.all().order_by("show_order")
 
+    def setDate(pk, newDate):
+        obj = CreditCheckedDate.objects.get(pk=pk)
+        obj.date = newDate
+        obj.save()
+
+    def setPrice(pk, price):
+        obj = CreditCheckedDate.objects.get(pk=pk)
+        obj.price = price
+        obj.save()
+
 class CachebackCheckedDate(models.Model):
     show_order = models.IntegerField(default=0)
     name = models.CharField(max_length=200)
@@ -219,6 +234,11 @@ class CachebackCheckedDate(models.Model):
 
     def getAll():
         return CachebackCheckedDate.objects.all().order_by("show_order")
+
+    def set(pk, newDate):
+        obj = CachebackCheckedDate.objects.get(pk=pk)
+        obj.date = newDate
+        obj.save()
 
 class BankBalance(models.Model):
     show_order = models.IntegerField(default=0)
@@ -228,15 +248,28 @@ class BankBalance(models.Model):
     def getAll():
         return BankBalance.objects.all().order_by("show_order")
 
+    def set(pk, price):
+        obj = BankBalance.objects.get(pk=pk)
+        obj.price = price
+        obj.save()
+
 class SeveralCosts(models.Model):
     name = models.CharField(max_length=200)
     price = models.IntegerField(default=0)
 
     def getFixedCostMark():
         return SeveralCosts.objects.get(name="FixedCostMark").price
+    def setFixedCostMark(price):
+        obj = SeveralCosts.objects.get(name="FixedCostMark")
+        obj.price = price
+        obj.save()
 
     def getActualCashBalance():
         return SeveralCosts.objects.get(name="ActualCashBalance").price
+    def setActualCashBalance(price):
+        obj = SeveralCosts.objects.get(name="ActualCashBalance")
+        obj.price = price
+        obj.save()
 
 class InOutBalance:
     def __init__(self, l, i, o, b):

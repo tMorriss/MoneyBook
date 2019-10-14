@@ -1,7 +1,9 @@
 from django.conf import settings
 from django.shortcuts import render
-from datetime import datetime
+from django.http import HttpResponse, HttpResponseBadRequest
+from datetime import date, datetime
 from web.models import *
+import json
 
 def tools(request):
     now = datetime.now()
@@ -49,3 +51,114 @@ def tools(request):
         'bank_written': bankWritten,
     }
     return render(request, "tools.html", content)
+
+def update_actual_cash(request):
+    if not "price" in request.POST:
+        return HttpResponseBadRequest(json.dumps({"message": "missing parameter"}))
+
+    try:
+        price = int(request.POST.get("price"))
+    except:
+        return HttpResponseBadRequest(json.dumps({"message": "price must be int"}))
+
+    SeveralCosts.setActualCashBalance(price)
+    return HttpResponse(json.dumps({"message": "success"}))
+
+def update_checked_date(request):
+    if not "year" in request.POST or not "month" in request.POST or not "day" in request.POST or not "method" in request.POST:
+        return HttpResponseBadRequest(json.dumps({"message": "missing parameter"}))
+
+    methodPk = request.POST.get("method")
+    try:
+        newDate = date(int(request.POST.get("year")), int(request.POST.get("month")), int(request.POST.get("day")))
+
+        # 指定日以前のを全部チェック
+        if "check_all" in request.POST and request.POST.get("check_all") == "1":
+            Data.filterCheckeds(Data.getMethodData(Data.getRangeData(None, newDate), methodPk), [False]).update(checked=True)
+    except:
+        return HttpResponseBadRequest(json.dumps({"message": "date format is invalid"}))
+
+    try:    
+        # チェック日を更新
+        CheckedDate.set(methodPk, newDate)
+    except:
+        return HttpResponseBadRequest(json.dumps({"message": "method id is invalid"}))
+
+    return HttpResponse(json.dumps({"message": "success"}))
+
+def update_credit_checked_date(request):
+    if not "year" in request.POST or not "month" in request.POST or not "day" in request.POST or not "pk" in request.POST:
+        return HttpResponseBadRequest(json.dumps({"message": "missing parameter"}))
+
+    pk = request.POST.get("pk")
+    try:
+        newDate = date(int(request.POST.get("year")), int(request.POST.get("month")), int(request.POST.get("day")))
+    except:
+        return HttpResponseBadRequest(json.dumps({"message": "date format is invalid"}))
+
+    try:
+        # 更新
+        CreditCheckedDate.setDate(pk, newDate)
+    except:
+        return HttpResponseBadRequest(json.dumps({"message": "method id is invalid"}))
+    
+    return HttpResponse(json.dumps({"message": "success"}))
+    
+def update_cacheback_checked_date(request):
+    if not "year" in request.POST or not "month" in request.POST or not "day" in request.POST or not "pk" in request.POST:
+        return HttpResponseBadRequest(json.dumps({"message": "missing parameter"}))
+
+    pk = request.POST.get("pk")
+    try:
+        newDate = date(int(request.POST.get("year")), int(request.POST.get("month")), int(request.POST.get("day")))
+    except:
+        return HttpResponseBadRequest(json.dumps({"message": "date format is invalid"}))
+
+    try:
+        # 更新
+        CachebackCheckedDate.set(pk, newDate)
+    except:
+        return HttpResponseBadRequest(json.dumps({"message": "method id is invalid"}))
+    
+    return HttpResponse(json.dumps({"message": "success"}))
+
+def update_fixed_cost_mark(request):
+    if not "price" in request.POST:
+        return HttpResponseBadRequest(json.dumps({"message": "missing parameter"}))
+
+    try:
+        price = int(request.POST.get("price"))
+    except:
+        return HttpResponseBadRequest(json.dumps({"message": "price must be int"}))
+
+    SeveralCosts.setFixedCostMark(price)
+    return HttpResponse(json.dumps({"message": "success"}))
+
+def calculate_now_bank(request):
+    bankSum = 0
+    bb = BankBalance.getAll()
+    cc = CreditCheckedDate.getAll()
+    try:
+        for b in bb:
+            key = "bank-" + str(b.pk)
+            if key in request.POST:
+                value = int(request.POST.get(key))
+                BankBalance.set(b.pk, value)
+                bankSum += value
+            
+        for c in cc:
+            key = "credit-" + str(c.pk)
+            if key in request.POST:
+                value = int(request.POST.get(key))
+                print(c.pk, value)
+                CreditCheckedDate.setPrice(c.pk, value)
+                bankSum -= value
+    except:
+        return HttpResponseBadRequest(json.dumps({"message": "invalid parameter"}))
+
+    return HttpResponse(json.dumps({"balance": bankSum}))
+
+    # if not "banks" in request.POST or not "cards" in request.POST:
+    #     return HttpResponseBadRequest(json.dumps({"message": "missing parameter"}))
+
+    # try:

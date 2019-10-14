@@ -11,6 +11,13 @@ urlpatterns = [
     path('statistics/<int:year>', statisticsView.statistics_month, name='statistics_month'),
     path('search', searchView.search, name='search'),
     path('tools', toolsView.tools, name='tools'),
+    path('tools/update-actual-cash', toolsView.update_actual_cash, name="update_actual_cash"),
+    path('tools/update_checked_date', toolsView.update_checked_date, name="update_checked_date"),
+    path('tools/update_credit_checked_date', toolsView.update_credit_checked_date, name="update_credit_checked_date"),
+    path('tools/update_cacheback_checked_date', toolsView.update_cacheback_checked_date, name="update_cacheback_checked_date"),
+    path('tools/update_fixed_cost_mark', toolsView.update_fixed_cost_mark, name="update_fixed_cost_mark"),
+    path('tools/calculate_now_bank', toolsView.calculate_now_bank, name="calculate_now_bank"),
     path('edit/<int:pk>', EditView.as_view(), name='edit'),
+    path('edit/check', CheckView.as_view(), name="edit_check"),
     path('delete', DeleteView.as_view(), name='delete')
 ]

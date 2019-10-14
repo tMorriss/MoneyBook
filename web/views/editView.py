@@ -33,8 +33,7 @@ class EditView(View):
         try:
             data = Data.get(pk)
         except:
-            res = {"message": "Data does not exist"}
-            return HttpResponseNotFound(json.dumps(res))
+            return HttpResponseNotFound(json.dumps({"message": "Data does not exist"}))
 
         newData = DataForm(request.POST)
         if newData.is_valid():
@@ -49,8 +48,7 @@ class EditView(View):
             data.checked = request.POST.get("checked")
             data.save()
 
-            res = {"message": "success"}
-            return HttpResponse(json.dumps(res))
+            return HttpResponse(json.dumps({"message": "success"}))
         else:
             resData = {}
             errorList = []
@@ -58,3 +56,17 @@ class EditView(View):
                 errorList.append(a)
             resData["ErrorList"] = errorList
             return HttpResponseBadRequest(json.dumps(resData))
+
+class CheckView(View):
+    def post(self, request, *args, **kwargs):
+        pk = request.POST.get("id")
+        
+        try:
+            data = Data.get(pk)
+        except:
+            res = {"message": "Data does not exist"}
+            return HttpResponseNotFound(json.dumps(res))
+
+        data.checked = True
+        data.save()
+        return HttpResponse(json.dumps({"message": "success"}))
