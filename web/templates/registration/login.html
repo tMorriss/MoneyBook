@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    </head>
+    <body>
+        <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+            <p>ユーザ名: {{ form.username }}</p>
+            <p>パスワード: {{ form.password }}</p>
+            <p><input type="submit" class="btn-apply" value="ログイン"></p>
+        </form>
+    </body>
+</html>
