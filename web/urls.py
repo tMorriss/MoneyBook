@@ -1,5 +1,6 @@
 from django.urls import path
 from web.views import *
+from django.contrib.auth.views import LogoutView
 
 app_name = 'web'
 urlpatterns = [
@@ -19,5 +20,7 @@ urlpatterns = [
     path('tools/calculate_now_bank', toolsView.calculate_now_bank, name="calculate_now_bank"),
     path('edit/<int:pk>', EditView.as_view(), name='edit'),
     path('edit/check', CheckView.as_view(), name="edit_check"),
-    path('delete', DeleteView.as_view(), name='delete')
+    path('delete', DeleteView.as_view(), name='delete'),
+    path('login', CustomLoginView.as_view(), name='login'),
+    path('logout', LogoutView.as_view(), name='logout'),
 ]

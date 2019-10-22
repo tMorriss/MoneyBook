@@ -130,4 +130,4 @@ NUMBER_GROUPING = 3
 # ログイン後トップページにリダイレクト
 LOGIN_REDIRECT_URL = 'web:index'
 # ログアウト後はログインページにリダイレクト
-LOGOUT_REDIRECT_URL = 'login'
+LOGOUT_REDIRECT_URL = 'web:login'

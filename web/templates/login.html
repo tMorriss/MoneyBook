@@ -16,7 +16,7 @@
         </header>
         <section>
             <h1>ログインしてください</h1>
-            <form method="post" action="{% url 'login' %}">
+            <form method="post" action="{% url 'web:login' %}">
                 {% csrf_token %}
                 <p>ユーザ名: {{ form.username }}</p>
                 <p>パスワード: {{ form.password }}</p>
