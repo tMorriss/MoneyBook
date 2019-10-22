@@ -1,5 +1,6 @@
 {% extends "_base.html" %}
 {% load static %}
+{% load humanize %}
 
 {% block title %}{{ app_name }} Search{% endblock %}
 
@@ -100,6 +101,10 @@
             </tr>
         </table>
     </form>
-    {% include "_data_table.html" %}
+    {% if is_show %}<br>
+    <table class="tbl-summary">
+        <tr><td>{{ show_data| length }}件</td><td>合計{{ balance| intcomma }}円</td></tr>
+    </table><br>
+    {% include "_data_table.html" %}{% endif %}
 </section>
 {% endblock %}

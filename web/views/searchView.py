@@ -101,6 +101,12 @@ def search(request):
             except:
                 data = data
         
-        content.update({"show_data": data})
+        content.update({
+            "show_data": data,
+            "balance": Data.getOutgoSum(data) - Data.getIncomeSum(data),
+            "is_show": True,
+        })
+    else:
+        content.update({"is_show": False})
 
     return render(request, 'search.html', content)
