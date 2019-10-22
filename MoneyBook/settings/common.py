@@ -50,6 +50,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'web.middleware.auth.authMiddleware',
 ]
 
 ROOT_URLCONF = 'MoneyBook.urls'
@@ -125,5 +126,8 @@ STATIC_URL = '/static/'
 APP_NAME = "MoneyBook"
 
 NUMBER_GROUPING = 3
+
 # ログイン後トップページにリダイレクト
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = 'web:index'
+# ログアウト後はログインページにリダイレクト
+LOGOUT_REDIRECT_URL = 'login'

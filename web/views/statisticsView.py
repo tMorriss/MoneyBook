@@ -41,6 +41,7 @@ def statistics_month(request, year):
 
     content = {
         'app_name': settings.APP_NAME,
+        'username': request.user,
         'year': year,
         'month_list': monthList,
         'month_io_list': monthIOB,

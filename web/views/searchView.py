@@ -6,6 +6,7 @@ from datetime import date
 def search(request):
     content = {
         'app_name': settings.APP_NAME,
+        'username': request.user,
         'directions': Direction.list(),
         'methods': Method.list(),
         'unused_methods': Method.unUsedList(),

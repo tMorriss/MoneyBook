@@ -36,6 +36,7 @@ def tools(request):
 
     content = {
         'app_name': settings.APP_NAME,
+        'username': request.user,
         'cash_balance': Data.getIncomeSum(Data.getCashData(Data.getAllData())) - Data.getOutgoSum(Data.getCashData(Data.getAllData())),
         'year': now.year,
         'month': now.month,

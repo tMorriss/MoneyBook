@@ -12,6 +12,7 @@ class AddView(View):
         now = datetime.now()
         content = {
             'app_name': settings.APP_NAME,
+            'username': request.user,
             'year': now.year,
             'month': now.month,
             'directions': Direction.list(),
@@ -36,6 +37,7 @@ class AddView(View):
 
             content = {
                 'app_name': settings.APP_NAME,
+                'username': request.user,
                 'show_data': monthlyData,
             }
 

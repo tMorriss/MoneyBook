@@ -50,6 +50,7 @@ class AddIntraMoveView(View):
                 monthlyData = Data.sortDateDescending(Data.getMonthData(int(year), int(month)))
                 content = {
                     'app_name': settings.APP_NAME,
+                    'username': request.user,
                     'show_data': monthlyData,
                 }
                 # 追加後のmonthlyテーブルを返す

@@ -17,6 +17,7 @@ class EditView(View):
 
         content = {
             'app_name': settings.APP_NAME,
+            'username': request.user,
             'data': data,
             'directions': Direction.list(),
             'methods': Method.list(),

@@ -37,6 +37,7 @@ def index_month(request, year, month):
     variableOutgo = Data.getOutgoSum(Data.getVariableData(monthlyData))
     content = {
         'app_name': settings.APP_NAME,
+        'username': request.user,
         'year': year,
         'month': month,
         'show_data': monthlyData,
