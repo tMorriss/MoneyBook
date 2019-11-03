@@ -31,7 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'moneybook.apps.MoneybokConfig',
+    'moneybook.apps.MoneybookConfig',
     'django.contrib.humanize',
     'django.contrib.admin',
     'django.contrib.auth',
