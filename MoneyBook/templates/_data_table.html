@@ -1,0 +1,19 @@
+{% load humanize %}
+
+<table class="tbl-inout tbl-boarder">
+    <tr><th>日付</th><th>品目</th><th>金額</th><th>支払い方法</th><th>分類</th><th>編集</th>
+    {% for d in show_data %}
+        <tr class="data-row 
+            {% if d.checked and d.direction.pk == 1 %} tr-outgo
+            {% elif d.checked and d.direction.pk == 0 %} tr-income
+            {% endif %}
+            method-{{ d.method.pk }} class-{{ d.genre.pk }}">
+            <td>{{ d.date|date:"Y/m/d" }}</td>
+            <td class="lefter">{{ d.item }}</td>
+            <td class="righter">{{ d.price|intcomma }}</td>
+            <td>{{ d.method }}</td>
+            <td>{% if d.temp %}立替{% else %}{{ d.genre }}{% endif %}</td>
+            <td class='a-edit'><a href="{% url 'moneybook:edit' d.pk %}">編集</a></td>
+        </tr>
+    {% endfor %}
+</table>
