@@ -6,7 +6,7 @@
     price: 0
     method: 4
     direction: 2
-    genre: 0
+    genre: 8
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -17,7 +17,7 @@
     price: 0
     method: 3
     direction: 2
-    genre: 0
+    genre: 8
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -28,7 +28,7 @@
     price: 0
     method: 2
     direction: 2
-    genre: 0
+    genre: 8
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -39,7 +39,7 @@
     price: 0
     method: 1
     direction: 2
-    genre: 0
+    genre: 8
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -50,7 +50,7 @@
     price: 0
     method: 4
     direction: 1
-    genre: 0
+    genre: 8
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -61,7 +61,7 @@
     price: 0
     method: 3
     direction: 1
-    genre: 0
+    genre: 8
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -72,7 +72,7 @@
     price: 0
     method: 2
     direction: 1
-    genre: 0
+    genre: 8
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -83,7 +83,7 @@
     price: 0
     method: 1
     direction: 1
-    genre: 0
+    genre: 8
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -127,7 +127,7 @@
     price: 1000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -138,7 +138,7 @@
     price: 1000
     method: 4
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -149,7 +149,7 @@
     price: 5000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -160,7 +160,7 @@
     price: 105000
     method: 2
     direction: 1
-    genre: -1
+    genre: 9
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -182,7 +182,7 @@
     price: 5000
     method: 3
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -193,7 +193,7 @@
     price: 120000
     method: 2
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -204,7 +204,7 @@
     price: 1000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -215,7 +215,7 @@
     price: 1000
     method: 4
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -226,7 +226,7 @@
     price: 1000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -237,7 +237,7 @@
     price: 1000
     method: 4
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -248,7 +248,7 @@
     price: 1000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -259,7 +259,7 @@
     price: 1000
     method: 4
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -270,7 +270,7 @@
     price: 1000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -281,7 +281,7 @@
     price: 1000
     method: 4
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -292,7 +292,7 @@
     price: 119562
     method: 1
     direction: 1
-    genre: 0
+    genre: 8
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -303,7 +303,7 @@
     price: 128854
     method: 2
     direction: 2
-    genre: 0
+    genre: 8
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -314,7 +314,7 @@
     price: 1637
     method: 3
     direction: 1
-    genre: 0
+    genre: 8
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -325,7 +325,7 @@
     price: 1547
     method: 4
     direction: 1
-    genre: 0
+    genre: 8
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -336,7 +336,7 @@
     price: 35640
     method: 2
     direction: 2
-    genre: -1
+    genre: 9
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -358,7 +358,7 @@
     price: 110
     method: 1
     direction: 2
-    genre: 0
+    genre: 8
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -402,7 +402,7 @@
     price: 1000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -413,7 +413,7 @@
     price: 1000
     method: 4
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -424,7 +424,7 @@
     price: 54000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -435,7 +435,7 @@
     price: 54000
     method: 1
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -468,7 +468,7 @@
     price: 4400
     method: 2
     direction: 2
-    genre: -1
+    genre: 9
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -490,7 +490,7 @@
     price: 1000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -501,7 +501,7 @@
     price: 1000
     method: 4
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -512,7 +512,7 @@
     price: 7680
     method: 2
     direction: 2
-    genre: -1
+    genre: 9
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -523,7 +523,7 @@
     price: 8000
     method: 1
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -545,7 +545,7 @@
     price: 2680
     method: 1
     direction: 2
-    genre: 0
+    genre: 8
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -589,7 +589,7 @@
     price: 19388
     method: 2
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -611,7 +611,7 @@
     price: 130000
     method: 2
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -622,7 +622,7 @@
     price: 211116
     method: 2
     direction: 1
-    genre: 0
+    genre: 8
     temp: 1
     checked: 1
 - model: moneybook.data
@@ -1293,7 +1293,7 @@
     price: 240000
     method: 2
     direction: 2
-    genre: 0
+    genre: 8
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -1623,7 +1623,7 @@
     price: 14040
     method: 2
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -1645,7 +1645,7 @@
     price: 5000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -1656,7 +1656,7 @@
     price: 5000
     method: 3
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -1942,7 +1942,7 @@
     price: 1000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -1953,7 +1953,7 @@
     price: 1000
     method: 4
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -2085,7 +2085,7 @@
     price: 60440
     method: 2
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -2360,7 +2360,7 @@
     price: 130000
     method: 2
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -2371,7 +2371,7 @@
     price: 32964
     method: 2
     direction: 2
-    genre: -1
+    genre: 9
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -2547,7 +2547,7 @@
     price: 1000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -2558,7 +2558,7 @@
     price: 1000
     method: 4
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -2569,7 +2569,7 @@
     price: 5000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -2580,7 +2580,7 @@
     price: 5000
     method: 3
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -2591,7 +2591,7 @@
     price: 1000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -2602,7 +2602,7 @@
     price: 1000
     method: 4
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -2613,7 +2613,7 @@
     price: 1000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -2624,7 +2624,7 @@
     price: 1000
     method: 4
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -2646,7 +2646,7 @@
     price: 19388
     method: 2
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -2745,7 +2745,7 @@
     price: 5380
     method: 1
     direction: 2
-    genre: -1
+    genre: 9
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -2778,7 +2778,7 @@
     price: 54000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -2789,7 +2789,7 @@
     price: 54000
     method: 1
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -2811,7 +2811,7 @@
     price: 86852
     method: 2
     direction: 2
-    genre: -1
+    genre: 9
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -2822,7 +2822,7 @@
     price: 10072
     method: 2
     direction: 2
-    genre: -1
+    genre: 9
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -2965,7 +2965,7 @@
     price: 10000
     method: 1
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -2976,7 +2976,7 @@
     price: 20000
     method: 1
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -2987,7 +2987,7 @@
     price: 10000
     method: 1
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -2998,7 +2998,7 @@
     price: 10000
     method: 1
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -3009,7 +3009,7 @@
     price: 10000
     method: 1
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -3053,7 +3053,7 @@
     price: 10000
     method: 1
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -3097,7 +3097,7 @@
     price: 30000
     method: 1
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -3108,7 +3108,7 @@
     price: 50000
     method: 1
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -3119,7 +3119,7 @@
     price: 30000
     method: 1
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -3141,7 +3141,7 @@
     price: 110000
     method: 1
     direction: 2
-    genre: -1
+    genre: 9
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -3174,7 +3174,7 @@
     price: 900
     method: 1
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -3306,7 +3306,7 @@
     price: 1000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -3317,7 +3317,7 @@
     price: 1000
     method: 4
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -3328,7 +3328,7 @@
     price: 70000
     method: 2
     direction: 1
-    genre: -1
+    genre: 9
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -3339,7 +3339,7 @@
     price: 130000
     method: 2
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -3405,7 +3405,7 @@
     price: 39008
     method: 2
     direction: 2
-    genre: -1
+    genre: 9
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -3471,7 +3471,7 @@
     price: 5000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -3482,7 +3482,7 @@
     price: 5000
     method: 3
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -3493,7 +3493,7 @@
     price: 32964
     method: 2
     direction: 1
-    genre: -1
+    genre: 9
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -3647,7 +3647,7 @@
     price: 54000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -3658,7 +3658,7 @@
     price: 54000
     method: 1
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -3823,7 +3823,7 @@
     price: 13510
     method: 2
     direction: 2
-    genre: -1
+    genre: 9
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -3845,7 +3845,7 @@
     price: 11430
     method: 2
     direction: 2
-    genre: -1
+    genre: 9
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -3856,7 +3856,7 @@
     price: 19388
     method: 2
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -3867,7 +3867,7 @@
     price: 130000
     method: 2
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -3922,7 +3922,7 @@
     price: 1000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -3933,7 +3933,7 @@
     price: 1000
     method: 4
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -3944,7 +3944,7 @@
     price: 1000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -3955,7 +3955,7 @@
     price: 1000
     method: 4
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -3966,7 +3966,7 @@
     price: 500
     method: 3
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -3977,7 +3977,7 @@
     price: 37200
     method: 2
     direction: 2
-    genre: -1
+    genre: 9
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -3988,7 +3988,7 @@
     price: 27000
     method: 2
     direction: 2
-    genre: -1
+    genre: 9
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -4098,7 +4098,7 @@
     price: 11906
     method: 2
     direction: 1
-    genre: -1
+    genre: 9
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -4164,7 +4164,7 @@
     price: 30000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -4175,7 +4175,7 @@
     price: 30000
     method: 1
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -4395,7 +4395,7 @@
     price: 1000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -4406,7 +4406,7 @@
     price: 1000
     method: 4
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -4494,7 +4494,7 @@
     price: 1000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -4505,7 +4505,7 @@
     price: 1000
     method: 4
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -4747,7 +4747,7 @@
     price: 5374
     method: 3
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -4769,7 +4769,7 @@
     price: 70000
     method: 2
     direction: 1
-    genre: -1
+    genre: 9
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -4780,7 +4780,7 @@
     price: 54000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -4791,7 +4791,7 @@
     price: 54000
     method: 1
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -4802,7 +4802,7 @@
     price: 123008
     method: 2
     direction: 1
-    genre: -1
+    genre: 9
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -4813,7 +4813,7 @@
     price: 20357
     method: 2
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -4824,7 +4824,7 @@
     price: 120000
     method: 2
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -4901,7 +4901,7 @@
     price: 70000
     method: 2
     direction: 2
-    genre: -1
+    genre: 9
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -4912,7 +4912,7 @@
     price: 1000
     method: 2
     direction: 2
-    genre: -1
+    genre: 9
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -5011,7 +5011,7 @@
     price: 20000
     method: 1
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -5055,7 +5055,7 @@
     price: 1000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -5066,7 +5066,7 @@
     price: 1000
     method: 4
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -5352,7 +5352,7 @@
     price: 41541
     method: 2
     direction: 2
-    genre: -1
+    genre: 9
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -5572,7 +5572,7 @@
     price: 1000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -5583,7 +5583,7 @@
     price: 1000
     method: 4
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -5671,7 +5671,7 @@
     price: 33000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -5682,7 +5682,7 @@
     price: 33000
     method: 1
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -5693,7 +5693,7 @@
     price: 13000
     method: 1
     direction: 2
-    genre: -1
+    genre: 9
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -5759,7 +5759,7 @@
     price: 13315
     method: 2
     direction: 1
-    genre: -1
+    genre: 9
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -5781,7 +5781,7 @@
     price: 400
     method: 2
     direction: 2
-    genre: 0
+    genre: 8
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -5814,7 +5814,7 @@
     price: 54000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -5825,7 +5825,7 @@
     price: 54000
     method: 1
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -5891,7 +5891,7 @@
     price: 150000
     method: 2
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -6012,7 +6012,7 @@
     price: 106848
     method: 2
     direction: 1
-    genre: -1
+    genre: 9
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -6023,7 +6023,7 @@
     price: 1000
     method: 2
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -6034,7 +6034,7 @@
     price: 56225
     method: 2
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -6122,7 +6122,7 @@
     price: 30000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -6133,7 +6133,7 @@
     price: 30000
     method: 1
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -6144,7 +6144,7 @@
     price: 1
     method: 1
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -6243,7 +6243,7 @@
     price: 500
     method: 5
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -6254,7 +6254,7 @@
     price: 8175
     method: 5
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -6606,7 +6606,7 @@
     price: 1224
     method: 2
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -6760,7 +6760,7 @@
     price: 41586
     method: 2
     direction: 1
-    genre: -1
+    genre: 9
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -6892,7 +6892,7 @@
     price: 82
     method: 5
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -7134,7 +7134,7 @@
     price: 30000
     method: 2
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -7145,7 +7145,7 @@
     price: 20000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -7156,7 +7156,7 @@
     price: 20000
     method: 1
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -7178,7 +7178,7 @@
     price: 313483
     method: 2
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -7244,7 +7244,7 @@
     price: 1000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -7255,7 +7255,7 @@
     price: 1000
     method: 5
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -7266,7 +7266,7 @@
     price: 5000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -7277,7 +7277,7 @@
     price: 5000
     method: 5
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -7288,7 +7288,7 @@
     price: 24
     method: 3
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -7299,7 +7299,7 @@
     price: 30
     method: 1
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -7310,7 +7310,7 @@
     price: 15
     method: 2
     direction: 1
-    genre: -4
+    genre: 12
     temp: 1
     checked: 1
 - model: moneybook.data
@@ -7343,7 +7343,7 @@
     price: 100000
     method: 2
     direction: 2
-    genre: -3
+    genre: 11
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -7365,7 +7365,7 @@
     price: 110000
     method: 1
     direction: 2
-    genre: -3
+    genre: 11
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -7376,7 +7376,7 @@
     price: 3000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -7387,7 +7387,7 @@
     price: 3000
     method: 1
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -7398,7 +7398,7 @@
     price: 386
     method: 2
     direction: 2
-    genre: -1
+    genre: 9
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -7497,7 +7497,7 @@
     price: 1000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -7508,7 +7508,7 @@
     price: 1000
     method: 5
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -7519,7 +7519,7 @@
     price: 1000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -7530,7 +7530,7 @@
     price: 1000
     method: 5
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -7640,7 +7640,7 @@
     price: 1000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -7651,7 +7651,7 @@
     price: 1000
     method: 5
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -7662,7 +7662,7 @@
     price: 15184
     method: 2
     direction: 2
-    genre: -1
+    genre: 9
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -7673,7 +7673,7 @@
     price: 22500
     method: 2
     direction: 2
-    genre: -1
+    genre: 9
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -7684,7 +7684,7 @@
     price: 200
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -7695,7 +7695,7 @@
     price: 200
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -7750,7 +7750,7 @@
     price: 1000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -7761,7 +7761,7 @@
     price: 1000
     method: 5
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -7816,7 +7816,7 @@
     price: 3000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -7827,7 +7827,7 @@
     price: 3000
     method: 5
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -8047,7 +8047,7 @@
     price: 2126
     method: 5
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -8058,7 +8058,7 @@
     price: 192
     method: 2
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -8080,7 +8080,7 @@
     price: 4290
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -8091,7 +8091,7 @@
     price: 4290
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -8135,7 +8135,7 @@
     price: 200
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -8146,7 +8146,7 @@
     price: 200
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -8190,7 +8190,7 @@
     price: 344
     method: 5
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -8212,7 +8212,7 @@
     price: 264101
     method: 2
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -8223,7 +8223,7 @@
     price: 80000
     method: 2
     direction: 2
-    genre: -3
+    genre: 11
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -8366,7 +8366,7 @@
     price: 7520
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -8377,7 +8377,7 @@
     price: 7520
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -8388,7 +8388,7 @@
     price: 2135
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -8399,7 +8399,7 @@
     price: 2135
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -8410,7 +8410,7 @@
     price: 1547
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -8421,7 +8421,7 @@
     price: 1547
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -8608,7 +8608,7 @@
     price: 78
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -8619,7 +8619,7 @@
     price: 78
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -8630,7 +8630,7 @@
     price: 1510
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -8641,7 +8641,7 @@
     price: 1510
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -8762,7 +8762,7 @@
     price: 78
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -8773,7 +8773,7 @@
     price: 78
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -8784,7 +8784,7 @@
     price: 84
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -8795,7 +8795,7 @@
     price: 84
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -8806,7 +8806,7 @@
     price: 1868
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -8817,7 +8817,7 @@
     price: 1868
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -8828,7 +8828,7 @@
     price: 78
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -8839,7 +8839,7 @@
     price: 78
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -8850,7 +8850,7 @@
     price: 630
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -8861,7 +8861,7 @@
     price: 630
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -8883,7 +8883,7 @@
     price: 1000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -8894,7 +8894,7 @@
     price: 1000
     method: 5
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -8971,7 +8971,7 @@
     price: 84
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -8982,7 +8982,7 @@
     price: 84
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -8993,7 +8993,7 @@
     price: 78
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9004,7 +9004,7 @@
     price: 78
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9015,7 +9015,7 @@
     price: 1051
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9026,7 +9026,7 @@
     price: 1051
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9092,7 +9092,7 @@
     price: 78
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9103,7 +9103,7 @@
     price: 78
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9114,7 +9114,7 @@
     price: 1000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9125,7 +9125,7 @@
     price: 1000
     method: 5
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9202,7 +9202,7 @@
     price: 78
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9213,7 +9213,7 @@
     price: 78
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9224,7 +9224,7 @@
     price: 84
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9235,7 +9235,7 @@
     price: 84
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9246,7 +9246,7 @@
     price: 321
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9257,7 +9257,7 @@
     price: 321
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9268,7 +9268,7 @@
     price: 78
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9279,7 +9279,7 @@
     price: 78
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9367,7 +9367,7 @@
     price: 1271
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9378,7 +9378,7 @@
     price: 1271
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9400,7 +9400,7 @@
     price: 84
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9411,7 +9411,7 @@
     price: 84
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9422,7 +9422,7 @@
     price: 1674
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9433,7 +9433,7 @@
     price: 1674
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9444,7 +9444,7 @@
     price: 1000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9455,7 +9455,7 @@
     price: 1000
     method: 5
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9477,7 +9477,7 @@
     price: 10158
     method: 2
     direction: 2
-    genre: -1
+    genre: 9
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9499,7 +9499,7 @@
     price: 920
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9510,7 +9510,7 @@
     price: 920
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9532,7 +9532,7 @@
     price: 1223
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9543,7 +9543,7 @@
     price: 1223
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9565,7 +9565,7 @@
     price: 78
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9576,7 +9576,7 @@
     price: 78
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9587,7 +9587,7 @@
     price: 394
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9598,7 +9598,7 @@
     price: 394
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9620,7 +9620,7 @@
     price: 78
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9631,7 +9631,7 @@
     price: 78
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9653,7 +9653,7 @@
     price: 548
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9664,7 +9664,7 @@
     price: 548
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9686,7 +9686,7 @@
     price: 84
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9697,7 +9697,7 @@
     price: 84
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9719,7 +9719,7 @@
     price: 119
     method: 2
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9752,7 +9752,7 @@
     price: 352
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9763,7 +9763,7 @@
     price: 352
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9785,7 +9785,7 @@
     price: 1424
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9796,7 +9796,7 @@
     price: 1424
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9818,7 +9818,7 @@
     price: 84
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9829,7 +9829,7 @@
     price: 84
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9862,7 +9862,7 @@
     price: 2044
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9873,7 +9873,7 @@
     price: 2044
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9906,7 +9906,7 @@
     price: 1266
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9917,7 +9917,7 @@
     price: 1266
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9939,7 +9939,7 @@
     price: 264291
     method: 2
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9950,7 +9950,7 @@
     price: 80000
     method: 2
     direction: 2
-    genre: -3
+    genre: 11
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9972,7 +9972,7 @@
     price: 78
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9983,7 +9983,7 @@
     price: 78
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -9994,7 +9994,7 @@
     price: 78
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -10005,7 +10005,7 @@
     price: 78
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -10038,7 +10038,7 @@
     price: 709
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -10049,7 +10049,7 @@
     price: 709
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -10071,7 +10071,7 @@
     price: 84
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -10082,7 +10082,7 @@
     price: 84
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -10104,7 +10104,7 @@
     price: 78
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -10115,7 +10115,7 @@
     price: 78
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -10137,7 +10137,7 @@
     price: 346
     method: 6
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -10170,7 +10170,7 @@
     price: 2609
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -10181,7 +10181,7 @@
     price: 2609
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -10214,7 +10214,7 @@
     price: 2462
     method: 5
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -10247,7 +10247,7 @@
     price: 84
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -10258,7 +10258,7 @@
     price: 84
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -10269,7 +10269,7 @@
     price: 1000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -10280,7 +10280,7 @@
     price: 1000
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -10302,7 +10302,7 @@
     price: 5000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -10313,7 +10313,7 @@
     price: 5000
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -10478,7 +10478,7 @@
     price: 12
     method: 3
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -10654,7 +10654,7 @@
     price: 297
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -10665,7 +10665,7 @@
     price: 297
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -10676,7 +10676,7 @@
     price: 5000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -10687,7 +10687,7 @@
     price: 5000
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -10775,7 +10775,7 @@
     price: 11800
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -10786,7 +10786,7 @@
     price: 11800
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -10797,7 +10797,7 @@
     price: 5000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -10808,7 +10808,7 @@
     price: 5000
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -10995,7 +10995,7 @@
     price: 850
     method: 5
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -11083,7 +11083,7 @@
     price: 5000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -11094,7 +11094,7 @@
     price: 5000
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -11116,7 +11116,7 @@
     price: 261469
     method: 2
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -11149,7 +11149,7 @@
     price: 1000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -11160,7 +11160,7 @@
     price: 1000
     method: 5
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -11171,7 +11171,7 @@
     price: 384
     method: 6
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -11215,7 +11215,7 @@
     price: 80000
     method: 2
     direction: 2
-    genre: -3
+    genre: 11
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -11259,7 +11259,7 @@
     price: 5000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -11270,7 +11270,7 @@
     price: 5000
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -11292,7 +11292,7 @@
     price: 10000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -11303,7 +11303,7 @@
     price: 10000
     method: 1
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -11391,7 +11391,7 @@
     price: 5000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -11402,7 +11402,7 @@
     price: 5000
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -11468,7 +11468,7 @@
     price: 8980
     method: 6
     direction: 2
-    genre: -1
+    genre: 9
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -11479,7 +11479,7 @@
     price: 10000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -11490,7 +11490,7 @@
     price: 10000
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -11633,7 +11633,7 @@
     price: 5000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -11644,7 +11644,7 @@
     price: 5000
     method: 5
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -11666,7 +11666,7 @@
     price: 40185
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -11677,7 +11677,7 @@
     price: 40185
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -11688,7 +11688,7 @@
     price: 5000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -11699,7 +11699,7 @@
     price: 5000
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -11743,7 +11743,7 @@
     price: 3000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -11754,7 +11754,7 @@
     price: 3000
     method: 5
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -11798,7 +11798,7 @@
     price: 5000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -11809,7 +11809,7 @@
     price: 5000
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -11831,7 +11831,7 @@
     price: 20000
     method: 1
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -11842,7 +11842,7 @@
     price: 5000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -11853,7 +11853,7 @@
     price: 5000
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -12029,7 +12029,7 @@
     price: 1
     method: 2
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -12095,7 +12095,7 @@
     price: 5000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -12106,7 +12106,7 @@
     price: 5000
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -12128,7 +12128,7 @@
     price: 228
     method: 5
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -12150,7 +12150,7 @@
     price: 5000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -12161,7 +12161,7 @@
     price: 5000
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -12172,7 +12172,7 @@
     price: 579
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -12183,7 +12183,7 @@
     price: 579
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -12227,7 +12227,7 @@
     price: 2000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -12238,7 +12238,7 @@
     price: 2000
     method: 5
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -12293,7 +12293,7 @@
     price: 1000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -12304,7 +12304,7 @@
     price: 1000
     method: 5
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -12315,7 +12315,7 @@
     price: 261429
     method: 2
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -12359,7 +12359,7 @@
     price: 704
     method: 6
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -12447,7 +12447,7 @@
     price: 5000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -12458,7 +12458,7 @@
     price: 5000
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -12469,7 +12469,7 @@
     price: 80000
     method: 2
     direction: 2
-    genre: -3
+    genre: 11
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -12590,7 +12590,7 @@
     price: 15292
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -12601,7 +12601,7 @@
     price: 15292
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -12689,7 +12689,7 @@
     price: 23000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -12700,7 +12700,7 @@
     price: 23000
     method: 5
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -12799,7 +12799,7 @@
     price: 2837
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -12810,7 +12810,7 @@
     price: 2837
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -12821,7 +12821,7 @@
     price: 3280
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -12832,7 +12832,7 @@
     price: 3280
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -12843,7 +12843,7 @@
     price: 1000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -12854,7 +12854,7 @@
     price: 1000
     method: 5
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -12865,7 +12865,7 @@
     price: 1000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -12876,7 +12876,7 @@
     price: 1000
     method: 5
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -12920,7 +12920,7 @@
     price: 5000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -12931,7 +12931,7 @@
     price: 5000
     method: 5
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -12975,7 +12975,7 @@
     price: 5000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -12986,7 +12986,7 @@
     price: 5000
     method: 5
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -13030,7 +13030,7 @@
     price: 78
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -13041,7 +13041,7 @@
     price: 78
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -13052,7 +13052,7 @@
     price: 78
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -13063,7 +13063,7 @@
     price: 78
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -13162,7 +13162,7 @@
     price: 78
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -13173,7 +13173,7 @@
     price: 78
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -13206,7 +13206,7 @@
     price: 10000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -13217,7 +13217,7 @@
     price: 10000
     method: 5
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -13261,7 +13261,7 @@
     price: 78
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -13272,7 +13272,7 @@
     price: 78
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -13294,7 +13294,7 @@
     price: 78
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -13305,7 +13305,7 @@
     price: 78
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -13371,7 +13371,7 @@
     price: 78
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -13382,7 +13382,7 @@
     price: 78
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -13437,7 +13437,7 @@
     price: 78
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -13448,7 +13448,7 @@
     price: 78
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -13613,7 +13613,7 @@
     price: 261449
     method: 2
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -13646,7 +13646,7 @@
     price: 413
     method: 5
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -13668,7 +13668,7 @@
     price: 78
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -13679,7 +13679,7 @@
     price: 78
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -13701,7 +13701,7 @@
     price: 80000
     method: 2
     direction: 2
-    genre: -3
+    genre: 11
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -13767,7 +13767,7 @@
     price: 2017
     method: 6
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -13778,7 +13778,7 @@
     price: 78
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -13789,7 +13789,7 @@
     price: 78
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -13800,7 +13800,7 @@
     price: 116
     method: 5
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -13910,7 +13910,7 @@
     price: 5000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 0
 - model: moneybook.data
@@ -13921,7 +13921,7 @@
     price: 5000
     method: 5
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -13932,7 +13932,7 @@
     price: 10000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 0
 - model: moneybook.data
@@ -13943,7 +13943,7 @@
     price: 10000
     method: 5
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -14119,7 +14119,7 @@
     price: 1260
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 0
 - model: moneybook.data
@@ -14130,7 +14130,7 @@
     price: 1260
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -14163,7 +14163,7 @@
     price: 364
     method: 5
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -14460,7 +14460,7 @@
     price: 80
     method: 2
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -14471,7 +14471,7 @@
     price: 673
     method: 5
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -14482,7 +14482,7 @@
     price: 45
     method: 5
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -14493,7 +14493,7 @@
     price: 73
     method: 5
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -14504,7 +14504,7 @@
     price: 24
     method: 5
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -14515,7 +14515,7 @@
     price: 2
     method: 5
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -14526,7 +14526,7 @@
     price: 2
     method: 5
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -14537,7 +14537,7 @@
     price: 4
     method: 5
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -14548,7 +14548,7 @@
     price: 15
     method: 5
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -14559,7 +14559,7 @@
     price: 50
     method: 5
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -14570,7 +14570,7 @@
     price: 5
     method: 5
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -14581,7 +14581,7 @@
     price: 21
     method: 5
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -14592,7 +14592,7 @@
     price: 2
     method: 5
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -14603,7 +14603,7 @@
     price: 59
     method: 5
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -14614,7 +14614,7 @@
     price: 53
     method: 5
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -14625,7 +14625,7 @@
     price: 2
     method: 5
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -14636,7 +14636,7 @@
     price: 2
     method: 5
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -14647,7 +14647,7 @@
     price: 64
     method: 5
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -14658,7 +14658,7 @@
     price: 53
     method: 5
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -14669,7 +14669,7 @@
     price: 20
     method: 5
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -14680,7 +14680,7 @@
     price: 2
     method: 5
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -14691,7 +14691,7 @@
     price: 2
     method: 5
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -14702,7 +14702,7 @@
     price: 18
     method: 5
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -14713,7 +14713,7 @@
     price: 10
     method: 5
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -14724,7 +14724,7 @@
     price: 24
     method: 5
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -14735,7 +14735,7 @@
     price: 258797
     method: 2
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -14746,7 +14746,7 @@
     price: 40000
     method: 2
     direction: 2
-    genre: -3
+    genre: 11
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -14757,7 +14757,7 @@
     price: 56822
     method: 2
     direction: 1
-    genre: -1
+    genre: 9
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -14768,7 +14768,7 @@
     price: 40000
     method: 2
     direction: 2
-    genre: -3
+    genre: 11
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -14889,7 +14889,7 @@
     price: 2000
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 0
 - model: moneybook.data
@@ -14900,7 +14900,7 @@
     price: 2000
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -14922,7 +14922,7 @@
     price: 780
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 0
 - model: moneybook.data
@@ -14933,7 +14933,7 @@
     price: 780
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -14944,7 +14944,7 @@
     price: 219
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 0
 - model: moneybook.data
@@ -14955,7 +14955,7 @@
     price: 219
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -14977,7 +14977,7 @@
     price: 1
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 0
 - model: moneybook.data
@@ -14988,7 +14988,7 @@
     price: 1
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -14999,7 +14999,7 @@
     price: 1
     method: 6
     direction: 2
-    genre: 0
+    genre: 8
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -15164,7 +15164,7 @@
     price: 232
     method: 6
     direction: 1
-    genre: -4
+    genre: 12
     temp: 0
     checked: 1
 - model: moneybook.data
@@ -15175,7 +15175,7 @@
     price: 1383
     method: 2
     direction: 2
-    genre: -2
+    genre: 10
     temp: 0
     checked: 0
 - model: moneybook.data
@@ -15186,7 +15186,7 @@
     price: 1383
     method: 6
     direction: 1
-    genre: -2
+    genre: 10
     temp: 0
     checked: 1
 - model: moneybook.data

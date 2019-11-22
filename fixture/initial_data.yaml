@@ -48,53 +48,65 @@
 
 # Genre
 - model: moneybook.Genre
-  pk: -4
-  fields:
-    name: 収入
-- model: moneybook.Genre
-  pk: -3
-  fields:
-    name: 貯金
-- model: moneybook.Genre
-  pk: -2
-  fields:
-    name: 内部移動
-- model: moneybook.Genre
-  pk: -1
-  fields:
-    name: 計算外
-- model: moneybook.Genre
-  pk: 0
-  fields:
-    name: その他
-- model: moneybook.Genre
   pk: 1
   fields:
+    show_order: 1
     name: 食費
 - model: moneybook.Genre
   pk: 2
   fields:
+    show_order: 2
     name: インフラ
 - model: moneybook.Genre
   pk: 3
   fields:
+    show_order: 3
     name: 必需品
 - model: moneybook.Genre
   pk: 4
   fields:
+    show_order: 4
     name: 交通費
 - model: moneybook.Genre
   pk: 5
   fields:
+    show_order: 5
     name: 娯楽
 - model: moneybook.Genre
   pk: 6
   fields:
+    show_order: 6
     name: 交際費
 - model: moneybook.Genre
   pk: 7
   fields:
+    show_order: 7
     name: 家賃
+- model: moneybook.Genre
+  pk: 8
+  fields:
+    show_order: 0
+    name: その他
+- model: moneybook.Genre
+  pk: 9
+  fields:
+    show_order: -1
+    name: 計算外
+- model: moneybook.Genre
+  pk: 10
+  fields:
+    show_order: -2
+    name: 内部移動
+- model: moneybook.Genre
+  pk: 11
+  fields:
+    show_order: -3
+    name: 貯金
+- model: moneybook.Genre
+  pk: 12
+  fields:
+    show_order: -4
+    name: 収入
 
 # CheckedDate
 - model: moneybook.CheckedDate
