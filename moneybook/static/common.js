@@ -35,7 +35,8 @@ function fadeOutTimer(elm, opaValue, callback) {
     } else {
         clearTimeout(fadeout_timer);
         elm.style.opacity = 0;
-        //リロード
+        elm.style.display = "none";
+        // リセット処理
         callback();
     }
 }
