@@ -152,6 +152,10 @@ class Data(models.Model):
     def getBankData(data):
         return Data.getMethodData(data, 2)
 
+    # チェック済みのデータを取得
+    def getCheckedData(data):
+        return Data.sortDateAscending(data.filter(checked=1))
+
     # 未チェックのデータを取得
     def getUncheckedData(data):
         return Data.sortDateAscending(data.filter(checked=0))
