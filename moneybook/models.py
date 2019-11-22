@@ -33,6 +33,7 @@ class Method(models.Model):
         return Method.objects.filter(show_order__lte=0).order_by('id')
 
 class Genre(models.Model):
+    show_order = models.IntegerField(default=-100)
     name = models.CharField(max_length=10)
 
     def __str__(self):
@@ -42,11 +43,11 @@ class Genre(models.Model):
         return Genre.objects.get(pk=pk)
 
     def list():
-        return Genre.objects.order_by('pk')
+        return Genre.objects.order_by('show_order')
     def first_list():
-        return Genre.objects.filter(pk__gt=0).order_by('pk')
+        return Genre.objects.filter(show_order__gt=0).order_by('show_order')
     def latter_list():
-        return Genre.objects.filter(pk__lte=0).order_by('-pk')
+        return Genre.objects.filter(show_order__lte=0).order_by('-show_order')
 
 class Data(models.Model):
     date = models.DateField()
