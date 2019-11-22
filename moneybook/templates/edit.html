@@ -25,7 +25,7 @@
         })
         // 成功時
         .done((data) => {
-            history.back();
+            window.location.href = document.referrer;
         })
         // 失敗時
         .fail((data) => {
