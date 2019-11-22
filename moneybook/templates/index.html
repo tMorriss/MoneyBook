@@ -30,6 +30,11 @@
         chart.render();
     }
     function send_add_row() {
+        genre = $('input[name="a_genre"]:checked').val();
+        direction = 1;
+        if (genre == -4) {
+            direction = 0;
+        }
         $.ajax({
             url: "{% url 'moneybook:add' %}",
             type: "POST",
@@ -38,9 +43,9 @@
                 "date": $('#a_year').val() + "-" + $('#a_month').val() + "-" + $('#a_day').val(),
                 "item": $('#a_item').val(),
                 "price": $('#a_price').val(),
-                "direction": "1",
+                "direction": direction,
                 "method": $('input[name="a_method"]:checked').val(),
-                "genre": $('input[name="a_genre"]:checked').val(),
+                "genre": genre,
                 "temp": "False",
                 "checked": "False",
             }
