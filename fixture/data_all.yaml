@@ -13824,7 +13824,7 @@
     direction: 2
     genre: 1
     temp: 0
-    checked: 0
+    checked: 1
 - model: moneybook.data
   pk: 1258
   fields: 
@@ -13835,7 +13835,7 @@
     direction: 2
     genre: 2
     temp: 0
-    checked: 0
+    checked: 1
 - model: moneybook.data
   pk: 1259
   fields: 
@@ -13989,7 +13989,7 @@
     direction: 2
     genre: 1
     temp: 0
-    checked: 0
+    checked: 1
 - model: moneybook.data
   pk: 1273
   fields: 
@@ -14000,7 +14000,7 @@
     direction: 2
     genre: 1
     temp: 0
-    checked: 0
+    checked: 1
 - model: moneybook.data
   pk: 1274
   fields: 
@@ -14022,7 +14022,7 @@
     direction: 2
     genre: 1
     temp: 0
-    checked: 0
+    checked: 1
 - model: moneybook.data
   pk: 1276
   fields: 
@@ -14121,7 +14121,7 @@
     direction: 2
     genre: 10
     temp: 0
-    checked: 0
+    checked: 1
 - model: moneybook.data
   pk: 1285
   fields: 
@@ -14209,7 +14209,7 @@
     direction: 2
     genre: 2
     temp: 0
-    checked: 0
+    checked: 1
 - model: moneybook.data
   pk: 1293
   fields: 
@@ -14220,7 +14220,7 @@
     direction: 2
     genre: 2
     temp: 0
-    checked: 0
+    checked: 1
 - model: moneybook.data
   pk: 1294
   fields: 
@@ -14341,7 +14341,7 @@
     direction: 2
     genre: 1
     temp: 0
-    checked: 0
+    checked: 1
 - model: moneybook.data
   pk: 1305
   fields: 
@@ -14352,7 +14352,7 @@
     direction: 2
     genre: 1
     temp: 0
-    checked: 0
+    checked: 1
 - model: moneybook.data
   pk: 1306
   fields: 
@@ -14363,7 +14363,7 @@
     direction: 2
     genre: 1
     temp: 0
-    checked: 0
+    checked: 1
 - model: moneybook.data
   pk: 1307
   fields: 
@@ -14374,7 +14374,7 @@
     direction: 2
     genre: 1
     temp: 0
-    checked: 0
+    checked: 1
 - model: moneybook.data
   pk: 1308
   fields: 
@@ -14396,7 +14396,7 @@
     direction: 2
     genre: 1
     temp: 0
-    checked: 0
+    checked: 1
 - model: moneybook.data
   pk: 1310
   fields: 
@@ -14407,7 +14407,7 @@
     direction: 2
     genre: 1
     temp: 0
-    checked: 0
+    checked: 1
 - model: moneybook.data
   pk: 1311
   fields: 
@@ -14418,7 +14418,7 @@
     direction: 2
     genre: 1
     temp: 0
-    checked: 0
+    checked: 1
 - model: moneybook.data
   pk: 1312
   fields: 
@@ -14803,7 +14803,7 @@
     direction: 2
     genre: 1
     temp: 0
-    checked: 0
+    checked: 1
 - model: moneybook.data
   pk: 1347
   fields: 
@@ -14814,7 +14814,7 @@
     direction: 2
     genre: 1
     temp: 0
-    checked: 0
+    checked: 1
 - model: moneybook.data
   pk: 1348
   fields: 
@@ -14825,7 +14825,7 @@
     direction: 2
     genre: 1
     temp: 0
-    checked: 0
+    checked: 1
 - model: moneybook.data
   pk: 1349
   fields: 
@@ -14858,7 +14858,7 @@
     direction: 2
     genre: 1
     temp: 0
-    checked: 0
+    checked: 1
 - model: moneybook.data
   pk: 1352
   fields: 
@@ -14880,7 +14880,7 @@
     direction: 2
     genre: 1
     temp: 0
-    checked: 0
+    checked: 1
 - model: moneybook.data
   pk: 1354
   fields: 
@@ -14891,7 +14891,7 @@
     direction: 2
     genre: 10
     temp: 0
-    checked: 0
+    checked: 1
 - model: moneybook.data
   pk: 1355
   fields: 
@@ -14924,7 +14924,7 @@
     direction: 2
     genre: 10
     temp: 0
-    checked: 0
+    checked: 1
 - model: moneybook.data
   pk: 1358
   fields: 
@@ -14946,7 +14946,7 @@
     direction: 2
     genre: 10
     temp: 0
-    checked: 0
+    checked: 1
 - model: moneybook.data
   pk: 1360
   fields: 
@@ -14979,7 +14979,7 @@
     direction: 2
     genre: 10
     temp: 0
-    checked: 0
+    checked: 1
 - model: moneybook.data
   pk: 1363
   fields: 
@@ -15067,7 +15067,7 @@
     direction: 2
     genre: 1
     temp: 0
-    checked: 0
+    checked: 1
 - model: moneybook.data
   pk: 1371
   fields: 
@@ -15100,7 +15100,7 @@
     direction: 2
     genre: 1
     temp: 0
-    checked: 0
+    checked: 1
 - model: moneybook.data
   pk: 1374
   fields: 
@@ -15111,7 +15111,7 @@
     direction: 2
     genre: 1
     temp: 0
-    checked: 0
+    checked: 1
 - model: moneybook.data
   pk: 1375
   fields: 
@@ -15122,18 +15122,18 @@
     direction: 2
     genre: 1
     temp: 0
-    checked: 0
+    checked: 1
 - model: moneybook.data
   pk: 1376
   fields: 
     date: 2019-10-31
     item: 西友
-    price: 89
+    price: 78
     method: 2
     direction: 2
     genre: 1
     temp: 0
-    checked: 0
+    checked: 1
 - model: moneybook.data
   pk: 1377
   fields: 
@@ -15144,7 +15144,7 @@
     direction: 2
     genre: 1
     temp: 0
-    checked: 0
+    checked: 1
 - model: moneybook.data
   pk: 1378
   fields: 
@@ -15155,7 +15155,7 @@
     direction: 2
     genre: 1
     temp: 0
-    checked: 0
+    checked: 1
 - model: moneybook.data
   pk: 1379
   fields: 
@@ -15177,7 +15177,7 @@
     direction: 2
     genre: 10
     temp: 0
-    checked: 0
+    checked: 1
 - model: moneybook.data
   pk: 1381
   fields: 
@@ -15232,7 +15232,7 @@
     direction: 2
     genre: 4
     temp: 0
-    checked: 0
+    checked: 1
 - model: moneybook.data
   pk: 1386
   fields: 
@@ -15242,6 +15242,985 @@
     method: 5
     direction: 2
     genre: 4
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1387
+  fields: 
+    date: 2019-10-12
+    item: au
+    price: 3221
+    method: 2
+    direction: 2
+    genre: 2
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1388
+  fields: 
+    date: 2019-11-05
+    item: 自販機
+    price: 100
+    method: 1
+    direction: 2
+    genre: 1
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1389
+  fields: 
+    date: 2019-11-06
+    item: ガス代
+    price: 1897
+    method: 2
+    direction: 2
+    genre: 2
+    temp: 0
+    checked: 0
+- model: moneybook.data
+  pk: 1390
+  fields: 
+    date: 2019-11-02
+    item: コンビニ
+    price: 2
+    method: 2
+    direction: 2
+    genre: 1
+    temp: 0
+    checked: 0
+- model: moneybook.data
+  pk: 1391
+  fields: 
+    date: 2019-11-04
+    item: マクドナルド
+    price: 640
+    method: 2
+    direction: 2
+    genre: 1
+    temp: 0
+    checked: 0
+- model: moneybook.data
+  pk: 1392
+  fields: 
+    date: 2019-11-04
+    item: しまむら
+    price: 2340
+    method: 2
+    direction: 2
+    genre: 3
+    temp: 0
+    checked: 0
+- model: moneybook.data
+  pk: 1393
+  fields: 
+    date: 2019-11-04
+    item: ユニクロ
+    price: 2189
+    method: 2
+    direction: 2
+    genre: 3
+    temp: 0
+    checked: 0
+- model: moneybook.data
+  pk: 1394
+  fields: 
+    date: 2019-11-05
+    item: 西友
+    price: 78
+    method: 2
+    direction: 2
+    genre: 1
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1395
+  fields: 
+    date: 2019-11-05
+    item: 西友
+    price: 1752
+    method: 5
+    direction: 2
+    genre: 1
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1396
+  fields: 
+    date: 2019-11-06
+    item: 西友
+    price: 87
+    method: 2
+    direction: 2
+    genre: 1
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1397
+  fields: 
+    date: 2019-11-06
+    item: 西友
+    price: 783
+    method: 2
+    direction: 2
+    genre: 1
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1398
+  fields: 
+    date: 2019-11-07
+    item: 西友
+    price: 78
+    method: 2
+    direction: 2
+    genre: 1
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1399
+  fields: 
+    date: 2019-11-05
+    item: 社食
+    price: 691
+    method: 5
+    direction: 2
+    genre: 1
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1400
+  fields: 
+    date: 2019-11-06
+    item: 社食
+    price: 693
+    method: 5
+    direction: 2
+    genre: 1
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1401
+  fields: 
+    date: 2019-11-06
+    item: PayPayチャージ
+    price: 1000
+    method: 2
+    direction: 2
+    genre: 10
+    temp: 0
+    checked: 0
+- model: moneybook.data
+  pk: 1402
+  fields: 
+    date: 2019-11-06
+    item: PayPayチャージ
+    price: 1000
+    method: 5
+    direction: 1
+    genre: 10
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1403
+  fields: 
+    date: 2019-11-07
+    item: 社食
+    price: 744
+    method: 5
+    direction: 2
+    genre: 1
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1404
+  fields: 
+    date: 2019-11-04
+    item: 散髪
+    price: 1200
+    method: 1
+    direction: 2
+    genre: 3
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1405
+  fields: 
+    date: 2019-10-31
+    item: 食事代控除
+    price: 12338
+    method: 2
+    direction: 2
+    genre: 1
+    temp: 0
+    checked: 0
+- model: moneybook.data
+  pk: 1406
+  fields: 
+    date: 2019-11-12
+    item: au
+    price: 3413
+    method: 2
+    direction: 2
+    genre: 2
+    temp: 0
+    checked: 0
+- model: moneybook.data
+  pk: 1407
+  fields: 
+    date: 2019-11-09
+    item: OB会
+    price: 3000
+    method: 5
+    direction: 2
+    genre: 4
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1408
+  fields: 
+    date: 2019-11-09
+    item: OB会二次会
+    price: 1600
+    method: 1
+    direction: 2
+    genre: 4
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1409
+  fields: 
+    date: 2019-11-08
+    item: 西友
+    price: 78
+    method: 2
+    direction: 2
+    genre: 1
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1410
+  fields: 
+    date: 2019-11-09
+    item: コンビニ
+    price: 649
+    method: 2
+    direction: 2
+    genre: 1
+    temp: 0
+    checked: 0
+- model: moneybook.data
+  pk: 1411
+  fields: 
+    date: 2019-11-08
+    item: PayPayチャージ
+    price: 5000
+    method: 2
+    direction: 2
+    genre: 10
+    temp: 0
+    checked: 0
+- model: moneybook.data
+  pk: 1412
+  fields: 
+    date: 2019-11-08
+    item: PayPayチャージ
+    price: 5000
+    method: 5
+    direction: 1
+    genre: 10
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1413
+  fields: 
+    date: 2019-11-08
+    item: PayPayチャージ
+    price: 962
+    method: 2
+    direction: 2
+    genre: 10
+    temp: 0
+    checked: 0
+- model: moneybook.data
+  pk: 1414
+  fields: 
+    date: 2019-11-08
+    item: PayPayチャージ
+    price: 962
+    method: 5
+    direction: 1
+    genre: 10
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1415
+  fields: 
+    date: 2019-11-08
+    item: PayPayチャージ
+    price: 5000
+    method: 2
+    direction: 2
+    genre: 10
+    temp: 0
+    checked: 0
+- model: moneybook.data
+  pk: 1416
+  fields: 
+    date: 2019-11-08
+    item: PayPayチャージ
+    price: 5000
+    method: 5
+    direction: 1
+    genre: 10
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1417
+  fields: 
+    date: 2019-11-08
+    item: 肉会
+    price: 6500
+    method: 5
+    direction: 2
+    genre: 4
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1418
+  fields: 
+    date: 2019-11-08
+    item: 社食
+    price: 642
+    method: 5
+    direction: 2
+    genre: 1
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1419
+  fields: 
+    date: 2019-11-11
+    item: 自販機
+    price: 100
+    method: 2
+    direction: 2
+    genre: 1
+    temp: 0
+    checked: 0
+- model: moneybook.data
+  pk: 1420
+  fields: 
+    date: 2019-11-12
+    item: 水道代
+    price: 3783
+    method: 2
+    direction: 2
+    genre: 2
+    temp: 0
+    checked: 0
+- model: moneybook.data
+  pk: 1421
+  fields: 
+    date: 2019-10-31
+    item: nuro
+    price: 1440
+    method: 2
+    direction: 2
+    genre: 2
+    temp: 0
+    checked: 0
+- model: moneybook.data
+  pk: 1422
+  fields: 
+    date: 2019-10-31
+    item: nuro
+    price: 3023
+    method: 2
+    direction: 2
+    genre: 2
+    temp: 0
+    checked: 0
+- model: moneybook.data
+  pk: 1423
+  fields: 
+    date: 2019-11-15
+    item: 自販機
+    price: 100
+    method: 1
+    direction: 2
+    genre: 1
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1424
+  fields: 
+    date: 2019-11-11
+    item: 西友
+    price: 78
+    method: 2
+    direction: 2
+    genre: 1
+    temp: 0
+    checked: 0
+- model: moneybook.data
+  pk: 1425
+  fields: 
+    date: 2019-11-11
+    item: マクドナルド
+    price: 550
+    method: 2
+    direction: 2
+    genre: 1
+    temp: 0
+    checked: 0
+- model: moneybook.data
+  pk: 1426
+  fields: 
+    date: 2019-11-11
+    item: コンビニ
+    price: 588
+    method: 2
+    direction: 2
+    genre: 1
+    temp: 0
+    checked: 0
+- model: moneybook.data
+  pk: 1427
+  fields: 
+    date: 2019-11-12
+    item: 西友
+    price: 78
+    method: 2
+    direction: 2
+    genre: 1
+    temp: 0
+    checked: 0
+- model: moneybook.data
+  pk: 1428
+  fields: 
+    date: 2019-11-13
+    item: 西友
+    price: 1562
+    method: 2
+    direction: 2
+    genre: 1
+    temp: 0
+    checked: 0
+- model: moneybook.data
+  pk: 1429
+  fields: 
+    date: 2019-11-13
+    item: 西友
+    price: 78
+    method: 2
+    direction: 2
+    genre: 1
+    temp: 0
+    checked: 0
+- model: moneybook.data
+  pk: 1430
+  fields: 
+    date: 2019-11-14
+    item: 西友
+    price: 78
+    method: 2
+    direction: 2
+    genre: 1
+    temp: 0
+    checked: 0
+- model: moneybook.data
+  pk: 1431
+  fields: 
+    date: 2019-11-14
+    item: 西友
+    price: 149
+    method: 2
+    direction: 2
+    genre: 1
+    temp: 0
+    checked: 0
+- model: moneybook.data
+  pk: 1432
+  fields: 
+    date: 2019-11-14
+    item: 松屋
+    price: 380
+    method: 5
+    direction: 2
+    genre: 1
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1433
+  fields: 
+    date: 2019-11-15
+    item: 西友
+    price: 78
+    method: 2
+    direction: 2
+    genre: 1
+    temp: 0
+    checked: 0
+- model: moneybook.data
+  pk: 1434
+  fields: 
+    date: 2019-11-15
+    item: 西友
+    price: 1170
+    method: 2
+    direction: 2
+    genre: 1
+    temp: 0
+    checked: 0
+- model: moneybook.data
+  pk: 1435
+  fields: 
+    date: 2019-11-12
+    item: 社食
+    price: 744
+    method: 5
+    direction: 2
+    genre: 1
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1436
+  fields: 
+    date: 2019-11-13
+    item: 社食
+    price: 491
+    method: 5
+    direction: 2
+    genre: 1
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1437
+  fields: 
+    date: 2019-11-13
+    item: PayPayチャージ
+    price: 5000
+    method: 2
+    direction: 2
+    genre: 10
+    temp: 0
+    checked: 0
+- model: moneybook.data
+  pk: 1438
+  fields: 
+    date: 2019-11-13
+    item: PayPayチャージ
+    price: 5000
+    method: 5
+    direction: 1
+    genre: 10
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1439
+  fields: 
+    date: 2019-11-14
+    item: 社食
+    price: 693
+    method: 5
+    direction: 2
+    genre: 1
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1440
+  fields: 
+    date: 2019-11-15
+    item: PayPayキャッシュバック
+    price: 91
+    method: 5
+    direction: 1
+    genre: 12
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1441
+  fields: 
+    date: 2019-11-15
+    item: 社食
+    price: 693
+    method: 5
+    direction: 2
+    genre: 1
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1442
+  fields: 
+    date: 2019-10-01
+    item: PayPayキャッシュバック
+    price: 1
+    method: 5
+    direction: 1
+    genre: 12
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1443
+  fields: 
+    date: 2019-10-01
+    item: PayPayキャッシュバック
+    price: 472
+    method: 5
+    direction: 1
+    genre: 12
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1444
+  fields: 
+    date: 2019-10-03
+    item: payPayキャッシュバック
+    price: 52
+    method: 5
+    direction: 1
+    genre: 12
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1445
+  fields: 
+    date: 2019-11-15
+    item: 西荻屋
+    price: 680
+    method: 1
+    direction: 2
+    genre: 1
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1446
+  fields: 
+    date: 2019-11-16
+    item: 富士そば
+    price: 310
+    method: 1
+    direction: 2
+    genre: 1
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1447
+  fields: 
+    date: 2019-10-03
+    item: Suicaチャージ
+    price: 1000
+    method: 2
+    direction: 2
+    genre: 6
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1448
+  fields: 
+    date: 2019-10-07
+    item: Suicaチャージ
+    price: 1000
+    method: 2
+    direction: 2
+    genre: 6
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1449
+  fields: 
+    date: 2019-10-09
+    item: Suicaチャージ
+    price: 1000
+    method: 2
+    direction: 2
+    genre: 6
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1450
+  fields: 
+    date: 2019-10-17
+    item: 定期券
+    price: 6580
+    method: 2
+    direction: 2
+    genre: 6
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1451
+  fields: 
+    date: 2019-10-17
+    item: Suicaチャージ
+    price: 1000
+    method: 2
+    direction: 2
+    genre: 6
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1452
+  fields: 
+    date: 2019-10-25
+    item: Suicaチャージ
+    price: 1000
+    method: 2
+    direction: 2
+    genre: 6
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1453
+  fields: 
+    date: 2019-12-04
+    item: 西友優待
+    price: 254
+    method: 2
+    direction: 1
+    genre: 12
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1454
+  fields: 
+    date: 2019-11-16
+    item: 肉球キーキャップ
+    price: 2860
+    method: 5
+    direction: 2
+    genre: 5
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1455
+  fields: 
+    date: 2019-11-17
+    item: コンビニ
+    price: 151
+    method: 2
+    direction: 2
+    genre: 1
+    temp: 0
+    checked: 0
+- model: moneybook.data
+  pk: 1456
+  fields: 
+    date: 2019-11-17
+    item: ニトリ
+    price: 1619
+    method: 6
+    direction: 2
+    genre: 3
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1457
+  fields: 
+    date: 2019-11-17
+    item: Kyashチャージ
+    price: 1387
+    method: 2
+    direction: 2
+    genre: 10
+    temp: 0
+    checked: 0
+- model: moneybook.data
+  pk: 1458
+  fields: 
+    date: 2019-11-17
+    item: Kyashチャージ
+    price: 1387
+    method: 6
+    direction: 1
+    genre: 10
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1459
+  fields: 
+    date: 2019-11-18
+    item: 西友
+    price: 78
+    method: 2
+    direction: 2
+    genre: 1
+    temp: 0
+    checked: 0
+- model: moneybook.data
+  pk: 1460
+  fields: 
+    date: 2019-11-18
+    item: 西友
+    price: 2052
+    method: 2
+    direction: 2
+    genre: 1
+    temp: 0
+    checked: 0
+- model: moneybook.data
+  pk: 1461
+  fields: 
+    date: 2019-11-19
+    item: 西友
+    price: 78
+    method: 2
+    direction: 2
+    genre: 1
+    temp: 0
+    checked: 0
+- model: moneybook.data
+  pk: 1462
+  fields: 
+    date: 2019-11-20
+    item: 西友
+    price: 78
+    method: 2
+    direction: 2
+    genre: 1
+    temp: 0
+    checked: 0
+- model: moneybook.data
+  pk: 1463
+  fields: 
+    date: 2019-11-20
+    item: かつや
+    price: 1045
+    method: 1
+    direction: 2
+    genre: 1
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1464
+  fields: 
+    date: 2019-11-18
+    item: 社食
+    price: 691
+    method: 5
+    direction: 2
+    genre: 1
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1465
+  fields: 
+    date: 2019-11-19
+    item: 社食
+    price: 543
+    method: 5
+    direction: 2
+    genre: 1
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1466
+  fields: 
+    date: 2019-11-19
+    item: PayPayチャージ
+    price: 5000
+    method: 2
+    direction: 2
+    genre: 10
+    temp: 0
+    checked: 0
+- model: moneybook.data
+  pk: 1467
+  fields: 
+    date: 2019-11-19
+    item: PayPayチャージ
+    price: 5000
+    method: 5
+    direction: 1
+    genre: 10
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1468
+  fields: 
+    date: 2019-11-20
+    item: 社食
+    price: 691
+    method: 5
+    direction: 2
+    genre: 1
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1469
+  fields: 
+    date: 2019-10-08
+    item: PayPayキャッシュバック
+    price: 5
+    method: 5
+    direction: 1
+    genre: 12
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1470
+  fields: 
+    date: 2019-10-09
+    item: PayPayキャッシュバック
+    price: 100
+    method: 5
+    direction: 1
+    genre: 12
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1471
+  fields: 
+    date: 2019-10-11
+    item: PayPayキャッシュバック
+    price: 5
+    method: 5
+    direction: 1
+    genre: 12
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1472
+  fields: 
+    date: 2019-10-17
+    item: PayPayキャッシュバック
+    price: 16
+    method: 5
+    direction: 1
+    genre: 12
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1473
+  fields: 
+    date: 2019-10-24
+    item: PayPayキャッシュバック
+    price: 62
+    method: 5
+    direction: 1
+    genre: 12
+    temp: 0
+    checked: 1
+- model: moneybook.data
+  pk: 1474
+  fields: 
+    date: 2019-11-20
+    item: 家賃
+    price: 54000
+    method: 2
+    direction: 2
+    genre: 7
+    temp: 1
+    checked: 0
+- model: moneybook.data
+  pk: 1475
+  fields: 
+    date: 2019-11-21
+    item: 自販機
+    price: 100
+    method: 1
+    direction: 2
+    genre: 1
     temp: 0
     checked: 0
 

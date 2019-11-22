@@ -27,7 +27,7 @@ def index_month(request, year, month):
     # ジャンルごとの支出
     positiveGenresOutgo = {}
     for g in Genre.list():
-        if g.pk >= 0:
+        if g.show_order >= 0:
             d = Data.getGenreData(monthlyData, g.pk)
             positiveGenresOutgo[g] = Data.getOutgoSum(d)
 
