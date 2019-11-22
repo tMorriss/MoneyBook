@@ -139,6 +139,7 @@ def update_fixed_cost_mark(request):
     return HttpResponse(json.dumps({"message": "success"}))
 
 def calculate_now_bank(request):
+    writtenBankData = Data.getBankData(Data.getAllData())
     bankSum = 0
     bb = BankBalance.getAll()
     cc = CreditCheckedDate.getAll()
@@ -159,4 +160,4 @@ def calculate_now_bank(request):
     except:
         return HttpResponseBadRequest(json.dumps({"message": "invalid parameter"}))
 
-    return HttpResponse(json.dumps({"balance": bankSum}))
+    return HttpResponse(json.dumps({"balance": Data.getIncomeSum(writtenBankData) - Data.getOutgoSum(writtenBankData) - bankSum}))
