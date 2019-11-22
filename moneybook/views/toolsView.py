@@ -35,7 +35,8 @@ def tools(request):
     banks = BankBalance.getAll()
     # 銀行残高
     allBankData = Data.getBankData(allData)
-    bankWritten = Data.getIncomeSum(allBankData) - Data.getOutgoSum(allBankData)
+    checkedBankData = Data.getCheckedData(allBankData)
+    bankWritten = Data.getIncomeSum(checkedBankData) - Data.getOutgoSum(checkedBankData)
 
     content = {
         'app_name': settings.APP_NAME,
@@ -139,7 +140,7 @@ def update_fixed_cost_mark(request):
     return HttpResponse(json.dumps({"message": "success"}))
 
 def calculate_now_bank(request):
-    writtenBankData = Data.getBankData(Data.getAllData())
+    writtenBankData = Data.getCheckedData(Data.getBankData(Data.getAllData()))
     bankSum = 0
     bb = BankBalance.getAll()
     cc = CreditCheckedDate.getAll()
