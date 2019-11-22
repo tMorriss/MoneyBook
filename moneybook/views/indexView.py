@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.shortcuts import render
 from datetime import datetime
+from dateutil.relativedelta import relativedelta
 from moneybook.models import *
 
 def index_month(request, year, month):
@@ -35,11 +36,21 @@ def index_month(request, year, month):
     totalOutgo = Data.getOutgoSum(Data.getNormalData(monthlyData)) - monthlyTempAndDeposit
     fixedOutgo = Data.getOutgoSum(Data.getFixedData(monthlyData))
     variableOutgo = Data.getOutgoSum(Data.getVariableData(monthlyData))
+
+    # 前後の日付
+    toMonth = datetime(int(year), int(month), 1)
+    nextMonth = toMonth + relativedelta(months=1)
+    lastMonth = toMonth - relativedelta(months=1)
+
     content = {
         'app_name': settings.APP_NAME,
         'username': request.user,
         'year': year,
         'month': month,
+        'next_year': nextMonth.year,
+        'next_month': nextMonth.month,
+        'last_year': lastMonth.year,
+        'last_month': lastMonth.month,
         'show_data': monthlyData,
         'methods': methods,
         'first_genres': Genre.first_list(),

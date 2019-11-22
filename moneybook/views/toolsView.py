@@ -17,6 +17,9 @@ def tools(request):
     methodsBD = []
     for m in methods:
         d = Data.getMethodData(allData, m.pk)
+        # 銀行はチェック済みだけ
+        if m.pk == 2:
+            d = Data.getCheckedData(d)
         methodsBD.append(BalanceDate(m, Data.getIncomeSum(d) - Data.getOutgoSum(d), CheckedDate.get(m.pk).date))
     # クレカ確認日
     creditCheckedDate = CreditCheckedDate.getAll()
