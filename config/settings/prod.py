@@ -10,3 +10,5 @@ DATABASES = {
         'PORT': '3306',
     }
 }
+
+ALLOWED_HOSTS = ['moneybook.tmorriss.com']
