@@ -2,10 +2,12 @@
 - model: moneybook.Direction
   pk: 0
   fields:
+    state: 0
     name: 収入
 - model: moneybook.Direction
   pk: 1
   fields:
+    state: 1
     name: 支出
 
 # Method
