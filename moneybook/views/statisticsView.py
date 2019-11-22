@@ -34,8 +34,9 @@ def statistics_month(request, year):
         w = Data.getOutgoSum(Data.getKeywordData(monthlyData, "水道代"))
         if (w > 0):
             if iMonth > 0:
+                infraCosts[iMonth - 1].total += w / 2
                 infraCosts[iMonth - 1].water = w / 2
-        infraCosts.append(InfraCost(monthList[iMonth], e + g + w / 2, e, g, w))
+        infraCosts.append(InfraCost(monthList[iMonth], e + g + w / 2, e, g, w / 2))
 
         FoodCosts.append(LabelValue(monthList[iMonth], Data.getFoodCosts(monthlyData)))
 

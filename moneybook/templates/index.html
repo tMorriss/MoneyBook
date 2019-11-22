@@ -31,9 +31,9 @@
     }
     function send_add_row() {
         genre = $('input[name="a_genre"]:checked').val();
-        direction = 1;
+        direction = 2;
         if (genre == -4) {
-            direction = 0;
+            direction = 1;
         }
         $.ajax({
             url: "{% url 'moneybook:add' %}",

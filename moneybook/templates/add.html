@@ -115,7 +115,7 @@
                 "date": $('#s_year').val() + "-" + $('#s_month').val() + "-" + $('#s_day').val(),
                 "item": "Suicaチャージ",
                 "price": price,
-                "direction": 1,
+                "direction": 2,
                 "method": 2,
                 "genre": 4,
                 "temp": "False",
@@ -301,7 +301,7 @@
                 <th>立替</th>
                 <td class="radio-green">
                     {% for k,v in temps.items %}
-                        <input type="radio" name="a_temp" value="{{ k }}" id="a_temp-{{ k }}"{% if k == 0 %} checked{% endif %} onkeypress="key_press_add(event.keyCode)">
+                        <input type="radio" name="a_temp" value="{% if k == 0 %}False{% else %}True{% endif %}" id="a_temp-{{ k }}"{% if k == 0 %} checked{% endif %} onkeypress="key_press_add(event.keyCode)">
                         <label for="a_temp-{{ k }}">{{ v }}</label>
                     {% endfor %}
                 </td>
