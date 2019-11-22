@@ -13,16 +13,17 @@ class FixedCostPlan(models.Model):
         return FixedCostPlan.objects.all().first().price
 
 class Direction(models.Model):
+    state = models.IntegerField(default=-1)
     name = models.CharField(max_length=2)
 
     def __str__(self):
         return self.name
 
-    def get(pk):
-        return Direction.objects.get(pk=pk)
+    def get(state):
+        return Direction.objects.get(state=state)
 
     def list():
-        return Direction.objects.order_by('pk')
+        return Direction.objects.order_by('state')
 
 class Method(models.Model):
     show_order = models.IntegerField(default=0)
