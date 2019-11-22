@@ -3,15 +3,6 @@ from django.db.models import Sum
 from datetime import date, datetime
 import calendar
 
-class FixedCostPlan(models.Model):
-    price = models.IntegerField(default=0)
-
-    def __str__(self):
-        return self.price
-
-    def get():
-        return FixedCostPlan.objects.all().first().price
-
 class Direction(models.Model):
     name = models.CharField(max_length=2)
 

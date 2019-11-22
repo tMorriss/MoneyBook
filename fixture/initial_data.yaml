@@ -96,12 +96,6 @@
   fields:
     name: 家賃
 
-# FixedCost
-- model: moneybook.FixedCostPlan
-  pk: 1
-  fields:
-    price: 110000
-
 # CheckedDate
 - model: moneybook.CheckedDate
   pk: 1
