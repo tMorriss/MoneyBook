@@ -20,7 +20,7 @@ class AddIntraMoveView(View):
                 outData = Data()
                 outData.date = date(int(request.POST.get("year")), int(request.POST.get("month")), int(request.POST.get("day")))
                 outData.price = request.POST.get("price")
-                outData.direction = Direction.get(1)
+                outData.direction = Direction.get(2)
                 outData.method = Method.get(request.POST.get("before_method"))
                 outData.genre = Genre.get(-2)
                 outData.temp = False
@@ -32,7 +32,7 @@ class AddIntraMoveView(View):
                 inData = Data()
                 inData.date = date(int(request.POST.get("year")), int(request.POST.get("month")), int(request.POST.get("day")))
                 inData.price = request.POST.get("price")
-                inData.direction = Direction.get(0)
+                inData.direction = Direction.get(1)
                 inData.method = Method.get(request.POST.get("after_method"))
                 inData.genre = Genre.get(-2)
                 inData.temp = False

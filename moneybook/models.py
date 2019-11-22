@@ -13,17 +13,16 @@ class FixedCostPlan(models.Model):
         return FixedCostPlan.objects.all().first().price
 
 class Direction(models.Model):
-    state = models.IntegerField(default=-1)
     name = models.CharField(max_length=2)
 
     def __str__(self):
         return self.name
 
-    def get(state):
-        return Direction.objects.get(state=state)
+    def get(pk):
+        return Direction.objects.get(pk=pk)
 
     def list():
-        return Direction.objects.order_by('state')
+        return Direction.objects.order_by('pk')
 
 class Method(models.Model):
     show_order = models.IntegerField(default=0)
@@ -98,10 +97,10 @@ class Data(models.Model):
         return v
     # 収入の合計
     def getIncomeSum(data):
-        return Data.getSum(data, 0)
+        return Data.getSum(data, 1)
     # 支出の合計
     def getOutgoSum(data):
-        return Data.getSum(data, 1)
+        return Data.getSum(data, 2)
 
     # methodでフィルタ
     def getMethodData(data, methodId):
@@ -138,8 +137,8 @@ class Data(models.Model):
         return data.filter(genre__in=variableGenres)
 
     def getFoodCosts(data):
-        i = Data.getSum(Data.getGenreData(data, 1).filter(temp=1), 0)
-        o = Data.getSum(Data.getGenreData(data, 1), 1)
+        i = Data.getIncomeSum(Data.getGenreData(data, 1).filter(temp=1))
+        o = Data.getOutgoSum(Data.getGenreData(data, 1))
         return o - i
 
     # 日付順にソート
