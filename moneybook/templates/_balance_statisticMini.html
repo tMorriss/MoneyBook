@@ -1,0 +1,73 @@
+{% load humanize %}
+<h1>残高</h1>
+<table class="tbl-all-balance">
+    <tr>
+        <td>総残高</td>
+        <td>{{ total_balance|intcomma }}円</td>
+    </tr>
+</table>
+
+<!-- 支払い方法一覧 -->
+<table class="tbl-common">
+    <tr>
+        {% for m in methods_iob %}
+            <th>{{ m.label }}</th>
+        {% endfor %}
+    </tr>
+    <tr>
+        {% for m in methods_iob %}
+            <td>{{ m.balance|intcomma }}円</td>
+        {% endfor %}
+    </tr>
+</table>
+
+<h1>統計</h1>
+<div id="chart_container"></div>
+<table class="tbl-add tbl-common" id="tbl-parameters">
+    <tr>
+        <th>収入合計</th>
+        <td class="righter">{{ total_income|intcomma }}</td>
+    </tr>
+    <tr>
+        <th>支出合計</th>
+        <td class="righter">{{ total_outgo|intcomma }}</td>
+    </tr>
+    <tr>
+        <th>収支</th>
+        <td class="righter">{% if total_inout >= 0 %}+{% endif %}{{ total_inout|intcomma }}</td>
+    </tr>
+    <tr>
+        <th>変動費</th>
+        <td class="righter">{{ variable_outgo|intcomma }}</td>
+    </tr>
+    <tr>
+        <th>固定費</th>
+        <td class="righter">{{ fixed_outgo|intcomma }}</td>
+    </tr>
+    <tr>
+        <th>変動残額</th>
+        <td class="righter">{{ variable_remain|intcomma }}</td>
+    </tr>
+    <tr>
+        <th>全収入</th>
+        <td class="righter">{{ all_income|intcomma }}</td>
+    </tr>
+    <tr>
+        <th>全支出</th>
+        <td class="righter">{{ all_outgo|intcomma }}</td>
+    </tr>
+</table>
+<table class="tbl-common">
+    <tr>
+        <th></th>
+        {% for m in methods_iob %}<th>{{ m.label }}</th>{% endfor %}
+    </tr>
+    <tr>
+        <th>収入</th>
+        {% for m in methods_monthly_iob %}<td>{{ m.income|intcomma }}</td>{% endfor %}
+    </tr>
+    <tr>
+        <th>支出</th>
+        {% for m in methods_monthly_iob %}<td>{{ m.outgo|intcomma }}</td>{% endfor %}
+    </tr>
+</table>
