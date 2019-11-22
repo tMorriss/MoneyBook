@@ -1,0 +1,5 @@
+.tbl-summary th, .tbl-summary td {
+    background: #ff0033;
+    font-size: 120%;
+    padding: 0 0.2vw;
+}

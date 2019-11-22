@@ -1,0 +1,23 @@
+.tbl-per-month {
+    /* font-size: 120%; */
+    font-size: 0.8vw;
+}
+
+@media screen and (max-width: 980px) {
+    .tbl-per-month {
+        font-size: 2vw;
+    }
+}
+
+.graph-statistic {
+    height: 25vw;
+    width: 50vw;
+    margin: auto;
+}
+
+@media screen and (max-width: 980px) {
+    .graph-statistic {
+        height: 50vw;
+        width: 100vw;
+    }
+}
