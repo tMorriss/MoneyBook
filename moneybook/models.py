@@ -106,18 +106,18 @@ class Data(models.Model):
         temp = data.filter(temp=1).aggregate(Sum('price'))['price__sum']
         if temp == None:
             temp = 0
-        deposit = data.filter(genre=-3).aggregate(Sum('price'))['price__sum']
+        deposit = data.filter(genre=11).aggregate(Sum('price'))['price__sum']
         if deposit == None:
             deposit = 0
         return temp + deposit
 
     # 内部移動だけを排除
     def getDataWithoutInmove(data):
-        return data.exclude(genre=-2)
+        return data.exclude(genre=10)
 
     # 計算外と内部移動を排除
     def getNormalData(data):
-        return data.exclude(genre=-1).exclude(genre=-2)
+        return data.exclude(genre=9).exclude(genre=10)
 
     # 使った固定費
     def getFixedData(data):
