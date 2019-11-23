@@ -247,7 +247,7 @@
             <td>{{ d.method }}</td>
             <td>{% if d.temp %}立替{% else %}{{ d.genre }}{% endif %}</td>
             <td class='a-edit'><a href="{% url 'moneybook:edit' d.pk %}">編集</a></td>
-            <td class="a-edit"><input type="button" value="OK" onclick="check({{ d.pk }})"></td>
+            <td class="a-edit"><input type="button" value="OK" onclick="check({{ d.pk }})" style="cursor:pointer"></td>
         </tr>
         {% endfor %}
     </table>
