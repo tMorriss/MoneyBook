@@ -22,7 +22,7 @@ class AddIntraMoveView(View):
                 outData.price = request.POST.get("price")
                 outData.direction = Direction.get(2)
                 outData.method = Method.get(request.POST.get("before_method"))
-                outData.genre = Genre.get(-2)
+                outData.genre = Genre.get(10)
                 outData.temp = False
                 if request.POST.get("item"):
                     outData.item = request.POST.get("item")
@@ -34,7 +34,7 @@ class AddIntraMoveView(View):
                 inData.price = request.POST.get("price")
                 inData.direction = Direction.get(1)
                 inData.method = Method.get(request.POST.get("after_method"))
-                inData.genre = Genre.get(-2)
+                inData.genre = Genre.get(10)
                 inData.temp = False
                 if request.POST.get("item"):
                     inData.item = request.POST.get("item")
