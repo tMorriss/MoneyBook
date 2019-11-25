@@ -42,7 +42,7 @@ class EditView(View):
             data.date = request.POST.get("date")
             data.item = request.POST.get("item")
             data.price = request.POST.get("price")
-            data.directions = Direction.get(request.POST.get("direction"))
+            data.direction = Direction.get(request.POST.get("direction"))
             data.method = Method.get(request.POST.get("method"))
             data.genre = Genre.get(request.POST.get("genre"))
             data.temp = request.POST.get("temp")
