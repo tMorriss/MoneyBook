@@ -124,7 +124,7 @@
         })
         // 成功時
         .done((data) => {
-            update_success(data);
+            update_success();
         })
         // 失敗時
         .fail((data) => {
@@ -135,9 +135,7 @@
         });
     }
     
-    function update_success(data) {
-        // 表の書き換え
-        $('#transactions').html(data);
+    function update_success() {
         // メッセージ表示
         show_result_msg("Success!", reset_add_form);
     }

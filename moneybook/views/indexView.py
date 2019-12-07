@@ -86,6 +86,7 @@ def index_balance_statisticMini(request):
     if "year" in request.GET and "month" in request.GET:
         year = request.GET.get("year")
         month = request.GET.get("month")
+
     # 今月のデータ
     monthlyData = Data.sortDateDescending(Data.getMonthData(int(year), int(month)))
     # 支払い方法リスト
@@ -98,6 +99,7 @@ def index_chart_data(request):
     if "year" in request.GET and "month" in request.GET:
         year = request.GET.get("year")
         month = request.GET.get("month")
+
     # 今月のデータ
     monthlyData = Data.sortDateDescending(Data.getMonthData(int(year), int(month)))
     # ジャンルごとの支出
@@ -110,3 +112,18 @@ def index_chart_data(request):
         'genres_outgo': positiveGenresOutgo,
     }
     return render(request, '_chart_container_data.html', content)
+
+def data_table(request):
+    if "year" in request.GET and "month" in request.GET:
+        year = int(request.GET.get("year"))
+        month = int(request.GET.get("month"))
+
+    # 今月のデータ
+    monthlyData = Data.sortDateDescending(Data.getMonthData(year, month))
+
+    content = {
+        'show_data': monthlyData,
+    }
+
+    # 追加後のmonthlyテーブルを返す
+    return render(request, '_data_table.html', content)
