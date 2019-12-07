@@ -4,6 +4,12 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from moneybook.models import *
 
+def index(request):
+    now = datetime.now()
+    year = now.year
+    month = str(now.month).zfill(2)
+    return index_month(request, year, month)
+
 def index_month(request, year, month):
     # 支払い方法リスト
     methods = Method.list()
@@ -27,12 +33,6 @@ def index_month(request, year, month):
         'latter_genres': Genre.latter_list(),
     }
     return render(request, 'index.html', content)
-
-def index(request):
-    now = datetime.now()
-    year = now.year
-    month = str(now.month).zfill(2)
-    return index_month(request, year, month)
 
 def index_balance_statisticMini(request):
     if "year" in request.GET and "month" in request.GET:
