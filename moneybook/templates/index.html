@@ -8,25 +8,13 @@
 <script type="text/javascript" src="{% static 'canvasjs.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'common.js' %}"></script>
 <script type="text/javascript" src="{% static 'index.js' %}"></script>
+<div id="js_draw_chart_container">
+{% include "_chart_container_data.html" %}
+</div>
 <script type="text/javascript">
     window.onload = function() {
         apply_filter()
-        
-        var chart = new CanvasJS.Chart("chart_container", {
-            animationEnabled: true,
-            title: {text: "支出内訳"},
-            data: [{
-                type: "pie",
-                startAngle: 270,
-                radius: "80%",
-                yValueFormatString: "#,###,##0\"円\"",
-                indexLabel: "{label} {y}",
-                dataPoints: [
-                    {% include "_chart_container_data.html" %}
-                ]
-            }]
-        });
-        chart.render();
+        draw_chart_container();
     }
     function send_add_row() {
         genre = $('input[name="a_genre"]:checked').val();
@@ -104,6 +92,38 @@
         if (code === 13) {
             move_month();
         }
+    }
+    
+    function update_balance_statisticMini() {
+        $.when(
+            $.ajax({
+                url: "{% url 'moneybook:balance_statisticMini' %}",
+                type: "GET",
+                data: {
+                    "year": "{{ year }}",
+                    "month": "{{ month }}",
+                }
+            })
+            .done((data) => {
+                $('#statistic-fixed').html(data);
+            }),
+            $.ajax({
+                url: "{% url 'moneybook:chart_container_data' %}",
+                type: "GET",
+                data: {
+                    "year": "{{ year }}",
+                    "month": "{{ month }}",
+                }
+            })
+            .done((data) => {
+                $('#js_draw_chart_container').html(data);
+            })
+        )
+        // 成功時
+        .done((data) => {
+            // 円グラフ再描画
+            draw_chart_container();
+        });
     }
 
     function reset_add_form() {

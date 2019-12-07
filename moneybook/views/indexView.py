@@ -81,3 +81,32 @@ def index(request):
     year = now.year
     month = str(now.month).zfill(2)
     return index_month(request, year, month)
+
+def index_balance_statisticMini(request):
+    if "year" in request.GET and "month" in request.GET:
+        year = request.GET.get("year")
+        month = request.GET.get("month")
+    # 今月のデータ
+    monthlyData = Data.sortDateDescending(Data.getMonthData(int(year), int(month)))
+    # 支払い方法リスト
+    methods = Method.list()
+    
+    content = data_for_balance_statisticMini(monthlyData, methods)
+    return render(request, '_balance_statisticMini.html', content)
+
+def index_chart_data(request):
+    if "year" in request.GET and "month" in request.GET:
+        year = request.GET.get("year")
+        month = request.GET.get("month")
+    # 今月のデータ
+    monthlyData = Data.sortDateDescending(Data.getMonthData(int(year), int(month)))
+    # ジャンルごとの支出
+    positiveGenresOutgo = {}
+    for g in Genre.list():
+        if g.show_order >= 0:
+            d = Data.getGenreData(monthlyData, g.pk)
+            positiveGenresOutgo[g] = Data.getOutgoSum(d)
+    content = {
+        'genres_outgo': positiveGenresOutgo,
+    }
+    return render(request, '_chart_container_data.html', content)
