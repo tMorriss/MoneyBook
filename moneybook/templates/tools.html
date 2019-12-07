@@ -8,138 +8,16 @@
 <script type="text/javascript" src="{% static 'common.js' %}"></script>
 <script type="text/javascript" src="{% static 'tools.js' %}"></script>
 <script type="text/javascript">
+    update_actual_cash_url = "{% url 'moneybook:update_actual_cash' %}";
+    update_checked_date_url = "{% url 'moneybook:update_checked_date' %}";
+    update_fixed_cost_mark_url = "{% url 'moneybook:update_fixed_cost_mark' %}";
+    edit_check_url = "{% url 'moneybook:edit_check' %}";
+
     window.onload = function() {
         show_diff();
         calculate_now_bank();
     }
-
-    function update_diff() {
-        var written = Number($("#written_balance").text().replace(",", ""));
-        var actual = Number($("#actual_balance").val().replace(",", ""));
-
-        var value = written - actual;
-        $.ajax({
-            url: "{% url 'moneybook:update_actual_cash' %}",
-            type: "POST",
-            data: {
-                "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
-                "price": actual,
-            }
-        })
-        // 成功時
-        .done((data) => {
-            $("#balance_diff").text(value);
-            separate_value('actual_balance')
-            separate_html("balance_diff");
-        })
-        // 失敗時
-        .fail((data) => {
-            // メッセージ表示
-            show_result_msg("Error...", empty);
-        });
-    }
-    function key_press_diff(code) {
-        // エンターキーなら
-        if (code === 13) {
-            update_diff();
-        }
-    }
-
-    function show_diff() {
-        var written = Number($("#written_balance").text().replace(",", ""));
-        var actual = Number($("#actual_balance").val().replace(",", ""));
-
-        var value = written - actual;
-        $("#balance_diff").text(value);
-        separate_html("balance_diff");
-    }
-
-    function update_checked_date(method_id, checkAll) {
-        $.ajax({
-            url: "{% url 'moneybook:update_checked_date' %}",
-            type: "POST",
-            data: {
-                "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
-                "year": $("#check_year").val(),
-                "month": $("#check_month").val(),
-                "day": $("#check_day").val(),
-                "method": method_id,
-                "check_all": checkAll,
-            }
-        })
-        .done((data) => {
-            location.reload();
-        })
-        .fail((data) => {
-            // メッセージ表示
-            show_result_msg("Error...", empty);
-        });
-    }
-
-    function update_several_checked_date(id, url) {
-        $.ajax({
-            url: url,
-            type: "POST",
-            data: {
-                "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
-                "year": $("#credit_check_year").val(),
-                "month": $("#credit_check_month").val(),
-                "day": $("#credit_check_day").val(),
-                "pk": id,
-            }
-        })
-        .done((data) => {
-            location.reload();
-        })
-        .fail((data) => {
-            // メッセージ表示
-            show_result_msg("Error...", empty);
-        });
-    }
-
-    function update_fixed_cost_mark() {
-        $.ajax({ 
-            url: "{% url 'moneybook:update_fixed_cost_mark' %}",
-            type: "POST",
-            data: {
-                "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
-                "price": Number($("#txt_fixed_cost").val().replace(",", "")),
-            }
-        })
-        .done((data) => {
-            location.reload();
-        })
-        .fail((data) => {
-            // メッセージ表示
-            show_result_msg("Error...", empty);
-        });
-    }
-    function key_press_fixed(code) {
-        // エンターキーなら
-        if (code === 13) {
-            update_fixed_cost_mark();
-        }
-    }
-
-    function check(id) {
-        $.ajax({
-            url: "{% url 'moneybook:edit_check' %}",
-            type: "POST",
-            data: {
-                "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
-                "id": id,
-            }
-        })
-        .done((data) => {
-            // チェックした行を削除
-            $("#unapproved-row-" + id).remove();
-        })
-        .fail((data) => {
-            // メッセージ表示
-            show_result_msg("Error...", empty);
-        });
-    }
-
+    
     function calculate_now_bank() {
         $.ajax({
             url: "{% url 'moneybook:calculate_now_bank' %}",
