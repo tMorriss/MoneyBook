@@ -12,7 +12,7 @@
 <script type="text/javascript">
     window.onload = function() {
         apply_filter()
-        update_balance_statisticMini();
+        update_data();
     }
     function send_add_row() {
         genre = $('input[name="a_genre"]:checked').val();
@@ -53,7 +53,7 @@
                 })
                 // 成功時
                 .done((data) => {
-                    update_success(data);
+                    update_success();
                 })
                 // 失敗時
                 .fail((data) => {
@@ -64,7 +64,7 @@
                 });
             }
             else {
-                update_success(data);
+                update_success();
             }
         })
         // 失敗時
@@ -92,8 +92,20 @@
         }
     }
     
-    function update_balance_statisticMini() {
+    function update_data() {
         $.when(
+            $.ajax({
+                url: "{% url 'moneybook:data_table' %}",
+                type: "GET",
+                data: {
+                    "year": "{{ year }}",
+                    "month": "{{ month }}",
+                }
+            })
+            .done((data) => {
+                $('#transactions').html(data);
+            }),
+
             $.ajax({
                 url: "{% url 'moneybook:balance_statisticMini' %}",
                 type: "GET",
@@ -105,6 +117,7 @@
             .done((data) => {
                 $('#statistic-fixed').html(data);
             }),
+
             $.ajax({
                 url: "{% url 'moneybook:chart_container_data' %}",
                 type: "GET",

@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.shortcuts import render
 from django.views import View
-from django.http import HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseBadRequest
 from datetime import datetime
 from moneybook.models import *
 from moneybook.forms import *
@@ -29,29 +29,16 @@ class AddView(View):
             # データ追加
             newData.save()
 
-            year = request.POST.get('year')
-            month = request.POST.get('month')
-
-            dateSplit = request.POST.get('date').split('-')
-            year = int(dateSplit[0])
-            month = int(dateSplit[1])
-            
-            # 今月のデータ
-            monthlyData = Data.sortDateDescending(Data.getMonthData(year, month))
-
-            content = {
-                'app_name': settings.APP_NAME,
-                'username': request.user,
-                'show_data': monthlyData,
+            resData = {
+                "status": "success",
             }
-
-            # 追加後のmonthlyテーブルを返す
-            return render(request, '_data_table.html', content)
+            return HttpResponse(json.dumps(resData))
 
         else:
-            resData = {}
             errorList = []
             for a in newData.errors:
                 errorList.append(a)
-            resData["ErrorList"] = errorList
+            resData = {
+                "ErrorList": errorList,
+            }
             return HttpResponseBadRequest(json.dumps(resData))
