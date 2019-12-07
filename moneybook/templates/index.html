@@ -8,13 +8,11 @@
 <script type="text/javascript" src="{% static 'canvasjs.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'common.js' %}"></script>
 <script type="text/javascript" src="{% static 'index.js' %}"></script>
-<div id="js_draw_chart_container">
-{% include "_chart_container_data.html" %}
-</div>
+<div id="js_draw_chart_container"></div>
 <script type="text/javascript">
     window.onload = function() {
         apply_filter()
-        draw_chart_container();
+        update_balance_statisticMini();
     }
     function send_add_row() {
         genre = $('input[name="a_genre"]:checked').val();
