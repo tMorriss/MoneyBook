@@ -4,6 +4,14 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from moneybook.models import *
 
+def get_monthlyData_from_get_parameter(requestGet):
+    if "year" in requestGet and "month" in requestGet:
+        year = requestGet.get("year")
+        month = requestGet.get("month")
+
+    monthlyData = Data.sortDateDescending(Data.getMonthData(int(year), int(month)))
+    return monthlyData
+
 def index(request):
     now = datetime.now()
     year = now.year
@@ -35,14 +43,10 @@ def index_month(request, year, month):
     return render(request, 'index.html', content)
 
 def index_balance_statisticMini(request):
-    if "year" in request.GET and "month" in request.GET:
-        year = request.GET.get("year")
-        month = request.GET.get("month")
-
-    # 今月のデータ
-    monthlyData = Data.sortDateDescending(Data.getMonthData(int(year), int(month)))
     # 全データ
     allData = Data.getAllData()
+    # 今月のデータ
+    monthlyData = get_monthlyData_from_get_parameter(request.GET)
     # 支払い方法リスト
     methods = Method.list()
     # 立替と貯金
@@ -80,12 +84,8 @@ def index_balance_statisticMini(request):
     return render(request, '_balance_statisticMini.html', content)
 
 def index_chart_data(request):
-    if "year" in request.GET and "month" in request.GET:
-        year = request.GET.get("year")
-        month = request.GET.get("month")
-
     # 今月のデータ
-    monthlyData = Data.sortDateDescending(Data.getMonthData(int(year), int(month)))
+    monthlyData = get_monthlyData_from_get_parameter(request.GET)
     # ジャンルごとの支出
     positiveGenresOutgo = {}
     for g in Genre.list():
@@ -98,12 +98,8 @@ def index_chart_data(request):
     return render(request, '_chart_container_data.html', content)
 
 def data_table(request):
-    if "year" in request.GET and "month" in request.GET:
-        year = int(request.GET.get("year"))
-        month = int(request.GET.get("month"))
-
     # 今月のデータ
-    monthlyData = Data.sortDateDescending(Data.getMonthData(year, month))
+    monthlyData = get_monthlyData_from_get_parameter(request.GET)
 
     content = {
         'show_data': monthlyData,
