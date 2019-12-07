@@ -10,146 +10,22 @@
 <script type="text/javascript" src="{% static 'index.js' %}"></script>
 <div id="js_draw_chart_container"></div>
 <script type="text/javascript">
+    index_url = "{% url 'moneybook:index' %}";
+    add_url = "{% url 'moneybook:add' %}";
+    add_intra_move_url = "{% url 'moneybook:add_intra_move' %}";
+    data_table_url = "{% url 'moneybook:data_table' %}";
+    balance_statisticMini_url = "{% url 'moneybook:balance_statisticMini' %}";
+    chart_container_data_url = "{% url 'moneybook:chart_container_data' %}";
+
+    year = "{{ year }}";
+    month = "{{ month }}";
+    method_first = "{{ methods.first.pk }}";
+    genre_first = "{{ first_genres.first.pk }}";
+
     window.onload = function() {
         apply_filter()
         update_data();
     }
-    function send_add_row() {
-        genre = $('input[name="a_genre"]:checked').val();
-        direction = 2;
-        if (genre == 12) {
-            direction = 1;
-        }
-        $.ajax({
-            url: "{% url 'moneybook:add' %}",
-            type: "POST",
-            data: {
-                "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
-                "date": $('#a_year').val() + "-" + $('#a_month').val() + "-" + $('#a_day').val(),
-                "item": $('#a_item').val(),
-                "price": $('#a_price').val(),
-                "direction": direction,
-                "method": $('input[name="a_method"]:checked').val(),
-                "genre": genre,
-                "temp": "False",
-                "checked": "False",
-            }
-        })
-        // 成功時
-        .done((data) => {
-            if ($('#is-charge').prop('checked')) {
-                $.ajax({
-                    url: "{% url 'moneybook:add_intra_move' %}",
-                    type: "POST",
-                    data: {
-                        "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
-                        "year": $('#a_year').val(),
-                        "month": $('#a_month').val(),
-                        "day": $('#a_day').val(),
-                        "price": $('#a_price').val(),
-                        "before_method": 2,
-                        "after_method": $('input[name="a_method"]:checked').val(),
-                    }
-                })
-                // 成功時
-                .done((data) => {
-                    update_success();
-                })
-                // 失敗時
-                .fail((data) => {
-                    // メッセージ表示
-                    show_result_msg("Error...", empty);
-                    // 抜ける
-                    return;
-                });
-            }
-            else {
-                update_success();
-            }
-        })
-        // 失敗時
-        .fail((data) => {
-            // メッセージ表示
-            show_result_msg("Error...", empty);
-        });
-    }
-    function key_press_add(code) {
-        // エンターキーなら実行
-        if (code === 13) {
-            send_add_row();
-        }
-    }
-
-    function move_month() {
-        year = document.getElementById("jump_year").value;
-        month = document.getElementById("jump_month").value;
-        window.location.href = "{% url 'moneybook:index' %}" + year + "/" + month;
-    }
-    function key_press_move(code) {
-        //エンターキーなら
-        if (code === 13) {
-            move_month();
-        }
-    }
-    
-    function update_data() {
-        $.when(
-            $.ajax({
-                url: "{% url 'moneybook:data_table' %}",
-                type: "GET",
-                data: {
-                    "year": "{{ year }}",
-                    "month": "{{ month }}",
-                }
-            })
-            .done((data) => {
-                $('#transactions').html(data);
-            }),
-
-            $.ajax({
-                url: "{% url 'moneybook:balance_statisticMini' %}",
-                type: "GET",
-                data: {
-                    "year": "{{ year }}",
-                    "month": "{{ month }}",
-                }
-            })
-            .done((data) => {
-                $('#statistic-fixed').html(data);
-            }),
-
-            $.ajax({
-                url: "{% url 'moneybook:chart_container_data' %}",
-                type: "GET",
-                data: {
-                    "year": "{{ year }}",
-                    "month": "{{ month }}",
-                }
-            })
-            .done((data) => {
-                $('#js_draw_chart_container').html(data);
-            })
-        )
-        // 成功時
-        .done((data) => {
-            // 円グラフ再描画
-            draw_chart_container();
-        });
-    }
-
-    function reset_add_form() {
-        // フォームをリセット
-        $('#a_day').val('');
-        $('#a_item').val('');
-        $('#a_price').val('');
-        $('input[name=a_method]').val(['{{ methods.first.pk }}']);
-        $('input[name=a_genre]').val(['{{ first_genres.first.pk }}']);
-        $('#is-charge').prop('checked', false).change();
-
-        // フォーカス
-        $('#a_day').focus();
-    }
-
 </script>
 {% endblock %}
 
