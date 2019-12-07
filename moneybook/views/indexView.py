@@ -4,13 +4,12 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from moneybook.models import *
 
-def index_month(request, year, month):
+def data_for_balance_statisticMini(monthlyData, methods):
     # 全データ
     allData = Data.getAllData()
-    # 今月のデータ
-    monthlyData = Data.sortDateDescending(Data.getMonthData(int(year), int(month)))
-    # 支払い方法リスト
-    methods = Method.list()
+    # 立替と貯金
+    monthlyTempAndDeposit = Data.getTempAndDeposit(monthlyData)
+
     # 支払い方法ごとの残高
     methodsIOB = []
     methodsMonthlyIOB = []
@@ -22,20 +21,37 @@ def index_month(request, year, month):
         o = Data.getOutgoSum(Data.getMethodData(monthlyData, m.pk))
         methodsMonthlyIOB.append(InOutBalance(m, i, o, None))
 
-    # 立替と貯金
-    monthlyTempAndDeposit = Data.getTempAndDeposit(monthlyData)
+    totalIncome = Data.getIncomeSum(Data.getNormalData(monthlyData)) - monthlyTempAndDeposit
+    totalOutgo = Data.getOutgoSum(Data.getNormalData(monthlyData)) - monthlyTempAndDeposit
+    fixedOutgo = Data.getOutgoSum(Data.getFixedData(monthlyData))
+    variableOutgo = Data.getOutgoSum(Data.getVariableData(monthlyData))
 
+    content = {
+        'total_balance': Data.getIncomeSum(allData) - Data.getOutgoSum(allData),
+        'methods_iob': methodsIOB,
+        'total_income': totalIncome,
+        'total_outgo': totalOutgo,
+        'total_inout': totalIncome - totalOutgo,
+        'variable_outgo': variableOutgo,
+        'fixed_outgo': fixedOutgo,
+        'variable_remain': totalIncome - max(SeveralCosts.getFixedCostMark(), fixedOutgo) - variableOutgo,
+        'all_income': Data.getIncomeSum(monthlyData),
+        'all_outgo': Data.getOutgoSum(monthlyData),
+        'methods_monthly_iob': methodsMonthlyIOB,
+    }
+    return content
+
+def index_month(request, year, month):
+    # 今月のデータ
+    monthlyData = Data.sortDateDescending(Data.getMonthData(int(year), int(month)))
+    # 支払い方法リスト
+    methods = Method.list()
     # ジャンルごとの支出
     positiveGenresOutgo = {}
     for g in Genre.list():
         if g.show_order >= 0:
             d = Data.getGenreData(monthlyData, g.pk)
             positiveGenresOutgo[g] = Data.getOutgoSum(d)
-
-    totalIncome = Data.getIncomeSum(Data.getNormalData(monthlyData)) - monthlyTempAndDeposit
-    totalOutgo = Data.getOutgoSum(Data.getNormalData(monthlyData)) - monthlyTempAndDeposit
-    fixedOutgo = Data.getOutgoSum(Data.getFixedData(monthlyData))
-    variableOutgo = Data.getOutgoSum(Data.getVariableData(monthlyData))
 
     # 前後の日付
     toMonth = datetime(int(year), int(month), 1)
@@ -55,19 +71,9 @@ def index_month(request, year, month):
         'methods': methods,
         'first_genres': Genre.first_list(),
         'latter_genres': Genre.latter_list(),
-        'total_balance': Data.getIncomeSum(allData) - Data.getOutgoSum(allData),
-        'total_income': totalIncome,
-        'total_outgo': totalOutgo,
-        'total_inout': totalIncome - totalOutgo,
-        'fixed_outgo': fixedOutgo,
-        'variable_outgo': variableOutgo,
-        'variable_remain': totalIncome - max(SeveralCosts.getFixedCostMark(), fixedOutgo) - variableOutgo,
-        'all_income': Data.getIncomeSum(monthlyData),
-        'all_outgo': Data.getOutgoSum(monthlyData),
         'genres_outgo': positiveGenresOutgo,
-        'methods_iob': methodsIOB,
-        'methods_monthly_iob': methodsMonthlyIOB,
     }
+    content.update(data_for_balance_statisticMini(monthlyData, methods))
     return render(request, 'index.html', content)
 
 def index(request):
