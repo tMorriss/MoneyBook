@@ -4,9 +4,47 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from moneybook.models import *
 
-def data_for_balance_statisticMini(monthlyData, methods):
+def index_month(request, year, month):
+    # 支払い方法リスト
+    methods = Method.list()
+
+    # 前後の日付
+    toMonth = datetime(int(year), int(month), 1)
+    nextMonth = toMonth + relativedelta(months=1)
+    lastMonth = toMonth - relativedelta(months=1)
+
+    content = {
+        'app_name': settings.APP_NAME,
+        'username': request.user,
+        'year': year,
+        'month': month,
+        'next_year': nextMonth.year,
+        'next_month': nextMonth.month,
+        'last_year': lastMonth.year,
+        'last_month': lastMonth.month,
+        'methods': methods,
+        'first_genres': Genre.first_list(),
+        'latter_genres': Genre.latter_list(),
+    }
+    return render(request, 'index.html', content)
+
+def index(request):
+    now = datetime.now()
+    year = now.year
+    month = str(now.month).zfill(2)
+    return index_month(request, year, month)
+
+def index_balance_statisticMini(request):
+    if "year" in request.GET and "month" in request.GET:
+        year = request.GET.get("year")
+        month = request.GET.get("month")
+
+    # 今月のデータ
+    monthlyData = Data.sortDateDescending(Data.getMonthData(int(year), int(month)))
     # 全データ
     allData = Data.getAllData()
+    # 支払い方法リスト
+    methods = Method.list()
     # 立替と貯金
     monthlyTempAndDeposit = Data.getTempAndDeposit(monthlyData)
 
@@ -39,60 +77,6 @@ def data_for_balance_statisticMini(monthlyData, methods):
         'all_outgo': Data.getOutgoSum(monthlyData),
         'methods_monthly_iob': methodsMonthlyIOB,
     }
-    return content
-
-def index_month(request, year, month):
-    # 今月のデータ
-    monthlyData = Data.sortDateDescending(Data.getMonthData(int(year), int(month)))
-    # 支払い方法リスト
-    methods = Method.list()
-    # ジャンルごとの支出
-    positiveGenresOutgo = {}
-    for g in Genre.list():
-        if g.show_order >= 0:
-            d = Data.getGenreData(monthlyData, g.pk)
-            positiveGenresOutgo[g] = Data.getOutgoSum(d)
-
-    # 前後の日付
-    toMonth = datetime(int(year), int(month), 1)
-    nextMonth = toMonth + relativedelta(months=1)
-    lastMonth = toMonth - relativedelta(months=1)
-
-    content = {
-        'app_name': settings.APP_NAME,
-        'username': request.user,
-        'year': year,
-        'month': month,
-        'next_year': nextMonth.year,
-        'next_month': nextMonth.month,
-        'last_year': lastMonth.year,
-        'last_month': lastMonth.month,
-        'show_data': monthlyData,
-        'methods': methods,
-        'first_genres': Genre.first_list(),
-        'latter_genres': Genre.latter_list(),
-        'genres_outgo': positiveGenresOutgo,
-    }
-    content.update(data_for_balance_statisticMini(monthlyData, methods))
-    return render(request, 'index.html', content)
-
-def index(request):
-    now = datetime.now()
-    year = now.year
-    month = str(now.month).zfill(2)
-    return index_month(request, year, month)
-
-def index_balance_statisticMini(request):
-    if "year" in request.GET and "month" in request.GET:
-        year = request.GET.get("year")
-        month = request.GET.get("month")
-
-    # 今月のデータ
-    monthlyData = Data.sortDateDescending(Data.getMonthData(int(year), int(month)))
-    # 支払い方法リスト
-    methods = Method.list()
-    
-    content = data_for_balance_statisticMini(monthlyData, methods)
     return render(request, '_balance_statisticMini.html', content)
 
 def index_chart_data(request):
