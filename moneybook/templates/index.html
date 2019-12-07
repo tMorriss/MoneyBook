@@ -22,8 +22,7 @@
                 yValueFormatString: "#,###,##0\"円\"",
                 indexLabel: "{label} {y}",
                 dataPoints: [
-                    {% for k,v in genres_outgo.items %}{y: {{ v }}, label: "{{ k.name }}"},
-                    {% endfor %}
+                    {% include "_chart_container_data.html" %}
                 ]
             }]
         });
