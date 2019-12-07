@@ -48,6 +48,8 @@ function apply_filter() {
 function update_success(data) {
     // 表の書き換え
     $('#transactions').html(data);
+    // 残高・統計を書き換え
+    update_balance_statisticMini();
     // メッセージ表示
     show_result_msg("Success!", reset_add_form);
 }
