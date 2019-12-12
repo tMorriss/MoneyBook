@@ -88,6 +88,7 @@ function update_data() {
         })
         .done((data) => {
             $('#transactions').html(data);
+            apply_filter();
         }),
 
         $.ajax({
