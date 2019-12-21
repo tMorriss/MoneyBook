@@ -179,7 +179,4 @@ function reset_add_form() {
     $('input[name=a_method]').val([method_first]);
     $('input[name=a_genre]').val([genre_first]);
     $('#is-charge').prop('checked', false).change();
-
-    // フォーカス
-    $('#c_day').focus();
 }
