@@ -37,6 +37,7 @@ def index_month(request, year, month):
         'last_year': lastMonth.year,
         'last_month': lastMonth.month,
         'methods': methods,
+        'unused_methods': Method.unUsedList(),
         'first_genres': Genre.first_list(),
         'latter_genres': Genre.latter_list(),
     }

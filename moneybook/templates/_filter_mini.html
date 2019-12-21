@@ -26,6 +26,10 @@
                         <input type="checkbox" class="check_filter" onChange="apply_filter()" name="filter-method[]" id="method-{{ m.pk }}" value="{{ m.pk }}" checked>
                         <label for="method-{{ m.pk }}">{{ m.name }}</label>
                     {% endfor %}
+                    {% for m in unused_methods %}
+                        <input type="checkbox" class="check_filter" onChange="apply_filter()" name="filter-method[]" id="method-{{ m.pk }}" value="{{ m.pk }}" checked>
+                        <label for="method-{{ m.pk }}">{{ m.name }}</label>
+                    {% endfor %}
                 </td>
             </tr>
             <tr><td>
