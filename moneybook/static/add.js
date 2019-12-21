@@ -16,7 +16,7 @@ function send_add_row() {
     })
     // 成功時
     .done((data) => {
-        update_success(data);
+        update_success(reset_add_form);
     })
     // 失敗時
     .fail(() => {
@@ -48,7 +48,7 @@ function send_intra_move() {
     })
     // 成功時
     .done((data) => {
-        update_success(data);
+        update_success(reset_add_form);
     })
     // 失敗時
     .fail(() => {
@@ -79,7 +79,7 @@ function send_charge() {
     })
     // 成功時
     .done((data) => {
-        update_success(data);
+        update_success(reset_add_form);
     })
     // 失敗時
     .fail(() => {
@@ -112,7 +112,7 @@ function send_suica_charge(price) {
     })
     // 成功時
     .done(() => {
-        update_success();
+        update_success(reset_for_shortcut);
     })
     // 失敗時
     .fail(() => {
@@ -121,9 +121,36 @@ function send_suica_charge(price) {
     });
 }
 
-function update_success() {
+function send_paypay_cacheback() {
+    $.ajax({
+        url: add_url,
+        type: "POST",
+        data: {
+            "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+            "date": $('#s_year').val() + "-" + $('#s_month').val() + "-" + $('#s_day').val(),
+            "item": "PayPayキャッシュバック",
+            "price": $('#s_price').val(),
+            "direction": 1,
+            "method": 5,
+            "genre": 12,
+            "temp": "False",
+            "checked": "False",
+        }
+    })
+    // 成功時
+    .done(() => {
+        update_success(reset_for_shortcut);
+    })
+    // 失敗時
+    .fail(() => {
+        // メッセージ表示
+        show_result_msg("Error...", empty);
+    });
+}
+
+function update_success(callback) {
     // メッセージ表示
-    show_result_msg("Success!", reset_add_form);
+    show_result_msg("Success!", callback);
 }
 
 function reset_add_form() {
@@ -143,6 +170,7 @@ function reset_add_form() {
 
     // ショートカット
     $('#s_day').val('');
+    $('#s_price').val('');
 
     // 通常追加
     $('#a_day').val('');
@@ -151,7 +179,10 @@ function reset_add_form() {
     $('input[name=a_method]').val([method_first]);
     $('input[name=a_genre]').val([genre_first]);
     $('#is-charge').prop('checked', false).change();
+}
+function reset_for_shortcut() {
+    reset_add_form();
 
-    // フォーカス
-    $('#c_day').focus();
+    // ショートカットの日付にフォーカス
+    $('#s_day').focus();
 }
