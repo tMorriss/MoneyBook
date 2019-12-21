@@ -81,15 +81,17 @@
         <table class="tbl-add tbl-common fcs-blue">
             <tr>
                 <th>日付</th>
-                <td>
+                <td colspan="2">
                     <input type="text" id="s_year" style="width:6ex" class="righter" value="{{ year }}">年
                     <input type="text" id="s_month" style="width:5ex" class="righter" value="{{ month }}">月
                     <input type="text" id="s_day" style="width:5ex" class="righter" >日
                 </td>
             </tr>
+            <tr><th>金額</th><td></td><td><input type="text" id="s_price" style="width:10ex" class="righter">円</td></tr>
             <tr>
                 <th>項目</th>
                 <td><input type="button" class="btn-apply" onclick="send_suica_charge(1000)" value="1000円Suicaチャージ"></td>
+                <td><input type="button" class="btn-apply" onclick="send_paypay_cacheback()" value="PayPayキャッシュバック"></td>
             </tr>
         </table>
     </form>
