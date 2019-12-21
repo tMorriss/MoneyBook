@@ -121,6 +121,33 @@ function send_suica_charge(price) {
     });
 }
 
+function send_paypay_cacheback() {
+    $.ajax({
+        url: add_url,
+        type: "POST",
+        data: {
+            "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+            "date": $('#s_year').val() + "-" + $('#s_month').val() + "-" + $('#s_day').val(),
+            "item": "PayPayキャッシュバック",
+            "price": $('#s_price').val(),
+            "direction": 1,
+            "method": 5,
+            "genre": 12,
+            "temp": "False",
+            "checked": "False",
+        }
+    })
+    // 成功時
+    .done(() => {
+        update_success();
+    })
+    // 失敗時
+    .fail(() => {
+        // メッセージ表示
+        show_result_msg("Error...", empty);
+    });
+}
+
 function update_success() {
     // メッセージ表示
     show_result_msg("Success!", reset_add_form);
@@ -143,6 +170,7 @@ function reset_add_form() {
 
     // ショートカット
     $('#s_day').val('');
+    $('#s_price').val('');
 
     // 通常追加
     $('#a_day').val('');
