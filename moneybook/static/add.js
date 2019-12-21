@@ -16,7 +16,7 @@ function send_add_row() {
     })
     // 成功時
     .done((data) => {
-        update_success(data);
+        update_success(reset_add_form);
     })
     // 失敗時
     .fail(() => {
@@ -48,7 +48,7 @@ function send_intra_move() {
     })
     // 成功時
     .done((data) => {
-        update_success(data);
+        update_success(reset_add_form);
     })
     // 失敗時
     .fail(() => {
@@ -79,7 +79,7 @@ function send_charge() {
     })
     // 成功時
     .done((data) => {
-        update_success(data);
+        update_success(reset_add_form);
     })
     // 失敗時
     .fail(() => {
@@ -112,7 +112,7 @@ function send_suica_charge(price) {
     })
     // 成功時
     .done(() => {
-        update_success();
+        update_success(reset_for_shortcut);
     })
     // 失敗時
     .fail(() => {
@@ -139,7 +139,7 @@ function send_paypay_cacheback() {
     })
     // 成功時
     .done(() => {
-        update_success();
+        update_success(reset_for_shortcut);
     })
     // 失敗時
     .fail(() => {
@@ -148,9 +148,9 @@ function send_paypay_cacheback() {
     });
 }
 
-function update_success() {
+function update_success(callback) {
     // メッセージ表示
-    show_result_msg("Success!", reset_add_form);
+    show_result_msg("Success!", callback);
 }
 
 function reset_add_form() {
@@ -179,4 +179,10 @@ function reset_add_form() {
     $('input[name=a_method]').val([method_first]);
     $('input[name=a_genre]').val([genre_first]);
     $('#is-charge').prop('checked', false).change();
+}
+function reset_for_shortcut() {
+    reset_add_form();
+
+    // ショートカットの日付にフォーカス
+    $('#s_day').focus();
 }
