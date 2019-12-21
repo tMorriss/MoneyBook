@@ -9,13 +9,14 @@
 <script type="text/javascript" src="{% static 'tools.js' %}"></script>
 <script type="text/javascript">
     update_actual_cash_url = "{% url 'moneybook:update_actual_cash' %}";
-    update_checked_date_url = "{% url 'moneybook:update_checked_date' %}";
+    checked_date_url = "{% url 'moneybook:checked_date' %}";
     update_fixed_cost_mark_url = "{% url 'moneybook:update_fixed_cost_mark' %}";
     edit_check_url = "{% url 'moneybook:edit_check' %}";
 
     window.onload = function() {
         show_diff();
         calculate_now_bank();
+        get_checked_date();
     }
 
     function calculate_now_bank() {
@@ -72,23 +73,7 @@
     </table>
     <input type="button" class="btn-apply" value="計算" onclick="update_diff()" onkeypress="key_press_diff(event.keyCode)">
 
-    <h1>確認済み日付</h1>
-    <table class="tbl-add tbl-common">
-        <tr>
-            <td colspan="3">
-                <input type="text" style="width:6ex" class="righter" id="check_year" value="{{ year }}">年
-                <input type="text" style="width:5ex" class="righter" id="check_month" value="{{ month }}">月
-                <input type="text" style="width:5ex" class="righter" id="check_day" value="{{ day }}">日
-            </td>
-        </tr>
-        {% for m in methods_bd %}
-            <tr>
-                <td><input type="button" class="btn-apply" value="{{ m.method.name }}" onclick="update_checked_date({{ m.method.pk }}, {% if m.method.pk == 2 %}0{% else %}1{% endif %})"></td>
-                <td>現在: {{ m.date|date:"Y"}}年{{ m.date|date:"m" }}月{{ m.date|date:"d" }}日</td>
-                <td class="righter">{{ m.balance|intcomma }}円</td>
-            </tr>
-        {% endfor %}
-    </table>
+    <div id="checked-date"></div>
 
     <h1>各種確認日</h1>
     <table class="tbl-add tbl-common">

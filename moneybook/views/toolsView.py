@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseBadRequest
+from django.views import View
 from datetime import date, datetime
 from moneybook.models import *
 import json
@@ -11,16 +12,6 @@ def tools(request):
     allData = Data.getAllData()
     # 実際の現金残高
     actualCashBalance = SeveralCosts.getActualCashBalance()
-    # 支払い方法リスト
-    methods = Method.list()
-    # 支払い方法ごとの残高
-    methodsBD = []
-    for m in methods:
-        d = Data.getMethodData(allData, m.pk)
-        # 銀行はチェック済みだけ
-        if m.pk == 2:
-            d = Data.getCheckedData(d)
-        methodsBD.append(BalanceDate(m, Data.getIncomeSum(d) - Data.getOutgoSum(d), CheckedDate.get(m.pk).date))
     # クレカ確認日
     creditCheckedDate = CreditCheckedDate.getAll()
     # キャッシュバック確認日
@@ -46,7 +37,6 @@ def tools(request):
         'month': now.month,
         'day': now.day,
         'actual_cash_balance': actualCashBalance,
-        'methods_bd': methodsBD,
         'credit_checked_date': creditCheckedDate,
         'cacheback_checked_date': cachebackCheckedDate,
         'bank_balance': bankBalance,
@@ -69,27 +59,51 @@ def update_actual_cash(request):
     SeveralCosts.setActualCashBalance(price)
     return HttpResponse(json.dumps({"message": "success"}))
 
-def update_checked_date(request):
-    if not "year" in request.POST or not "month" in request.POST or not "day" in request.POST or not "method" in request.POST:
-        return HttpResponseBadRequest(json.dumps({"message": "missing parameter"}))
+class checkedDateView(View):
+    def get(self, request, *args, **kwargs):
+        now = datetime.now()
+        # 全データ
+        allData = Data.getAllData()
+        # 支払い方法リスト
+        methods = Method.list()
+        # 支払い方法ごとの残高
+        methodsBD = []
+        for m in methods:
+            d = Data.getMethodData(allData, m.pk)
+            # 銀行はチェック済みだけ
+            if m.pk == 2:
+                d = Data.getCheckedData(d)
+            methodsBD.append(BalanceDate(m, Data.getIncomeSum(d) - Data.getOutgoSum(d), CheckedDate.get(m.pk).date))
 
-    methodPk = request.POST.get("method")
-    try:
-        newDate = date(int(request.POST.get("year")), int(request.POST.get("month")), int(request.POST.get("day")))
+        content = {
+            'year': now.year,
+            'month': now.month,
+            'day': now.day,
+            'methods_bd': methodsBD,
+        }
+        return render(request, "_checked_date.html", content)
 
-        # 指定日以前のを全部チェック
-        if "check_all" in request.POST and request.POST.get("check_all") == "1":
-            Data.filterCheckeds(Data.getMethodData(Data.getRangeData(None, newDate), methodPk), [False]).update(checked=True)
-    except:
-        return HttpResponseBadRequest(json.dumps({"message": "date format is invalid"}))
+    def post(self, request, *args, **kwargs):
+        if not "year" in request.POST or not "month" in request.POST or not "day" in request.POST or not "method" in request.POST:
+            return HttpResponseBadRequest(json.dumps({"message": "missing parameter"}))
 
-    try:    
-        # チェック日を更新
-        CheckedDate.set(methodPk, newDate)
-    except:
-        return HttpResponseBadRequest(json.dumps({"message": "method id is invalid"}))
+        methodPk = request.POST.get("method")
+        try:
+            newDate = date(int(request.POST.get("year")), int(request.POST.get("month")), int(request.POST.get("day")))
 
-    return HttpResponse(json.dumps({"message": "success"}))
+            # 指定日以前のを全部チェック
+            if "check_all" in request.POST and request.POST.get("check_all") == "1":
+                Data.filterCheckeds(Data.getMethodData(Data.getRangeData(None, newDate), methodPk), [False]).update(checked=True)
+        except:
+            return HttpResponseBadRequest(json.dumps({"message": "date format is invalid"}))
+
+        try:    
+            # チェック日を更新
+            CheckedDate.set(methodPk, newDate)
+        except:
+            return HttpResponseBadRequest(json.dumps({"message": "method id is invalid"}))
+
+        return HttpResponse(json.dumps({"message": "success"}))
 
 def update_credit_checked_date(request):
     if not "year" in request.POST or not "month" in request.POST or not "day" in request.POST or not "pk" in request.POST:
