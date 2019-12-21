@@ -65,9 +65,18 @@ function show_diff() {
     separate_html("balance_diff");
 }
 
+function get_checked_date() {
+    $.get({
+        url: checked_date_url,
+    })
+    .done((data) => {
+        $("#checked-date").html(data);
+    })
+}
+
 function update_checked_date(method_id, checkAll) {
     $.ajax({
-        url: update_checked_date_url,
+        url: checked_date_url,
         type: "POST",
         data: {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),

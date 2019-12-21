@@ -1,0 +1,19 @@
+{% load humanize %}
+
+<h1>確認済み日付</h1>
+<table class="tbl-add tbl-common">
+    <tr>
+        <td colspan="3">
+            <input type="text" style="width:6ex" class="righter" id="check_year" value="{{ year }}">年
+            <input type="text" style="width:5ex" class="righter" id="check_month" value="{{ month }}">月
+            <input type="text" style="width:5ex" class="righter" id="check_day" value="{{ day }}">日
+        </td>
+    </tr>
+    {% for m in methods_bd %}
+        <tr>
+            <td><input type="button" class="btn-apply" value="{{ m.method.name }}" onclick="update_checked_date({{ m.method.pk }}, {% if m.method.pk == 2 %}0{% else %}1{% endif %})"></td>
+            <td>現在: {{ m.date|date:"Y"}}年{{ m.date|date:"m" }}月{{ m.date|date:"d" }}日</td>
+            <td class="righter">{{ m.balance|intcomma }}円</td>
+        </tr>
+    {% endfor %}
+</table>
