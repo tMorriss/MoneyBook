@@ -17,8 +17,14 @@
         show_diff();
         calculate_now_bank();
     }
-    
+
     function calculate_now_bank() {
+        $(".now_bank_credit").each(function(i, o) {
+            if ($(".now_bank_credit").eq(i).val() == "") {
+                $(".now_bank_credit").eq(i).val("0");
+            }
+        })
+
         $.ajax({
             url: "{% url 'moneybook:calculate_now_bank' %}",
             type: "POST",
@@ -141,13 +147,13 @@
         {% for b in banks %}
             <tr>
                 <th>{{ b.name }}</th>
-                <td><input type="text" class="righter" id="bank-{{ b.pk }}" style="width:7ex" onfocus="unseparate_value('bank-{{ b.pk }}')" onblur="separate_value('bank-{{ b.pk }}')" onkeypress="key_press_now_bank(event.keyCode)" value="{{ b.price| intcomma }}"></td>
+                <td><input type="text" class="righter now_bank_credit" id="bank-{{ b.pk }}" style="width:7ex" onfocus="unseparate_value('bank-{{ b.pk }}')" onblur="separate_value('bank-{{ b.pk }}')" onkeypress="key_press_now_bank(event.keyCode)" value="{{ b.price| intcomma }}"></td>
             </tr>
         {% endfor %}
         {% for c in credit_checked_date %}
             <tr>
                 <th>{{ c.name }}</th>
-                <td><input type="text" class="righter" id="credit-{{ c.pk }}" style="width:7ex" onfocus="unseparate_value('credit-{{ c.pk }}')" onblur="separate_value('credit-{{ c.pk }}')" onkeypress="key_press_now_bank(event.keyCode)" value="{{ c.price| intcomma }}"></td>
+                <td><input type="text" class="righter now_bank_credit" id="credit-{{ c.pk }}" style="width:7ex" onfocus="unseparate_value('credit-{{ c.pk }}')" onblur="separate_value('credit-{{ c.pk }}')" onkeypress="key_press_now_bank(event.keyCode)" value="{{ c.price| intcomma }}"></td>
             </tr>
         {% endfor %}
         <tr><th class="space"></th><td class="space"></td></tr>
