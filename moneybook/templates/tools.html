@@ -33,6 +33,7 @@
         .done((data) => {
             result = JSON.parse(data);
             $("#now_bank_balance").text(separate(result["balance"]));
+            document.activeElement.blur();
         })
         .fail((data) => {
             // メッセージ表示
