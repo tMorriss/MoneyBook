@@ -100,6 +100,9 @@ def search(request):
                 data = Data.filterCheckeds(data, content["checked"])
             except:
                 data = data
+
+        # 日付順にソート
+        data = Data.sortDateAscending(data)
         
         content.update({
             "show_data": data,

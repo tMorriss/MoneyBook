@@ -8,8 +8,8 @@
                             <a href="{% url 'moneybook:index_month' last_year last_month %}"><img src="{% static 'images/left.png' %}" alt="←" width="30vw" valign="middle"></a>
                         </td>
                         <td class="jump-date">
-                            <input type="text" name="year" id="jump_year" style="width:6ex" class="righter" value="{{ year }}" onkeypress="key_press_move(event.keyCode)" onfocus="deleteValue(this)">年
-                            <input type="text" name="month" id="jump_month" style="width:5ex" class="righter" value="{{ month }}" onkeypress="key_press_move(event.keyCode)" onfocus="deleteValue(this)">月
+                            <input type="text" name="year" id="jump_year" style="width:6ex" class="righter" value="{{ year }}" onkeypress="key_press_move(event.keyCode)">年
+                            <input type="text" name="month" id="jump_month" style="width:5ex" class="righter" value="{{ month }}" onkeypress="key_press_move(event.keyCode)">月
                         </td>
                         <td rowspan="2">
                             <a href="{% url 'moneybook:index_month' next_year next_month %}"><img src="{% static 'images/right.png' %}" alt="→" width="30 vw" valign="middle"></a>
