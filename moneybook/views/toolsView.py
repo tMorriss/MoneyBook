@@ -22,10 +22,6 @@ def tools(request):
     uncheckedData = Data.getUncheckedData(allData)
     # 現在銀行
     banks = BankBalance.getAll()
-    # 銀行残高
-    allBankData = Data.getBankData(allData)
-    checkedBankData = Data.getCheckedData(allBankData)
-    bankWritten = Data.getIncomeSum(checkedBankData) - Data.getOutgoSum(checkedBankData)
 
     content = {
         'app_name': settings.APP_NAME,
@@ -40,7 +36,6 @@ def tools(request):
         'fixed_cost_mark': fixedCostMark,
         'unchecked_data': uncheckedData,
         'banks': banks,
-        'bank_written': bankWritten,
     }
     return render(request, "tools.html", content)
 
@@ -164,26 +159,45 @@ def update_fixed_cost_mark(request):
     SeveralCosts.setFixedCostMark(price)
     return HttpResponse(json.dumps({"message": "success"}))
 
-def calculate_now_bank(request):
-    writtenBankData = Data.getCheckedData(Data.getBankData(Data.getAllData()))
-    bankSum = 0
-    bb = BankBalance.getAll()
-    cc = CreditCheckedDate.getAll()
-    try:
-        for b in bb:
-            key = "bank-" + str(b.pk)
-            if key in request.POST:
-                value = int(request.POST.get(key))
-                BankBalance.set(b.pk, value)
-                bankSum += value
-            
-        for c in cc:
-            key = "credit-" + str(c.pk)
-            if key in request.POST:
-                value = int(request.POST.get(key))
-                CreditCheckedDate.setPrice(c.pk, value)
-                bankSum -= value
-    except:
-        return HttpResponseBadRequest(json.dumps({"message": "invalid parameter"}))
+class calculateNowBankView(View):
+    def get(self, request, *args, **kwargs):
+        # 全データ
+        allData = Data.getAllData()
+        # 現在銀行
+        banks = BankBalance.getAll()
+        # クレカ確認日
+        creditCheckedDate = CreditCheckedDate.getAll()
+        # 銀行残高
+        allBankData = Data.getBankData(allData)
+        checkedBankData = Data.getCheckedData(allBankData)
+        bankWritten = Data.getIncomeSum(checkedBankData) - Data.getOutgoSum(checkedBankData)
+        content = {
+            'banks': banks,
+            'credit_checked_date': creditCheckedDate,
+            'bank_written': bankWritten,
+        }
+        return render(request, "_calculate_now_bank.html", content)
 
-    return HttpResponse(json.dumps({"balance": Data.getIncomeSum(writtenBankData) - Data.getOutgoSum(writtenBankData) - bankSum}))
+    def post(self, request, *args, **kwargs):
+        writtenBankData = Data.getCheckedData(Data.getBankData(Data.getAllData()))
+        bankSum = 0
+        bb = BankBalance.getAll()
+        cc = CreditCheckedDate.getAll()
+        try:
+            for b in bb:
+                key = "bank-" + str(b.pk)
+                if key in request.POST:
+                    value = int(request.POST.get(key))
+                    BankBalance.set(b.pk, value)
+                    bankSum += value
+                
+            for c in cc:
+                key = "credit-" + str(c.pk)
+                if key in request.POST:
+                    value = int(request.POST.get(key))
+                    CreditCheckedDate.setPrice(c.pk, value)
+                    bankSum -= value
+        except:
+            return HttpResponseBadRequest(json.dumps({"message": "invalid parameter"}))
+
+        return HttpResponse(json.dumps({"balance": Data.getIncomeSum(writtenBankData) - Data.getOutgoSum(writtenBankData) - bankSum}))

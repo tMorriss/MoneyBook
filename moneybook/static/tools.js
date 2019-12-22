@@ -168,3 +168,13 @@ function check(id) {
         show_result_msg("Error...", empty);
     });
 }
+
+function get_calculate_now_bank(next) {
+    $.get({
+        url: calculate_now_bank_url
+    })
+    .done((data) => {
+        $("#calculate-now-bank").html(data);
+        next();
+    })
+}
