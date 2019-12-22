@@ -162,6 +162,8 @@ function check(id) {
     .done(() => {
         // チェックした行を削除
         $("#unapproved-row-" + id).remove();
+        // 現在銀行も更新
+        get_calculate_now_bank();
     })
     .fail(() => {
         // メッセージ表示
@@ -175,6 +177,6 @@ function get_calculate_now_bank(next) {
     })
     .done((data) => {
         $("#calculate-now-bank").html(data);
-        next();
+        calculate_now_bank();
     })
 }
