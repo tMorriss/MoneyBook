@@ -9,16 +9,26 @@
 <script type="text/javascript" src="{% static 'tools.js' %}"></script>
 <script type="text/javascript">
     update_actual_cash_url = "{% url 'moneybook:update_actual_cash' %}";
-    update_checked_date_url = "{% url 'moneybook:update_checked_date' %}";
+    checked_date_url = "{% url 'moneybook:checked_date' %}";
+    several_checked_date_url = "{% url 'moneybook:several_checked_date' %}";
     update_fixed_cost_mark_url = "{% url 'moneybook:update_fixed_cost_mark' %}";
     edit_check_url = "{% url 'moneybook:edit_check' %}";
+    calculate_now_bank_url = "{% url 'moneybook:calculate_now_bank' %}";
 
     window.onload = function() {
         show_diff();
-        calculate_now_bank();
+        get_checked_date();
+        get_several_checked_date();
+        get_calculate_now_bank();
     }
-    
+
     function calculate_now_bank() {
+        $(".now_bank_credit").each(function(i, o) {
+            if ($(".now_bank_credit").eq(i).val() == "") {
+                $(".now_bank_credit").eq(i).val("0");
+            }
+        })
+
         $.ajax({
             url: "{% url 'moneybook:calculate_now_bank' %}",
             type: "POST",
@@ -33,6 +43,7 @@
         .done((data) => {
             result = JSON.parse(data);
             $("#now_bank_balance").text(separate(result["balance"]));
+            document.activeElement.blur();
         })
         .fail((data) => {
             // メッセージ表示
@@ -65,46 +76,9 @@
     </table>
     <input type="button" class="btn-apply" value="計算" onclick="update_diff()" onkeypress="key_press_diff(event.keyCode)">
 
-    <h1>確認済み日付</h1>
-    <table class="tbl-add tbl-common">
-        <tr>
-            <td colspan="3">
-                <input type="text" style="width:6ex" class="righter" id="check_year" value="{{ year }}">年
-                <input type="text" style="width:5ex" class="righter" id="check_month" value="{{ month }}">月
-                <input type="text" style="width:5ex" class="righter" id="check_day" value="{{ day }}">日
-            </td>
-        </tr>
-        {% for m in methods_bd %}
-            <tr>
-                <td><input type="button" class="btn-apply" value="{{ m.method.name }}" onclick="update_checked_date({{ m.method.pk }}, {% if m.method.pk == 2 %}0{% else %}1{% endif %})"></td>
-                <td>現在: {{ m.date|date:"Y"}}年{{ m.date|date:"m" }}月{{ m.date|date:"d" }}日</td>
-                <td class="righter">{{ m.balance|intcomma }}円</td>
-            </tr>
-        {% endfor %}
-    </table>
+    <div id="checked-date"></div>
 
-    <h1>各種確認日</h1>
-    <table class="tbl-add tbl-common">
-        <tr>
-            <td colspan="3">
-                <input type="text" style="width:6ex" class="righter" id="credit_check_year" value="{{ year }}">年
-                <input type="text" style="width:5ex" class="righter" id="credit_check_month">月
-                <input type="text" style="width:5ex" class="righter" id="credit_check_day">日
-            </td>
-        </tr>
-        {% for c in credit_checked_date %}
-            <tr>
-                <td><input type="button" class="btn-apply" value="{{ c.name }}" onclick="update_several_checked_date({{ c.pk }}, '{% url "moneybook:update_credit_checked_date" %}')"></td>
-                <td>最新確定引き落とし日: {{ c.date|date:"Y"}}年{{ c.date|date:"m" }}月{{ c.date|date:"d" }}日</td>
-            </tr>
-        {% endfor %}
-        {% for c in cacheback_checked_date %}
-            <tr>
-                <td><input type="button" class="btn-apply" value="{{ c.name }}" onclick="update_several_checked_date({{ c.pk }}, '{% url "moneybook:update_cacheback_checked_date" %}')"></td>
-                <td>キャッシュバック確認: {{ c.date|date:"Y"}}年{{ c.date|date:"m" }}月{{ c.date|date:"d" }}日</td>
-            </tr>
-        {% endfor %}
-    </table>
+    <div id="several-checked-date"></div>
 
     <h1>固定費目標額</h1>
     <table class="tbl-common">
@@ -130,32 +104,7 @@
         {% endfor %}
     </table>
 
-    <h1>現在銀行計算</h1>
-    <table class="tbl-common">
-        <tr>
-            <th>記録</th>
-            <td>{{ bank_written| intcomma }}</td>
-        </tr>
-        <tr><th class="space"></th><td class="space"></td></tr>
-        {% for b in banks %}
-            <tr>
-                <th>{{ b.name }}</th>
-                <td><input type="text" class="righter" id="bank-{{ b.pk }}" style="width:7ex" onfocus="unseparate_value('bank-{{ b.pk }}')" onblur="separate_value('bank-{{ b.pk }}')" onkeypress="key_press_now_bank(event.keyCode)" value="{{ b.price| intcomma }}"></td>
-            </tr>
-        {% endfor %}
-        {% for c in credit_checked_date %}
-            <tr>
-                <th>{{ c.name }}</th>
-                <td><input type="text" class="righter" id="credit-{{ c.pk }}" style="width:7ex" onfocus="unseparate_value('credit-{{ c.pk }}')" onblur="separate_value('credit-{{ c.pk }}')" onkeypress="key_press_now_bank(event.keyCode)" value="{{ c.price| intcomma }}"></td>
-            </tr>
-        {% endfor %}
-        <tr><th class="space"></th><td class="space"></td></tr>
-        <tr>
-            <th>差額(記録-予定)</th>
-            <td id="now_bank_balance"></td>
-        </tr>
-    </table>
-    <input type="button" class="btn-apply" value="計算" onclick="calculate_now_bank()" />
+    <div id="calculate-now-bank"></div>
 </section>
 {% include "_result_message.html" %}
 {% endblock %}

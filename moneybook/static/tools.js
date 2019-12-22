@@ -65,9 +65,27 @@ function show_diff() {
     separate_html("balance_diff");
 }
 
+function get_checked_date() {
+    $.get({
+        url: checked_date_url,
+    })
+    .done((data) => {
+        $("#checked-date").html(data);
+    })
+}
+
+function get_several_checked_date() {
+    $.get({
+        url: several_checked_date_url,
+    })
+    .done((data) => {
+        $("#several-checked-date").html(data);
+    })
+}
+
 function update_checked_date(method_id, checkAll) {
     $.ajax({
-        url: update_checked_date_url,
+        url: checked_date_url,
         type: "POST",
         data: {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
@@ -79,7 +97,7 @@ function update_checked_date(method_id, checkAll) {
         }
     })
     .done(() => {
-        location.reload();
+        get_checked_date();
     })
     .fail(() => {
         // メッセージ表示
@@ -100,7 +118,9 @@ function update_several_checked_date(id, url) {
         }
     })
     .done(() => {
-        location.reload();
+        get_several_checked_date();
+        // 現在銀行も更新
+        get_calculate_now_bank();
     })
     .fail(() => {
         // メッセージ表示
@@ -144,9 +164,21 @@ function check(id) {
     .done(() => {
         // チェックした行を削除
         $("#unapproved-row-" + id).remove();
+        // 現在銀行も更新
+        get_calculate_now_bank();
     })
     .fail(() => {
         // メッセージ表示
         show_result_msg("Error...", empty);
     });
+}
+
+function get_calculate_now_bank() {
+    $.get({
+        url: calculate_now_bank_url
+    })
+    .done((data) => {
+        $("#calculate-now-bank").html(data);
+        calculate_now_bank();
+    })
 }
