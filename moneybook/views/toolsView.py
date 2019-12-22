@@ -161,12 +161,17 @@ def update_fixed_cost_mark(request):
 
 class calculateNowBankView(View):
     def get(self, request, *args, **kwargs):
+        now = date.today()
         # 全データ
         allData = Data.getAllData()
         # 現在銀行
         banks = BankBalance.getAll()
         # クレカ確認日
         creditCheckedDate = CreditCheckedDate.getAll()
+        for c in creditCheckedDate:
+            # 日付が過ぎていたらpriceを0にする
+            if c.date < now:
+                c.price = 0
         # 銀行残高
         allBankData = Data.getBankData(allData)
         checkedBankData = Data.getCheckedData(allBankData)

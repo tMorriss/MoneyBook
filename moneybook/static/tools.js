@@ -119,6 +119,8 @@ function update_several_checked_date(id, url) {
     })
     .done(() => {
         get_several_checked_date();
+        // 現在銀行も更新
+        get_calculate_now_bank();
     })
     .fail(() => {
         // メッセージ表示
@@ -171,7 +173,7 @@ function check(id) {
     });
 }
 
-function get_calculate_now_bank(next) {
+function get_calculate_now_bank() {
     $.get({
         url: calculate_now_bank_url
     })
