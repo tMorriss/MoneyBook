@@ -97,7 +97,7 @@ function update_checked_date(method_id, checkAll) {
         }
     })
     .done(() => {
-        location.reload();
+        get_checked_date();
     })
     .fail(() => {
         // メッセージ表示
@@ -118,7 +118,7 @@ function update_several_checked_date(id, url) {
         }
     })
     .done(() => {
-        location.reload();
+        get_several_checked_date();
     })
     .fail(() => {
         // メッセージ表示
