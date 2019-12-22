@@ -17,6 +17,7 @@ urlpatterns = [
     path('tools', toolsView.tools, name='tools'),
     path('tools/update-actual-cash', toolsView.update_actual_cash, name="update_actual_cash"),
     path('tools/checked_date', checkedDateView.as_view(), name="checked_date"),
+    path('tools/get_several_checked_date', toolsView.get_several_checked_date, name="several_checked_date"),
     path('tools/update_credit_checked_date', toolsView.update_credit_checked_date, name="update_credit_checked_date"),
     path('tools/update_cacheback_checked_date', toolsView.update_cacheback_checked_date, name="update_cacheback_checked_date"),
     path('tools/update_fixed_cost_mark', toolsView.update_fixed_cost_mark, name="update_fixed_cost_mark"),

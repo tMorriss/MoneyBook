@@ -14,8 +14,6 @@ def tools(request):
     actualCashBalance = SeveralCosts.getActualCashBalance()
     # クレカ確認日
     creditCheckedDate = CreditCheckedDate.getAll()
-    # キャッシュバック確認日
-    cachebackCheckedDate = CachebackCheckedDate.getAll()
     # 銀行残高
     bankBalance = BankBalance.getAll()
     # 固定費目標額
@@ -38,7 +36,6 @@ def tools(request):
         'day': now.day,
         'actual_cash_balance': actualCashBalance,
         'credit_checked_date': creditCheckedDate,
-        'cacheback_checked_date': cachebackCheckedDate,
         'bank_balance': bankBalance,
         'fixed_cost_mark': fixedCostMark,
         'unchecked_data': uncheckedData,
@@ -104,6 +101,20 @@ class checkedDateView(View):
             return HttpResponseBadRequest(json.dumps({"message": "method id is invalid"}))
 
         return HttpResponse(json.dumps({"message": "success"}))
+
+def get_several_checked_date(request):
+    now = datetime.now()
+    # クレカ確認日
+    creditCheckedDate = CreditCheckedDate.getAll()
+    # キャッシュバック確認日
+    cachebackCheckedDate = CachebackCheckedDate.getAll()
+
+    content = {
+        'year': now.year,
+        'credit_checked_date': creditCheckedDate,
+        'cacheback_checked_date': cachebackCheckedDate,
+    }
+    return render(request, "_several_checked_date.html", content)
 
 def update_credit_checked_date(request):
     if not "year" in request.POST or not "month" in request.POST or not "day" in request.POST or not "pk" in request.POST:

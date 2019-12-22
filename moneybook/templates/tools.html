@@ -10,6 +10,7 @@
 <script type="text/javascript">
     update_actual_cash_url = "{% url 'moneybook:update_actual_cash' %}";
     checked_date_url = "{% url 'moneybook:checked_date' %}";
+    several_checked_date_url = "{% url 'moneybook:several_checked_date' %}";
     update_fixed_cost_mark_url = "{% url 'moneybook:update_fixed_cost_mark' %}";
     edit_check_url = "{% url 'moneybook:edit_check' %}";
 
@@ -17,6 +18,7 @@
         show_diff();
         calculate_now_bank();
         get_checked_date();
+        get_several_checked_date();
     }
 
     function calculate_now_bank() {
@@ -75,28 +77,7 @@
 
     <div id="checked-date"></div>
 
-    <h1>各種確認日</h1>
-    <table class="tbl-add tbl-common">
-        <tr>
-            <td colspan="3">
-                <input type="text" style="width:6ex" class="righter" id="credit_check_year" value="{{ year }}">年
-                <input type="text" style="width:5ex" class="righter" id="credit_check_month">月
-                <input type="text" style="width:5ex" class="righter" id="credit_check_day">日
-            </td>
-        </tr>
-        {% for c in credit_checked_date %}
-            <tr>
-                <td><input type="button" class="btn-apply" value="{{ c.name }}" onclick="update_several_checked_date({{ c.pk }}, '{% url "moneybook:update_credit_checked_date" %}')"></td>
-                <td>最新確定引き落とし日: {{ c.date|date:"Y"}}年{{ c.date|date:"m" }}月{{ c.date|date:"d" }}日</td>
-            </tr>
-        {% endfor %}
-        {% for c in cacheback_checked_date %}
-            <tr>
-                <td><input type="button" class="btn-apply" value="{{ c.name }}" onclick="update_several_checked_date({{ c.pk }}, '{% url "moneybook:update_cacheback_checked_date" %}')"></td>
-                <td>キャッシュバック確認: {{ c.date|date:"Y"}}年{{ c.date|date:"m" }}月{{ c.date|date:"d" }}日</td>
-            </tr>
-        {% endfor %}
-    </table>
+    <div id="several-checked-date"></div>
 
     <h1>固定費目標額</h1>
     <table class="tbl-common">
