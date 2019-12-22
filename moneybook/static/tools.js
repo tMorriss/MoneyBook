@@ -74,6 +74,15 @@ function get_checked_date() {
     })
 }
 
+function get_several_checked_date() {
+    $.get({
+        url: several_checked_date_url,
+    })
+    .done((data) => {
+        $("#several-checked-date").html(data);
+    })
+}
+
 function update_checked_date(method_id, checkAll) {
     $.ajax({
         url: checked_date_url,

@@ -1,0 +1,22 @@
+<h1>各種確認日</h1>
+<table class="tbl-add tbl-common">
+    <tr>
+        <td colspan="3">
+            <input type="text" style="width:6ex" class="righter" id="credit_check_year" value="{{ year }}">年
+            <input type="text" style="width:5ex" class="righter" id="credit_check_month">月
+            <input type="text" style="width:5ex" class="righter" id="credit_check_day">日
+        </td>
+    </tr>
+    {% for c in credit_checked_date %}
+        <tr>
+            <td><input type="button" class="btn-apply" value="{{ c.name }}" onclick="update_several_checked_date({{ c.pk }}, '{% url "moneybook:update_credit_checked_date" %}')"></td>
+            <td>最新確定引き落とし日: {{ c.date|date:"Y"}}年{{ c.date|date:"m" }}月{{ c.date|date:"d" }}日</td>
+        </tr>
+    {% endfor %}
+    {% for c in cacheback_checked_date %}
+        <tr>
+            <td><input type="button" class="btn-apply" value="{{ c.name }}" onclick="update_several_checked_date({{ c.pk }}, '{% url "moneybook:update_cacheback_checked_date" %}')"></td>
+            <td>キャッシュバック確認: {{ c.date|date:"Y"}}年{{ c.date|date:"m" }}月{{ c.date|date:"d" }}日</td>
+        </tr>
+    {% endfor %}
+</table>
