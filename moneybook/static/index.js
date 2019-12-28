@@ -137,6 +137,8 @@ function clear_filter() {
     apply_all(elements, false);
 }
 function apply_filter() {
+    // 検索ワードを取得
+    var keyword = $('#filter-item').val();
     // 各チェックボックスを取得
     var directionList = $('[name="filter-direction[]"]');
     var methodList = $('[name="filter-method[]"]');
@@ -145,6 +147,11 @@ function apply_filter() {
     // 履歴表のtr
     var rows = $('.data-row');
     for (var i = 0; i < rows.length; i++) {
+        // 検索
+        wordShowing = true;
+        if (keyword.length >= 0 && $(rows[i]).children('.data_item').html().indexOf(keyword) < 0) {
+            wordShowing = false;
+        }
         // direction
         directionShowing = false;
         for (var j = 0; j < directionList.length; j++) {
@@ -169,7 +176,7 @@ function apply_filter() {
                 break;
             }
         }
-        if (directionShowing && methodShowing && classShowing) {
+        if (wordShowing && directionShowing && methodShowing && classShowing) {
             $(rows[i]).removeClass("hidden-row");
         }
         else {

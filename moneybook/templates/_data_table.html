@@ -9,7 +9,7 @@
             {% endif %}
             direction-{{ d.direction.pk }} method-{{ d.method.pk }} class-{{ d.genre.pk }}">
             <td>{{ d.date|date:"Y/m/d" }}</td>
-            <td class="lefter">{{ d.item }}</td>
+            <td class="lefter data_item">{{ d.item }}</td>
             <td class="righter">{{ d.price|intcomma }}</td>
             <td>{{ d.method }}</td>
             <td>{% if d.temp %}立替{% else %}{{ d.genre }}{% endif %}</td>
