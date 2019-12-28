@@ -27,6 +27,14 @@
                 <table class="radio-green">
                     <tr>
                         <td>
+                            {% for d in directions %}
+                                <input type="checkbox" class="check_filter" onChange="apply_filter()" name="filter-direction[]" id="direction-{{ d.pk }}" value="{{ d.pk }}" checked>
+                                <label for="direction-{{ d.pk }}">{{ d.name }}</label>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
                             {% for m in methods %}
                                 <input type="checkbox" class="check_filter" onChange="apply_filter()" name="filter-method[]" id="method-{{ m.pk }}" value="{{ m.pk }}" checked>
                                 <label for="method-{{ m.pk }}">{{ m.name }}</label>
