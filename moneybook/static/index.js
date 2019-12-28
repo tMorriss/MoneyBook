@@ -138,29 +138,38 @@ function clear_filter() {
 }
 function apply_filter() {
     // 各チェックボックスを取得
+    var directionList = document.getElementsByName('filter-direction[]');
     var methodList = document.getElementsByName('filter-method[]');
     var classList = document.getElementsByName('filter-class[]');
 
     // 履歴表のtr
     var rows = document.getElementsByClassName('data-row');
     for (var i = 0; i < rows.length; i++) {
-        methodShowing = false;
+        // direction
+        directionShowing = false;
+        for (var j = 0; j < directionList.length; j++) {
+            if (directionList[j].checked && rows[i].classList.contains(directionList[j].id)) {
+                directionShowing = true;
+                break;
+            }
+        }
         // method
+        methodShowing = false;
         for (var j = 0; j < methodList.length; j++) {
             if (methodList[j].checked && rows[i].classList.contains(methodList[j].id)) {
                 methodShowing = true;
                 break;
             }
         }
-        classShowing = false;
         // class
+        classShowing = false;
         for (var j = 0; j < classList.length; j++) {
             if (classList[j].checked && rows[i].classList.contains(classList[j].id)) {
                 classShowing = true;
                 break;
             }
         }
-        if (methodShowing && classShowing) {
+        if (directionShowing && methodShowing && classShowing) {
             rows[i].classList.remove("hidden-row");
         }
         else {
