@@ -129,26 +129,26 @@ function apply_all(elements, status) {
     apply_filter();
 }
 function select_all() {
-    var elements = document.getElementsByClassName('check_filter');
+    var elements = $('.check_filter');
     apply_all(elements, true);
 }
 function clear_filter() {
-    var elements = document.getElementsByName('filter-class[]');
+    var elements = $('[name="filter-class[]"]');
     apply_all(elements, false);
 }
 function apply_filter() {
     // 各チェックボックスを取得
-    var directionList = document.getElementsByName('filter-direction[]');
-    var methodList = document.getElementsByName('filter-method[]');
-    var classList = document.getElementsByName('filter-class[]');
+    var directionList = $('[name="filter-direction[]"]');
+    var methodList = $('[name="filter-method[]"]');
+    var classList = $('[name="filter-class[]"]');
 
     // 履歴表のtr
-    var rows = document.getElementsByClassName('data-row');
+    var rows = $('.data-row');
     for (var i = 0; i < rows.length; i++) {
         // direction
         directionShowing = false;
         for (var j = 0; j < directionList.length; j++) {
-            if (directionList[j].checked && rows[i].classList.contains(directionList[j].id)) {
+            if (directionList[j].checked && $(rows[i]).hasClass(directionList[j].id)) {
                 directionShowing = true;
                 break;
             }
@@ -156,7 +156,7 @@ function apply_filter() {
         // method
         methodShowing = false;
         for (var j = 0; j < methodList.length; j++) {
-            if (methodList[j].checked && rows[i].classList.contains(methodList[j].id)) {
+            if (methodList[j].checked && $(rows[i]).hasClass(methodList[j].id)) {
                 methodShowing = true;
                 break;
             }
@@ -164,16 +164,16 @@ function apply_filter() {
         // class
         classShowing = false;
         for (var j = 0; j < classList.length; j++) {
-            if (classList[j].checked && rows[i].classList.contains(classList[j].id)) {
+            if (classList[j].checked && $(rows[i]).hasClass(classList[j].id)) {
                 classShowing = true;
                 break;
             }
         }
         if (directionShowing && methodShowing && classShowing) {
-            rows[i].classList.remove("hidden-row");
+            $(rows[i]).removeClass("hidden-row");
         }
         else {
-            rows[i].classList.add("hidden-row");
+            $(rows[i]).addClass("hidden-row");
         }
     }
 }
