@@ -15,8 +15,10 @@ class AddView(View):
         content = {
             'app_name': settings.APP_NAME,
             'username': request.user,
-            'year': lastMonth.year,
-            'month': lastMonth.month,
+            'year': now.year,
+            'month': now.month,
+            'last_year': lastMonth.year,
+            'last_month': lastMonth.month,
             'directions': Direction.list(),
             'methods': Method.list(),
             'first_genres': Genre.first_list(),
