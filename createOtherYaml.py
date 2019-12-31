@@ -8,7 +8,7 @@ resultStr = ""
 query = "SELECT * FROM moneybook_bankbalance ORDER BY id"
 result = pd.read_sql(query, con)
 for iRow in range(len(result)):
-    resultStr += "- model: moneybook.bankbalance\n"
+    resultStr += "- model: moneybook.BankBalance\n"
     resultStr += "  pk: " + str(result.iat[iRow, 0]) + "\n"
     resultStr += "  fields: \n"
     resultStr += "    name: " + str(result.iat[iRow, 1]) + "\n"
@@ -20,7 +20,7 @@ resultStr += "\n"
 query = "SELECT * FROM moneybook_cachebackcheckeddate ORDER BY id"
 result = pd.read_sql(query, con)
 for iRow in range(len(result)):
-    resultStr += "- model: moneybook.cachebackcheckeddate\n"
+    resultStr += "- model: moneybook.CachebackCheckedDate\n"
     resultStr += "  pk: " + str(result.iat[iRow, 0]) + "\n"
     resultStr += "  fields: \n"
     resultStr += "    show_order: " + str(result.iat[iRow, 1]) + "\n"
@@ -32,7 +32,7 @@ resultStr += "\n"
 query = "SELECT * FROM moneybook_checkeddate ORDER BY id"
 result = pd.read_sql(query, con)
 for iRow in range(len(result)):
-    resultStr += "- model: moneybook.checkeddate\n"
+    resultStr += "- model: moneybook.CheckedDate\n"
     resultStr += "  pk: " + str(result.iat[iRow, 0]) + "\n"
     resultStr += "  fields: \n"
     resultStr += "    date: " + str(result.iat[iRow, 1]) + "\n"
@@ -43,7 +43,7 @@ resultStr += "\n"
 query = "SELECT * FROM moneybook_creditcheckeddate ORDER BY id"
 result = pd.read_sql(query, con)
 for iRow in range(len(result)):
-    resultStr += "- model: moneybook.creditcheckeddate\n"
+    resultStr += "- model: moneybook.CreditCheckedDate\n"
     resultStr += "  pk: " + str(result.iat[iRow, 0]) + "\n"
     resultStr += "  fields: \n"
     resultStr += "    name: " + str(result.iat[iRow, 1]) + "\n"
@@ -56,7 +56,7 @@ resultStr += "\n"
 query = "SELECT * FROM moneybook_direction ORDER BY id"
 result = pd.read_sql(query, con)
 for iRow in range(len(result)):
-    resultStr += "- model: moneybook.direction\n"
+    resultStr += "- model: moneybook.Direction\n"
     resultStr += "  pk: " + str(result.iat[iRow, 0]) + "\n"
     resultStr += "  fields: \n"
     resultStr += "    name: " + str(result.iat[iRow, 1]) + "\n"
@@ -66,7 +66,7 @@ resultStr += "\n"
 query = "SELECT * FROM moneybook_genre ORDER BY id"
 result = pd.read_sql(query, con)
 for iRow in range(len(result)):
-    resultStr += "- model: moneybook.genre\n"
+    resultStr += "- model: moneybook.Genre\n"
     resultStr += "  pk: " + str(result.iat[iRow, 0]) + "\n"
     resultStr += "  fields: \n"
     resultStr += "    name: " + str(result.iat[iRow, 1]) + "\n"
@@ -77,7 +77,7 @@ resultStr += "\n"
 query = "SELECT * FROM moneybook_method ORDER BY id"
 result = pd.read_sql(query, con)
 for iRow in range(len(result)):
-    resultStr += "- model: moneybook.method\n"
+    resultStr += "- model: moneybook.Method\n"
     resultStr += "  pk: " + str(result.iat[iRow, 0]) + "\n"
     resultStr += "  fields: \n"
     resultStr += "    show_order: " + str(result.iat[iRow, 1]) + "\n"
@@ -89,11 +89,11 @@ resultStr += "\n"
 query = "SELECT * FROM moneybook_severalcosts ORDER BY id"
 result = pd.read_sql(query, con)
 for iRow in range(len(result)):
-    resultStr += "- model: moneybook.severalcosts\n"
+    resultStr += "- model: moneybook.SeveralCosts\n"
     resultStr += "  pk: " + str(result.iat[iRow, 0]) + "\n"
     resultStr += "  fields: \n"
     resultStr += "    name: " + str(result.iat[iRow, 1]) + "\n"
-    resultStr += "    preice: " + str(result.iat[iRow, 2]) + "\n"
+    resultStr += "    price: " + str(result.iat[iRow, 2]) + "\n"
 resultStr += "\n"    
 
 print(resultStr)

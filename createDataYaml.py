@@ -7,7 +7,7 @@ result = pd.read_sql(query, con)
 resultStr = ""
 for iRow in range(len(result)):
     
-    resultStr += "- model: moneybook.data\n"
+    resultStr += "- model: moneybook.Data\n"
     resultStr += "  pk: " + str(iRow + 1) + "\n"
     resultStr += "  fields: \n"
     resultStr += "    date: " + str(result.iat[iRow, 1]) + "\n"
