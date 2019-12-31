@@ -1,199 +1,200 @@
-# Direction
-- model: moneybook.Direction
-  pk: 1
-  fields:
-    name: 収入
-- model: moneybook.Direction
-  pk: 2
-  fields:
-    name: 支出
-
-# Method
-- model: moneybook.Method
-  pk: 1
-  fields:
-    show_order: 4
-    name: 現金
-    chargeable: false
-- model: moneybook.Method
-  pk: 2
-  fields:
-    show_order: 3
-    name: 銀行
-    chargeable: false
-- model: moneybook.Method
-  pk: 3
-  fields:
-    show_order: 0
-    name: nanaco
-    chargeable: true
-- model: moneybook.Method
-  pk: 4
-  fields:
-    show_order: 0
-    name: Edy
-    chargeable: true
-- model: moneybook.Method
-  pk: 5
-  fields:
-    show_order: 1
-    name: PayPay
-    chargeable: true
-- model: moneybook.Method
-  pk: 6
-  fields:
-    show_order: 2
-    name: Kyash
-    chargeable: true
-
-# Genre
-- model: moneybook.Genre
-  pk: 1
-  fields:
-    show_order: 1
-    name: 食費
-- model: moneybook.Genre
-  pk: 2
-  fields:
-    show_order: 2
-    name: インフラ
-- model: moneybook.Genre
-  pk: 3
-  fields:
-    show_order: 3
-    name: 必需品
-- model: moneybook.Genre
-  pk: 4
-  fields:
-    show_order: 4
-    name: 交通費
-- model: moneybook.Genre
-  pk: 5
-  fields:
-    show_order: 5
-    name: 娯楽
-- model: moneybook.Genre
-  pk: 6
-  fields:
-    show_order: 6
-    name: 交際費
-- model: moneybook.Genre
-  pk: 7
-  fields:
-    show_order: 7
-    name: 家賃
-- model: moneybook.Genre
-  pk: 8
-  fields:
-    show_order: 0
-    name: その他
-- model: moneybook.Genre
-  pk: 9
-  fields:
-    show_order: -1
-    name: 計算外
-- model: moneybook.Genre
-  pk: 10
-  fields:
-    show_order: -2
-    name: 内部移動
-- model: moneybook.Genre
-  pk: 11
-  fields:
-    show_order: -3
-    name: 貯金
-- model: moneybook.Genre
-  pk: 12
-  fields:
-    show_order: -4
-    name: 収入
-
-# CheckedDate
-- model: moneybook.CheckedDate
-  pk: 1
-  fields:
-    method: 1
-    date: 2019-09-11
-- model: moneybook.CheckedDate
-  pk: 2
-  fields:
-    method: 2
-    date: 2019-09-14
-- model: moneybook.CheckedDate
-  pk: 3
-  fields:
-    method: 3
-    date: 2019-07-06
-- model: moneybook.CheckedDate
-  pk: 4
-  fields:
-    method: 4
-    date: 2019-06-28
-- model: moneybook.CheckedDate
-  pk: 5
-  fields:
-    method: 5
-    date: 2019-09-11
-- model: moneybook.CheckedDate
-  pk: 6
-  fields:
-    method: 6
-    date: 2019-09-21
-
-# CreditCheckedDate
-- model: moneybook.CreditCheckedDate
-  pk: 1
-  fields:
-    show_order: 1
-    name: THE POINT
-    date: 2019-09-27
-    price: 0
-- model: moneybook.CreditCheckedDate
-  pk: 2
-  fields:
-    show_order: 2
-    name: WallMart
-    date: 2019-09-27
-    price: 0
-- model: moneybook.CreditCheckedDate
-  pk: 3
-  fields:
-    show_order: 3
-    name: JRE CARD
-    date: 2019-09-27
-    price: 0
-- model: moneybook.CreditCheckedDate
-  pk: 4
-  fields:
-    show_order: 4
-    name: Yahoo!カード
-    date: 2019-09-27
-    price: 0
-
-# CachebackCheckedDate
-- model: moneybook.CachebackCheckedDate
-  pk: 1
-  fields:
-    show_order: 1
-    name: Paypay
-    date: 2019-09-27
-
-# BankBalance
 - model: moneybook.BankBalance
   pk: 1
-  fields:
-    show_order: 1
+  fields: 
     name: みずほ
-    price: 400000
+    price: 622971
+    show_order: 1
 
-# SeveralCosts
+- model: moneybook.CachebackCheckedDate
+  pk: 1
+  fields: 
+    show_order: 1
+    name: Paypay
+    date: 2019-11-29
+
+- model: moneybook.CheckedDate
+  pk: 1
+  fields: 
+    date: 2019-12-28
+    method_id: 1
+- model: moneybook.CheckedDate
+  pk: 2
+  fields: 
+    date: 2019-12-28
+    method_id: 2
+- model: moneybook.CheckedDate
+  pk: 3
+  fields: 
+    date: 2019-07-06
+    method_id: 3
+- model: moneybook.CheckedDate
+  pk: 4
+  fields: 
+    date: 2019-06-28
+    method_id: 4
+- model: moneybook.CheckedDate
+  pk: 5
+  fields: 
+    date: 2019-12-28
+    method_id: 5
+- model: moneybook.CheckedDate
+  pk: 6
+  fields: 
+    date: 2019-12-28
+    method_id: 6
+
+- model: moneybook.CreditCheckedDate
+  pk: 1
+  fields: 
+    name: THE POINT
+    date: 2019-12-27
+    price: 0
+    show_order: 0
+- model: moneybook.CreditCheckedDate
+  pk: 2
+  fields: 
+    name: AmexGold
+    date: 2020-01-06
+    price: 10106
+    show_order: 10106
+- model: moneybook.CreditCheckedDate
+  pk: 3
+  fields: 
+    name: JRE CARD
+    date: 2020-01-06
+    price: 8580
+    show_order: 8580
+- model: moneybook.CreditCheckedDate
+  pk: 4
+  fields: 
+    name: Yahoo!カード
+    date: 2019-12-27
+    price: 0
+    show_order: 0
+- model: moneybook.CreditCheckedDate
+  pk: 5
+  fields: 
+    name: JCB ORIGINAL
+    date: 2019-12-10
+    price: 0
+    show_order: 0
+
+- model: moneybook.Direction
+  pk: 1
+  fields: 
+    name: 収入
+- model: moneybook.Direction
+  pk: 2
+  fields: 
+    name: 支出
+
+- model: moneybook.Genre
+  pk: 1
+  fields: 
+    name: 食費
+    show_order: 1
+- model: moneybook.Genre
+  pk: 2
+  fields: 
+    name: インフラ
+    show_order: 2
+- model: moneybook.Genre
+  pk: 3
+  fields: 
+    name: 必需品
+    show_order: 3
+- model: moneybook.Genre
+  pk: 4
+  fields: 
+    name: 交通費
+    show_order: 4
+- model: moneybook.Genre
+  pk: 5
+  fields: 
+    name: 娯楽
+    show_order: 5
+- model: moneybook.Genre
+  pk: 6
+  fields: 
+    name: 交際費
+    show_order: 6
+- model: moneybook.Genre
+  pk: 7
+  fields: 
+    name: 家賃
+    show_order: 7
+- model: moneybook.Genre
+  pk: 8
+  fields: 
+    name: その他
+    show_order: 0
+- model: moneybook.Genre
+  pk: 9
+  fields: 
+    name: 計算外
+    show_order: -1
+- model: moneybook.Genre
+  pk: 10
+  fields: 
+    name: 内部移動
+    show_order: -2
+- model: moneybook.Genre
+  pk: 11
+  fields: 
+    name: 貯金
+    show_order: -3
+- model: moneybook.Genre
+  pk: 12
+  fields: 
+    name: 収入
+    show_order: -4
+
+- model: moneybook.Method
+  pk: 1
+  fields: 
+    show_order: 4
+    name: 現金
+    chargeable: 0
+- model: moneybook.Method
+  pk: 2
+  fields: 
+    show_order: 2
+    name: 銀行
+    chargeable: 0
+- model: moneybook.Method
+  pk: 3
+  fields: 
+    show_order: 0
+    name: nanaco
+    chargeable: 1
+- model: moneybook.Method
+  pk: 4
+  fields: 
+    show_order: 0
+    name: Edy
+    chargeable: 1
+- model: moneybook.Method
+  pk: 5
+  fields: 
+    show_order: 1
+    name: PayPay
+    chargeable: 1
+- model: moneybook.Method
+  pk: 6
+  fields: 
+    show_order: 3
+    name: Kyash
+    chargeable: 1
+
 - model: moneybook.SeveralCosts
   pk: 1
-  fields:
+  fields: 
     name: FixedCostMark
     price: 110000
 - model: moneybook.SeveralCosts
   pk: 2
-  fields:
+  fields: 
     name: ActualCashBalance
-    price: 50000
+    price: 40634
+
+
