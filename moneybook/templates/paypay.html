@@ -1,0 +1,41 @@
+{% extends "_base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}{{ app_name }} PayPay{% endblock %}
+
+{% block header %}
+<script type="text/javascript" src="{% static 'common.js' %}"></script>
+<script type="text/javascript" src="{% static 'paypay.js' %}"></script>
+<script type="text/javascript">
+    add_url = "{% url 'moneybook:add' %}";
+    data_table_url = "{% url 'moneybook:paypay_recent_income' %}";
+    window.onload = function() {
+        get_transaction();
+    }
+</script>
+{% endblock %}
+
+{% block content %}
+{% include "_add_task_bar.html" %}
+<section>
+    {% csrf_token %}
+    <h1>PayPayキャッシュバック追加</h1>
+    <form>
+        <table class="tbl-add tbl-common fcs-blue">
+            <tr>
+                <th>日付</th>
+                <td>
+                    <input type="text" id="s_year" style="width:6ex" class="righter" onkeypress="key_press_send(event.keyCode)" value="{{ year }}">年
+                    <input type="text" id="s_month" style="width:5ex" class="righter" onkeypress="key_press_send(event.keyCode)" value="{{ month }}">月
+                    <input type="text" id="s_day" style="width:5ex" onkeypress="key_press_send(event.keyCode)" class="righter" >日
+                </td>
+            </tr>
+            <tr><th>金額</th><td><input type="text" id="s_price" style="width:10ex" class="righter" onkeypress="key_press_send(event.keyCode)">円</td></tr>
+        </table>
+        <input type="button" value="追加" class="btn-apply" onclick="send_paypay_cacheback()">
+    </form>
+    <div id="transactions"></div>
+</section>
+{% include "_result_message.html" %}
+{% endblock %}

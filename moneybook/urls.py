@@ -25,6 +25,8 @@ urlpatterns = [
     path('edit/<int:pk>', EditView.as_view(), name='edit'),
     path('edit/check', CheckView.as_view(), name="edit_check"),
     path('delete', DeleteView.as_view(), name='delete'),
+    path('paypay', paypayView.paypay, name='paypay'),
+    path('paypay_recent_income', paypayView.recent_paypay_income_table, name='paypay_recent_income'),
     path('login', CustomLoginView.as_view(), name='login'),
     path('logout', LogoutView.as_view(), name='logout'),
 ]
