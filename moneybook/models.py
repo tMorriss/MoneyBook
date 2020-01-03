@@ -152,6 +152,10 @@ class Data(models.Model):
     def getBankData(data):
         return Data.getMethodData(data, 2)
 
+    # PayPayのデータを取得
+    def getPayPayData(data):
+        return Data.getMethodData(data, 5)
+
     # チェック済みのデータを取得
     def getCheckedData(data):
         return Data.sortDateAscending(data.filter(checked=1))
