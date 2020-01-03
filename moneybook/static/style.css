@@ -16,24 +16,24 @@ body label,
     }
 }
 
-nav {
+.task_bar {
     padding: 2px 0px;
     float: top;
 }
-nav ul {
+.task_bar ul {
     display: flex;
     list-style: none;
     justify-content: space-around;
     padding-left: 0px;
     margin: 0 1px;
 }
-nav li {
+.task_bar li {
     flex: 1;
     margin: 0 1px;
     background: #005000;
     border-radius: 5px;
 }
-nav a, nav a:visited {
+.task_bar a, .task_bar a:visited {
     display: block;
     color: #fff;
 }
@@ -51,7 +51,7 @@ body {
     }
 }
 
-section, header, nav {
+section, header, .task_bar {
     background: #fff;
 }
 
