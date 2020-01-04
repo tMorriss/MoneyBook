@@ -15,8 +15,8 @@ function send_add_row() {
         }
     })
     // 成功時
-    .done((data) => {
-        update_success(reset_add_form);
+    .done(() => {
+        show_result_msg("Success!", reset_add_form);
     })
     // 失敗時
     .fail(() => {
@@ -47,8 +47,8 @@ function send_intra_move() {
         }
     })
     // 成功時
-    .done((data) => {
-        update_success(reset_add_form);
+    .done(() => {
+        show_result_msg("Success!", reset_add_form);
     })
     // 失敗時
     .fail(() => {
@@ -78,8 +78,8 @@ function send_charge() {
         }
     })
     // 成功時
-    .done((data) => {
-        update_success(reset_add_form);
+    .done(() => {
+        show_result_msg("Success!", reset_add_form);
     })
     // 失敗時
     .fail(() => {
@@ -112,7 +112,7 @@ function send_suica_charge(price) {
     })
     // 成功時
     .done(() => {
-        update_success(reset_for_shortcut);
+        show_result_msg("Success!", reset_for_shortcut);
     })
     // 失敗時
     .fail(() => {
@@ -139,18 +139,13 @@ function send_paypay_cacheback() {
     })
     // 成功時
     .done(() => {
-        update_success(reset_for_shortcut);
+        show_result_msg("Success!", reset_for_shortcut);
     })
     // 失敗時
     .fail(() => {
         // メッセージ表示
         show_result_msg("Error...", empty);
     });
-}
-
-function update_success(callback) {
-    // メッセージ表示
-    show_result_msg("Success!", callback);
 }
 
 function reset_add_form() {
