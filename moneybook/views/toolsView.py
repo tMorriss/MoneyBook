@@ -8,8 +8,6 @@ import json
 
 def tools(request):
     now = datetime.now()
-    # 全データ
-    allData = Data.getAllData()
     # 実際の現金残高
     actualCashBalance = SeveralCosts.getActualCashBalance()
     # クレカ確認日
@@ -18,8 +16,6 @@ def tools(request):
     bankBalance = BankBalance.getAll()
     # 固定費目標額
     fixedCostMark = SeveralCosts.getFixedCostMark()
-    # 未承認トランザクション
-    uncheckedData = Data.getUncheckedData(allData)
     # 現在銀行
     banks = BankBalance.getAll()
 
@@ -34,7 +30,6 @@ def tools(request):
         'credit_checked_date': creditCheckedDate,
         'bank_balance': bankBalance,
         'fixed_cost_mark': fixedCostMark,
-        'unchecked_data': uncheckedData,
         'banks': banks,
     }
     return render(request, "tools.html", content)
@@ -158,6 +153,16 @@ def update_fixed_cost_mark(request):
 
     SeveralCosts.setFixedCostMark(price)
     return HttpResponse(json.dumps({"message": "success"}))
+
+def get_unchecked_transaction(request):
+    # 全データ
+    allData = Data.getAllData()
+    # 未承認トランザクション
+    uncheckedData = Data.getUncheckedData(allData)
+    content = {
+        'unchecked_data': uncheckedData,
+    }
+    return render(request, "_unchecked_transaction.html", content)
 
 class calculateNowBankView(View):
     def get(self, request, *args, **kwargs):

@@ -98,6 +98,7 @@ function update_checked_date(method_id, checkAll) {
     })
     .done(() => {
         get_checked_date();
+        get_unchecked_transaction();
     })
     .fail(() => {
         // メッセージ表示
@@ -180,5 +181,14 @@ function get_calculate_now_bank() {
     .done((data) => {
         $("#calculate-now-bank").html(data);
         calculate_now_bank();
+    })
+}
+
+function get_unchecked_transaction() {
+    $.get({
+        url: unchecked_transaction_url
+    })
+    .done((data) => {
+        $("#unchecked-transaction").html(data);
     })
 }
