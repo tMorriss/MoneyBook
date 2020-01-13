@@ -42,6 +42,28 @@ function key_press_send(code) {
     }
 }
 
+function update_cacheback_date() {
+    $.post({
+        url: cacheback_checked_url,
+        data: {
+            "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+            "year": $("#c_year").val(),
+            "month": $("#c_month").val(),
+            "day": $("#c_day").val(),
+            "pk": 1,
+        }
+    })
+    .done(() => {
+    
+    });
+}
+function key_press_cacheback(code) {
+    // エンターキーなら実行
+    if (code === 13) {
+        update_cacheback_date();
+    }
+}
+
 function reset_form() {
     // フォームをリセット
     $('#s_day').val('');
