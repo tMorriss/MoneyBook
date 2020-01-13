@@ -21,6 +21,7 @@ class AddView(View):
             'last_month': lastMonth.month,
             'directions': Direction.list(),
             'methods': Method.list(),
+            'chargeable_methods': Method.chargeableList(),
             'first_genres': Genre.first_list(),
             'latter_genres': Genre.latter_list(),
             'temps': {0: "No", 1: "Yes"},

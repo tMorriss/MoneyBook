@@ -4,7 +4,6 @@
 {% block title %}{{ app_name }} Add{% endblock %}
 
 {% block header %}
-<script type="text/javascript" src="{% static 'common.js' %}"></script>
 <script type="text/javascript" src="{% static 'add.js' %}"></script>
 <script type="text/javascript">
     add_url = "{% url 'moneybook:add' %}";
@@ -34,8 +33,8 @@
             <tr>
                 <th>移動先</th>
                 <td class="radio-green">
-                    {% for m in methods %}
-                        <input type="radio" name="c_method" value="{{ m.pk }}" id="c_method-{{ m.pk }}"{% if m == methods.first %} checked{% endif %} onkeypress="key_press_charge(event.keyCode)">
+                    {% for m in chargeable_methods %}
+                        <input type="radio" name="c_method" value="{{ m.pk }}" id="c_method-{{ m.pk }}"{% if m == chargeable_methods.first %} checked{% endif %} onkeypress="key_press_charge(event.keyCode)">
                         <label for="c_method-{{ m.pk }}">{{ m.name }}</label>
                     {% endfor %}
                 </td>
