@@ -235,6 +235,9 @@ class CachebackCheckedDate(models.Model):
     name = models.CharField(max_length=200)
     date = models.DateField()
 
+    def get(pk):
+        return CachebackCheckedDate.objects.get(pk=pk)
+
     def getAll():
         return CachebackCheckedDate.objects.all().order_by("show_order")
 
