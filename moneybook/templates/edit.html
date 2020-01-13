@@ -5,7 +5,6 @@
 {% block title %}{{ app_name }} Edit{% endblock %}
 
 {% block header %}
-<script type="text/javascript" src="{% static 'common.js' %}"></script>
 <script type="text/javascript" src="{% static 'edit.js' %}"></script>
 <script type="text/javascript">
     edit_url = "{% url 'moneybook:edit' data.pk %}";

@@ -6,5 +6,5 @@ from .searchView import *
 from .toolsView import *
 from .editView import *
 from .deleteView import *
-from .CustomLoginView import *
+from .customLoginView import *
 from .paypayView import *
