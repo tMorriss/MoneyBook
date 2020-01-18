@@ -18,7 +18,7 @@
     <h1>詳細検索</h1>
     <form action="{% url 'moneybook:search' %}" method="get">
         <input type="hidden" name="is_query" value="1">
-        <table class="tbl-add tbl-common fcs-blue">
+        <table class="tbl-common fcs-blue">
             <tr><th>日付</th>
                 <td>
                     <input type="text" name="start_year" style="width:6ex" class="righter" value="{{ start_year }}">年
