@@ -29,9 +29,8 @@ function update_diff() {
     var actual = Number($("#actual_balance").val().replace(",", ""));
 
     var value = written - actual;
-    $.ajax({
+    $.post({
         url: update_actual_cash_url,
-        type: "POST",
         data: {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
             "price": actual,
@@ -84,9 +83,8 @@ function get_several_checked_date() {
 }
 
 function update_checked_date(method_id, checkAll) {
-    $.ajax({
+    $.post({
         url: checked_date_url,
-        type: "POST",
         data: {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
             "year": $("#check_year").val(),
@@ -107,9 +105,8 @@ function update_checked_date(method_id, checkAll) {
 }
 
 function update_several_checked_date(id, url) {
-    $.ajax({
+    $.post({
         url: url,
-        type: "POST",
         data: {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
             "year": $("#credit_check_year").val(),
@@ -130,9 +127,8 @@ function update_several_checked_date(id, url) {
 }
 
 function update_fixed_cost_mark() {
-    $.ajax({ 
+    $.post({ 
         url: update_fixed_cost_mark_url,
-        type: "POST",
         data: {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
             "price": Number($("#txt_fixed_cost").val().replace(",", "")),
@@ -154,9 +150,8 @@ function key_press_fixed(code) {
 }
 
 function check(id) {
-    $.ajax({
+    $.post({
         url: edit_check_url,
-        type: "POST",
         data: {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
             "id": id,

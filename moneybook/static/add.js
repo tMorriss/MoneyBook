@@ -1,7 +1,6 @@
 function send_add_row() {
-    $.ajax({
+    $.post({
         url: add_url,
-        type: "POST",
         data: {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
             "date": $('#a_year').val() + "-" + $('#a_month').val() + "-" + $('#a_day').val(),
@@ -32,9 +31,8 @@ function key_press_add(code) {
 }
 
 function send_intra_move() {
-    $.ajax({
+    $.post({
         url: intra_move_url,
-        type: "POST",
         data: {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
             "year": $('#m_year').val(),
@@ -64,9 +62,8 @@ function key_press_intra(code) {
 }
 
 function send_charge() {
-    $.ajax({
+    $.post({
         url: intra_move_url,
-        type: "POST",
         data: {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
             "year": $('#c_year').val(),
@@ -95,9 +92,8 @@ function key_press_charge(code) {
 }
 
 function send_suica_charge(price) {
-    $.ajax({
+    $.post({
         url: add_url,
-        type: "POST",
         data: {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
             "date": $('#s_year').val() + "-" + $('#s_month').val() + "-" + $('#s_day').val(),
@@ -122,9 +118,8 @@ function send_suica_charge(price) {
 }
 
 function send_paypay_cacheback() {
-    $.ajax({
+    $.post({
         url: add_url,
-        type: "POST",
         data: {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
             "date": $('#s_year').val() + "-" + $('#s_month').val() + "-" + $('#s_day').val(),

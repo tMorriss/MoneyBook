@@ -2,9 +2,8 @@ function separate(num){
     return String(num).replace( /(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
 }
 function get_transaction() {
-    $.ajax({
+    $.get({
         url: data_table_url,
-        type: "GET",
     })
     .done((data) => {
         $('#transactions').html(data);
@@ -12,9 +11,8 @@ function get_transaction() {
 }
 
 function send_paypay_cacheback() {
-    $.ajax({
+    $.post({
         url: add_url,
-        type: "POST",
         data: {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
             "date": $('#s_year').val() + "-" + $('#s_month').val() + "-" + $('#s_day').val(),
