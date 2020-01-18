@@ -4,9 +4,8 @@ function send_add_row() {
     if (genre == 12) {
         direction = 1;
     }
-    $.ajax({
+    $.post({
         url: add_url,
-        type: "POST",
         data: {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
             "date": $('#a_year').val() + "-" + $('#a_month').val() + "-" + $('#a_day').val(),
@@ -22,9 +21,8 @@ function send_add_row() {
     // 成功時
     .done(() => {
         if ($('#is-charge').prop('checked')) {
-            $.ajax({
+            $.post({
                 url: add_intra_move_url,
-                type: "POST",
                 data: {
                     "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
                     "year": $('#a_year').val(),
@@ -78,9 +76,8 @@ function key_press_move(code) {
 
 function update_data() {
     $.when(
-        $.ajax({
+        $.get({
             url: data_table_url,
-            type: "GET",
             data: {
                 "year": year,
                 "month": month,
@@ -91,9 +88,8 @@ function update_data() {
             apply_filter();
         }),
 
-        $.ajax({
+        $.get({
             url: balance_statisticMini_url,
-            type: "GET",
             data: {
                 "year": year,
                 "month": month,
@@ -103,9 +99,8 @@ function update_data() {
             $('#statistic-fixed').html(data);
         }),
 
-        $.ajax({
+        $.get({
             url: chart_container_data_url,
-            type: "GET",
             data: {
                 "year": year,
                 "month": month,
