@@ -1,7 +1,6 @@
 function send_update_row() {
-    $.ajax({
+    $.post({
         url: edit_url,
-        type: "POST",
         data: {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
             "date": $('#year').val() + "-" + $('#month').val() + "-" + $('#day').val(),
@@ -32,9 +31,8 @@ function key_press_update(code) {
 }
 
 function send_delete_row() {
-    $.ajax({
+    $.post({
         url: delete_url,
-        type: "POST",
         data: {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
             "pk": data_pk,

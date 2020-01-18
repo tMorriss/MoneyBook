@@ -30,9 +30,8 @@
             }
         })
 
-        $.ajax({
+        $.post({
             url: "{% url 'moneybook:calculate_now_bank' %}",
-            type: "POST",
             data: {
                 "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
                 {% for b in banks %}
