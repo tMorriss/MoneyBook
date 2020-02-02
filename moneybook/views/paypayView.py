@@ -32,9 +32,9 @@ def paypay(request):
     return render(request, 'paypay.html', content)
 
 def recent_paypay_income_table(request):
-    # 先月の頭以降
+    # 先々月の頭以降
     now = datetime.now()
-    lastMonth = now - relativedelta(months=1)
+    lastMonth = now - relativedelta(months=2)
     recentData = Data.getRangeData(date(lastMonth.year, lastMonth.month, 1), None)
     # 直近のPayPay関係
     paypayData = Data.sortDateDescending(Data.getPayPayData(recentData))
