@@ -56,7 +56,8 @@ function update_cacheback_date() {
         }
     })
     .done(() => {
-    
+        show_result_msg("Success!", get_transaction);
+        reset_form();
     });
 }
 function key_press_cacheback(code) {
