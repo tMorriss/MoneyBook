@@ -31,6 +31,15 @@
                     {% for m in month_io_list %}{ label: "{{ m.label }}月", y: {{ m.outgo }} },
                     {% endfor %}
                 ]
+            },
+            {
+                type: "line",
+                showInLegend: true,
+                legendText: "固定費",
+                dataPoints: [
+                    {% for fc in fixed_costs %}{ label: "{{ fc.label }}月", y: {{ fc.value }} },
+                    {% endfor %}
+                ]
             }]
         });
         chart.render();
