@@ -10,7 +10,8 @@ def statistics_month(request, year):
     monthAllIOB = []
     beforeBalances = []
     infraCosts = []
-    FoodCosts = []
+    foodCosts = []
+    fixedCosts = []
     for iMonth in range(len(monthList)):
         monthlyData = Data.getMonthData(year, monthList[iMonth])
         monthlyNormalData = Data.getNormalData(monthlyData)
@@ -38,7 +39,9 @@ def statistics_month(request, year):
                 infraCosts[iMonth - 1].water = w / 2
         infraCosts.append(InfraCost(monthList[iMonth], e + g + w / 2, e, g, w / 2))
 
-        FoodCosts.append(LabelValue(monthList[iMonth], Data.getFoodCosts(monthlyData)))
+        foodCosts.append(LabelValue(monthList[iMonth], Data.getFoodCosts(monthlyData)))
+
+        fixedCosts.append(LabelValue(monthList[iMonth], Data.getOutgoSum(Data.getFixedData(monthlyData))))
 
     content = {
         'app_name': settings.APP_NAME,
@@ -49,7 +52,8 @@ def statistics_month(request, year):
         'month_all_io_list': monthAllIOB,
         'before_balance': beforeBalances,
         'infra_costs': infraCosts,
-        'food_costs': FoodCosts,
+        'food_costs': foodCosts,
+        'fixed_costs': fixedCosts,
     }
     return render(request, 'statistics.html', content)
 
