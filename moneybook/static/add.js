@@ -140,9 +140,10 @@ function reset_add_form() {
     $('#a_day').val('');
     $('#a_item').val('');
     $('#a_price').val('');
+    $('input[name=a_direction]').val([direction_first]);
     $('input[name=a_method]').val([method_first]);
     $('input[name=a_genre]').val([genre_first]);
-    $('#is-charge').prop('checked', false).change();
+    $('input[name=a_temp]').val(["False"]);
 }
 function reset_for_shortcut() {
     reset_add_form();
