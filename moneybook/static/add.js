@@ -91,43 +91,17 @@ function key_press_charge(code) {
     }
 }
 
-function send_suica_charge(price) {
+function send_suica_charge() {
     $.post({
         url: add_url,
         data: {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
             "date": $('#s_year').val() + "-" + $('#s_month').val() + "-" + $('#s_day').val(),
             "item": "Suicaチャージ",
-            "price": price,
+            "price": $('#s_price').val(),
             "direction": 2,
             "method": 2,
             "genre": 4,
-            "temp": "False",
-            "checked": "False",
-        }
-    })
-    // 成功時
-    .done(() => {
-        show_result_msg("Success!", reset_for_shortcut);
-    })
-    // 失敗時
-    .fail(() => {
-        // メッセージ表示
-        show_result_msg("Error...", empty);
-    });
-}
-
-function send_paypay_cacheback() {
-    $.post({
-        url: add_url,
-        data: {
-            "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
-            "date": $('#s_year').val() + "-" + $('#s_month').val() + "-" + $('#s_day').val(),
-            "item": "PayPayキャッシュバック",
-            "price": $('#s_price').val(),
-            "direction": 1,
-            "method": 5,
-            "genre": 12,
             "temp": "False",
             "checked": "False",
         }
