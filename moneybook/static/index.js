@@ -10,7 +10,7 @@ function send_add_row() {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
             "date": $('#a_year').val() + "-" + $('#a_month').val() + "-" + $('#a_day').val(),
             "item": $('#a_item').val(),
-            "price": $('#a_price').val(),
+            "price": removeComma($('#a_price').val()),
             "direction": direction,
             "method": $('input[name="a_method"]:checked').val(),
             "genre": genre,
@@ -28,7 +28,7 @@ function send_add_row() {
                     "year": $('#a_year').val(),
                     "month": $('#a_month').val(),
                     "day": $('#a_day').val(),
-                    "price": $('#a_price').val(),
+                    "price": removeComma($('#a_price').val()),
                     "before_method": 2,
                     "after_method": $('input[name="a_method"]:checked').val(),
                 }

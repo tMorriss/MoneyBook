@@ -25,8 +25,8 @@ function delete_value(id) {
 }
 
 function update_diff() {
-    var written = Number($("#written_balance").text().replace(",", ""));
-    var actual = Number($("#actual_balance").val().replace(",", ""));
+    var written = Number(removeComma($("#written_balance").text()));
+    var actual = Number(removeComma($("#actual_balance").val()));
 
     var value = written - actual;
     $.post({
