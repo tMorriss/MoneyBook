@@ -17,7 +17,7 @@ function send_paypay_cacheback() {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
             "date": $('#s_year').val() + "-" + $('#s_month').val() + "-" + $('#s_day').val(),
             "item": "PayPayキャッシュバック",
-            "price": $('#s_price').val(),
+            "price": removeComma($('#s_price').val()),
             "direction": 1,
             "method": 5,
             "genre": 12,
