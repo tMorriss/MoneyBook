@@ -5,7 +5,7 @@ function send_add_row() {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
             "date": $('#a_year').val() + "-" + $('#a_month').val() + "-" + $('#a_day').val(),
             "item": $('#a_item').val(),
-            "price": $('#a_price').val(),
+            "price": removeComma($('#a_price').val()),
             "direction": $('input[name="a_direction"]:checked').val(),
             "method": $('input[name="a_method"]:checked').val(),
             "genre": $('input[name="a_genre"]:checked').val(),
@@ -39,7 +39,7 @@ function send_intra_move() {
             "month": $('#m_month').val(),
             "day": $('#m_day').val(),
             "item": $("#m_item").val(),
-            "price": $('#m_price').val(),
+            "price": removeComma($('#m_price').val()),
             "before_method": $('input[name="m_before_method"]:checked').val(),
             "after_method": $('input[name="m_after_method"]:checked').val(),
         }
@@ -69,7 +69,7 @@ function send_charge() {
             "year": $('#c_year').val(),
             "month": $('#c_month').val(),
             "day": $('#c_day').val(),
-            "price": $('#c_price').val(),
+            "price": removeComma($('#c_price').val()),
             "before_method": 2,
             "after_method": $('input[name="c_method"]:checked').val(),
         }
@@ -91,43 +91,17 @@ function key_press_charge(code) {
     }
 }
 
-function send_suica_charge(price) {
+function send_suica_charge() {
     $.post({
         url: add_url,
         data: {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
             "date": $('#s_year').val() + "-" + $('#s_month').val() + "-" + $('#s_day').val(),
             "item": "Suicaチャージ",
-            "price": price,
+            "price": removeComma($('#s_price').val()),
             "direction": 2,
             "method": 2,
             "genre": 4,
-            "temp": "False",
-            "checked": "False",
-        }
-    })
-    // 成功時
-    .done(() => {
-        show_result_msg("Success!", reset_for_shortcut);
-    })
-    // 失敗時
-    .fail(() => {
-        // メッセージ表示
-        show_result_msg("Error...", empty);
-    });
-}
-
-function send_paypay_cacheback() {
-    $.post({
-        url: add_url,
-        data: {
-            "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
-            "date": $('#s_year').val() + "-" + $('#s_month').val() + "-" + $('#s_day').val(),
-            "item": "PayPayキャッシュバック",
-            "price": $('#s_price').val(),
-            "direction": 1,
-            "method": 5,
-            "genre": 12,
             "temp": "False",
             "checked": "False",
         }
@@ -166,9 +140,10 @@ function reset_add_form() {
     $('#a_day').val('');
     $('#a_item').val('');
     $('#a_price').val('');
+    $('input[name=a_direction]').val([direction_first]);
     $('input[name=a_method]').val([method_first]);
     $('input[name=a_genre]').val([genre_first]);
-    $('#is-charge').prop('checked', false).change();
+    $('input[name=a_temp]').val(["False"]);
 }
 function reset_for_shortcut() {
     reset_add_form();
