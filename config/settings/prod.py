@@ -11,4 +11,6 @@ DATABASES = {
     }
 }
 
+APP_NAME = "MoneyBook"
+
 ALLOWED_HOSTS = ['moneybook.tmorriss.com']
