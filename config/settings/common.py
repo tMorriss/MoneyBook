@@ -110,8 +110,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-APP_NAME = "MoneyBook"
-
 NUMBER_GROUPING = 3
 
 # ログイン後トップページにリダイレクト

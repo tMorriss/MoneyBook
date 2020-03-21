@@ -35,9 +35,9 @@
             data: {
                 "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
                 {% for b in banks %}
-                    "bank-{{ b.pk }}": unseparate($("#bank-{{ b.pk }}").val()),{% endfor %}
+                    "bank-{{ b.pk }}": removeComma($("#bank-{{ b.pk }}").val()),{% endfor %}
                 {% for c in credit_checked_date %}
-                    "credit-{{ c.pk }}": unseparate($("#credit-{{ c.pk }}").val()),{% endfor %}
+                    "credit-{{ c.pk }}": removeComma($("#credit-{{ c.pk }}").val()),{% endfor %}
             }
         })
         .done((data) => {

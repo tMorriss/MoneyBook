@@ -47,3 +47,7 @@ function empty() { }
 function deleteValue(elm) {
     elm.value = "";
 }
+
+function removeComma(num) {
+    return num.replace(",", "");
+}
