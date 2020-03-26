@@ -46,5 +46,5 @@ function send_delete_row() {
     .fail(() => {
         // メッセージ表示
         show_result_msg("Error...", empty);
-    });   
+    });
 }

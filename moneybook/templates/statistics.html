@@ -119,7 +119,7 @@
             }]
         });
         chart.render();
-        
+
         var chart = new CanvasJS.Chart("barplot_inout_all", {
             animationEnabled: false,
             title: {text: "収入と支出"},
@@ -145,7 +145,7 @@
             }]
         });
         chart.render();
-        
+
         var chart = new CanvasJS.Chart("lineplot_monthly_balance", {
             animationEnabled: false,
             title: {text: "途中残高"},
@@ -167,7 +167,7 @@
         });
         chart.render();
     }
-    
+
     function move_year() {
         year = document.getElementById("jump_year").value;
         window.location.href = "{% url 'moneybook:statistics' %}/" + year;
