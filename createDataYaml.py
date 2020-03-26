@@ -6,7 +6,7 @@ query = "SELECT * FROM moneybook_data ORDER BY id"
 result = pd.read_sql(query, con)
 resultStr = ""
 for iRow in range(len(result)):
-    
+
     resultStr += "- model: moneybook.Data\n"
     resultStr += "  pk: " + str(iRow + 1) + "\n"
     resultStr += "  fields: \n"

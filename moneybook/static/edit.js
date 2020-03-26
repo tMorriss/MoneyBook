@@ -5,7 +5,7 @@ function send_update_row() {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
             "date": $('#year').val() + "-" + $('#month').val() + "-" + $('#day').val(),
             "item": $('#item').val(),
-            "price": remoteComma($('#price').val()),
+            "price": removeComma($('#price').val()),
             "direction": $('input[name="direction"]:checked').val(),
             "method": $('input[name="method"]:checked').val(),
             "genre": $('input[name="genre"]:checked').val(),
@@ -46,5 +46,5 @@ function send_delete_row() {
     .fail(() => {
         // メッセージ表示
         show_result_msg("Error...", empty);
-    });   
+    });
 }
