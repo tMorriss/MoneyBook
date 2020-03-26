@@ -30,7 +30,7 @@ class EditView(View):
 
     def post(self, request, *args, **kwargs):
         pk = kwargs["pk"]
-        
+
         try:
             data = Data.get(pk)
         except:
@@ -61,7 +61,7 @@ class EditView(View):
 class CheckView(View):
     def post(self, request, *args, **kwargs):
         pk = request.POST.get("id")
-        
+
         try:
             data = Data.get(pk)
         except:

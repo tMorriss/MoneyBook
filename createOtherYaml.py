@@ -50,7 +50,7 @@ for iRow in range(len(result)):
     resultStr += "    date: " + str(result.iat[iRow, 2]) + "\n"
     resultStr += "    price: " + str(result.iat[iRow, 3]) + "\n"
     resultStr += "    show_order: " + str(result.iat[iRow, 3]) + "\n"
-resultStr += "\n"    
+resultStr += "\n"
 
 # クレジットチェック
 query = "SELECT * FROM moneybook_direction ORDER BY id"
@@ -60,7 +60,7 @@ for iRow in range(len(result)):
     resultStr += "  pk: " + str(result.iat[iRow, 0]) + "\n"
     resultStr += "  fields: \n"
     resultStr += "    name: " + str(result.iat[iRow, 1]) + "\n"
-resultStr += "\n"    
+resultStr += "\n"
 
 # ジャンル
 query = "SELECT * FROM moneybook_genre ORDER BY id"
@@ -71,7 +71,7 @@ for iRow in range(len(result)):
     resultStr += "  fields: \n"
     resultStr += "    name: " + str(result.iat[iRow, 1]) + "\n"
     resultStr += "    show_order: " + str(result.iat[iRow, 2]) + "\n"
-resultStr += "\n"    
+resultStr += "\n"
 
 # 支払い方法
 query = "SELECT * FROM moneybook_method ORDER BY id"
@@ -83,7 +83,7 @@ for iRow in range(len(result)):
     resultStr += "    show_order: " + str(result.iat[iRow, 1]) + "\n"
     resultStr += "    name: " + str(result.iat[iRow, 2]) + "\n"
     resultStr += "    chargeable: " + str(result.iat[iRow, 3]) + "\n"
-resultStr += "\n"    
+resultStr += "\n"
 
 # 諸々の価格
 query = "SELECT * FROM moneybook_severalcosts ORDER BY id"
@@ -94,6 +94,6 @@ for iRow in range(len(result)):
     resultStr += "  fields: \n"
     resultStr += "    name: " + str(result.iat[iRow, 1]) + "\n"
     resultStr += "    price: " + str(result.iat[iRow, 2]) + "\n"
-resultStr += "\n"    
+resultStr += "\n"
 
 print(resultStr)

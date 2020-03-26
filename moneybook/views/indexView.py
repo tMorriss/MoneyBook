@@ -93,7 +93,7 @@ def index_chart_data(request):
     for g in Genre.list():
         if g.show_order >= 0:
             d = Data.getGenreData(monthlyData, g.pk)
-            positiveGenresOutgo[g] = Data.getOutgoSum(d)
+            positiveGenresOutgo[g] = Data.getOutgoSum(d) - Data.getTempSum(d)
     content = {
         'genres_outgo': positiveGenresOutgo,
     }

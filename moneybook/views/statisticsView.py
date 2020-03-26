@@ -21,7 +21,7 @@ def statistics_month(request, year):
 
         # if i != 0 and o != 0:
         monthIOB.append(InOutBalance(monthList[iMonth], i, o, i - o))
-        
+
         monthlyDataWithoutInMove = Data.getDataWithoutInmove(monthlyData)
         i = Data.getIncomeSum(monthlyDataWithoutInMove) - t
         o = Data.getOutgoSum(monthlyDataWithoutInMove) - t

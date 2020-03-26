@@ -84,7 +84,7 @@ class checkedDateView(View):
         except:
             return HttpResponseBadRequest(json.dumps({"message": "date format is invalid"}))
 
-        try:    
+        try:
             # チェック日を更新
             CheckedDate.set(methodPk, newDate)
         except:
@@ -121,9 +121,9 @@ def update_credit_checked_date(request):
         CreditCheckedDate.setDate(pk, newDate)
     except:
         return HttpResponseBadRequest(json.dumps({"message": "method id is invalid"}))
-    
+
     return HttpResponse(json.dumps({"message": "success"}))
-    
+
 def update_cacheback_checked_date(request):
     if not "year" in request.POST or not "month" in request.POST or not "day" in request.POST or not "pk" in request.POST:
         return HttpResponseBadRequest(json.dumps({"message": "missing parameter"}))
@@ -139,7 +139,7 @@ def update_cacheback_checked_date(request):
         CachebackCheckedDate.set(pk, newDate)
     except:
         return HttpResponseBadRequest(json.dumps({"message": "method id is invalid"}))
-    
+
     return HttpResponse(json.dumps({"message": "success"}))
 
 def update_fixed_cost_mark(request):
@@ -200,7 +200,7 @@ class calculateNowBankView(View):
                     value = int(request.POST.get(key))
                     BankBalance.set(b.pk, value)
                     bankSum += value
-                
+
             for c in cc:
                 key = "credit-" + str(c.pk)
                 if key in request.POST:

@@ -103,7 +103,7 @@ def search(request):
 
         # 日付順にソート
         data = Data.sortDateAscending(data)
-        
+
         content.update({
             "show_data": data,
             "income_sum": Data.getIncomeSum(data),
