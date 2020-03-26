@@ -124,7 +124,7 @@ function update_several_checked_date(id, url) {
 }
 
 function update_fixed_cost_mark() {
-    $.post({ 
+    $.post({
         url: update_fixed_cost_mark_url,
         data: {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),

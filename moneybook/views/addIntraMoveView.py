@@ -40,10 +40,10 @@ class AddIntraMoveView(View):
                     inData.item = request.POST.get("item")
                 else:
                     inData.item = inData.method.name + "チャージ"
-                
+
                 outData.save()
                 inData.save()
-                
+
                 year = request.POST.get('year')
                 month = request.POST.get('month')
                 # 今月のデータ

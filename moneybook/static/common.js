@@ -16,7 +16,7 @@ function fadeInTimer(elm, opaValue) {
     maxMilliSec = 100;
     split = 100;
     if (opaValue < 1) {
-        elm.style.opacity = opaValue; 
+        elm.style.opacity = opaValue;
         opaValue = opaValue + (1 / split);
         fadein_timer = setTimeout(function(){fadeInTimer(elm, opaValue);}, (maxMilliSec / split));
     } else {
