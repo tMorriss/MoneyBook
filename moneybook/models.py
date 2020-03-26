@@ -104,15 +104,19 @@ class Data(models.Model):
     def getGenreData(data, genreId):
         return data.filter(genre=genreId)
 
-    # 立替と貯金をフィルタ
-    def getTempAndDeposit(data):
+    # 立替合計
+    def getTempSum(data):
         temp = data.filter(temp=1).aggregate(Sum('price'))['price__sum']
         if temp == None:
             temp = 0
+        return temp
+
+    # 立替と貯金をフィルタ
+    def getTempAndDeposit(data):
         deposit = data.filter(genre=11).aggregate(Sum('price'))['price__sum']
         if deposit == None:
             deposit = 0
-        return temp + deposit
+        return Data.getTempSum(data) + deposit
 
     # 内部移動だけを排除
     def getDataWithoutInmove(data):
