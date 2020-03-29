@@ -67,8 +67,12 @@ def index_balance_statisticMini(request):
 
     totalIncome = Data.getIncomeSum(Data.getNormalData(monthlyData)) - monthlyTempAndDeposit
     totalOutgo = Data.getOutgoSum(Data.getNormalData(monthlyData)) - monthlyTempAndDeposit
-    fixedOutgo = Data.getOutgoSum(Data.getFixedData(monthlyData))
-    variableOutgo = Data.getOutgoSum(Data.getVariableData(monthlyData))
+
+    fixedData = Data.getFixedData(monthlyData)
+    fixedOutgo = Data.getOutgoSum(fixedData) - Data.getTempSum(fixedData)
+
+    variableData = Data.getVariableData(monthlyData)
+    variableOutgo = Data.getOutgoSum(variableData) - Data.getTempSum(variableData)
 
     content = {
         'total_balance': Data.getIncomeSum(allData) - Data.getOutgoSum(allData),
