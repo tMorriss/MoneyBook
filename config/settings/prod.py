@@ -6,7 +6,7 @@ DATABASES = {
         'NAME': 'moneybook_django',
         'USER': 'moneybook',
         'PASSWORD': 'want2money',
-        'HOST': 'localhost',
+        'HOST': 'neptune.tmorriss.com',
         'PORT': '3306',
     }
 }
