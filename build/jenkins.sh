@@ -3,7 +3,7 @@ sudo podman pull docker.io/library/python:3
 sudo podman pull docker.io/library/nginx:latest
 
 # build docker image
-sudo podman build -t tMorriss/moneybook -f ./build/Dockerfile ../
+sudo podman build -t tmorriss/moneybook -f ./build/Dockerfile ./
 
 # stop container
 count=`sudo podman ps |grep moneybook_gunicorn |wc -l`
