@@ -7,7 +7,6 @@ RUN pip3 install -r /MoneyBook/build/requirements.txt
 
 # nginx
 RUN ln -s /MoneyBook/build/nginx.conf /etc/nginx/conf.d/default.conf
-RUN nginx
 
 WORKDIR /MoneyBook
-CMD ["gunicorn", "--bind", "0.0.0.0:8081", "config.wsgi"]
+CMD ["/bin/bash", "/MoneyBook/build/start.sh"]
