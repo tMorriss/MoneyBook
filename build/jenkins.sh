@@ -32,7 +32,7 @@ tmorriss/moneybook \
 
 # deploy container
 sudo podman run \
--it \
+-d \
 --restart=always \
 -p 8080:80 \
 -e DB_NAME=$DB_NAME \
@@ -41,7 +41,7 @@ sudo podman run \
 -e DB_HOST=$DB_HOST \
 -h moneybook \
 --name moneybook \
-tmorriss/moneybook /bin/bash
+tmorriss/moneybook
 
 # delete old images
 sudo podman image prune
