@@ -6,14 +6,14 @@ sudo podman pull docker.io/library/nginx:latest
 sudo podman build -t tmorriss/moneybook -f ./build/Dockerfile ./
 
 # stop container
-count=`sudo podman ps |grep moneybook_gunicorn |wc -l`
+count=`sudo podman ps |grep moneybook |wc -l`
 if [ $count -gt 0 ]; then
-  sudo podman stop moneybook_gunicorn
+  sudo podman stop moneybook
 fi
 # remove container
-count=`sudo podman ps -a |grep moneybook_gunicorn |wc -l`
+count=`sudo podman ps -a |grep moneybook |wc -l`
 if [ $count -gt 0 ]; then
-  sudo podman rm moneybook_gunicorn
+  sudo podman rm moneybook
 fi
 
 # DB migration
