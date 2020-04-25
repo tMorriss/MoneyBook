@@ -20,7 +20,7 @@ fi
 sudo podman run \
 -e DB_NAME=$DB_NAME \
 -e DB_USER=$DB_USER \
--e DB_PASS=$DB_PATH \
+-e DB_PASS=$DB_PASS \
 -e DB_HOST=$DB_HOST \
 -h moneybook_migration \
 --name moneybook_migration \
@@ -37,7 +37,7 @@ sudo podman run \
 -p 8080:80 \
 -e DB_NAME=$DB_NAME \
 -e DB_USER=$DB_USER \
--e DB_PASS=$DB_PATH \
+-e DB_PASS=$DB_PASS \
 -e DB_HOST=$DB_HOST \
 -h moneybook \
 --name moneybook \
