@@ -25,7 +25,7 @@ sudo podman run \
 -h moneybook_migration \
 --name moneybook_migration \
 --rm \
-tMorriss/moneybook \
+tmorriss/moneybook \
 /bin/bash -c \
 "/usr/bin/python3 /MoneyBook/manage.py makemigrations --settings config.settings.prod && \
 /usr/bin/python3 /MoneyBook/manage.py migrate --settings config.settings.prod"
@@ -41,7 +41,7 @@ sudo podman run \
 -e DB_HOST=$DB_HOST \
 -h moneybook \
 --name moneybook \
-tMorriss/moneybook
+tmorriss/moneybook
 
 # delete old images
 sudo podman image prune
