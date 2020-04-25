@@ -1,12 +1,9 @@
-cd /home/programs/MoneyBook
-git pull origin master
-
 # pull docker images
 sudo podman pull docker.io/library/python:3
 sudo podman pull docker.io/library/nginx:latest
 
 # build docker image
-sudo podman build -t moneybook_gunicorn ./build/
+sudo podman build -t tMorriss/moneybook -f ./build/Dockerfile ../
 
 # stop container
 count=`sudo podman ps |grep moneybook_gunicorn |wc -l`
@@ -20,11 +17,31 @@ if [ $count -gt 0 ]; then
 fi
 
 # DB migration
-python3 manage.py makemigrations --settings config.settings.prod
-python3 manage.py migrate --settings config.settings.prod
+sudo podman run \
+-e DB_NAME=$DB_NAME \
+-e DB_USER=$DB_USER \
+-e DB_PASS=$DB_PATH \
+-e DB_HOST=$DB_HOST \
+-h moneybook_migration \
+--name moneybook_migration \
+--rm \
+tMorriss/moneybook \
+/bin/bash -c \
+"/usr/bin/python3 /MoneyBook/manage.py makemigrations --settings config.settings.prod && \
+/usr/bin/python3 /MoneyBook/manage.py migrate --settings config.settings.prod"
 
 # deploy container
-sudo podman run -d --restart=always -p 8080:80 -v /home/programs/MoneyBook/:/MoneyBook/ --name moneybook_gunicorn -h moneybook_gunicorn moneybook_gunicorn
+sudo podman run \
+-d \
+--restart=always \
+-p 8080:80 \
+-e DB_NAME=$DB_NAME \
+-e DB_USER=$DB_USER \
+-e DB_PASS=$DB_PATH \
+-e DB_HOST=$DB_HOST \
+-h moneybook \
+--name moneybook \
+tMorriss/moneybook
 
 # delete old images
 sudo podman image prune
