@@ -1,4 +1,5 @@
-<h1>各種確認日</h1>
+{% load humanize %}
+<h1>現在銀行計算</h1>
 <table class="tbl-common">
     <tr>
         <td colspan="3">
@@ -7,16 +8,24 @@
             <input type="text" style="width:5ex" class="righter" id="credit_check_day">日
         </td>
     </tr>
+    <tr>
+        <th colspan="2">記録</th>
+        <td>{{ bank_written| intcomma }}</td>
+    </tr>
+    {% for b in banks %}
+        <tr>
+            <th colspan="2">{{ b.name }}</th>
+            <td><input type="text" class="righter now_bank_credit" id="bank-{{ b.pk }}" style="width:7ex" onfocus="unseparate_value('bank-{{ b.pk }}')" onblur="separate_value('bank-{{ b.pk }}')" onkeypress="key_press_now_bank(event.keyCode)" value="{{ b.price| intcomma }}"></td>
+        </tr>{% endfor %}
     {% for c in credit_checked_date %}
         <tr>
             <td><input type="button" class="btn-apply" value="{{ c.name }}" onclick="update_several_checked_date({{ c.pk }}, '{% url "moneybook:update_credit_checked_date" %}')"></td>
             <td>最新確定引き落とし日: {{ c.date|date:"Y"}}年{{ c.date|date:"m" }}月{{ c.date|date:"d" }}日</td>
-        </tr>
-    {% endfor %}
-    {% for c in cacheback_checked_date %}
-        <tr>
-            <td><input type="button" class="btn-apply" value="{{ c.name }}" onclick="update_several_checked_date({{ c.pk }}, '{% url "moneybook:update_cacheback_checked_date" %}')"></td>
-            <td>キャッシュバック確認: {{ c.date|date:"Y"}}年{{ c.date|date:"m" }}月{{ c.date|date:"d" }}日</td>
-        </tr>
-    {% endfor %}
+            <td><input type="text" class="righter now_bank_credit" id="credit-{{ c.pk }}" style="width:7ex" onfocus="unseparate_value('credit-{{ c.pk }}')" onblur="separate_value('credit-{{ c.pk }}')" onkeypress="key_press_now_bank(event.keyCode)" value="{{ c.price| intcomma }}"></td>
+        </tr>{% endfor %}
+    <tr>
+        <th colspan="2">未記録分</th>
+        <td id="now_bank_balance"></td>
+    </tr>
 </table>
+<input type="button" class="btn-apply" value="計算" onclick="calculate_now_bank()" />
