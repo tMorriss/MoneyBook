@@ -94,15 +94,28 @@ class checkedDateView(View):
 
 def get_several_checked_date(request):
     now = datetime.now()
+    # 全データ
+    allData = Data.getAllData()
+    # 現在銀行
+    banks = BankBalance.getAll()
     # クレカ確認日
     creditCheckedDate = CreditCheckedDate.getAll()
-    # キャッシュバック確認日
-    cachebackCheckedDate = CachebackCheckedDate.getAll()
+    today = date.today()
+    for c in creditCheckedDate:
+        # 日付が過ぎていたらpriceを0にする
+        if c.date < today:
+            c.price = 0
+
+    # 銀行残高
+    allBankData = Data.getBankData(allData)
+    checkedBankData = Data.getCheckedData(allBankData)
+    bankWritten = Data.getIncomeSum(checkedBankData) - Data.getOutgoSum(checkedBankData)
 
     content = {
         'year': now.year,
+        'banks': banks,
         'credit_checked_date': creditCheckedDate,
-        'cacheback_checked_date': cachebackCheckedDate,
+        'bank_written': bankWritten,
     }
     return render(request, "_several_checked_date.html", content)
 
@@ -164,50 +177,26 @@ def get_unchecked_transaction(request):
     }
     return render(request, "_unchecked_transaction.html", content)
 
-class calculateNowBankView(View):
-    def get(self, request, *args, **kwargs):
-        now = date.today()
-        # 全データ
-        allData = Data.getAllData()
-        # 現在銀行
-        banks = BankBalance.getAll()
-        # クレカ確認日
-        creditCheckedDate = CreditCheckedDate.getAll()
-        for c in creditCheckedDate:
-            # 日付が過ぎていたらpriceを0にする
-            if c.date < now:
-                c.price = 0
-        # 銀行残高
-        allBankData = Data.getBankData(allData)
-        checkedBankData = Data.getCheckedData(allBankData)
-        bankWritten = Data.getIncomeSum(checkedBankData) - Data.getOutgoSum(checkedBankData)
-        content = {
-            'banks': banks,
-            'credit_checked_date': creditCheckedDate,
-            'bank_written': bankWritten,
-        }
-        return render(request, "_calculate_now_bank.html", content)
+def update_now_bank(request):
+    writtenBankData = Data.getCheckedData(Data.getBankData(Data.getAllData()))
+    bankSum = 0
+    bb = BankBalance.getAll()
+    cc = CreditCheckedDate.getAll()
+    try:
+        for b in bb:
+            key = "bank-" + str(b.pk)
+            if key in request.POST:
+                value = int(request.POST.get(key))
+                BankBalance.set(b.pk, value)
+                bankSum += value
 
-    def post(self, request, *args, **kwargs):
-        writtenBankData = Data.getCheckedData(Data.getBankData(Data.getAllData()))
-        bankSum = 0
-        bb = BankBalance.getAll()
-        cc = CreditCheckedDate.getAll()
-        try:
-            for b in bb:
-                key = "bank-" + str(b.pk)
-                if key in request.POST:
-                    value = int(request.POST.get(key))
-                    BankBalance.set(b.pk, value)
-                    bankSum += value
+        for c in cc:
+            key = "credit-" + str(c.pk)
+            if key in request.POST:
+                value = int(request.POST.get(key))
+                CreditCheckedDate.setPrice(c.pk, value)
+                bankSum -= value
+    except:
+        return HttpResponseBadRequest(json.dumps({"message": "invalid parameter"}))
 
-            for c in cc:
-                key = "credit-" + str(c.pk)
-                if key in request.POST:
-                    value = int(request.POST.get(key))
-                    CreditCheckedDate.setPrice(c.pk, value)
-                    bankSum -= value
-        except:
-            return HttpResponseBadRequest(json.dumps({"message": "invalid parameter"}))
-
-        return HttpResponse(json.dumps({"balance": Data.getIncomeSum(writtenBankData) - Data.getOutgoSum(writtenBankData) - bankSum}))
+    return HttpResponse(json.dumps({"balance": Data.getIncomeSum(writtenBankData) - Data.getOutgoSum(writtenBankData) - bankSum}))

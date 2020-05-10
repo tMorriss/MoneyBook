@@ -134,7 +134,7 @@ function reset_add_form() {
 
     // ショートカット
     $('#s_day').val('');
-    $('#s_price').val('');
+    $('#s_price').val('1000');
 
     // 通常追加
     $('#a_day').val('');

@@ -12,14 +12,13 @@
     several_checked_date_url = "{% url 'moneybook:several_checked_date' %}";
     update_fixed_cost_mark_url = "{% url 'moneybook:update_fixed_cost_mark' %}";
     edit_check_url = "{% url 'moneybook:edit_check' %}";
-    calculate_now_bank_url = "{% url 'moneybook:calculate_now_bank' %}";
+    update_now_bank_url = "{% url 'moneybook:update_now_bank' %}";
     unchecked_transaction_url = "{% url 'moneybook:unchecked_transaction' %}";
 
     window.onload = function() {
         show_diff();
         get_checked_date();
         get_several_checked_date();
-        get_calculate_now_bank();
         get_unchecked_transaction();
     }
 
@@ -31,7 +30,7 @@
         })
 
         $.post({
-            url: "{% url 'moneybook:calculate_now_bank' %}",
+            url: "{% url 'moneybook:update_now_bank' %}",
             data: {
                 "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
                 {% for b in banks %}
@@ -89,8 +88,6 @@
     </table>
 
     <div id="unchecked-transaction"></div>
-
-    <div id="calculate-now-bank"></div>
 </section>
 {% include "_result_message.html" %}
 {% endblock %}
