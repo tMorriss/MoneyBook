@@ -76,6 +76,7 @@ function get_several_checked_date() {
     })
     .done((data) => {
         $("#several-checked-date").html(data);
+        calculate_now_bank();
     })
 }
 
@@ -114,8 +115,6 @@ function update_several_checked_date(id, url) {
     })
     .done(() => {
         get_several_checked_date();
-        // 現在銀行も更新
-        get_calculate_now_bank();
     })
     .fail(() => {
         // メッセージ表示
@@ -158,22 +157,12 @@ function check(id) {
         // チェックした行を削除
         $("#unapproved-row-" + id).remove();
         // 現在銀行も更新
-        get_calculate_now_bank();
+        get_several_checked_date();
     })
     .fail(() => {
         // メッセージ表示
         show_result_msg("Error...", empty);
     });
-}
-
-function get_calculate_now_bank() {
-    $.get({
-        url: calculate_now_bank_url
-    })
-    .done((data) => {
-        $("#calculate-now-bank").html(data);
-        calculate_now_bank();
-    })
 }
 
 function get_unchecked_transaction() {
