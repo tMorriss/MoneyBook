@@ -1,7 +1,7 @@
 import pandas as pd
 import mysql.connector
 
-con = mysql.connector.connect(host='localhost', port=3306, user='moneybook', password='want2money', database='moneybook_django')
+con = mysql.connector.connect(host='localhost', port=3306, user='moneybooker', password='want2money', database='moneybook_django')
 resultStr = ""
 
 # 現在銀行
