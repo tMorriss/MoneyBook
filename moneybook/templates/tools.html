@@ -62,7 +62,7 @@
 {% csrf_token %}
 <section>
     <h1>現金差額計算</h1>
-    <table class="tbl-common">
+    <table class="tbl-common fcs-blue">
         <tr>
             <th>記録</th>
             <td id="written_balance" class="righter">{{ cash_balance| intcomma }}</td>
@@ -80,7 +80,7 @@
     <div id="several-checked-date"></div>
 
     <h1>固定費目標額</h1>
-    <table class="tbl-common">
+    <table class="tbl-common fcs-blue">
         <tr>
             <td><input type="text" class="righter" id="txt_fixed_cost" style="width:10ex" onfocus="unseparate_value('txt_fixed_cost')" onblur="separate_value('txt_fixed_cost')" onkeypress="key_press_fixed(event.keyCode)" value="{{ fixed_cost_mark| intcomma }}"></td>
             <td><input type="button" value="更新" class="btn-apply" onclick="update_fixed_cost_mark()" onkeypress="key_press_fixed(event.keyCode)"></td>
