@@ -35,8 +35,8 @@
                 <th>移動先</th>
                 <td class="radio-green">
                     {% for m in chargeable_methods %}
-                        <input type="radio" name="c_method" value="{{ m.pk }}" id="c_method-{{ m.pk }}"{% if m == chargeable_methods.first %} checked{% endif %} onkeypress="key_press_charge(event.keyCode)">
-                        <label for="c_method-{{ m.pk }}">{{ m.name }}</label>
+                        <input type="radio" name="c_method" value="{{ m.pk }}" id="c_method-{{ m.pk }}"{% if m == chargeable_methods.first %} checked{% endif %} onkeypress="key_press_charge(event.keyCode)" onfocus="addBlueFocus('#lbl_c_method-{{ m.pk }}')" onblur="removeBlueFocus('#lbl_c_method-{{ m.pk }}')">
+                        <label for="c_method-{{ m.pk }}" id="lbl_c_method-{{ m.pk }}">{{ m.name }}</label>
                     {% endfor %}
                 </td>
             </tr>
@@ -60,8 +60,8 @@
                 <th>移動元</th>
                 <td class="radio-green">
                     {% for m in methods %}
-                        <input type="radio" name="m_before_method" value="{{ m.pk }}" id="m_before_method-{{ m.pk }}"{% if m == methods.first %} checked{% endif %} onkeypress="key_press_intra(event.keyCode)">
-                        <label for="m_before_method-{{ m.pk }}">{{ m.name }}</label>
+                        <input type="radio" name="m_before_method" value="{{ m.pk }}" id="m_before_method-{{ m.pk }}"{% if m == methods.first %} checked{% endif %} onkeypress="key_press_intra(event.keyCode)" onfocus="addBlueFocus('#lbl_m_before_method-{{ m.pk }}')" onblur="removeBlueFocus('#lbl_m_before_method-{{ m.pk }}')">
+                        <label for="m_before_method-{{ m.pk }}" id="lbl_m_before_method-{{ m.pk }}">{{ m.name }}</label>
                     {% endfor %}
                 </td>
             </tr>
@@ -69,8 +69,8 @@
                 <th>移動先</th>
                 <td class="radio-green">
                     {% for m in methods %}
-                        <input type="radio" name="m_after_method" value="{{ m.pk }}" id="m_after_method-{{ m.pk }}"{% if m == methods.first %} checked{% endif %} onkeypress="key_press_intra(event.keyCode)">
-                        <label for="m_after_method-{{ m.pk }}">{{ m.name }}</label>
+                        <input type="radio" name="m_after_method" value="{{ m.pk }}" id="m_after_method-{{ m.pk }}"{% if m == methods.first %} checked{% endif %} onkeypress="key_press_intra(event.keyCode)" onfocus="addBlueFocus('#lbl_m_after_method-{{ m.pk }}')" onblur="removeBlueFocus('#lbl_m_after_method-{{ m.pk }}')">
+                        <label for="m_after_method-{{ m.pk }}" id="lbl_m_after_method-{{ m.pk }}">{{ m.name }}</label>
                     {% endfor %}
                 </td>
             </tr>
@@ -112,8 +112,8 @@
                 <th>方向</th>
                 <td class="radio-green">
                     {% for d in directions %}
-                        <input type="radio" name="a_direction" value="{{ d.pk }}" id="a_direction-{{ d.pk }}"{% if d == directions.first %} checked{% endif %} onkeypress="key_press_add(event.keyCode)">
-                        <label for="a_direction-{{ d.pk }}">{{ d.name }}</label>
+                        <input type="radio" name="a_direction" value="{{ d.pk }}" id="a_direction-{{ d.pk }}"{% if d == directions.first %} checked{% endif %} onkeypress="key_press_add(event.keyCode)" onfocus="addBlueFocus('#lbl_a_direction-{{ d.pk }}')" onblur="removeBlueFocus('#lbl_a_direction-{{ d.pk }}')">
+                        <label for="a_direction-{{ d.pk }}" id="lbl_a_direction-{{ d.pk }}">{{ d.name }}</label>
                     {% endfor %}
                 </td>
             </tr>
@@ -121,8 +121,8 @@
                 <th>支払い方法</th>
                 <td class="radio-green">
                     {% for m in methods %}
-                        <input type="radio" name="a_method" value="{{ m.pk }}" id="a_method-{{ m.pk }}"{% if m == methods.first %} checked{% endif %} onkeypress="key_press_add(event.keyCode)">
-                        <label for="a_method-{{ m.pk }}">{{ m.name }}</label>
+                        <input type="radio" name="a_method" value="{{ m.pk }}" id="a_method-{{ m.pk }}"{% if m == methods.first %} checked{% endif %} onkeypress="key_press_add(event.keyCode)" onfocus="addBlueFocus('#lbl_a_method-{{ m.pk }}')" onblur="removeBlueFocus('#lbl_a_method-{{ m.pk }}')">
+                        <label for="a_method-{{ m.pk }}" id="lbl_a_method-{{ m.pk }}">{{ m.name }}</label>
                     {% endfor %}
                 </td>
             </tr>
@@ -130,12 +130,12 @@
                 <th>分類</th>
                 <td class="radio-green">
                     {% for g in first_genres %}
-                        <input type="radio" name="a_genre" value="{{ g.pk }}" id="a_genre-{{ g.pk }}"{% if g == first_genres.first %} checked{% endif %} onkeypress="key_press_add(event.keyCode)">
-                        <label for="a_genre-{{ g.pk }}">{{ g.name }}</label>
+                        <input type="radio" name="a_genre" value="{{ g.pk }}" id="a_genre-{{ g.pk }}"{% if g == first_genres.first %} checked{% endif %} onkeypress="key_press_add(event.keyCode)" onfocus="addBlueFocus('#lbl_a_genre-{{ g.pk }}')" onblur="removeBlueFocus('#lbl_a_genre-{{ g.pk }}')">
+                        <label for="a_genre-{{ g.pk }}" id="lbl_a_genre-{{ g.pk }}">{{ g.name }}</label>
                     {% endfor %}
                     {% for g in latter_genres %}
-                        <input type="radio" name="a_genre" value="{{ g.pk }}" id="a_genre-{{ g.pk }}" onkeypress="key_press_add(event.keyCode)">
-                        <label for="a_genre-{{ g.pk }}">{{ g.name }}</label>
+                        <input type="radio" name="a_genre" value="{{ g.pk }}" id="a_genre-{{ g.pk }}" onkeypress="key_press_add(event.keyCode)" onfocus="addBlueFocus('#lbl_a_genre-{{ g.pk }}')" onblur="removeBlueFocus('#lbl_a_genre-{{ g.pk }}')">
+                        <label for="a_genre-{{ g.pk }}" id="lbl_a_genre-{{ g.pk }}">{{ g.name }}</label>
                     {% endfor %}
                 </td>
             </tr>
@@ -143,8 +143,8 @@
                 <th>立替</th>
                 <td class="radio-green">
                     {% for k,v in temps.items %}
-                        <input type="radio" name="a_temp" value="{% if k == 0 %}False{% else %}True{% endif %}" id="a_temp-{{ k }}"{% if k == 0 %} checked{% endif %} onkeypress="key_press_add(event.keyCode)">
-                        <label for="a_temp-{{ k }}">{{ v }}</label>
+                        <input type="radio" name="a_temp" value="{% if k == 0 %}False{% else %}True{% endif %}" id="a_temp-{{ k }}"{% if k == 0 %} checked{% endif %} onkeypress="key_press_add(event.keyCode)" onfocus="addBlueFocus('#lbl_a_temp-{{ k }}')" onblur="removeBlueFocus('#lbl_a_temp-{{ k }}')">
+                        <label for="a_temp-{{ k }}" id="lbl_a_temp-{{ k }}">{{ v }}</label>
                     {% endfor %}
                 </td>
             </tr>
