@@ -51,3 +51,10 @@ function deleteValue(elm) {
 function removeComma(num) {
     return num.replace(",", "");
 }
+
+function addBlueFocus(id) {
+    $(id).addClass('on-fcs-blue');
+}
+function removeBlueFocus(id) {
+    $(id).removeClass('on-fcs-blue');
+}

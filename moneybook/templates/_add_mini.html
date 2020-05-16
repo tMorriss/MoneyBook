@@ -16,8 +16,8 @@
                 <th>支払い方法</th>
                 <td class="radio-green">
                     {% for m in methods %}
-                        <input type="radio" value="{{ m.pk }}" name="a_method" id="a_method-{{ m.pk }}"{% if m == methods.first %} checked{% endif %} onkeypress="key_press_add(event.keyCode)">
-                        <label for="a_method-{{ m.pk }}">{{ m.name }}</label>
+                        <input type="radio" value="{{ m.pk }}" name="a_method" id="a_method-{{ m.pk }}"{% if m == methods.first %} checked{% endif %} onkeypress="key_press_add(event.keyCode)" onfocus="addBlueFocus('#lbl_a_method-{{ m.pk }}')" onblur="removeBlueFocus('#lbl_a_method-{{ m.pk }}')">
+                        <label for="a_method-{{ m.pk }}" id="lbl_a_method-{{ m.pk }}">{{ m.name }}</label>
                     {% endfor %}
                 </td>
             </tr>
@@ -27,14 +27,14 @@
                     <table class="radio-green">
                         <tr><td>
                             {% for g in first_genres %}
-                                <input type="radio" value="{{ g.pk }}" name="a_genre" id="a_genre-{{ g.pk }}"{% if g == first_genres.first %} checked{% endif %} onkeypress="key_press_add(event.keyCode)">
-                                <label for="a_genre-{{ g.pk }}">{{ g.name }}</label>
+                                <input type="radio" value="{{ g.pk }}" name="a_genre" id="a_genre-{{ g.pk }}"{% if g == first_genres.first %} checked{% endif %} onkeypress="key_press_add(event.keyCode)" onfocus="addBlueFocus('#lbl_a_genre-{{ g.pk }}')" onblur="removeBlueFocus('#lbl_a_genre-{{ g.pk }}')">
+                                <label for="a_genre-{{ g.pk }}" id="lbl_a_genre-{{ g.pk }}">{{ g.name }}</label>
                             {% endfor %}
                         </td></tr>
                         <tr><td>
                             {% for g in latter_genres %}
-                                <input type="radio" value="{{ g.pk }}" name="a_genre" id="a_genre-{{ g.pk }}" onkeypress="key_press_add(event.keyCode)">
-                                <label for="a_genre-{{ g.pk }}">{{ g.name }}</label>
+                                <input type="radio" value="{{ g.pk }}" name="a_genre" id="a_genre-{{ g.pk }}" onkeypress="key_press_add(event.keyCode)" onfocus="addBlueFocus('#lbl_a_genre-{{ g.pk }}')" onblur="removeBlueFocus('#lbl_a_genre-{{ g.pk }}')">
+                                <label for="a_genre-{{ g.pk }}" id="lbl_a_genre-{{ g.pk }}">{{ g.name }}</label>
                             {% endfor %}
                         </td></tr>
                     </table>
@@ -43,8 +43,8 @@
             <tr>
                 <th>全額チャージ</th>
                 <td class="radio-green">
-                    <input type="checkbox" value="1" id="is-charge" onkeypress="key_press_add(event.keyCode)">
-                    <label for="is-charge">Yes</label>
+                    <input type="checkbox" value="1" id="is-charge" onkeypress="key_press_add(event.keyCode)" onfocus="addBlueFocus('#lbl_is-charge')" onblur="removeBlueFocus('#lbl_is-charge')">
+                    <label for="is-charge" id="lbl_is-charge">Yes</label>
                 </td>
             </tr>
         </table>
