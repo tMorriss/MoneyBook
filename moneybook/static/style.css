@@ -75,7 +75,8 @@ section {
 section h1, .nav h1{
     background: #005000;
     color: #fff;
-    padding: 10px 0;
+    padding: 5px 0;
+    font-size: 1.2vw;
 }
 section h2 {
     background: #008000;
