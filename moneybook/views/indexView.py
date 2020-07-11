@@ -2,15 +2,19 @@ from django.conf import settings
 from django.shortcuts import render
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
-from moneybook.models import *
+from moneybook.models import Direction, Method, Genre, Data
+from moneybook.models import InOutBalance, SeveralCosts
 
-def get_monthlyData_from_get_parameter(requestGet):
-    if "year" in requestGet and "month" in requestGet:
-        year = requestGet.get("year")
-        month = requestGet.get("month")
 
-    monthlyData = Data.sortDateDescending(Data.getMonthData(int(year), int(month)))
-    return monthlyData
+def get_monthly_data_from_get_parameter(request_get):
+    if "year" in request_get and "month" in request_get:
+        year = request_get.get("year")
+        month = request_get.get("month")
+
+    monthly_data = Data.sortDateDescending(
+        Data.getMonthData(int(year), int(month)))
+    return monthly_data
+
 
 def index(request):
     now = datetime.now()
@@ -18,24 +22,25 @@ def index(request):
     month = str(now.month).zfill(2)
     return index_month(request, year, month)
 
+
 def index_month(request, year, month):
     # 支払い方法リスト
     methods = Method.list()
 
     # 前後の日付
-    toMonth = datetime(int(year), int(month), 1)
-    nextMonth = toMonth + relativedelta(months=1)
-    lastMonth = toMonth - relativedelta(months=1)
+    to_month = datetime(int(year), int(month), 1)
+    next_month = to_month + relativedelta(months=1)
+    last_month = to_month - relativedelta(months=1)
 
     content = {
         'app_name': settings.APP_NAME,
         'username': request.user,
         'year': year,
         'month': month,
-        'next_year': nextMonth.year,
-        'next_month': nextMonth.month,
-        'last_year': lastMonth.year,
-        'last_month': lastMonth.month,
+        'next_year': next_month.year,
+        'next_month': next_month.month,
+        'last_year': last_month.year,
+        'last_month': last_month.month,
         'directions': Direction.list(),
         'methods': methods,
         'unused_methods': Method.unUsedList(),
@@ -44,71 +49,80 @@ def index_month(request, year, month):
     }
     return render(request, 'index.html', content)
 
-def index_balance_statisticMini(request):
+
+def index_balance_statistic_mini(request):
     # 全データ
-    allData = Data.getAllData()
+    all_data = Data.getAllData()
     # 今月のデータ
-    monthlyData = get_monthlyData_from_get_parameter(request.GET)
+    monthly_data = get_monthly_data_from_get_parameter(request.GET)
     # 支払い方法リスト
     methods = Method.list()
     # 立替と貯金
-    monthlyTempAndDeposit = Data.getTempAndDeposit(monthlyData)
+    monthly_temp_and_deposit = Data.getTempAndDeposit(monthly_data)
 
     # 支払い方法ごとの残高
-    methodsIOB = []
-    methodsMonthlyIOB = []
+    methods_iob = []
+    methods_monthly_iob = []
     for m in methods:
-        d = Data.getMethodData(allData, m.pk)
-        methodsIOB.append(InOutBalance(m, None, None, Data.getIncomeSum(d) - Data.getOutgoSum(d)))
+        d = Data.getMethodData(all_data, m.pk)
+        methods_iob.append(InOutBalance(
+            m, None, None, Data.getIncomeSum(d) - Data.getOutgoSum(d)))
 
-        i = Data.getIncomeSum(Data.getMethodData(monthlyData, m.pk))
-        o = Data.getOutgoSum(Data.getMethodData(monthlyData, m.pk))
-        methodsMonthlyIOB.append(InOutBalance(m, i, o, None))
+        i = Data.getIncomeSum(Data.getMethodData(monthly_data, m.pk))
+        o = Data.getOutgoSum(Data.getMethodData(monthly_data, m.pk))
+        methods_monthly_iob.append(InOutBalance(m, i, o, None))
 
-    totalIncome = Data.getIncomeSum(Data.getNormalData(monthlyData)) - monthlyTempAndDeposit
-    totalOutgo = Data.getOutgoSum(Data.getNormalData(monthlyData)) - monthlyTempAndDeposit
+    total_income = Data.getIncomeSum(
+        Data.getNormalData(monthly_data)) - monthly_temp_and_deposit
+    total_outgo = Data.getOutgoSum(Data.getNormalData(
+        monthly_data)) - monthly_temp_and_deposit
 
-    fixedData = Data.getFixedData(monthlyData)
-    fixedOutgo = Data.getOutgoSum(fixedData) - Data.getTempSum(fixedData)
+    fixed_data = Data.getFixedData(monthly_data)
+    fixed_outgo = Data.getOutgoSum(fixed_data) - Data.getTempSum(fixed_data)
 
-    variableData = Data.getVariableData(monthlyData)
-    variableOutgo = Data.getOutgoSum(variableData) - Data.getTempSum(variableData)
+    variable_data = Data.getVariableData(monthly_data)
+    variable_outgo = Data.getOutgoSum(
+        variable_data) - Data.getTempSum(variable_data)
 
     content = {
-        'total_balance': Data.getIncomeSum(allData) - Data.getOutgoSum(allData),
-        'methods_iob': methodsIOB,
-        'total_income': totalIncome,
-        'total_outgo': totalOutgo,
-        'total_inout': totalIncome - totalOutgo,
-        'variable_outgo': variableOutgo,
-        'fixed_outgo': fixedOutgo,
-        'variable_remain': totalIncome - max(SeveralCosts.getFixedCostMark(), fixedOutgo) - variableOutgo,
-        'all_income': Data.getIncomeSum(monthlyData),
-        'all_outgo': Data.getOutgoSum(monthlyData),
-        'methods_monthly_iob': methodsMonthlyIOB,
+        'total_balance':
+            Data.getIncomeSum(all_data) - Data.getOutgoSum(all_data),
+        'methods_iob': methods_iob,
+        'total_income': total_income,
+        'total_outgo': total_outgo,
+        'total_inout': total_income - total_outgo,
+        'variable_outgo': variable_outgo,
+        'fixed_outgo': fixed_outgo,
+        'variable_remain': total_income - max(SeveralCosts.getFixedCostMark(),
+                                              fixed_outgo) - variable_outgo,
+        'all_income': Data.getIncomeSum(monthly_data),
+        'all_outgo': Data.getOutgoSum(monthly_data),
+        'methods_monthly_iob': methods_monthly_iob,
     }
     return render(request, '_balance_statisticMini.html', content)
 
+
 def index_chart_data(request):
     # 今月のデータ
-    monthlyData = get_monthlyData_from_get_parameter(request.GET)
+    monthly_data = get_monthly_data_from_get_parameter(request.GET)
     # ジャンルごとの支出
-    positiveGenresOutgo = {}
+    positive_genres_outgo = {}
     for g in Genre.list():
         if g.show_order >= 0:
-            d = Data.getGenreData(monthlyData, g.pk)
-            positiveGenresOutgo[g] = Data.getOutgoSum(d) - Data.getTempSum(d)
+            d = Data.getGenreData(monthly_data, g.pk)
+            positive_genres_outgo[g] = Data.getOutgoSum(d) - Data.getTempSum(d)
     content = {
-        'genres_outgo': positiveGenresOutgo,
+        'genres_outgo': positive_genres_outgo,
     }
     return render(request, '_chart_container_data.html', content)
 
+
 def data_table(request):
     # 今月のデータ
-    monthlyData = get_monthlyData_from_get_parameter(request.GET)
+    monthly_data = get_monthly_data_from_get_parameter(request.GET)
 
     content = {
-        'show_data': monthlyData,
+        'show_data': monthly_data,
     }
 
     # 追加後のmonthlyテーブルを返す

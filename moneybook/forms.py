@@ -1,10 +1,12 @@
 from django import forms
-from .models import *
+from .models import Data
+
 
 class DataForm(forms.ModelForm):
     class Meta:
         model = Data
         exclude = []
+
 
 class IntraMoveForm(forms.Form):
     year = forms.IntegerField()

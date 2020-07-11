@@ -1,4 +1,4 @@
-from .common import *
+from .common import *  # NOQA F403
 import os
 
 DATABASES = {

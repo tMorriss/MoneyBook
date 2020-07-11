@@ -1,10 +1,12 @@
 from django.conf import settings
-from django.http import HttpResponse, HttpResponseNotFound, HttpResponseBadRequest
+from django.http import HttpResponse
+from django.http import HttpResponseNotFound, HttpResponseBadRequest
 from django.shortcuts import render, redirect
 from django.views import View
-from moneybook.models import *
-from moneybook.forms import *
+from moneybook.models import Direction, Method, Genre, Data
+from moneybook.forms import DataForm
 import json
+
 
 class EditView(View):
     def get(self, request, *args, **kwargs):
@@ -23,7 +25,7 @@ class EditView(View):
             'methods': Method.list(),
             'first_genres': Genre.first_list(),
             'latter_genres': Genre.latter_list(),
-            'temps': {0:"No", 1:"Yes"},
+            'temps': {0: "No", 1: "Yes"},
             'checked': {0: "No", 1: "Yes"},
         }
         return render(request, "edit.html", content)
@@ -34,10 +36,12 @@ class EditView(View):
         try:
             data = Data.get(pk)
         except:
-            return HttpResponseNotFound(json.dumps({"message": "Data does not exist"}))
+            return HttpResponseNotFound(
+                json.dumps({"message": "Data does not exist"})
+            )
 
-        newData = DataForm(request.POST)
-        if newData.is_valid():
+        new_data = DataForm(request.POST)
+        if new_data.is_valid():
             # データ更新
             data.date = request.POST.get("date")
             data.item = request.POST.get("item")
@@ -51,12 +55,13 @@ class EditView(View):
 
             return HttpResponse(json.dumps({"message": "success"}))
         else:
-            resData = {}
-            errorList = []
-            for a in newData.errors:
-                errorList.append(a)
-            resData["ErrorList"] = errorList
-            return HttpResponseBadRequest(json.dumps(resData))
+            res_data = {}
+            error_list = []
+            for a in new_data.errors:
+                error_list.append(a)
+            res_data["ErrorList"] = error_list
+            return HttpResponseBadRequest(json.dumps(res_data))
+
 
 class CheckView(View):
     def post(self, request, *args, **kwargs):

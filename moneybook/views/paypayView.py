@@ -1,60 +1,66 @@
 from django.conf import settings
 from django.http import HttpResponse
 from django.shortcuts import render
-from moneybook.models import *
+from moneybook.models import Data, CachebackCheckedDate
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 import json
 
+
 def paypay(request):
     now = datetime.now()
-    lastMonth = now - relativedelta(months=1)
+    last_month = now - relativedelta(months=1)
     # 全データ
-    allData = Data.getAllData()
+    all_data = Data.getAllData()
     # PayPayデータ
-    paypayData = Data.getMethodData(allData, 5)
+    paypay_data = Data.getMethodData(all_data, 5)
     # PayPay残高
-    paypayBalance = Data.getIncomeSum(paypayData) - Data.getOutgoSum(paypayData)
+    paypay_balance = Data.getIncomeSum(
+        paypay_data) - Data.getOutgoSum(paypay_data)
 
     # キャッシュバック確認日
-    cachebackDate = CachebackCheckedDate.get(1).date
+    cacheback_date = CachebackCheckedDate.get(1).date
 
     content = {
         'app_name': settings.APP_NAME,
         'username': request.user,
-        'year': lastMonth.year,
-        'month': lastMonth.month,
-        'balance': paypayBalance,
-        'cacheback_year': cachebackDate.year,
-        'cacheback_month': cachebackDate.month,
-        'cacheback_day': cachebackDate.day,
+        'year': last_month.year,
+        'month': last_month.month,
+        'balance': paypay_balance,
+        'cacheback_year': cacheback_date.year,
+        'cacheback_month': cacheback_date.month,
+        'cacheback_day': cacheback_date.day,
     }
     return render(request, 'paypay.html', content)
+
 
 def recent_paypay_income_table(request):
     # 先々月の頭以降
     now = datetime.now()
-    lastMonth = now - relativedelta(months=2)
-    recentData = Data.getRangeData(date(lastMonth.year, lastMonth.month, 1), None)
+    last_month = now - relativedelta(months=2)
+    recent_data = Data.getRangeData(
+        date(last_month.year, last_month.month, 1), None)
     # 直近のPayPay関係
-    paypayData = Data.sortDateDescending(Data.getPayPayData(recentData))
-    paypayIncome = Data.filterDirections(paypayData, '1')
+    paypay_data = Data.sortDateDescending(Data.getPayPayData(recent_data))
+    paypay_income = Data.filterDirections(paypay_data, '1')
 
     content = {
-        'show_data': paypayIncome,
+        'show_data': paypay_income,
     }
 
     return render(request, '_data_table.html', content)
 
+
 def get_paypay_bakance(request):
     # 全データ
-    allData = Data.getAllData()
+    all_data = Data.getAllData()
     # PayPayデータ
-    paypayData = Data.getMethodData(allData, 5)
+    paypay_data = Data.getMethodData(all_data, 5)
     # PayPay残高
-    paypayBalance = Data.getIncomeSum(paypayData) - Data.getOutgoSum(paypayData)
+    paypay_balance = Data.getIncomeSum(
+        paypay_data) - Data.getOutgoSum(paypay_data)
 
     content = {
-        'balance': paypayBalance,
+        'balance': paypay_balance,
     }
     return HttpResponse(json.dumps(content))
