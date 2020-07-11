@@ -1,9 +1,6 @@
-from django.conf import settings
-from django.http import HttpResponse, HttpResponseNotFound, HttpResponseBadRequest
-from django.shortcuts import render
+from django.http import HttpResponse, HttpResponseNotFound
 from django.views import View
-from moneybook.models import *
-from moneybook.forms import *
+from moneybook.models import Data
 import json
 
 

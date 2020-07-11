@@ -4,21 +4,22 @@ from django.views import View
 from django.http import HttpResponse, HttpResponseBadRequest
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
-from moneybook.models import *
-from moneybook.forms import *
+from moneybook.models import Direction, Method, Genre
+from moneybook.forms import DataForm
 import json
+
 
 class AddView(View):
     def get(self, request, *args, **kwargs):
         now = datetime.now()
-        lastMonth = now - relativedelta(months=1)
+        last_month = now - relativedelta(months=1)
         content = {
             'app_name': settings.APP_NAME,
             'username': request.user,
             'year': now.year,
             'month': now.month,
-            'last_year': lastMonth.year,
-            'last_month': lastMonth.month,
+            'last_year': last_month.year,
+            'last_month': last_month.month,
             'directions': Direction.list(),
             'methods': Method.list(),
             'chargeable_methods': Method.chargeableList(),
@@ -29,21 +30,21 @@ class AddView(View):
         return render(request, 'add.html', content)
 
     def post(self, request, *args, **kwargs):
-        newData = DataForm(request.POST)
-        if newData.is_valid():
+        new_data = DataForm(request.POST)
+        if new_data.is_valid():
             # データ追加
-            newData.save()
+            new_data.save()
 
-            resData = {
+            res_data = {
                 "status": "success",
             }
-            return HttpResponse(json.dumps(resData))
+            return HttpResponse(json.dumps(res_data))
 
         else:
-            errorList = []
-            for a in newData.errors:
-                errorList.append(a)
-            resData = {
-                "ErrorList": errorList,
+            error_list = []
+            for a in new_data.errors:
+                error_list.append(a)
+            res_data = {
+                "ErrorList": error_list,
             }
-            return HttpResponseBadRequest(json.dumps(resData))
+            return HttpResponseBadRequest(json.dumps(res_data))

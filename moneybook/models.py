@@ -1,7 +1,8 @@
-from django.db import models, connection
+from django.db import models
 from django.db.models import Sum
-from datetime import date, datetime
+from datetime import date
 import calendar
+
 
 class Direction(models.Model):
     name = models.CharField(max_length=2)
@@ -14,6 +15,7 @@ class Direction(models.Model):
 
     def list():
         return Direction.objects.order_by('pk')
+
 
 class Method(models.Model):
     show_order = models.IntegerField(default=0)
@@ -33,7 +35,11 @@ class Method(models.Model):
         return Method.objects.filter(show_order__lte=0).order_by('id')
 
     def chargeableList():
-        return Method.objects.filter(show_order__gt=0, chargeable=1).order_by('show_order')
+        return Method.objects.filter(
+            show_order__gt=0, chargeable=1
+        ).order_by(
+            'show_order')
+
 
 class Genre(models.Model):
     show_order = models.IntegerField(default=-100)
@@ -47,10 +53,13 @@ class Genre(models.Model):
 
     def list():
         return Genre.objects.order_by('show_order')
+
     def first_list():
         return Genre.objects.filter(show_order__gt=0).order_by('show_order')
+
     def latter_list():
         return Genre.objects.filter(show_order__lte=0).order_by('-show_order')
+
 
 class Data(models.Model):
     date = models.DateField()
@@ -72,9 +81,9 @@ class Data(models.Model):
     # 指定期間のデータを持ってくる
     def getRangeData(start, end):
         data = Data.getAllData()
-        if start != None:
+        if start is not None:
             data = data.filter(date__gte=start)
-        if end != None:
+        if end is not None:
             data = data.filter(date__lte=end)
         return data
 
@@ -86,14 +95,17 @@ class Data(models.Model):
 
     # 収入や支出の合計
     def getSum(data, direction):
-        v = data.filter(direction=direction).aggregate(Sum('price'))['price__sum']
-        if v == None:
+        v = data.filter(direction=direction).aggregate(
+            Sum('price'))['price__sum']
+        if v is None:
             v = 0
         return v
     # 収入の合計
+
     def getIncomeSum(data):
         return Data.getSum(data, 1)
     # 支出の合計
+
     def getOutgoSum(data):
         return Data.getSum(data, 2)
 
@@ -101,20 +113,21 @@ class Data(models.Model):
     def getMethodData(data, methodId):
         return data.filter(method=methodId)
     # genreでフィルタ
+
     def getGenreData(data, genreId):
         return data.filter(genre=genreId)
 
     # 立替合計
     def getTempSum(data):
         temp = data.filter(temp=1).aggregate(Sum('price'))['price__sum']
-        if temp == None:
+        if temp is None:
             temp = 0
         return temp
 
     # 立替と貯金をフィルタ
     def getTempAndDeposit(data):
         deposit = data.filter(genre=11).aggregate(Sum('price'))['price__sum']
-        if deposit == None:
+        if deposit is None:
             deposit = 0
         return Data.getTempSum(data) + deposit
 
@@ -131,6 +144,7 @@ class Data(models.Model):
         fixedGenres = [1, 2, 7]
         return data.filter(genre__in=fixedGenres)
     # 使った変動費
+
     def getVariableData(data):
         variableGenres = [0, 3, 4, 5, 6]
         return data.filter(genre__in=variableGenres)
@@ -144,6 +158,7 @@ class Data(models.Model):
     def sortDateAscending(data):
         return data.order_by('date', 'id')
     # 日付の逆にソート
+
     def sortDateDescending(data):
         return data.order_by('-date', '-id')
 
@@ -177,9 +192,9 @@ class Data(models.Model):
 
     # 金額でフィルタ
     def filterPrice(data, lower, upper):
-        if lower != None:
+        if lower is not None:
             data = data.filter(price__gte=lower)
-        if upper != None:
+        if upper is not None:
             data = data.filter(price__lte=upper)
         return data
 
@@ -203,6 +218,7 @@ class Data(models.Model):
     def filterCheckeds(data, checkeds):
         return data.filter(checked__in=checkeds)
 
+
 class CheckedDate(models.Model):
     method = models.ForeignKey(Method, on_delete=models.CASCADE)
     date = models.DateField()
@@ -214,6 +230,7 @@ class CheckedDate(models.Model):
         obj = CheckedDate.objects.get(pk=pk)
         obj.date = newDate
         obj.save()
+
 
 class CreditCheckedDate(models.Model):
     show_order = models.IntegerField(default=0)
@@ -234,6 +251,7 @@ class CreditCheckedDate(models.Model):
         obj.price = price
         obj.save()
 
+
 class CachebackCheckedDate(models.Model):
     show_order = models.IntegerField(default=0)
     name = models.CharField(max_length=200)
@@ -250,6 +268,7 @@ class CachebackCheckedDate(models.Model):
         obj.date = newDate
         obj.save()
 
+
 class BankBalance(models.Model):
     show_order = models.IntegerField(default=0)
     name = models.CharField(max_length=200)
@@ -263,12 +282,14 @@ class BankBalance(models.Model):
         obj.price = price
         obj.save()
 
+
 class SeveralCosts(models.Model):
     name = models.CharField(max_length=200)
     price = models.IntegerField(default=0)
 
     def getFixedCostMark():
         return SeveralCosts.objects.get(name="FixedCostMark").price
+
     def setFixedCostMark(price):
         obj = SeveralCosts.objects.get(name="FixedCostMark")
         obj.price = price
@@ -276,33 +297,38 @@ class SeveralCosts(models.Model):
 
     def getActualCashBalance():
         return SeveralCosts.objects.get(name="ActualCashBalance").price
+
     def setActualCashBalance(price):
         obj = SeveralCosts.objects.get(name="ActualCashBalance")
         obj.price = price
         obj.save()
 
+
 class InOutBalance:
-    def __init__(self, l, i, o, b):
-        self.label = l
-        self.income = i
-        self.outgo = o
-        self.balance = b
+    def __init__(self, label, income, outgo, balance):
+        self.label = label
+        self.income = income
+        self.outgo = outgo
+        self.balance = balance
+
 
 class BalanceDate:
-    def __init__(self, m, b, d):
-        self.method = m
-        self.balance = b
-        self.date = d
+    def __init__(self, method, balance, date):
+        self.method = method
+        self.balance = balance
+        self.date = date
+
 
 class LabelValue:
-    def __init__(self, l, v):
-        self.label = l
-        self.value = v
+    def __init__(self, label, value):
+        self.label = label
+        self.value = value
+
 
 class InfraCost:
-    def __init__(self, l, t, e, g, w):
-        self.label = l
-        self.total = t
-        self.electricity = e
-        self.gus = g
-        self.water = w
+    def __init__(self, label, total, electricity, gus, water):
+        self.label = label
+        self.total = total
+        self.electricity = electricity
+        self.gus = gus
+        self.water = water
