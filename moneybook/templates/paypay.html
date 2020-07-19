@@ -12,7 +12,7 @@
     cacheback_checked_url = "{% url 'moneybook:update_cacheback_checked_date' %}";
     paypay_balance_url = "{% url 'moneybook:paypay_balance' %}";
 
-    window.onload = function() {
+    window.onload = function () {
         get_transaction();
         get_payapy_balance();
     }
@@ -27,14 +27,19 @@
     <table class="tbl-common fcs-blue">
         <tr>
             <th>残高</th>
-            <td><div id="paypay_balance">円</div></td>
+            <td>
+                <div id="paypay_balance">円</div>
+            </td>
         </tr>
         <tr>
             <th>キャッシュバック確認日</th>
             <td>
-                <input type="text" id="c_year" style="width:6ex" class="righter" onkeypress="key_press_cacheback(event.keyCode)" value="{{ cacheback_year }}">年
-                <input type="text" id="c_month" style="width:5ex" class="righter" onkeypress="key_press_cacheback(event.keyCode)" value="{{ cacheback_month }}">月
-                <input type="text" id="c_day" style="width:5ex" class="righter" onkeypress="key_press_cacheback(event.keyCode)" value="{{ cacheback_day }}">日
+                <input type="text" id="c_year" style="width:6ex" class="righter"
+                    onkeypress="key_press_cacheback(event.keyCode)" value="{{ cacheback_year }}">年
+                <input type="text" id="c_month" style="width:5ex" class="righter"
+                    onkeypress="key_press_cacheback(event.keyCode)" value="{{ cacheback_month }}">月
+                <input type="text" id="c_day" style="width:5ex" class="righter"
+                    onkeypress="key_press_cacheback(event.keyCode)" value="{{ cacheback_day }}">日
                 <input type="button" value="更新" class="btn-apply" onclick="update_cacheback_date()">
             </td>
         </tr>
@@ -45,12 +50,19 @@
             <tr>
                 <th>日付</th>
                 <td>
-                    <input type="text" id="s_year" style="width:6ex" class="righter" onkeypress="key_press_send(event.keyCode)" value="{{ year }}">年
-                    <input type="text" id="s_month" style="width:5ex" class="righter" onkeypress="key_press_send(event.keyCode)" value="{{ month }}">月
-                    <input type="text" id="s_day" style="width:5ex" class="righter" onkeypress="key_press_send(event.keyCode)" autofocus >日
+                    <input type="text" id="s_year" style="width:6ex" class="righter"
+                        onkeypress="key_press_send(event.keyCode)" value="{{ year }}">年
+                    <input type="text" id="s_month" style="width:5ex" class="righter"
+                        onkeypress="key_press_send(event.keyCode)" value="{{ month }}">月
+                    <input type="text" id="s_day" style="width:5ex" class="righter"
+                        onkeypress="key_press_send(event.keyCode)" autofocus>日
                 </td>
             </tr>
-            <tr><th>金額</th><td><input type="text" id="s_price" style="width:10ex" class="righter" onkeypress="key_press_send(event.keyCode)">円</td></tr>
+            <tr>
+                <th>金額</th>
+                <td><input type="text" id="s_price" style="width:10ex" class="righter"
+                        onkeypress="key_press_send(event.keyCode)">円</td>
+            </tr>
         </table>
         <input type="button" value="追加" class="btn-apply" onclick="send_paypay_cacheback()">
     </form>

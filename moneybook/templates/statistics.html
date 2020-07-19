@@ -8,164 +8,165 @@
 <link rel="stylesheet" type="text/css" href="{% static 'statistics.css' %}">
 <script type="text/javascript" src="{% static 'canvasjs.min.js' %}"></script>
 <script type="text/javascript">
-    window.onload = function() {
+    window.onload = function () {
         var chart = new CanvasJS.Chart("barplot_inout", {
             animationEnabled: false,
-            title: {text: "収入と支出"},
-            axisX: {interval: 1},
+            title: { text: "収入と支出" },
+            axisX: { interval: 1 },
             // axisY: {title: "金額"},
-            data: [{
-                type: "column",
-                showInLegend: true,
-                legendText: "収入",
-                dataPoints: [
-                    {% for m in month_io_list %}{ label: "{{ m.label }}月", y: {{ m.income }} },
-                    {% endfor %}
+            data: [
+                {
+                    type: "column",
+                    showInLegend: true,
+                    legendText: "収入",
+                    dataPoints: [
+                        {% for m in month_io_list %}{ label: "{{ m.label }}月", y: {{ m.income }} },
+        {% endfor %}
                 ]
             },
-            {
-                type: "column",
-                showInLegend: true,
+    {
+        type: "column",
+            showInLegend: true,
                 legendText: "支出",
-                dataPoints: [
-                    {% for m in month_io_list %}{ label: "{{ m.label }}月", y: {{ m.outgo }} },
-                    {% endfor %}
+                    dataPoints: [
+                        {% for m in month_io_list %} { label: "{{ m.label }}月", y: { { m.outgo } } },
+    {% endfor %}
                 ]
             },
-            {
-                type: "line",
-                showInLegend: true,
+    {
+        type: "line",
+            showInLegend: true,
                 legendText: "固定費",
-                dataPoints: [
-                    {% for fc in fixed_costs %}{ label: "{{ fc.label }}月", y: {{ fc.value }} },
-                    {% endfor %}
+                    dataPoints: [
+                        {% for fc in fixed_costs %} { label: "{{ fc.label }}月", y: { { fc.value } } },
+    {% endfor %}
                 ]
             }]
         });
-        chart.render();
+    chart.render();
 
-        var chart = new CanvasJS.Chart("lineplot_infra", {
-            animationEnabled: false,
-            title: {text: "インフラ"},
-            axisX: {
-                interval: 1,
-                valueFormatString: "#\"月\"",
-            },
-            toolTip: {
-                shared: true
-            },
-            data: [{
-                type: "line",
-                name: "電気",
-                color: "#cccc00",
-                lineColor: "#cccc00",
-                showInLegend: true,
-                lineThickness: 3,
-                dataPoints: [
-                    {% for i in infra_costs %}{ label: "{{ i.label }}月", y: {{ i.electricity }} },
-                    {% endfor %}
+    var chart = new CanvasJS.Chart("lineplot_infra", {
+        animationEnabled: false,
+        title: { text: "インフラ" },
+        axisX: {
+            interval: 1,
+            valueFormatString: "#\"月\"",
+        },
+        toolTip: {
+            shared: true
+        },
+        data: [{
+            type: "line",
+            name: "電気",
+            color: "#cccc00",
+            lineColor: "#cccc00",
+            showInLegend: true,
+            lineThickness: 3,
+            dataPoints: [
+                {% for i in infra_costs %}{ label: "{{ i.label }}月", y: {{ i.electricity }} },
+    {% endfor %}
                 ]
             },
-            {
-                type: "line",
-                name: "ガス",
+    {
+        type: "line",
+            name: "ガス",
                 color: "#ff0000",
-                lineColor: "#ff0000",
-                showInLegend: true,
-                lineThickness: 3,
-                dataPoints: [
-                    {% for i in infra_costs %}{ label: "{{ i.label }}月", y: {{ i.gus }} },
-                    {% endfor %}
+                    lineColor: "#ff0000",
+                        showInLegend: true,
+                            lineThickness: 3,
+                                dataPoints: [
+                                    {% for i in infra_costs %} { label: "{{ i.label }}月", y: { { i.gus } } },
+    {% endfor %}
                 ]
             },
-            {
-                type: "line",
-                name: "水道",
+    {
+        type: "line",
+            name: "水道",
                 color: "#0000ff",
-                lineColor: "#0000ff",
-                showInLegend: true,
-                lineThickness: 3,
-                dataPoints: [
-                    {% for i in infra_costs %}{ label: "{{ i.label }}月", y: {{ i.water }} },
-                    {% endfor %}
+                    lineColor: "#0000ff",
+                        showInLegend: true,
+                            lineThickness: 3,
+                                dataPoints: [
+                                    {% for i in infra_costs %} { label: "{{ i.label }}月", y: { { i.water } } },
+    {% endfor %}
                 ]
             },
-            {
-                type: "line",
-                name: "合計",
+    {
+        type: "line",
+            name: "合計",
                 color: "#000000",
-                lineColor: "#000000",
-                showInLegend: true,
-                lineThickness: 3,
-                dataPoints: [
-                    {% for i in infra_costs %}{ label: "{{ i.label }}月", y: {{ i.total }} },
-                    {% endfor %}
+                    lineColor: "#000000",
+                        showInLegend: true,
+                            lineThickness: 3,
+                                dataPoints: [
+                                    {% for i in infra_costs %} { label: "{{ i.label }}月", y: { { i.total } } },
+    {% endfor %}
                 ]
             }]
         });
-        chart.render();
+    chart.render();
 
-        var chart = new CanvasJS.Chart("lineplot_food", {
-            animationEnabled: false,
-            title: {text: "食費"},
-            axisX: { interval: 1, },
-            data: [{
-                type: "column",
-                color: "#ee7700",
-                dataPoints: [
-                    {% for f in food_costs %}{ label: "{{ f.label }}月", y: {{ f.value }}},
-                    {% endfor %}
+    var chart = new CanvasJS.Chart("lineplot_food", {
+        animationEnabled: false,
+        title: { text: "食費" },
+        axisX: { interval: 1, },
+        data: [{
+            type: "column",
+            color: "#ee7700",
+            dataPoints: [
+                {% for f in food_costs %}{ label: "{{ f.label }}月", y: {{ f.value }}},
+    {% endfor %}
                 ]
             }]
         });
-        chart.render();
+    chart.render();
 
-        var chart = new CanvasJS.Chart("barplot_inout_all", {
-            animationEnabled: false,
-            title: {text: "収入と支出"},
-            axisX: {interval: 1},
-            // axisY: {title: "金額"},
-            data: [{
-                type: "column",
-                showInLegend: true,
-                legendText: "収入",
-                dataPoints: [
-                    {% for m in month_all_io_list %}{ label: "{{ m.label }}月", y: {{ m.income }} },
-                    {% endfor %}
+    var chart = new CanvasJS.Chart("barplot_inout_all", {
+        animationEnabled: false,
+        title: { text: "収入と支出" },
+        axisX: { interval: 1 },
+        // axisY: {title: "金額"},
+        data: [{
+            type: "column",
+            showInLegend: true,
+            legendText: "収入",
+            dataPoints: [
+                {% for m in month_all_io_list %}{ label: "{{ m.label }}月", y: {{ m.income }} },
+    {% endfor %}
                 ]
             },
-            {
-                type: "column",
-                showInLegend: true,
+    {
+        type: "column",
+            showInLegend: true,
                 legendText: "支出",
-                dataPoints: [
-                    {% for m in month_all_io_list %}{ label: "{{ m.label }}月", y: {{ m.outgo }} },
-                    {% endfor %}
+                    dataPoints: [
+                        {% for m in month_all_io_list %} { label: "{{ m.label }}月", y: { { m.outgo } } },
+    {% endfor %}
                 ]
             }]
         });
-        chart.render();
+    chart.render();
 
-        var chart = new CanvasJS.Chart("lineplot_monthly_balance", {
-            animationEnabled: false,
-            title: {text: "途中残高"},
-            axisY: {includeZero: false},
-            axisX: {
-                interval: 1,
-                valueFormatString: "#\"月\"",
-            },
-            data: [{
-                type: "line",
-                color: "#00ff00",
-                lineColor: "#00ff00",
-                lineThickness: 3,
-                dataPoints: [
-                    {% for b in before_balance %}{ label: "{{ b.label }}月", y: {{ b.value }} },
-                    {% endfor %}
+    var chart = new CanvasJS.Chart("lineplot_monthly_balance", {
+        animationEnabled: false,
+        title: { text: "途中残高" },
+        axisY: { includeZero: false },
+        axisX: {
+            interval: 1,
+            valueFormatString: "#\"月\"",
+        },
+        data: [{
+            type: "line",
+            color: "#00ff00",
+            lineColor: "#00ff00",
+            lineThickness: 3,
+            dataPoints: [
+                {% for b in before_balance %}{ label: "{{ b.label }}月", y: {{ b.value }} },
+    {% endfor %}
                 ]
             }]
         });
-        chart.render();
+    chart.render();
     }
 
     function move_year() {
@@ -189,13 +190,16 @@
     <table class="tbl-common fcs-blue">
         <tr>
             <td rowspan="2">
-                <a href="{% url 'moneybook:statistics_month' year|add:'-1' %}"><img src="{% static 'images/left.png' %}" alt="←" width="40px" valign="middle"></a>
+                <a href="{% url 'moneybook:statistics_month' year|add:'-1' %}"><img src="{% static 'images/left.png' %}"
+                        alt="←" width="40px" valign="middle"></a>
             </td>
             <td class="jump-date">
-                <input type="text" name="year" id="jump_year" style="width:6ex" class="righter" value="{{ year }}" onkeypress="key_press_move(event.keyCode)" onfocus="deleteValue(this)">年
+                <input type="text" name="year" id="jump_year" style="width:6ex" class="righter" value="{{ year }}"
+                    onkeypress="key_press_move(event.keyCode)" onfocus="deleteValue(this)">年
             </td>
             <td rowspan="2">
-                <a href="{% url 'moneybook:statistics_month' year|add:'1' %}"><img src="{% static 'images/right.png' %}" alt="→" width="40px" valign="middle"></a>
+                <a href="{% url 'moneybook:statistics_month' year|add:'1' %}"><img src="{% static 'images/right.png' %}"
+                        alt="→" width="40px" valign="middle"></a>
             </td>
         </tr>
         <tr>
@@ -207,25 +211,25 @@
         <tr>
             <th></th>
             {% for m in month_io_list %}
-                <th>{{ m.label }}</th>
+            <th>{{ m.label }}</th>
             {% endfor %}
         </tr>
         <tr>
             <th>収入</th>
             {% for m in month_io_list %}
-                <td>{{ m.income| intcomma }}</td>
+            <td>{{ m.income| intcomma }}</td>
             {% endfor %}
         </tr>
         <tr>
             <th>支出</th>
             {% for m in month_io_list %}
-                <td>{{ m.outgo| intcomma }}</td>
+            <td>{{ m.outgo| intcomma }}</td>
             {% endfor %}
         </tr>
         <tr>
             <th>収支</th>
             {% for m in month_io_list %}
-                <td>{{ m.balance| intcomma }}</td>
+            <td>{{ m.balance| intcomma }}</td>
             {% endfor %}
         </tr>
     </table>
@@ -240,31 +244,31 @@
         <tr>
             <th></th>
             {% for m in month_all_io_list %}
-                <th>{{ m.label }}</th>
+            <th>{{ m.label }}</th>
             {% endfor %}
         </tr>
         <tr>
             <th>収入</th>
             {% for m in month_all_io_list %}
-                <td>{{ m.income| intcomma }}</td>
+            <td>{{ m.income| intcomma }}</td>
             {% endfor %}
         </tr>
         <tr>
             <th>支出</th>
             {% for m in month_all_io_list %}
-                <td>{{ m.outgo| intcomma }}</td>
+            <td>{{ m.outgo| intcomma }}</td>
             {% endfor %}
         </tr>
         <tr>
             <th>収支</th>
             {% for m in month_all_io_list %}
-                <td>{{ m.balance| intcomma }}</td>
+            <td>{{ m.balance| intcomma }}</td>
             {% endfor %}
         </tr>
         <tr>
             <th>途中残高</th>
             {% for b in before_balance %}
-                <td>{{ b.value |intcomma }}</td>
+            <td>{{ b.value |intcomma }}</td>
             {% endfor %}
         </tr>
     </table>

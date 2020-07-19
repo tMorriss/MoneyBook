@@ -1,11 +1,10 @@
-function separate(num){
-    return String(num).replace( /(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
+function separate(num) {
+    return String(num).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
 }
 function get_transaction() {
     $.get({
         url: data_table_url,
-    })
-    .done((data) => {
+    }).done((data) => {
         $('#transactions').html(data);
     })
 }
@@ -24,15 +23,11 @@ function send_paypay_cacheback() {
             "temp": "False",
             "checked": "False",
         }
-    })
-    // 成功時
-    .done(() => {
+    }).done(() => {
         show_result_msg("Success!", get_transaction);
         get_payapy_balance();
         reset_form();
-    })
-    // 失敗時
-    .fail(() => {
+    }).fail(() => {
         // メッセージ表示
         show_result_msg("Error...", empty);
     });
@@ -54,8 +49,7 @@ function update_cacheback_date() {
             "day": $("#c_day").val(),
             "pk": 1,
         }
-    })
-    .done(() => {
+    }).done(() => {
         show_result_msg("Success!", get_transaction);
         reset_form();
     });
@@ -70,8 +64,7 @@ function key_press_cacheback(code) {
 function get_payapy_balance() {
     $.get({
         url: paypay_balance_url
-    })
-    .done((data) => {
+    }).done((data) => {
         result = JSON.parse(data);
         $("#paypay_balance").text(separate(result["balance"]) + "円");
     });

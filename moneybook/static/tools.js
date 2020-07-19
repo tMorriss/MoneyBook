@@ -1,5 +1,5 @@
-function separate(num){
-    return String(num).replace( /(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
+function separate(num) {
+    return String(num).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
 }
 function unseparate_value(id) {
     var elm = document.getElementById(id);
@@ -32,15 +32,11 @@ function update_diff() {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
             "price": actual,
         }
-    })
-    // 成功時
-    .done(() => {
+    }).done(() => {
         $("#balance_diff").text(value);
         separate_value('actual_balance')
         separate_html("balance_diff");
-    })
-    // 失敗時
-    .fail(() => {
+    }).fail(() => {
         // メッセージ表示
         show_result_msg("Error...", empty);
     });
@@ -64,8 +60,7 @@ function show_diff() {
 function get_checked_date() {
     $.get({
         url: checked_date_url,
-    })
-    .done((data) => {
+    }).done((data) => {
         $("#checked-date").html(data);
     })
 }
@@ -73,8 +68,7 @@ function get_checked_date() {
 function get_several_checked_date() {
     $.get({
         url: several_checked_date_url,
-    })
-    .done((data) => {
+    }).done((data) => {
         $("#several-checked-date").html(data);
         calculate_now_bank();
     })
@@ -91,12 +85,10 @@ function update_checked_date(method_id, checkAll) {
             "method": method_id,
             "check_all": checkAll,
         }
-    })
-    .done(() => {
+    }).done(() => {
         get_checked_date();
         get_unchecked_transaction();
-    })
-    .fail(() => {
+    }).fail(() => {
         // メッセージ表示
         show_result_msg("Error...", empty);
     });
@@ -112,11 +104,9 @@ function update_several_checked_date(id, url) {
             "day": $("#credit_check_day").val(),
             "pk": id,
         }
-    })
-    .done(() => {
+    }).done(() => {
         get_several_checked_date();
-    })
-    .fail(() => {
+    }).fail(() => {
         // メッセージ表示
         show_result_msg("Error...", empty);
     });
@@ -129,11 +119,9 @@ function update_fixed_cost_mark() {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
             "price": Number($("#txt_fixed_cost").val().replace(",", "")),
         }
-    })
-    .done(() => {
+    }).done(() => {
         location.reload();
-    })
-    .fail(() => {
+    }).fail(() => {
         // メッセージ表示
         show_result_msg("Error...", empty);
     });
@@ -152,14 +140,12 @@ function check(id) {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
             "id": id,
         }
-    })
-    .done(() => {
+    }).done(() => {
         // チェックした行を削除
         $("#unapproved-row-" + id).remove();
         // 現在銀行も更新
         get_several_checked_date();
-    })
-    .fail(() => {
+    }).fail(() => {
         // メッセージ表示
         show_result_msg("Error...", empty);
     });
@@ -168,8 +154,7 @@ function check(id) {
 function get_unchecked_transaction() {
     $.get({
         url: unchecked_transaction_url
-    })
-    .done((data) => {
+    }).done((data) => {
         $("#unchecked-transaction").html(data);
     })
 }

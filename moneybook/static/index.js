@@ -17,9 +17,7 @@ function send_add_row() {
             "temp": "False",
             "checked": "False",
         }
-    })
-    // 成功時
-    .done(() => {
+    }).done(() => {
         if ($('#is-charge').prop('checked')) {
             $.post({
                 url: add_intra_move_url,
@@ -32,13 +30,9 @@ function send_add_row() {
                     "before_method": 2,
                     "after_method": $('input[name="a_method"]:checked').val(),
                 }
-            })
-            // 成功時
-            .done(() => {
+            }).done(() => {
                 update_success();
-            })
-            // 失敗時
-            .fail(() => {
+            }).fail(() => {
                 // メッセージ表示
                 show_result_msg("Error...", empty);
                 // 抜ける
@@ -48,9 +42,7 @@ function send_add_row() {
         else {
             update_success();
         }
-    })
-    // 失敗時
-    .fail(() => {
+    }).fail(() => {
         // メッセージ表示
         show_result_msg("Error...", empty);
     });
@@ -82,8 +74,7 @@ function update_data() {
                 "year": year,
                 "month": month,
             }
-        })
-        .done((data) => {
+        }).done((data) => {
             $('#transactions').html(data);
             apply_filter();
         }),
@@ -94,8 +85,7 @@ function update_data() {
                 "year": year,
                 "month": month,
             }
-        })
-        .done((data) => {
+        }).done((data) => {
             $('#statistic-fixed').html(data);
         }),
 
@@ -105,13 +95,10 @@ function update_data() {
                 "year": year,
                 "month": month,
             }
-        })
-        .done((data) => {
+        }).done((data) => {
             $('#js_draw_chart_container').html(data);
         })
-    )
-    // 成功時
-    .done(() => {
+    ).done(() => {
         // 円グラフ再描画
         draw_chart_container();
     });

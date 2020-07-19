@@ -18,7 +18,7 @@ function fadeInTimer(elm, opaValue) {
     if (opaValue < 1) {
         elm.style.opacity = opaValue;
         opaValue = opaValue + (1 / split);
-        fadein_timer = setTimeout(function(){fadeInTimer(elm, opaValue);}, (maxMilliSec / split));
+        fadein_timer = setTimeout(function () { fadeInTimer(elm, opaValue); }, (maxMilliSec / split));
     } else {
         clearTimeout(fadein_timer);
         elm.style.opacity = 1;
@@ -31,7 +31,7 @@ function fadeOutTimer(elm, opaValue, callback) {
     if (opaValue > 0) {
         elm.style.opacity = opaValue;
         opaValue = opaValue - (1 / split);
-        fadeout_timer = setTimeout(function(){fadeOutTimer(elm, opaValue, callback);}, (maxMilliSec / split));
+        fadeout_timer = setTimeout(function () { fadeOutTimer(elm, opaValue, callback); }, (maxMilliSec / split));
     } else {
         clearTimeout(fadeout_timer);
         elm.style.opacity = 0;

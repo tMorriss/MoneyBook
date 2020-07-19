@@ -2,7 +2,7 @@
     function draw_chart_container() {
         var chart = new CanvasJS.Chart("chart_container", {
             animationEnabled: true,
-            title: {text: "支出内訳"},
+            title: { text: "支出内訳" },
             data: [{
                 type: "pie",
                 startAngle: 270,
@@ -10,11 +10,11 @@
                 yValueFormatString: "#,###,##0\"円\"",
                 indexLabel: "{label} {y}",
                 dataPoints: [
-                    {% for k,v in genres_outgo.items %}{y: {{ v }}, label: "{{ k.name }}"},
-                    {% endfor %}
+                    {% for k, v in genres_outgo.items %}{ y: {{ v }}, label: "{{ k.name }}"},
+    {% endfor %}
                 ]
             }]
         });
-        chart.render();
+    chart.render();
     }
 </script>

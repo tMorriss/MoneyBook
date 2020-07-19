@@ -19,7 +19,8 @@
     <form action="{% url 'moneybook:search' %}" method="get">
         <input type="hidden" name="is_query" value="1">
         <table class="tbl-common fcs-blue">
-            <tr><th>日付</th>
+            <tr>
+                <th>日付</th>
                 <td>
                     <input type="text" name="start_year" style="width:6ex" class="righter" value="{{ start_year }}">年
                     <input type="text" name="start_month" style="width:5ex" class="righter" value="{{ start_month }}">月
@@ -30,7 +31,10 @@
                     <input type="text" name="end_day" style="width:5ex" class="righter" value="{{ end_day }}">日
                 </td>
             </tr>
-            <tr><th>品目</th><td><input type="text" name="item" size="25" value="{{ item }}"></td></tr>
+            <tr>
+                <th>品目</th>
+                <td><input type="text" name="item" size="25" value="{{ item }}"></td>
+            </tr>
             <tr>
                 <th>金額</th>
                 <td>
@@ -43,8 +47,11 @@
                 <th>方向</th>
                 <td class="radio-green">
                     {% for d in directions %}
-                        <input type="checkbox" name="direction" value="{{ d.pk }}" id="direction-{{ d.pk }}"{% if d.pk in direction %} checked{% endif %}  onfocus="addBlueFocus('#lbl_direction-{{ d.pk }}')" onblur="removeBlueFocus('#lbl_direction-{{ d.pk }}')">
-                        <label for="direction-{{ d.pk }}" id="lbl_direction-{{ d.pk }}">{{ d.name }}</label>
+                    <input type="checkbox" name="direction" value="{{ d.pk }}" id="direction-{{ d.pk }}"
+                        {% if d.pk in direction %} checked{% endif %}
+                        onfocus="addBlueFocus('#lbl_direction-{{ d.pk }}')"
+                        onblur="removeBlueFocus('#lbl_direction-{{ d.pk }}')">
+                    <label for="direction-{{ d.pk }}" id="lbl_direction-{{ d.pk }}">{{ d.name }}</label>
                     {% endfor %}
                 </td>
             </tr>
@@ -52,12 +59,16 @@
                 <th>支払い方法</th>
                 <td class="radio-green">
                     {% for m in methods %}
-                        <input type="checkbox" name="method" value="{{ m.pk }}" id="method-{{ m.pk }}"{% if m.pk in method %} checked{% endif %} onfocus="addBlueFocus('#lbl_method-{{ m.pk }}')" onblur="removeBlueFocus('#lbl_method-{{ m.pk }}')">
-                        <label for="method-{{ m.pk }}" id="lbl_method-{{ m.pk }}">{{ m.name }}</label>
+                    <input type="checkbox" name="method" value="{{ m.pk }}" id="method-{{ m.pk }}"
+                        {% if m.pk in method %} checked{% endif %} onfocus="addBlueFocus('#lbl_method-{{ m.pk }}')"
+                        onblur="removeBlueFocus('#lbl_method-{{ m.pk }}')">
+                    <label for="method-{{ m.pk }}" id="lbl_method-{{ m.pk }}">{{ m.name }}</label>
                     {% endfor %}
                     {% for m in unused_methods %}
-                        <input type="checkbox" name="method" value="{{ m.pk }}" id="method-{{ m.pk }}"{% if m.pk in method %} checked{% endif %} onfocus="addBlueFocus('#lbl_method-{{ m.pk }}')" onblur="removeBlueFocus('#lbl_method-{{ m.pk }}')">
-                        <label for="method-{{ m.pk }}" id="lbl_method-{{ m.pk }}">{{ m.name }}</label>
+                    <input type="checkbox" name="method" value="{{ m.pk }}" id="method-{{ m.pk }}"
+                        {% if m.pk in method %} checked{% endif %} onfocus="addBlueFocus('#lbl_method-{{ m.pk }}')"
+                        onblur="removeBlueFocus('#lbl_method-{{ m.pk }}')">
+                    <label for="method-{{ m.pk }}" id="lbl_method-{{ m.pk }}">{{ m.name }}</label>
                     {% endfor %}
                 </td>
             </tr>
@@ -65,12 +76,16 @@
                 <th>分類</th>
                 <td class="radio-green">
                     {% for g in first_genres %}
-                        <input type="checkbox" name="genre" value="{{ g.pk }}" id="genre-{{ g.pk }}"{% if g.pk in genre %} checked{% endif %} onfocus="addBlueFocus('#lbl_genre-{{ g.pk }}')" onblur="removeBlueFocus('#lbl_genre-{{ g.pk }}')">
-                        <label for="genre-{{ g.pk }}" id="lbl_genre-{{ g.pk }}">{{ g.name }}</label>
+                    <input type="checkbox" name="genre" value="{{ g.pk }}" id="genre-{{ g.pk }}" {% if g.pk in genre %}
+                        checked{% endif %} onfocus="addBlueFocus('#lbl_genre-{{ g.pk }}')"
+                        onblur="removeBlueFocus('#lbl_genre-{{ g.pk }}')">
+                    <label for="genre-{{ g.pk }}" id="lbl_genre-{{ g.pk }}">{{ g.name }}</label>
                     {% endfor %}
                     {% for g in latter_genres %}
-                        <input type="checkbox" name="genre" value="{{ g.pk }}" id="genre-{{ g.pk }}"{% if g.pk in genre %} checked{% endif %} onfocus="addBlueFocus('#lbl_genre-{{ g.pk }}')" onblur="removeBlueFocus('#lbl_genre-{{ g.pk }}')">
-                        <label for="genre-{{ g.pk }}" id="lbl_genre-{{ g.pk }}">{{ g.name }}</label>
+                    <input type="checkbox" name="genre" value="{{ g.pk }}" id="genre-{{ g.pk }}" {% if g.pk in genre %}
+                        checked{% endif %} onfocus="addBlueFocus('#lbl_genre-{{ g.pk }}')"
+                        onblur="removeBlueFocus('#lbl_genre-{{ g.pk }}')">
+                    <label for="genre-{{ g.pk }}" id="lbl_genre-{{ g.pk }}">{{ g.name }}</label>
                     {% endfor %}
                 </td>
             </tr>
@@ -78,8 +93,10 @@
                 <th>立替</th>
                 <td class="radio-green">
                     {% for k,v in temps.items %}
-                        <input type="checkbox" name="temp" value="{{ k }}" id="temp-{{ k }}"{% if k in temp %} checked{% endif %} onfocus="addBlueFocus('#lbl_temp-{{ k }}')" onblur="removeBlueFocus('#lbl_temp-{{ k }}')">
-                        <label for="temp-{{ k }}" id="lbl_temp-{{ k }}">{{ v }}</label>
+                    <input type="checkbox" name="temp" value="{{ k }}" id="temp-{{ k }}" {% if k in temp %}
+                        checked{% endif %} onfocus="addBlueFocus('#lbl_temp-{{ k }}')"
+                        onblur="removeBlueFocus('#lbl_temp-{{ k }}')">
+                    <label for="temp-{{ k }}" id="lbl_temp-{{ k }}">{{ v }}</label>
                     {% endfor %}
                 </td>
             </tr>
@@ -87,8 +104,10 @@
                 <th>チェック済み</th>
                 <td class="radio-green">
                     {% for k,v in checkeds.items %}
-                        <input type="checkbox" name="checked" value="{{ k }}" id="checked-{{ k }}"{% if k in checked %} checked{% endif %} onfocus="addBlueFocus('#lbl_checked-{{ k }}')" onblur="removeBlueFocus('#lbl_checked-{{ k }}')">
-                        <label for="checked-{{ k }}" id="lbl_checked-{{ k }}">{{ v }}</label>
+                    <input type="checkbox" name="checked" value="{{ k }}" id="checked-{{ k }}" {% if k in checked %}
+                        checked{% endif %} onfocus="addBlueFocus('#lbl_checked-{{ k }}')"
+                        onblur="removeBlueFocus('#lbl_checked-{{ k }}')">
+                    <label for="checked-{{ k }}" id="lbl_checked-{{ k }}">{{ v }}</label>
                     {% endfor %}
                 </td>
             </tr>
@@ -96,14 +115,18 @@
 
         <table class="tbl-buttons">
             <tr>
-            <td><input type="submit" class="btn-apply" value="検索"></td>
-            <td><input type="button" class="btn-cancel" value="リセット" onclick="reset_page()"></td>
+                <td><input type="submit" class="btn-apply" value="検索"></td>
+                <td><input type="button" class="btn-cancel" value="リセット" onclick="reset_page()"></td>
             </tr>
         </table>
     </form>
     {% if is_show %}<br>
     <table class="tbl-summary">
-        <tr><td>{{ show_data| length }}件</td><td>収入: {{ income_sum| intcomma }}円</td><td>支出: {{ outgo_sum| intcomma }}円</td></tr>
+        <tr>
+            <td>{{ show_data| length }}件</td>
+            <td>収入: {{ income_sum| intcomma }}円</td>
+            <td>支出: {{ outgo_sum| intcomma }}円</td>
+        </tr>
     </table><br>
     {% include "_data_table.html" %}{% endif %}
 </section>

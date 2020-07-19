@@ -12,13 +12,9 @@ function send_update_row() {
             "temp": $('input[name="temp"]:checked').val(),
             "checked": $('input[name="checked"]:checked').val(),
         }
-    })
-    // 成功時
-    .done(() => {
+    }).done(() => {
         window.location.href = document.referrer;
-    })
-    // 失敗時
-    .fail(() => {
+    }).fail(() => {
         // メッセージ表示
         show_result_msg("Error...", empty);
     });
@@ -37,13 +33,9 @@ function send_delete_row() {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
             "pk": data_pk,
         }
-    })
-    // 成功時
-    .done(() => {
+    }).done(() => {
         window.location.href = document.referrer;
-    })
-    // 失敗時
-    .fail(() => {
+    }).fail(() => {
         // メッセージ表示
         show_result_msg("Error...", empty);
     });

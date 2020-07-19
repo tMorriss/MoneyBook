@@ -11,12 +11,12 @@
 <table class="tbl-common">
     <tr>
         {% for m in methods_iob %}
-            <th>{{ m.label }}</th>
+        <th>{{ m.label }}</th>
         {% endfor %}
     </tr>
     <tr>
         {% for m in methods_iob %}
-            <td>{{ m.balance|intcomma }}円</td>
+        <td>{{ m.balance|intcomma }}円</td>
         {% endfor %}
     </tr>
 </table>
