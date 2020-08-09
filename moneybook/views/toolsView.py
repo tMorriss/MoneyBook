@@ -126,7 +126,7 @@ def get_several_checked_date(request):
     today = date.today()
     for c in credit_checked_date:
         # 日付が過ぎていたらpriceを0にする
-        if c.date < today:
+        if c.date <= today:
             c.price = 0
 
     # 銀行残高
