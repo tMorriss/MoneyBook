@@ -17,9 +17,7 @@ function send_add_row() {
             "temp": "False",
             "checked": "False",
         }
-    })
-    // 成功時
-    .done(() => {
+    }).done(() => {
         if ($('#is-charge').prop('checked')) {
             $.post({
                 url: add_intra_move_url,
@@ -32,13 +30,9 @@ function send_add_row() {
                     "before_method": 2,
                     "after_method": $('input[name="a_method"]:checked').val(),
                 }
-            })
-            // 成功時
-            .done(() => {
+            }).done(() => {
                 update_success();
-            })
-            // 失敗時
-            .fail(() => {
+            }).fail(() => {
                 // メッセージ表示
                 show_result_msg("Error...", empty);
                 // 抜ける
@@ -48,9 +42,7 @@ function send_add_row() {
         else {
             update_success();
         }
-    })
-    // 失敗時
-    .fail(() => {
+    }).fail(() => {
         // メッセージ表示
         show_result_msg("Error...", empty);
     });
@@ -82,8 +74,7 @@ function update_data() {
                 "year": year,
                 "month": month,
             }
-        })
-        .done((data) => {
+        }).done((data) => {
             $('#transactions').html(data);
             apply_filter();
         }),
@@ -94,8 +85,7 @@ function update_data() {
                 "year": year,
                 "month": month,
             }
-        })
-        .done((data) => {
+        }).done((data) => {
             $('#statistic-fixed').html(data);
         }),
 
@@ -105,13 +95,10 @@ function update_data() {
                 "year": year,
                 "month": month,
             }
-        })
-        .done((data) => {
+        }).done((data) => {
             $('#js_draw_chart_container').html(data);
         })
-    )
-    // 成功時
-    .done(() => {
+    ).done(() => {
         // 円グラフ再描画
         draw_chart_container();
     });
@@ -198,4 +185,51 @@ function update_success() {
     update_data();
     // メッセージ表示
     show_result_msg("Success!", reset_add_form);
+}
+
+function draw_chart_container() {
+    am4core.ready(function () {
+        // テーマ
+        am4core.useTheme(am4themes_animated);
+        am4core.useTheme(am4themes_kelly);
+
+        var chart = am4core.create("chart_container", am4charts.PieChart);
+
+        // データ収集
+        const chartData = $("#chart_data li");
+        chart.data = [];
+        dataSum = 0;
+        for (var i = 0; i < chartData.length; i++) {
+            data = chartData[i].textContent.split(',');
+            chart.data.push({ genre: data[0], value: data[1] });
+            dataSum += Number(data[1]);
+        }
+
+        // データが無いときは描画しない
+        if (dataSum == 0) {
+            return;
+        }
+
+        chart.radius = am4core.percent(60);
+        chart.innerRadius = am4core.percent(30);
+
+        // Series設定
+        var pieSeries = chart.series.push(new am4charts.PieSeries());
+        pieSeries.dataFields.value = "value";
+        pieSeries.dataFields.category = "genre";
+        pieSeries.slices.template.strokeWidth = 0;
+        pieSeries.labels.template.text = "{category}\n{value.value}円";
+        pieSeries.slices.template.tooltipText = "{category}: {value.value}円 ({value.percent.formatNumber('#.')}%)";
+
+        // アニメーションの開始設定
+        pieSeries.hiddenState.properties.opacity = 1;
+        pieSeries.hiddenState.properties.endAngle = -90;
+        pieSeries.hiddenState.properties.startAngle = -90;
+
+        var label = pieSeries.createChild(am4core.Label);
+        label.text = "支出内訳";
+        label.horizontalCenter = "middle";
+        label.verticalCenter = "middle";
+        label.fontSize = "1.7vw";
+    });
 }

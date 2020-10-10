@@ -2,7 +2,15 @@
 
 <h1 id="unchecked-transaction">未承認トランザクション</h1>
 <table class="tbl-inout tbl-boarder">
-    <tr><th>日付</th><th>品目</th><th>金額</th><th>支払い方法</th><th>分類</th><th>編集</th><th>チェック</th></tr>
+    <tr>
+        <th>日付</th>
+        <th>品目</th>
+        <th>金額</th>
+        <th>支払い方法</th>
+        <th>分類</th>
+        <th>編集</th>
+        <th>チェック</th>
+    </tr>
     {% for d in unchecked_data %}
     <tr class="data-row" id="unapproved-row-{{ d.pk }}">
         <td>{{ d.date|date:"Y/m/d" }}</td>

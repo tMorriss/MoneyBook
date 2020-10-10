@@ -12,13 +12,9 @@ function send_add_row() {
             "temp": $('input[name="a_temp"]:checked').val(),
             "checked": "False",
         }
-    })
-    // 成功時
-    .done(() => {
+    }).done(() => {
         show_result_msg("Success!", reset_add_form);
-    })
-    // 失敗時
-    .fail(() => {
+    }).fail(() => {
         // メッセージ表示
         show_result_msg("Error...", empty);
     });
@@ -43,13 +39,9 @@ function send_intra_move() {
             "before_method": $('input[name="m_before_method"]:checked').val(),
             "after_method": $('input[name="m_after_method"]:checked').val(),
         }
-    })
-    // 成功時
-    .done(() => {
+    }).done(() => {
         show_result_msg("Success!", reset_add_form);
-    })
-    // 失敗時
-    .fail(() => {
+    }).fail(() => {
         // メッセージ表示
         show_result_msg("Error...", empty);
     });
@@ -73,13 +65,9 @@ function send_charge() {
             "before_method": 2,
             "after_method": $('input[name="c_method"]:checked').val(),
         }
-    })
-    // 成功時
-    .done(() => {
+    }).done(() => {
         show_result_msg("Success!", reset_add_form);
-    })
-    // 失敗時
-    .fail(() => {
+    }).fail(() => {
         // メッセージ表示
         show_result_msg("Error...", empty);
     });
@@ -105,13 +93,9 @@ function send_suica_charge() {
             "temp": "False",
             "checked": "False",
         }
-    })
-    // 成功時
-    .done(() => {
+    }).done(() => {
         show_result_msg("Success!", reset_for_shortcut);
-    })
-    // 失敗時
-    .fail(() => {
+    }).fail(() => {
         // メッセージ表示
         show_result_msg("Error...", empty);
     });

@@ -5,8 +5,11 @@
 
 {% block header %}
 <link rel="stylesheet" type="text/css" href="{% static 'index.css' %}">
-<script type="text/javascript" src="{% static 'canvasjs.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'index.js' %}"></script>
+<script src="{% static 'amcharts4/core.js' %}"></script>
+<script src="{% static 'amcharts4/charts.js' %}"></script>
+<script src="{% static 'amcharts4/animated.js' %}"></script>
+<script src="{% static 'amcharts4/kelly.js' %}"></script>
 <div id="js_draw_chart_container"></div>
 <script type="text/javascript">
     index_url = "{% url 'moneybook:index' %}";
@@ -21,7 +24,7 @@
     method_first = "{{ methods.first.pk }}";
     genre_first = "{{ first_genres.first.pk }}";
 
-    window.onload = function() {
+    window.onload = function () {
         update_data();
     }
 </script>

@@ -15,7 +15,7 @@
     update_now_bank_url = "{% url 'moneybook:update_now_bank' %}";
     unchecked_transaction_url = "{% url 'moneybook:unchecked_transaction' %}";
 
-    window.onload = function() {
+    window.onload = function () {
         show_diff();
         get_checked_date();
         get_several_checked_date();
@@ -23,7 +23,7 @@
     }
 
     function calculate_now_bank() {
-        $(".now_bank_credit").each(function(i, o) {
+        $(".now_bank_credit").each(function (i, o) {
             if ($(".now_bank_credit").eq(i).val() == "") {
                 $(".now_bank_credit").eq(i).val("0");
             }
@@ -34,20 +34,18 @@
             data: {
                 "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
                 {% for b in banks %}
-                    "bank-{{ b.pk }}": removeComma($("#bank-{{ b.pk }}").val()),{% endfor %}
-                {% for c in credit_checked_date %}
-                    "credit-{{ c.pk }}": removeComma($("#credit-{{ c.pk }}").val()),{% endfor %}
+    "bank-{{ b.pk }}": removeComma($("#bank-{{ b.pk }}").val()), {% endfor %}
+    {% for c in credit_checked_date %}
+    "credit-{{ c.pk }}": removeComma($("#credit-{{ c.pk }}").val()), {% endfor %}
             }
-        })
-        .done((data) => {
-            result = JSON.parse(data);
-            $("#now_bank_balance").text(separate(result["balance"]));
-            document.activeElement.blur();
-        })
-        .fail((data) => {
-            // メッセージ表示
-            show_result_msg("Error...", empty);
-        });
+        }).done((data) => {
+        result = JSON.parse(data);
+        $("#now_bank_balance").text(separate(result["balance"]));
+        document.activeElement.blur();
+    }).fail((data) => {
+        // メッセージ表示
+        show_result_msg("Error...", empty);
+    });
     }
     function key_press_now_bank(code) {
         // エンターキーなら
@@ -69,11 +67,17 @@
         </tr>
         <tr>
             <th>実際</th>
-            <td><input type="text" class="righter" id="actual_balance" style="width:10ex" onfocus="delete_value('actual_balance')" onblur="separate_value('actual_balance')" onkeypress="key_press_diff(event.keyCode)" value="{{ actual_cash_balance| intcomma }}"></td>
+            <td><input type="text" class="righter" id="actual_balance" style="width:10ex"
+                    onfocus="delete_value('actual_balance')" onblur="separate_value('actual_balance')"
+                    onkeypress="key_press_diff(event.keyCode)" value="{{ actual_cash_balance| intcomma }}"></td>
         </tr>
-        <tr><th>差額</th><td id="balance_diff" class="righter"></td></tr>
+        <tr>
+            <th>差額</th>
+            <td id="balance_diff" class="righter"></td>
+        </tr>
     </table>
-    <input type="button" class="btn-apply" value="計算" onclick="update_diff()" onkeypress="key_press_diff(event.keyCode)">
+    <input type="button" class="btn-apply" value="計算" onclick="update_diff()"
+        onkeypress="key_press_diff(event.keyCode)">
 
     <div id="checked-date"></div>
 
@@ -82,8 +86,11 @@
     <h1>固定費目標額</h1>
     <table class="tbl-common fcs-blue">
         <tr>
-            <td><input type="text" class="righter" id="txt_fixed_cost" style="width:10ex" onfocus="unseparate_value('txt_fixed_cost')" onblur="separate_value('txt_fixed_cost')" onkeypress="key_press_fixed(event.keyCode)" value="{{ fixed_cost_mark| intcomma }}"></td>
-            <td><input type="button" value="更新" class="btn-apply" onclick="update_fixed_cost_mark()" onkeypress="key_press_fixed(event.keyCode)"></td>
+            <td><input type="text" class="righter" id="txt_fixed_cost" style="width:10ex"
+                    onfocus="unseparate_value('txt_fixed_cost')" onblur="separate_value('txt_fixed_cost')"
+                    onkeypress="key_press_fixed(event.keyCode)" value="{{ fixed_cost_mark| intcomma }}"></td>
+            <td><input type="button" value="更新" class="btn-apply" onclick="update_fixed_cost_mark()"
+                    onkeypress="key_press_fixed(event.keyCode)"></td>
         </tr>
     </table>
 

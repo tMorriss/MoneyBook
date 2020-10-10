@@ -1,20 +1,4 @@
-<script type="text/javascript">
-    function draw_chart_container() {
-        var chart = new CanvasJS.Chart("chart_container", {
-            animationEnabled: true,
-            title: {text: "支出内訳"},
-            data: [{
-                type: "pie",
-                startAngle: 270,
-                radius: "80%",
-                yValueFormatString: "#,###,##0\"円\"",
-                indexLabel: "{label} {y}",
-                dataPoints: [
-                    {% for k,v in genres_outgo.items %}{y: {{ v }}, label: "{{ k.name }}"},
-                    {% endfor %}
-                ]
-            }]
-        });
-        chart.render();
-    }
-</script>
+<ul id="chart_data" hidden>
+    {% for k, v in genres_outgo.items %}<li>{{ k.name }},{{ v }}</li>
+    {% endfor %}
+</ul>
