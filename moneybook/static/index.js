@@ -198,9 +198,16 @@ function draw_chart_container() {
         // データ収集
         const chartData = $("#chart_data li");
         chart.data = [];
+        dataSum = 0;
         for (var i = 0; i < chartData.length; i++) {
             data = chartData[i].textContent.split(',');
             chart.data.push({ genre: data[0], value: data[1] });
+            dataSum += Number(data[1]);
+        }
+
+        // データが無いときは描画しない
+        if (dataSum == 0) {
+            return;
         }
 
         chart.radius = am4core.percent(60);
