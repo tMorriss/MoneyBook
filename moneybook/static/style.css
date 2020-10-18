@@ -5,16 +5,6 @@ body label,
 .radio-green label {
     font-size: 0.8vw;
 }
-/* スマホ */
-@media screen and (max-width: 980px) {
-    body,
-    body input,
-    body table,
-    body label,
-    .radio-green label {
-        font-size: 2.5vw;
-    }
-}
 
 .task_bar {
     padding: 2px 0px;
@@ -44,11 +34,6 @@ body {
  	margin-right: auto;
     width: 90%;
     background: #cccccc;
-}
-@media screen and (max-width: 980px) {
-    body {
-        width: 100%;
-    }
 }
 
 section, header, .task_bar {
@@ -187,12 +172,6 @@ section h2 {
     border-color: #00bfff !important;
 }
 
-/* tbl-inout */
-@media screen and (max-width: 980px) {
-    .tbl-inout {
-        font-size: 2.5vw;
-    }
-}
 .tbl-inout th {
     background: #b0ffff;
 }
@@ -244,4 +223,27 @@ section h2 {
 }
 .tr-outgo {
     background: #ff6688;
+}
+
+/* スマホ */
+@media screen and (max-width: 980px) {
+    body,
+    body input,
+    body table,
+    body label,
+    .radio-green label {
+        font-size: 2.5vw;
+    }
+
+    body {
+        width: 100%;
+    }
+
+    .tbl-inout {
+        font-size: 2.5vw;
+    }
+
+    #is_pc {
+        visibility: hidden;
+    }
 }
