@@ -16,9 +16,8 @@ function separate_html(id) {
     elm.innerHTML = separate(Number(removeComma(elm.innerHTML)));
 }
 
-function delete_value(id) {
-    var elm = document.getElementById(id);
-    elm.value = "";
+function select_value(elm) {
+    $(elm).select();
 }
 
 function update_diff() {

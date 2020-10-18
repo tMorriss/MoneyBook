@@ -68,7 +68,7 @@
         <tr>
             <th>実際</th>
             <td><input type="text" class="righter" id="actual_balance" style="width:10ex"
-                    onfocus="delete_value('actual_balance')" onblur="separate_value('actual_balance')"
+                    onfocus="select_value('#actual_balance')" onblur="separate_value('actual_balance')"
                     onkeypress="key_press_diff(event.keyCode)" value="{{ actual_cash_balance| intcomma }}"></td>
         </tr>
         <tr>
