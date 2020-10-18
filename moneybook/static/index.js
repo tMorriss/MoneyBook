@@ -231,5 +231,10 @@ function draw_chart_container() {
         label.horizontalCenter = "middle";
         label.verticalCenter = "middle";
         label.fontSize = "1.7vw";
+
+        // スマホのとき
+        if ($('#is_pc').css("visibility") == 'hidden') {
+            label.fontSize = "7vw";
+        }
     });
 }
