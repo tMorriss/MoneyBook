@@ -1,24 +1,20 @@
 function separate(num) {
     return String(num).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
 }
-function unseparate_value(id) {
-    var elm = document.getElementById(id);
-    elm.value = removeComma(elm.value);
+function unseparate_value(elm) {
+    $(elm).val(removeComma($(elm).val()));
 }
 
-function separate_value(id) {
-    var elm = document.getElementById(id);
-    elm.value = separate(Number(removeComma(elm.value)));
+function separate_value(elm) {
+    $(elm).val(separate(Number(removeComma($(elm).val()))));
 }
 
-function separate_html(id) {
-    var elm = document.getElementById(id);
-    elm.innerHTML = separate(Number(removeComma(elm.innerHTML)));
+function separate_html(elm) {
+    $(elm).html(separate(Number(removeComma($(elm).html()))));
 }
 
-function delete_value(id) {
-    var elm = document.getElementById(id);
-    elm.value = "";
+function select_value(elm) {
+    $(elm).select();
 }
 
 function update_diff() {
@@ -34,8 +30,8 @@ function update_diff() {
         }
     }).done(() => {
         $("#balance_diff").text(value);
-        separate_value('actual_balance')
-        separate_html("balance_diff");
+        separate_value('#actual_balance')
+        separate_html("#balance_diff");
     }).fail(() => {
         // メッセージ表示
         show_result_msg("Error...", empty);
@@ -54,7 +50,7 @@ function show_diff() {
 
     var value = written - actual;
     $("#balance_diff").text(value);
-    separate_html("balance_diff");
+    separate_html("#balance_diff");
 }
 
 function get_checked_date() {
