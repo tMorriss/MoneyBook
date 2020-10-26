@@ -49,7 +49,7 @@ function deleteValue(elm) {
 }
 
 function removeComma(num) {
-    return num.replace(",", "");
+    return num.replace(/,/g, '');
 }
 
 function addBlueFocus(id) {
