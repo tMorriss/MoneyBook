@@ -15,7 +15,7 @@
     {% for b in banks %}
     <tr>
         <th colspan="2">{{ b.name }}</th>
-        <td><input type="text" class="righter now_bank_credit" id="bank-{{ b.pk }}" style="width:7ex"
+        <td><input type="text" class="righter now_bank_credit" id="bank-{{ b.pk }}" style="width:9ex"
                 onfocus="unseparate_value('#bank-{{ b.pk }}')" onblur="separate_value('#bank-{{ b.pk }}')"
                 onkeypress="key_press_now_bank(event.keyCode)" value="{{ b.price| intcomma }}"></td>
     </tr>{% endfor %}
@@ -25,7 +25,7 @@
                 onclick="update_several_checked_date({{ c.pk }}, '{% url "moneybook:update_credit_checked_date" %}')">
         </td>
         <td>最新確定引き落とし日: {{ c.date|date:"Y"}}年{{ c.date|date:"m" }}月{{ c.date|date:"d" }}日</td>
-        <td><input type="text" class="righter now_bank_credit" id="credit-{{ c.pk }}" style="width:7ex"
+        <td><input type="text" class="righter now_bank_credit" id="credit-{{ c.pk }}" style="width:9ex"
                 onfocus="unseparate_value('#credit-{{ c.pk }}')" onblur="separate_value('#credit-{{ c.pk }}')"
                 onkeypress="key_press_now_bank(event.keyCode)" value="{{ c.price| intcomma }}"></td>
     </tr>{% endfor %}
