@@ -103,13 +103,10 @@ function update_several_checked_date(id) {
     }).done(() => {
         // 現在銀行の計算も行う
         calculate_now_bank(true);
-
-        // get_several_checked_date();
     }).fail(() => {
         // メッセージ表示
         show_result_msg("Error...", empty);
     });
-
 }
 
 function update_fixed_cost_mark() {
@@ -190,4 +187,11 @@ function calculate_now_bank(isAllUpdate) {
         // メッセージ表示
         show_result_msg("Error...", empty);
     });
+}
+
+function key_press_now_bank(code) {
+    // エンターキーなら
+    if (code === 13) {
+        calculate_now_bank(true);
+    }
 }
