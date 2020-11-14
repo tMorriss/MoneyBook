@@ -66,7 +66,7 @@ function get_several_checked_date() {
         url: several_checked_date_url,
     }).done((data) => {
         $("#several-checked-date").html(data);
-        calculate_now_bank();
+        calculate_now_bank(false);
     })
 }
 
@@ -90,9 +90,9 @@ function update_checked_date(method_id, checkAll) {
     });
 }
 
-function update_several_checked_date(id, url) {
+function update_several_checked_date(id) {
     $.post({
-        url: url,
+        url: update_credit_checked_date_url,
         data: {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
             "year": $("#credit_check_year").val(),
@@ -101,7 +101,8 @@ function update_several_checked_date(id, url) {
             "pk": id,
         }
     }).done(() => {
-        get_several_checked_date();
+        // 現在銀行の計算も行う
+        calculate_now_bank(true);
     }).fail(() => {
         // メッセージ表示
         show_result_msg("Error...", empty);
@@ -153,4 +154,44 @@ function get_unchecked_transaction() {
     }).done((data) => {
         $("#unchecked-transaction").html(data);
     })
+}
+
+function calculate_now_bank(isAllUpdate) {
+    $(".now_bank_credit").each(function (i, o) {
+        if ($(".now_bank_credit").eq(i).val() == "") {
+            $(".now_bank_credit").eq(i).val("0");
+        }
+    })
+
+    // data収集
+    data = { "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val() }
+    $("[id^=bank-]").each(function () {
+        data[$(this).attr("id")] = removeComma($(this).val())
+    });
+    $("[id^=credit-]").each(function () {
+        data[$(this).attr("id")] = removeComma($(this).val())
+    });
+
+    $.post({
+        url: update_now_bank_url,
+        data: data
+    }).done((data) => {
+        result = JSON.parse(data);
+        $("#now_bank_balance").text(separate(result["balance"]));
+        document.activeElement.blur();
+
+        if (isAllUpdate) {
+            get_several_checked_date();
+        }
+    }).fail(() => {
+        // メッセージ表示
+        show_result_msg("Error...", empty);
+    });
+}
+
+function key_press_now_bank(code) {
+    // エンターキーなら
+    if (code === 13) {
+        calculate_now_bank(true);
+    }
 }

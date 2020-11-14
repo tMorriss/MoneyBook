@@ -14,44 +14,13 @@
     edit_check_url = "{% url 'moneybook:edit_check' %}";
     update_now_bank_url = "{% url 'moneybook:update_now_bank' %}";
     unchecked_transaction_url = "{% url 'moneybook:unchecked_transaction' %}";
+    update_credit_checked_date_url = "{% url 'moneybook:update_credit_checked_date' %}";
 
     window.onload = function () {
         show_diff();
         get_checked_date();
         get_several_checked_date();
         get_unchecked_transaction();
-    }
-
-    function calculate_now_bank() {
-        $(".now_bank_credit").each(function (i, o) {
-            if ($(".now_bank_credit").eq(i).val() == "") {
-                $(".now_bank_credit").eq(i).val("0");
-            }
-        })
-
-        $.post({
-            url: "{% url 'moneybook:update_now_bank' %}",
-            data: {
-                "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
-                {% for b in banks %}
-    "bank-{{ b.pk }}": removeComma($("#bank-{{ b.pk }}").val()), {% endfor %}
-    {% for c in credit_checked_date %}
-    "credit-{{ c.pk }}": removeComma($("#credit-{{ c.pk }}").val()), {% endfor %}
-            }
-        }).done((data) => {
-        result = JSON.parse(data);
-        $("#now_bank_balance").text(separate(result["balance"]));
-        document.activeElement.blur();
-    }).fail((data) => {
-        // メッセージ表示
-        show_result_msg("Error...", empty);
-    });
-    }
-    function key_press_now_bank(code) {
-        // エンターキーなら
-        if (code === 13) {
-            calculate_now_bank();
-        }
     }
 </script>
 {% endblock %}
