@@ -22,7 +22,7 @@
     {% for c in credit_checked_date %}
     <tr>
         <td><input type="button" class="btn-apply" value="{{ c.name }}"
-                onclick="update_several_checked_date({{ c.pk }}, '{% url "moneybook:update_credit_checked_date" %}')">
+                onclick="update_several_checked_date({{ c.pk }})">
         </td>
         <td>最新確定引き落とし日: {{ c.date|date:"Y"}}年{{ c.date|date:"m" }}月{{ c.date|date:"d" }}日</td>
         <td><input type="text" class="righter now_bank_credit" id="credit-{{ c.pk }}" style="width:9ex"
