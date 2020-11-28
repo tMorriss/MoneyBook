@@ -41,24 +41,24 @@
                 <table class="radio-green">
                     <tr>
                         <td>
-                            {% for g in first_genres %}
-                            <input type="radio" value="{{ g.pk }}" name="a_genre" id="a_genre-{{ g.pk }}"
-                                {% if g == first_genres.first %} checked{% endif %}
+                            {% for g in first_categories %}
+                            <input type="radio" value="{{ g.pk }}" name="a_category" id="a_category-{{ g.pk }}"
+                                {% if g == first_categories.first %} checked{% endif %}
                                 onkeypress="key_press_add(event.keyCode)"
-                                onfocus="addBlueFocus('#lbl_a_genre-{{ g.pk }}')"
-                                onblur="removeBlueFocus('#lbl_a_genre-{{ g.pk }}')">
-                            <label for="a_genre-{{ g.pk }}" id="lbl_a_genre-{{ g.pk }}">{{ g.name }}</label>
+                                onfocus="addBlueFocus('#lbl_a_category-{{ g.pk }}')"
+                                onblur="removeBlueFocus('#lbl_a_category-{{ g.pk }}')">
+                            <label for="a_category-{{ g.pk }}" id="lbl_a_category-{{ g.pk }}">{{ g.name }}</label>
                             {% endfor %}
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            {% for g in latter_genres %}
-                            <input type="radio" value="{{ g.pk }}" name="a_genre" id="a_genre-{{ g.pk }}"
+                            {% for g in latter_categories %}
+                            <input type="radio" value="{{ g.pk }}" name="a_category" id="a_category-{{ g.pk }}"
                                 onkeypress="key_press_add(event.keyCode)"
-                                onfocus="addBlueFocus('#lbl_a_genre-{{ g.pk }}')"
-                                onblur="removeBlueFocus('#lbl_a_genre-{{ g.pk }}')">
-                            <label for="a_genre-{{ g.pk }}" id="lbl_a_genre-{{ g.pk }}">{{ g.name }}</label>
+                                onfocus="addBlueFocus('#lbl_a_category-{{ g.pk }}')"
+                                onblur="removeBlueFocus('#lbl_a_category-{{ g.pk }}')">
+                            <label for="a_category-{{ g.pk }}" id="lbl_a_category-{{ g.pk }}">{{ g.name }}</label>
                             {% endfor %}
                         </td>
                     </tr>

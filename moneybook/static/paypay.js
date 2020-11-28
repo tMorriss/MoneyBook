@@ -19,7 +19,7 @@ function send_paypay_cacheback() {
             "price": removeComma($('#s_price').val()),
             "direction": 1,
             "method": 5,
-            "genre": 12,
+            "category": 12,
             "temp": "False",
             "checked": "False",
         }

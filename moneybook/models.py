@@ -41,7 +41,7 @@ class Method(models.Model):
             'show_order')
 
 
-class Genre(models.Model):
+class Category(models.Model):
     show_order = models.IntegerField(default=-100)
     name = models.CharField(max_length=10)
 
@@ -49,16 +49,16 @@ class Genre(models.Model):
         return self.name
 
     def get(pk):
-        return Genre.objects.get(pk=pk)
+        return Category.objects.get(pk=pk)
 
     def list():
-        return Genre.objects.order_by('show_order')
+        return Category.objects.order_by('show_order')
 
     def first_list():
-        return Genre.objects.filter(show_order__gt=0).order_by('show_order')
+        return Category.objects.filter(show_order__gt=0).order_by('show_order')
 
     def latter_list():
-        return Genre.objects.filter(show_order__lte=0).order_by('-show_order')
+        return Category.objects.filter(show_order__lte=0).order_by('-show_order')
 
 
 class Data(models.Model):
@@ -67,7 +67,7 @@ class Data(models.Model):
     price = models.IntegerField()
     direction = models.ForeignKey(Direction, on_delete=models.CASCADE)
     method = models.ForeignKey(Method, on_delete=models.CASCADE)
-    genre = models.ForeignKey(Genre, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     temp = models.BooleanField()
     checked = models.BooleanField(default=False)
 
@@ -112,10 +112,10 @@ class Data(models.Model):
     # methodでフィルタ
     def getMethodData(data, methodId):
         return data.filter(method=methodId)
-    # genreでフィルタ
 
-    def getGenreData(data, genreId):
-        return data.filter(genre=genreId)
+    # categoryでフィルタ
+    def getCategoryData(data, categoryId):
+        return data.filter(category=categoryId)
 
     # 立替合計
     def getTempSum(data):
@@ -126,32 +126,33 @@ class Data(models.Model):
 
     # 立替と貯金をフィルタ
     def getTempAndDeposit(data):
-        deposit = data.filter(genre=11).aggregate(Sum('price'))['price__sum']
+        deposit = data.filter(category=11).aggregate(
+            Sum('price'))['price__sum']
         if deposit is None:
             deposit = 0
         return Data.getTempSum(data) + deposit
 
     # 内部移動だけを排除
     def getDataWithoutInmove(data):
-        return data.exclude(genre=10)
+        return data.exclude(category=10)
 
     # 計算外と内部移動を排除
     def getNormalData(data):
-        return data.exclude(genre=9).exclude(genre=10)
+        return data.exclude(category=9).exclude(category=10)
 
     # 使った生活費
     def getFixedData(data):
-        fixedGenres = [1, 2, 7]
-        return data.filter(genre__in=fixedGenres)
+        fixedCategories = [1, 2, 7]
+        return data.filter(category__in=fixedCategories)
     # 使った変動費
 
     def getVariableData(data):
-        variableGenres = [0, 3, 4, 5, 6]
-        return data.filter(genre__in=variableGenres)
+        variableCategories = [0, 3, 4, 5, 6]
+        return data.filter(category__in=variableCategories)
 
     def getFoodCosts(data):
-        i = Data.getIncomeSum(Data.getGenreData(data, 1).filter(temp=1))
-        o = Data.getOutgoSum(Data.getGenreData(data, 1))
+        i = Data.getIncomeSum(Data.getCategoryData(data, 1).filter(temp=1))
+        o = Data.getOutgoSum(Data.getCategoryData(data, 1))
         return o - i
 
     # 日付順にソート
@@ -206,9 +207,9 @@ class Data(models.Model):
     def filterMethods(data, methods):
         return data.filter(method__in=methods)
 
-    # genreリストでフィルタ
-    def filterGenres(data, genres):
-        return data.filter(genre__in=genres)
+    # categoryリストでフィルタ
+    def filterCategories(data, categories):
+        return data.filter(category__in=categories)
 
     # tempリストでフィルタ
     def filterTemps(data, temps):

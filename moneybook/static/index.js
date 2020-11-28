@@ -1,7 +1,7 @@
 function send_add_row() {
-    genre = $('input[name="a_genre"]:checked').val();
+    category = $('input[name="a_category"]:checked').val();
     direction = 2;
-    if (genre == 12) {
+    if (category == 12) {
         direction = 1;
     }
     $.post({
@@ -13,7 +13,7 @@ function send_add_row() {
             "price": removeComma($('#a_price').val()),
             "direction": direction,
             "method": $('input[name="a_method"]:checked').val(),
-            "genre": genre,
+            "category": category,
             "temp": "False",
             "checked": "False",
         }
@@ -173,7 +173,7 @@ function reset_add_form() {
     $('#a_item').val('');
     $('#a_price').val('');
     $('input[name=a_method]').val([method_first]);
-    $('input[name=a_genre]').val([genre_first]);
+    $('input[name=a_category]').val([category_first]);
     $('#is-charge').prop('checked', false).change();
 
     // フォーカス
@@ -201,7 +201,7 @@ function draw_chart_container() {
         dataSum = 0;
         for (var i = 0; i < chartData.length; i++) {
             data = chartData[i].textContent.split(',');
-            chart.data.push({ genre: data[0], value: data[1] });
+            chart.data.push({ category: data[0], value: data[1] });
             dataSum += Number(data[1]);
         }
 
@@ -216,7 +216,7 @@ function draw_chart_container() {
         // Series設定
         var pieSeries = chart.series.push(new am4charts.PieSeries());
         pieSeries.dataFields.value = "value";
-        pieSeries.dataFields.category = "genre";
+        pieSeries.dataFields.category = "category";
         pieSeries.slices.template.strokeWidth = 0;
         pieSeries.labels.template.text = "{category}\n{value.value}円";
         pieSeries.slices.template.tooltipText = "{category}: {value.value}円 ({value.percent.formatNumber('#.')}%)";

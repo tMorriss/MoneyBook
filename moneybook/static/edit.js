@@ -8,7 +8,7 @@ function send_update_row() {
             "price": removeComma($('#price').val()),
             "direction": $('input[name="direction"]:checked').val(),
             "method": $('input[name="method"]:checked').val(),
-            "genre": $('input[name="genre"]:checked').val(),
+            "category": $('input[name="category"]:checked').val(),
             "temp": $('input[name="temp"]:checked').val(),
             "checked": $('input[name="checked"]:checked').val(),
         }

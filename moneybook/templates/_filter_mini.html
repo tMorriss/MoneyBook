@@ -61,14 +61,14 @@
                 </tr>
                 <tr>
                     <td>
-                        {% for g in first_genres %}
+                        {% for g in first_categories %}
                         <input type="checkbox" class="check_filter" onChange="apply_filter()" name="filter-class[]"
                             id="class-{{ g.pk }}" value="{{ g.pk }}" onfocus="addBlueFocus('#lbl_class-{{ g.pk }}')"
                             onblur="removeBlueFocus('#lbl_class-{{ g.pk }}')" checked>
                         <label for="class-{{ g.pk }}" id="lbl_class-{{ g.pk }}">{{ g.name }}</label>
                         {% endfor %}
                         <br>
-                        {% for g in latter_genres %}
+                        {% for g in latter_categories %}
                         <input type="checkbox" class="check_filter" onChange="apply_filter()" name="filter-class[]"
                             id="class-{{ g.pk }}" value="{{ g.pk }}" onfocus="addBlueFocus('#lbl_class-{{ g.pk }}')"
                             onblur="removeBlueFocus('#lbl_class-{{ g.pk }}')" checked>';

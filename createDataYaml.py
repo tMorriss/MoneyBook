@@ -19,6 +19,6 @@ for i_row in range(len(result)):
     result_str += "    temp: " + str(result.iat[i_row, 4]) + "\n"
     result_str += "    checked: " + str(result.iat[i_row, 5]) + "\n"
     result_str += "    direction_id: " + str(result.iat[i_row, 6]) + "\n"
-    result_str += "    genre_id: " + str(result.iat[i_row, 7]) + "\n"
+    result_str += "    category_id: " + str(result.iat[i_row, 7]) + "\n"
     result_str += "    method_id: " + str(result.iat[i_row, 8]) + "\n"
 print(result_str)

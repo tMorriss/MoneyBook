@@ -65,10 +65,10 @@ for i_row in range(len(result)):
 result_str += "\n"
 
 # ジャンル
-query = "SELECT * FROM moneybook_genre ORDER BY id"
+query = "SELECT * FROM moneybook_category ORDER BY id"
 result = pd.read_sql(query, con)
 for i_row in range(len(result)):
-    result_str += "- model: moneybook.Genre\n"
+    result_str += "- model: moneybook.Category\n"
     result_str += "  pk: " + str(result.iat[i_row, 0]) + "\n"
     result_str += "  fields:\n"
     result_str += "    name: " + str(result.iat[i_row, 1]) + "\n"

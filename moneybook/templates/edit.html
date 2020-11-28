@@ -63,15 +63,15 @@
             <tr>
                 <th>分類</th>
                 <td class="radio-green">
-                    {% for g in first_genres %}
-                    <input type="radio" name="genre" value="{{ g.pk }}" id="genre-{{ g.pk }}" {% if g == data.genre %}
-                        checked{% endif %} onkeypress="key_press_update(event.keyCode)">
-                    <label for="genre-{{ g.pk }}">{{ g.name }}</label>
+                    {% for g in first_categories %}
+                    <input type="radio" name="category" value="{{ g.pk }}" id="category-{{ g.pk }}"
+                        {% if g == data.category %} checked{% endif %} onkeypress="key_press_update(event.keyCode)">
+                    <label for="category-{{ g.pk }}">{{ g.name }}</label>
                     {% endfor %}
-                    {% for g in latter_genres %}
-                    <input type="radio" name="genre" value="{{ g.pk }}" id="genre-{{ g.pk }}" {% if g == data.genre %}
-                        checked{% endif %} onkeypress="key_press_update(event.keyCode)">
-                    <label for="genre-{{ g.pk }}">{{ g.name }}</label>
+                    {% for g in latter_categories %}
+                    <input type="radio" name="category" value="{{ g.pk }}" id="category-{{ g.pk }}"
+                        {% if g == data.category %} checked{% endif %} onkeypress="key_press_update(event.keyCode)">
+                    <label for="category-{{ g.pk }}">{{ g.name }}</label>
                     {% endfor %}
                 </td>
             </tr>

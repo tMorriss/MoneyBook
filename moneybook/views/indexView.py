@@ -2,7 +2,7 @@ from django.conf import settings
 from django.shortcuts import render
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
-from moneybook.models import Direction, Method, Genre, Data
+from moneybook.models import Direction, Method, Category, Data
 from moneybook.models import InOutBalance, SeveralCosts
 
 
@@ -44,8 +44,8 @@ def index_month(request, year, month):
         'directions': Direction.list(),
         'methods': methods,
         'unused_methods': Method.unUsedList(),
-        'first_genres': Genre.first_list(),
-        'latter_genres': Genre.latter_list(),
+        'first_categories': Category.first_list(),
+        'latter_categories': Category.latter_list(),
     }
     return render(request, 'index.html', content)
 
@@ -106,13 +106,14 @@ def index_chart_data(request):
     # 今月のデータ
     monthly_data = get_monthly_data_from_get_parameter(request.GET)
     # ジャンルごとの支出
-    positive_genres_outgo = {}
-    for g in Genre.list():
+    positive_categories_outgo = {}
+    for g in Category.list():
         if g.show_order >= 0:
-            d = Data.getGenreData(monthly_data, g.pk)
-            positive_genres_outgo[g] = Data.getOutgoSum(d) - Data.getTempSum(d)
+            d = Data.getCategoryData(monthly_data, g.pk)
+            positive_categories_outgo[g] = Data.getOutgoSum(
+                d) - Data.getTempSum(d)
     content = {
-        'genres_outgo': positive_genres_outgo,
+        'categories_outgo': positive_categories_outgo,
     }
     return render(request, '_chart_container_data.html', content)
 

@@ -8,7 +8,7 @@ function send_add_row() {
             "price": removeComma($('#a_price').val()),
             "direction": $('input[name="a_direction"]:checked').val(),
             "method": $('input[name="a_method"]:checked').val(),
-            "genre": $('input[name="a_genre"]:checked').val(),
+            "category": $('input[name="a_category"]:checked').val(),
             "temp": $('input[name="a_temp"]:checked').val(),
             "checked": "False",
         }
@@ -89,7 +89,7 @@ function send_suica_charge() {
             "price": removeComma($('#s_price').val()),
             "direction": 2,
             "method": 2,
-            "genre": 4,
+            "category": 4,
             "temp": "False",
             "checked": "False",
         }
@@ -126,7 +126,7 @@ function reset_add_form() {
     $('#a_price').val('');
     $('input[name=a_direction]').val([direction_first]);
     $('input[name=a_method]').val([method_first]);
-    $('input[name=a_genre]').val([genre_first]);
+    $('input[name=a_category]').val([category_first]);
     $('input[name=a_temp]').val(["False"]);
 }
 function reset_for_shortcut() {
