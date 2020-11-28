@@ -139,7 +139,7 @@ class Data(models.Model):
     def getNormalData(data):
         return data.exclude(genre=9).exclude(genre=10)
 
-    # 使った固定費
+    # 使った生活費
     def getFixedData(data):
         fixedGenres = [1, 2, 7]
         return data.filter(genre__in=fixedGenres)

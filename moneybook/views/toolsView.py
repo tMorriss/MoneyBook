@@ -17,7 +17,7 @@ def tools(request):
     credit_checked_date = CreditCheckedDate.getAll()
     # 銀行残高
     bank_balance = BankBalance.getAll()
-    # 固定費目標額
+    # 生活費目標額
     fixed_cost_mark = SeveralCosts.getFixedCostMark()
     # 現在銀行
     banks = BankBalance.getAll()

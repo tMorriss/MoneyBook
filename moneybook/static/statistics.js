@@ -29,7 +29,7 @@ function drawGraph() {
         series.strokeWidth = 3;
         series.dataFields.valueY = "fixed";
         series.dataFields.categoryX = "month";
-        series.name = "固定費"
+        series.name = "生活費"
 
         let bullet = series.bullets.push(new am4charts.Bullet());
         bullet.fill = series.stroke;
