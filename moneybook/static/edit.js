@@ -1,4 +1,4 @@
-function send_update_row() {
+function sendUpdateRow() {
     $.post({
         url: edit_url,
         data: {
@@ -16,17 +16,17 @@ function send_update_row() {
         window.location.href = document.referrer;
     }).fail(() => {
         // メッセージ表示
-        show_result_msg("Error...", empty);
+        showResultMsg("Error...", empty);
     });
 }
-function key_press_update(code) {
+function keyPressUpdate(code) {
     // エンターキーなら
     if (code === 13) {
-        send_update_row();
+        sendUpdateRow();
     }
 }
 
-function send_delete_row() {
+function sendDeleteRow() {
     $.post({
         url: delete_url,
         data: {
@@ -37,6 +37,6 @@ function send_delete_row() {
         window.location.href = document.referrer;
     }).fail(() => {
         // メッセージ表示
-        show_result_msg("Error...", empty);
+        showResultMsg("Error...", empty);
     });
 }

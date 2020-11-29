@@ -1,7 +1,4 @@
-function separate(num) {
-    return String(num).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
-}
-function get_transaction() {
+function getTransaction() {
     $.get({
         url: data_table_url,
     }).done((data) => {
@@ -9,7 +6,7 @@ function get_transaction() {
     })
 }
 
-function send_paypay_cacheback() {
+function sendPaypayCacheback() {
     $.post({
         url: add_url,
         data: {
@@ -24,22 +21,22 @@ function send_paypay_cacheback() {
             "checked": "False",
         }
     }).done(() => {
-        show_result_msg("Success!", get_transaction);
-        get_payapy_balance();
-        reset_form();
+        showResultMsg("Success!", getTransaction);
+        getPaypayBalance();
+        resetForm();
     }).fail(() => {
         // メッセージ表示
-        show_result_msg("Error...", empty);
+        showResultMsg("Error...", empty);
     });
 }
-function key_press_send(code) {
+function keyPressSend(code) {
     // エンターキーなら実行
     if (code === 13) {
-        send_paypay_cacheback();
+        sendPaypayCacheback();
     }
 }
 
-function update_cacheback_date() {
+function updateCachebackDate() {
     $.post({
         url: cacheback_checked_url,
         data: {
@@ -50,18 +47,18 @@ function update_cacheback_date() {
             "pk": 1,
         }
     }).done(() => {
-        show_result_msg("Success!", get_transaction);
-        reset_form();
+        showResultMsg("Success!", getTransaction);
+        resetForm();
     });
 }
-function key_press_cacheback(code) {
+function keyPressCacheback(code) {
     // エンターキーなら実行
     if (code === 13) {
-        update_cacheback_date();
+        updateCachebackDate();
     }
 }
 
-function get_payapy_balance() {
+function getPaypayBalance() {
     $.get({
         url: paypay_balance_url
     }).done((data) => {
@@ -70,7 +67,7 @@ function get_payapy_balance() {
     });
 }
 
-function reset_form() {
+function resetForm() {
     // フォームをリセット
     $('#s_day').val('');
     $('#s_price').val('');

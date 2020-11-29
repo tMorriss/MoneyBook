@@ -5,30 +5,30 @@
         <tr>
             <th>日付</th>
             <td>
-                <input type="text" id="a_year" style="width:6ex" class="righter"
-                    onkeypress="key_press_add(event.keyCode)" value="{{ year }}">年
+                <input type="text" id="a_year" style="width:6ex" class="righter" onkeypress="keyPressAdd(event.keyCode)"
+                    value="{{ year }}">年
                 <input type="text" id="a_month" style="width:5ex" class="righter"
-                    onkeypress="key_press_add(event.keyCode)" value="{{ month }}">月
-                <input type="text" id="a_day" style="width:5ex" class="righter"
-                    onkeypress="key_press_add(event.keyCode)" autofocus>日
+                    onkeypress="keyPressAdd(event.keyCode)" value="{{ month }}">月
+                <input type="text" id="a_day" style="width:5ex" class="righter" onkeypress="keyPressAdd(event.keyCode)"
+                    autofocus>日
             </td>
         </tr>
         <tr>
             <th>品目</th>
-            <td><input type="text" name="a_item" id="a_item" style="width:30ex"
-                    onkeypress="key_press_add(event.keyCode)"></td>
+            <td><input type="text" name="a_item" id="a_item" style="width:30ex" onkeypress="keyPressAdd(event.keyCode)">
+            </td>
         </tr>
         <tr>
             <th>金額</th>
             <td><input type="text" name="a_price" id="a_price" style="width:10ex" class="righter"
-                    onkeypress="key_press_add(event.keyCode)">円</td>
+                    onkeypress="keyPressAdd(event.keyCode)">円</td>
         </tr>
         <tr>
             <th>支払い方法</th>
             <td class="radio-green">
                 {% for m in methods %}
                 <input type="radio" value="{{ m.pk }}" name="a_method" id="a_method-{{ m.pk }}"
-                    {% if m == methods.first %} checked{% endif %} onkeypress="key_press_add(event.keyCode)"
+                    {% if m == methods.first %} checked{% endif %} onkeypress="keyPressAdd(event.keyCode)"
                     onfocus="addBlueFocus('#lbl_a_method-{{ m.pk }}')"
                     onblur="removeBlueFocus('#lbl_a_method-{{ m.pk }}')">
                 <label for="a_method-{{ m.pk }}" id="lbl_a_method-{{ m.pk }}">{{ m.name }}</label>
@@ -44,7 +44,7 @@
                             {% for g in first_categories %}
                             <input type="radio" value="{{ g.pk }}" name="a_category" id="a_category-{{ g.pk }}"
                                 {% if g == first_categories.first %} checked{% endif %}
-                                onkeypress="key_press_add(event.keyCode)"
+                                onkeypress="keyPressAdd(event.keyCode)"
                                 onfocus="addBlueFocus('#lbl_a_category-{{ g.pk }}')"
                                 onblur="removeBlueFocus('#lbl_a_category-{{ g.pk }}')">
                             <label for="a_category-{{ g.pk }}" id="lbl_a_category-{{ g.pk }}">{{ g.name }}</label>
@@ -55,7 +55,7 @@
                         <td>
                             {% for g in latter_categories %}
                             <input type="radio" value="{{ g.pk }}" name="a_category" id="a_category-{{ g.pk }}"
-                                onkeypress="key_press_add(event.keyCode)"
+                                onkeypress="keyPressAdd(event.keyCode)"
                                 onfocus="addBlueFocus('#lbl_a_category-{{ g.pk }}')"
                                 onblur="removeBlueFocus('#lbl_a_category-{{ g.pk }}')">
                             <label for="a_category-{{ g.pk }}" id="lbl_a_category-{{ g.pk }}">{{ g.name }}</label>
@@ -68,11 +68,11 @@
         <tr>
             <th>全額チャージ</th>
             <td class="radio-green">
-                <input type="checkbox" value="1" id="is-charge" onkeypress="key_press_add(event.keyCode)"
+                <input type="checkbox" value="1" id="is-charge" onkeypress="keyPressAdd(event.keyCode)"
                     onfocus="addBlueFocus('#lbl_is-charge')" onblur="removeBlueFocus('#lbl_is-charge')">
                 <label for="is-charge" id="lbl_is-charge">Yes</label>
             </td>
         </tr>
     </table>
-    <input type="button" value="追加" class="btn-apply" onclick="send_add_row()">
+    <input type="button" value="追加" class="btn-apply" onclick="sendAddRow()">
 </form>

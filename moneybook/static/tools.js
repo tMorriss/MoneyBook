@@ -1,23 +1,20 @@
-function separate(num) {
-    return String(num).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
-}
-function unseparate_value(elm) {
+function unseparateValue(elm) {
     $(elm).val(removeComma($(elm).val()));
 }
 
-function separate_value(elm) {
+function separateValue(elm) {
     $(elm).val(separate(Number(removeComma($(elm).val()))));
 }
 
-function separate_html(elm) {
+function separateHtml(elm) {
     $(elm).html(separate(Number(removeComma($(elm).html()))));
 }
 
-function select_value(elm) {
+function selectValue(elm) {
     $(elm).select();
 }
 
-function update_diff() {
+function updateDiff() {
     var written = Number(removeComma($("#written_balance").text()));
     var actual = Number(removeComma($("#actual_balance").val()));
 
@@ -30,30 +27,30 @@ function update_diff() {
         }
     }).done(() => {
         $("#balance_diff").text(value);
-        separate_value('#actual_balance')
-        separate_html("#balance_diff");
+        separateValue('#actual_balance')
+        separateHtml("#balance_diff");
     }).fail(() => {
         // メッセージ表示
-        show_result_msg("Error...", empty);
+        showResultMsg("Error...", empty);
     });
 }
-function key_press_diff(code) {
+function KeyPressDiff(code) {
     // エンターキーなら
     if (code === 13) {
-        update_diff();
+        updateDiff();
     }
 }
 
-function show_diff() {
+function showDiff() {
     var written = Number($("#written_balance").text().replace(",", ""));
     var actual = Number($("#actual_balance").val().replace(",", ""));
 
     var value = written - actual;
     $("#balance_diff").text(value);
-    separate_html("#balance_diff");
+    separateHtml("#balance_diff");
 }
 
-function get_checked_date() {
+function getCheckedDate() {
     $.get({
         url: checked_date_url,
     }).done((data) => {
@@ -70,7 +67,7 @@ function get_checked_date() {
             }
             var rowText = '<tr class="checked-date-row">';
             rowText += '<td>';
-            rowText += '<input type="button" class="btn-apply" value="' + dataJson[i].name + '" onclick="update_checked_date(' + dataJson[i].pk + ', ' + checkAll + ')">'
+            rowText += '<input type="button" class="btn-apply" value="' + dataJson[i].name + '" onclick="updateCheckedDate(' + dataJson[i].pk + ', ' + checkAll + ')">'
             rowText += '</td>';
             rowText += '<td>現在: ' + dataJson[i].year + '年' + dataJson[i].month + '月' + dataJson[i].day + '日</td>';
             rowText += '<td class="righter">' + separate(dataJson[i].balance) + '円</td>';
@@ -80,16 +77,16 @@ function get_checked_date() {
     })
 }
 
-function get_several_checked_date() {
+function getSeveralCheckedDate() {
     $.get({
         url: several_checked_date_url,
     }).done((data) => {
         $("#several-checked-date").html(data);
-        calculate_now_bank(false);
+        calculateNowBank(false);
     })
 }
 
-function update_checked_date(method_id, checkAll) {
+function updateCheckedDate(method_id, checkAll) {
     $.post({
         url: checked_date_url,
         data: {
@@ -101,15 +98,15 @@ function update_checked_date(method_id, checkAll) {
             "check_all": checkAll,
         }
     }).done(() => {
-        get_checked_date();
-        get_unchecked_transaction();
+        getCheckedDate();
+        getUncheckedTransaction();
     }).fail(() => {
         // メッセージ表示
-        show_result_msg("Error...", empty);
+        showResultMsg("Error...", empty);
     });
 }
 
-function update_several_checked_date(id) {
+function updateSeveralCheckedDate(id) {
     $.post({
         url: update_credit_checked_date_url,
         data: {
@@ -121,14 +118,14 @@ function update_several_checked_date(id) {
         }
     }).done(() => {
         // 現在銀行の計算も行う
-        calculate_now_bank(true);
+        calculateNowBank(true);
     }).fail(() => {
         // メッセージ表示
-        show_result_msg("Error...", empty);
+        showResultMsg("Error...", empty);
     });
 }
 
-function update_living_cost_mark() {
+function updateLivingCostMark() {
     $.post({
         url: update_living_cost_mark_url,
         data: {
@@ -139,13 +136,13 @@ function update_living_cost_mark() {
         location.reload();
     }).fail(() => {
         // メッセージ表示
-        show_result_msg("Error...", empty);
+        showResultMsg("Error...", empty);
     });
 }
-function key_press_living(code) {
+function keyPressLiving(code) {
     // エンターキーなら
     if (code === 13) {
-        update_living_cost_mark();
+        updateLivingCostMark();
     }
 }
 
@@ -160,14 +157,14 @@ function check(id) {
         // チェックした行を削除
         $("#unapproved-row-" + id).remove();
         // 現在銀行も更新
-        get_several_checked_date();
+        getSeveralCheckedDate();
     }).fail(() => {
         // メッセージ表示
-        show_result_msg("Error...", empty);
+        showResultMsg("Error...", empty);
     });
 }
 
-function get_unchecked_transaction() {
+function getUncheckedTransaction() {
     $.get({
         url: unchecked_transaction_url
     }).done((data) => {
@@ -175,7 +172,7 @@ function get_unchecked_transaction() {
     })
 }
 
-function calculate_now_bank(isAllUpdate) {
+function calculateNowBank(isAllUpdate) {
     $(".now_bank_credit").each(function (i, o) {
         if ($(".now_bank_credit").eq(i).val() == "") {
             $(".now_bank_credit").eq(i).val("0");
@@ -200,17 +197,17 @@ function calculate_now_bank(isAllUpdate) {
         document.activeElement.blur();
 
         if (isAllUpdate) {
-            get_several_checked_date();
+            getSeveralCheckedDate();
         }
     }).fail(() => {
         // メッセージ表示
-        show_result_msg("Error...", empty);
+        showResultMsg("Error...", empty);
     });
 }
 
-function key_press_now_bank(code) {
+function keyPressNowBank(code) {
     // エンターキーなら
     if (code === 13) {
-        calculate_now_bank(true);
+        calculateNowBank(true);
     }
 }

@@ -21,7 +21,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td><input type="button" class="btn-apply" value="更新" onclick="move_month()"></td>
+                    <td><input type="button" class="btn-apply" value="更新" onclick="moveMonth()"></td>
                 </tr>
             </table>
         </td>
@@ -30,12 +30,12 @@
         <td>
             <table class="radio-green fcs-blue">
                 <tr>
-                    <td><input type="text" oninput="apply_filter()" id="filter-item" size="45" value="{{ item }}"></td>
+                    <td><input type="text" oninput="applyFilter()" id="filter-item" size="45" value="{{ item }}"></td>
                 </tr>
                 <tr>
                     <td>
                         {% for d in directions %}
-                        <input type="checkbox" class="check_filter" onChange="apply_filter()" name="filter-direction[]"
+                        <input type="checkbox" class="check_filter" onChange="applyFilter()" name="filter-direction[]"
                             id="direction-{{ d.pk }}" value="{{ d.pk }}"
                             onfocus="addBlueFocus('#lbl_direction-{{ d.pk }}')"
                             onblur="removeBlueFocus('#lbl_direction-{{ d.pk }}')" checked>
@@ -46,13 +46,13 @@
                 <tr>
                     <td>
                         {% for m in methods %}
-                        <input type="checkbox" class="check_filter" onChange="apply_filter()" name="filter-method[]"
+                        <input type="checkbox" class="check_filter" onChange="applyFilter()" name="filter-method[]"
                             id="method-{{ m.pk }}" value="{{ m.pk }}" onfocus="addBlueFocus('#lbl_method-{{ m.pk }}')"
                             onblur="removeBlueFocus('#lbl_method-{{ m.pk }}')" checked>
                         <label for="method-{{ m.pk }}" id="lbl_method-{{ m.pk }}">{{ m.name }}</label>
                         {% endfor %}
                         {% for m in unused_methods %}
-                        <input type="checkbox" class="check_filter" onChange="apply_filter()" name="filter-method[]"
+                        <input type="checkbox" class="check_filter" onChange="applyFilter()" name="filter-method[]"
                             id="method-{{ m.pk }}" value="{{ m.pk }}" onfocus="addBlueFocus('#lbl_method-{{ m.pk }}')"
                             onblur="removeBlueFocus('#lbl_method-{{ m.pk }}')" checked>
                         <label for="method-{{ m.pk }}" id="lbl_method-{{ m.pk }}">{{ m.name }}</label>
@@ -62,14 +62,14 @@
                 <tr>
                     <td>
                         {% for g in first_categories %}
-                        <input type="checkbox" class="check_filter" onChange="apply_filter()" name="filter-class[]"
+                        <input type="checkbox" class="check_filter" onChange="applyFilter()" name="filter-class[]"
                             id="class-{{ g.pk }}" value="{{ g.pk }}" onfocus="addBlueFocus('#lbl_class-{{ g.pk }}')"
                             onblur="removeBlueFocus('#lbl_class-{{ g.pk }}')" checked>
                         <label for="class-{{ g.pk }}" id="lbl_class-{{ g.pk }}">{{ g.name }}</label>
                         {% endfor %}
                         <br>
                         {% for g in latter_categories %}
-                        <input type="checkbox" class="check_filter" onChange="apply_filter()" name="filter-class[]"
+                        <input type="checkbox" class="check_filter" onChange="applyFilter()" name="filter-class[]"
                             id="class-{{ g.pk }}" value="{{ g.pk }}" onfocus="addBlueFocus('#lbl_class-{{ g.pk }}')"
                             onblur="removeBlueFocus('#lbl_class-{{ g.pk }}')" checked>';
                         <label for="class-{{ g.pk }}" id="lbl_class-{{ g.pk }}">{{ g.name }}</label>
@@ -81,8 +81,8 @@
     </tr>
     <tr>
         <td>
-            <input type="button" value="全選択" class="btn-apply" onclick="select_all()">
-            <input type="button" value="全解除" class="btn-cancel" onclick="clear_filter()">
+            <input type="button" value="全選択" class="btn-apply" onclick="selectAll()">
+            <input type="button" value="全解除" class="btn-cancel" onclick="clearFilter()">
         </td>
     </tr>
 </table>
