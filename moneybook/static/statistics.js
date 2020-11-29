@@ -10,13 +10,18 @@ function drawGraph() {
         let monthIoList = $("#month_io_list li");
         monthData = {};
         for (var i = 0; i < monthIoList.length; i++) {
-            data = monthIoList[i].textContent.split(',');
+            let data = monthIoList[i].textContent.split(',');
             monthData[data[0]] = { month: data[0], income: data[1], outgo: data[2] };
         }
         let fixedCostsList = $("#fixed_costs li");
         for (var i = 0; i < fixedCostsList.length; i++) {
-            data = fixedCostsList[i].textContent.split(',');
+            let data = fixedCostsList[i].textContent.split(',');
             monthData[data[0]]["fixed"] = data[1];
+        }
+        let salaryList = $("#salary li");
+        for (var i = 0; i < salaryList.length; i++) {
+            let data = salaryList[i].textContent.split(',');
+            monthData[data[0]]["salary"] = data[1];
         }
         chart.data = [];
         for (let i in monthData) {
@@ -24,19 +29,31 @@ function drawGraph() {
         }
         drawIOGraph(chart);
 
-        let series = chart.series.push(new am4charts.LineSeries());
-        series.stroke = am4core.color("#0f0");
-        series.strokeWidth = 3;
-        series.dataFields.valueY = "fixed";
-        series.dataFields.categoryX = "month";
-        series.name = "生活費"
+        let livingSeries = chart.series.push(new am4charts.LineSeries());
+        livingSeries.stroke = am4core.color("#0f0");
+        livingSeries.strokeWidth = 3;
+        livingSeries.dataFields.valueY = "fixed";
+        livingSeries.dataFields.categoryX = "month";
+        livingSeries.name = "生活費";
+        let livingBullet = livingSeries.bullets.push(new am4charts.Bullet());
+        livingBullet.fill = livingSeries.stroke;
+        livingBullet.tooltipText = livingSeries.name + ": {valueY}円";
+        let livingCircle = livingBullet.createChild(am4core.Circle);
+        livingCircle.radius = 5;
+        livingCircle.fill = livingSeries.stroke;
 
-        let bullet = series.bullets.push(new am4charts.Bullet());
-        bullet.fill = series.stroke;
-        bullet.tooltipText = series.name + ": {valueY}円";
-        let circle = bullet.createChild(am4core.Circle);
-        circle.radius = 5;
-        circle.fill = series.stroke;
+        let salarySeries = chart.series.push(new am4charts.LineSeries());
+        salarySeries.stroke = am4core.color("#ff0");
+        salarySeries.strokeWidth = 3;
+        salarySeries.dataFields.valueY = "salary";
+        salarySeries.dataFields.categoryX = "month";
+        salarySeries.name = "給与";
+        let salaryBullet = salarySeries.bullets.push(new am4charts.Bullet());
+        salaryBullet.fill = salarySeries.stroke;
+        salaryBullet.tooltipText = salarySeries.name + ": {valueY}円";
+        let salaryCircle = salaryBullet.createChild(am4core.Circle);
+        salaryCircle.radius = 5;
+        salaryCircle.fill = salarySeries.stroke;
 
         chart.legend = new am4charts.Legend();
         chart.legend.position = "bottom";

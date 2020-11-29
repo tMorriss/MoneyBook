@@ -79,6 +79,10 @@
         {% for fc in fixed_costs %}<li>{{ fc.label }}月,{{ fc.value }}</li>
         {% endfor %}
     </ul>
+    <ul id="salary" hidden>
+        {% for s in salary %}<li>{{ s.label }}月,{{ s.value }}</li>
+        {% endfor %}
+    </ul>
     <h3>インフラ</h3>
     <div id="lineplot_infra" class="graph-statistic"></div>
     <ul id="infra_costs" hidden>
