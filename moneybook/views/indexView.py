@@ -2,7 +2,7 @@ from django.conf import settings
 from django.shortcuts import render
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
-from moneybook.models import Direction, Method, Genre, Data
+from moneybook.models import Direction, Method, Category, Data
 from moneybook.models import InOutBalance, SeveralCosts
 
 
@@ -44,8 +44,8 @@ def index_month(request, year, month):
         'directions': Direction.list(),
         'methods': methods,
         'unused_methods': Method.unUsedList(),
-        'first_genres': Genre.first_list(),
-        'latter_genres': Genre.latter_list(),
+        'first_categories': Category.first_list(),
+        'latter_categories': Category.latter_list(),
     }
     return render(request, 'index.html', content)
 
@@ -77,12 +77,14 @@ def index_balance_statistic_mini(request):
     total_outgo = Data.getOutgoSum(Data.getNormalData(
         monthly_data)) - monthly_temp_and_deposit
 
-    fixed_data = Data.getFixedData(monthly_data)
-    fixed_outgo = Data.getOutgoSum(fixed_data) - Data.getTempSum(fixed_data)
+    living_data = Data.getLivingData(monthly_data)
+    living_outgo = Data.getOutgoSum(living_data) - Data.getTempSum(living_data)
 
     variable_data = Data.getVariableData(monthly_data)
     variable_outgo = Data.getOutgoSum(
         variable_data) - Data.getTempSum(variable_data)
+
+    monthly_data_without_inmove = Data.getDataWithoutInmove(monthly_data)
 
     content = {
         'total_balance':
@@ -92,11 +94,11 @@ def index_balance_statistic_mini(request):
         'total_outgo': total_outgo,
         'total_inout': total_income - total_outgo,
         'variable_outgo': variable_outgo,
-        'fixed_outgo': fixed_outgo,
-        'variable_remain': total_income - max(SeveralCosts.getFixedCostMark(),
-                                              fixed_outgo) - variable_outgo,
-        'all_income': Data.getIncomeSum(monthly_data),
-        'all_outgo': Data.getOutgoSum(monthly_data),
+        'living_outgo': living_outgo,
+        'variable_remain': total_income - max(SeveralCosts.getLivingCostMark(),
+                                              living_outgo) - variable_outgo,
+        'all_income': Data.getIncomeSum(monthly_data_without_inmove),
+        'all_outgo': Data.getOutgoSum(monthly_data_without_inmove),
         'methods_monthly_iob': methods_monthly_iob,
     }
     return render(request, '_balance_statisticMini.html', content)
@@ -106,13 +108,14 @@ def index_chart_data(request):
     # 今月のデータ
     monthly_data = get_monthly_data_from_get_parameter(request.GET)
     # ジャンルごとの支出
-    positive_genres_outgo = {}
-    for g in Genre.list():
+    positive_categories_outgo = {}
+    for g in Category.list():
         if g.show_order >= 0:
-            d = Data.getGenreData(monthly_data, g.pk)
-            positive_genres_outgo[g] = Data.getOutgoSum(d) - Data.getTempSum(d)
+            d = Data.getCategoryData(monthly_data, g.pk)
+            positive_categories_outgo[g] = Data.getOutgoSum(
+                d) - Data.getTempSum(d)
     content = {
-        'genres_outgo': positive_genres_outgo,
+        'categories_outgo': positive_categories_outgo,
     }
     return render(request, '_chart_container_data.html', content)
 

@@ -5,7 +5,7 @@ from django.views import View
 from datetime import date, datetime
 from moneybook.models import Method, Data, SeveralCosts, CheckedDate
 from moneybook.models import CreditCheckedDate, CachebackCheckedDate
-from moneybook.models import BankBalance, BalanceDate
+from moneybook.models import BankBalance
 import json
 
 
@@ -17,8 +17,8 @@ def tools(request):
     credit_checked_date = CreditCheckedDate.getAll()
     # 銀行残高
     bank_balance = BankBalance.getAll()
-    # 固定費目標額
-    fixed_cost_mark = SeveralCosts.getFixedCostMark()
+    # 生活費目標額
+    living_cost_mark = SeveralCosts.getLivingCostMark()
     # 現在銀行
     banks = BankBalance.getAll()
 
@@ -34,7 +34,7 @@ def tools(request):
         'actual_cash_balance': actual_cash_balance,
         'credit_checked_date': credit_checked_date,
         'bank_balance': bank_balance,
-        'fixed_cost_mark': fixed_cost_mark,
+        'living_cost_mark': living_cost_mark,
         'banks': banks,
     }
     return render(request, "tools.html", content)
@@ -59,7 +59,6 @@ def update_actual_cash(request):
 
 class CheckedDataView(View):
     def get(self, request, *args, **kwargs):
-        now = datetime.now()
         # 全データ
         all_data = Data.getAllData()
         # 支払い方法リスト
@@ -71,16 +70,16 @@ class CheckedDataView(View):
             # 銀行はチェック済みだけ
             if m.pk == 2:
                 d = Data.getCheckedData(d)
-            methods_bd.append(BalanceDate(m, Data.getIncomeSum(
-                d) - Data.getOutgoSum(d), CheckedDate.get(m.pk).date))
+            methods_bd.append({
+                'pk': m.pk,
+                'name': m.name,
+                'balance': Data.getIncomeSum(d) - Data.getOutgoSum(d),
+                'year': CheckedDate.get(m.pk).date.year,
+                'month': CheckedDate.get(m.pk).date.month,
+                'day': CheckedDate.get(m.pk).date.day
+            })
 
-        content = {
-            'year': now.year,
-            'month': now.month,
-            'day': now.day,
-            'methods_bd': methods_bd,
-        }
-        return render(request, "_checked_date.html", content)
+        return HttpResponse(json.dumps(methods_bd))
 
     def post(self, request, *args, **kwargs):
         if "year" not in request.POST or "month" not in request.POST \
@@ -198,7 +197,7 @@ def update_cacheback_checked_date(request):
     return HttpResponse(json.dumps({"message": "success"}))
 
 
-def update_fixed_cost_mark(request):
+def update_living_cost_mark(request):
     if "price" not in request.POST:
         return HttpResponseBadRequest(
             json.dumps({"message": "missing parameter"})
@@ -211,7 +210,7 @@ def update_fixed_cost_mark(request):
             json.dumps({"message": "price must be int"})
         )
 
-    SeveralCosts.setFixedCostMark(price)
+    SeveralCosts.setLivingCostMark(price)
     return HttpResponse(json.dumps({"message": "success"}))
 
 

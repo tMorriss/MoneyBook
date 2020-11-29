@@ -1,7 +1,7 @@
-function send_add_row() {
-    genre = $('input[name="a_genre"]:checked').val();
+function sendAddRow() {
+    category = $('input[name="a_category"]:checked').val();
     direction = 2;
-    if (genre == 12) {
+    if (category == 12) {
         direction = 1;
     }
     $.post({
@@ -13,7 +13,7 @@ function send_add_row() {
             "price": removeComma($('#a_price').val()),
             "direction": direction,
             "method": $('input[name="a_method"]:checked').val(),
-            "genre": genre,
+            "category": category,
             "temp": "False",
             "checked": "False",
         }
@@ -31,30 +31,30 @@ function send_add_row() {
                     "after_method": $('input[name="a_method"]:checked').val(),
                 }
             }).done(() => {
-                update_success();
+                updateSuccess();
             }).fail(() => {
                 // メッセージ表示
-                show_result_msg("Error...", empty);
+                showResultMsg("Error...", empty);
                 // 抜ける
                 return;
             });
         }
         else {
-            update_success();
+            updateSuccess();
         }
     }).fail(() => {
         // メッセージ表示
-        show_result_msg("Error...", empty);
+        showResultMsg("Error...", empty);
     });
 }
-function key_press_add(code) {
+function keyPressAdd(code) {
     // エンターキーなら実行
     if (code === 13) {
-        send_add_row();
+        sendAddRow();
     }
 }
 
-function move_month() {
+function moveMonth() {
     year = document.getElementById("jump_year").value;
     month = document.getElementById("jump_month").value;
     window.location.href = index_url + year + "/" + month;
@@ -62,11 +62,11 @@ function move_month() {
 function key_press_move(code) {
     //エンターキーなら
     if (code === 13) {
-        move_month();
+        moveMonth();
     }
 }
 
-function update_data() {
+function updateData() {
     $.when(
         $.get({
             url: data_table_url,
@@ -76,7 +76,7 @@ function update_data() {
             }
         }).done((data) => {
             $('#transactions').html(data);
-            apply_filter();
+            applyFilter();
         }),
 
         $.get({
@@ -100,25 +100,25 @@ function update_data() {
         })
     ).done(() => {
         // 円グラフ再描画
-        draw_chart_container();
+        drawChartContainer();
     });
 }
 
-function apply_all(elements, status) {
+function applyAll(elements, status) {
     for (var i = 0; i < elements.length; i++) {
         elements[i].checked = status;
     }
-    apply_filter();
+    applyFilter();
 }
-function select_all() {
+function selectAll() {
     var elements = $('.check_filter');
-    apply_all(elements, true);
+    applyAll(elements, true);
 }
-function clear_filter() {
+function clearFilter() {
     var elements = $('[name="filter-class[]"]');
-    apply_all(elements, false);
+    applyAll(elements, false);
 }
-function apply_filter() {
+function applyFilter() {
     // 検索ワードを取得
     var keyword = $('#filter-item').val();
     // 各チェックボックスを取得
@@ -167,27 +167,27 @@ function apply_filter() {
     }
 }
 
-function reset_add_form() {
+function resetAddForm() {
     // フォームをリセット
     $('#a_day').val('');
     $('#a_item').val('');
     $('#a_price').val('');
     $('input[name=a_method]').val([method_first]);
-    $('input[name=a_genre]').val([genre_first]);
+    $('input[name=a_category]').val([category_first]);
     $('#is-charge').prop('checked', false).change();
 
     // フォーカス
     $('#a_day').focus();
 }
 
-function update_success() {
+function updateSuccess() {
     // データ更新
-    update_data();
+    updateData();
     // メッセージ表示
-    show_result_msg("Success!", reset_add_form);
+    showResultMsg("Success!", resetAddForm);
 }
 
-function draw_chart_container() {
+function drawChartContainer() {
     am4core.ready(function () {
         // テーマ
         am4core.useTheme(am4themes_animated);
@@ -201,7 +201,7 @@ function draw_chart_container() {
         dataSum = 0;
         for (var i = 0; i < chartData.length; i++) {
             data = chartData[i].textContent.split(',');
-            chart.data.push({ genre: data[0], value: data[1] });
+            chart.data.push({ category: data[0], value: data[1] });
             dataSum += Number(data[1]);
         }
 
@@ -216,7 +216,7 @@ function draw_chart_container() {
         // Series設定
         var pieSeries = chart.series.push(new am4charts.PieSeries());
         pieSeries.dataFields.value = "value";
-        pieSeries.dataFields.category = "genre";
+        pieSeries.dataFields.category = "category";
         pieSeries.slices.template.strokeWidth = 0;
         pieSeries.labels.template.text = "{category}\n{value.value}円";
         pieSeries.slices.template.tooltipText = "{category}: {value.value}円 ({value.percent.formatNumber('#.')}%)";

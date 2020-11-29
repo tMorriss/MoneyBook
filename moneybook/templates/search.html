@@ -75,17 +75,17 @@
             <tr>
                 <th>分類</th>
                 <td class="radio-green">
-                    {% for g in first_genres %}
-                    <input type="checkbox" name="genre" value="{{ g.pk }}" id="genre-{{ g.pk }}" {% if g.pk in genre %}
-                        checked{% endif %} onfocus="addBlueFocus('#lbl_genre-{{ g.pk }}')"
-                        onblur="removeBlueFocus('#lbl_genre-{{ g.pk }}')">
-                    <label for="genre-{{ g.pk }}" id="lbl_genre-{{ g.pk }}">{{ g.name }}</label>
+                    {% for g in first_categories %}
+                    <input type="checkbox" name="category" value="{{ g.pk }}" id="category-{{ g.pk }}"
+                        {% if g.pk in category %} checked{% endif %} onfocus="addBlueFocus('#lbl_category-{{ g.pk }}')"
+                        onblur="removeBlueFocus('#lbl_category-{{ g.pk }}')">
+                    <label for="category-{{ g.pk }}" id="lbl_category-{{ g.pk }}">{{ g.name }}</label>
                     {% endfor %}
-                    {% for g in latter_genres %}
-                    <input type="checkbox" name="genre" value="{{ g.pk }}" id="genre-{{ g.pk }}" {% if g.pk in genre %}
-                        checked{% endif %} onfocus="addBlueFocus('#lbl_genre-{{ g.pk }}')"
-                        onblur="removeBlueFocus('#lbl_genre-{{ g.pk }}')">
-                    <label for="genre-{{ g.pk }}" id="lbl_genre-{{ g.pk }}">{{ g.name }}</label>
+                    {% for g in latter_categories %}
+                    <input type="checkbox" name="category" value="{{ g.pk }}" id="category-{{ g.pk }}"
+                        {% if g.pk in category %} checked{% endif %} onfocus="addBlueFocus('#lbl_category-{{ g.pk }}')"
+                        onblur="removeBlueFocus('#lbl_category-{{ g.pk }}')">
+                    <label for="category-{{ g.pk }}" id="lbl_category-{{ g.pk }}">{{ g.name }}</label>
                     {% endfor %}
                 </td>
             </tr>

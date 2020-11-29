@@ -13,7 +13,8 @@ def statistics_month(request, year):
     before_balances = []
     infra_costs = []
     food_costs = []
-    fixed_costs = []
+    living_costs = []
+    salary = []
     for i_month in range(len(month_list)):
         monthly_data = Data.getMonthData(year, month_list[i_month])
         monthly_normal_data = Data.getNormalData(monthly_data)
@@ -47,13 +48,19 @@ def statistics_month(request, year):
             InfraCost(month_list[i_month], e + g + w / 2, e, g, w / 2))
 
         food_costs.append(LabelValue(
-            month_list[i_month], Data.getFoodCosts(monthly_data))
+            month_list[i_month],
+            Data.getFoodCosts(monthly_data))
         )
 
-        fixed_costs.append(LabelValue(
+        living_costs.append(LabelValue(
             month_list[i_month],
-            Data.getOutgoSum(Data.getFixedData(monthly_data)))
+            Data.getOutgoSum(Data.getLivingData(monthly_data)))
         )
+
+        salary.append(LabelValue(
+            month_list[i_month],
+            Data.getIncomeSum(Data.getKeywordData(monthly_data, "給与"))
+        ))
 
     content = {
         'app_name': settings.APP_NAME,
@@ -65,7 +72,8 @@ def statistics_month(request, year):
         'before_balance': before_balances,
         'infra_costs': infra_costs,
         'food_costs': food_costs,
-        'fixed_costs': fixed_costs,
+        'living_costs': living_costs,
+        'salary': salary
     }
     return render(request, 'statistics.html', content)
 

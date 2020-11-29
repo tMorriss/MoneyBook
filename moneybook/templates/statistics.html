@@ -75,8 +75,12 @@
         {% for m in month_io_list %}<li>{{ m.label }}月,{{ m.income }},{{ m.outgo }}</li>
         {% endfor %}
     </ul>
-    <ul id="fixed_costs" hidden>
-        {% for fc in fixed_costs %}<li>{{ fc.label }}月,{{ fc.value }}</li>
+    <ul id="living_costs" hidden>
+        {% for fc in living_costs %}<li>{{ fc.label }}月,{{ fc.value }}</li>
+        {% endfor %}
+    </ul>
+    <ul id="salary" hidden>
+        {% for s in salary %}<li>{{ s.label }}月,{{ s.value }}</li>
         {% endfor %}
     </ul>
     <h3>インフラ</h3>

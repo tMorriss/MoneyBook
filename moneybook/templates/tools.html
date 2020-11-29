@@ -10,17 +10,17 @@
     update_actual_cash_url = "{% url 'moneybook:update_actual_cash' %}";
     checked_date_url = "{% url 'moneybook:checked_date' %}";
     several_checked_date_url = "{% url 'moneybook:several_checked_date' %}";
-    update_fixed_cost_mark_url = "{% url 'moneybook:update_fixed_cost_mark' %}";
+    update_living_cost_mark_url = "{% url 'moneybook:update_living_cost_mark' %}";
     edit_check_url = "{% url 'moneybook:edit_check' %}";
     update_now_bank_url = "{% url 'moneybook:update_now_bank' %}";
     unchecked_transaction_url = "{% url 'moneybook:unchecked_transaction' %}";
     update_credit_checked_date_url = "{% url 'moneybook:update_credit_checked_date' %}";
 
     window.onload = function () {
-        show_diff();
-        get_checked_date();
-        get_several_checked_date();
-        get_unchecked_transaction();
+        showDiff();
+        getCheckedDate();
+        getSeveralCheckedDate();
+        getUncheckedTransaction();
     }
 </script>
 {% endblock %}
@@ -37,29 +37,37 @@
         <tr>
             <th>実際</th>
             <td><input type="text" class="righter" id="actual_balance" style="width:10ex"
-                    onfocus="select_value('#actual_balance')" onblur="separate_value('#actual_balance')"
-                    onkeypress="key_press_diff(event.keyCode)" value="{{ actual_cash_balance| intcomma }}"></td>
+                    onfocus="selectValue('#actual_balance')" onblur="separateValue('#actual_balance')"
+                    onkeypress="KeyPressDiff(event.keyCode)" value="{{ actual_cash_balance| intcomma }}"></td>
         </tr>
         <tr>
             <th>差額</th>
             <td id="balance_diff" class="righter"></td>
         </tr>
     </table>
-    <input type="button" class="btn-apply" value="計算" onclick="update_diff()"
-        onkeypress="key_press_diff(event.keyCode)">
+    <input type="button" class="btn-apply" value="計算" onclick="updateDiff()" onkeypress="KeyPressDiff(event.keyCode)">
 
-    <div id="checked-date"></div>
+    <h1>確認済み日付</h1>
+    <table class="tbl-common fcs-blue" id="checked-date">
+        <tr>
+            <td colspan="3">
+                <input type="text" style="width:6ex" class="righter" id="check_year" value="{{ year }}">年
+                <input type="text" style="width:5ex" class="righter" id="check_month" value="{{ month }}">月
+                <input type="text" style="width:5ex" class="righter" id="check_day" value="{{ day }}">日
+            </td>
+        </tr>
+    </table>
 
     <div id="several-checked-date"></div>
 
-    <h1>固定費目標額</h1>
+    <h1>生活費目標額</h1>
     <table class="tbl-common fcs-blue">
         <tr>
-            <td><input type="text" class="righter" id="txt_fixed_cost" style="width:10ex"
-                    onfocus="unseparate_value('#txt_fixed_cost')" onblur="separate_value('#txt_fixed_cost')"
-                    onkeypress="key_press_fixed(event.keyCode)" value="{{ fixed_cost_mark| intcomma }}"></td>
-            <td><input type="button" value="更新" class="btn-apply" onclick="update_fixed_cost_mark()"
-                    onkeypress="key_press_fixed(event.keyCode)"></td>
+            <td><input type="text" class="righter" id="txt_living_cost" style="width:10ex"
+                    onfocus="unseparateValue('#txt_living_cost')" onblur="separateValue('#txt_living_cost')"
+                    onkeypress="keyPressLiving(event.keyCode)" value="{{ living_cost_mark| intcomma }}"></td>
+            <td><input type="button" value="更新" class="btn-apply" onclick="updateLivingCostMark()"
+                    onkeypress="keyPressLiving(event.keyCode)"></td>
         </tr>
     </table>
 

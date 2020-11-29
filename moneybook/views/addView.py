@@ -4,7 +4,7 @@ from django.views import View
 from django.http import HttpResponse, HttpResponseBadRequest
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
-from moneybook.models import Direction, Method, Genre
+from moneybook.models import Direction, Method, Category
 from moneybook.forms import DataForm
 import json
 
@@ -23,8 +23,8 @@ class AddView(View):
             'directions': Direction.list(),
             'methods': Method.list(),
             'chargeable_methods': Method.chargeableList(),
-            'first_genres': Genre.first_list(),
-            'latter_genres': Genre.latter_list(),
+            'first_categories': Category.first_list(),
+            'latter_categories': Category.latter_list(),
             'temps': {0: "No", 1: "Yes"},
         }
         return render(request, 'add.html', content)

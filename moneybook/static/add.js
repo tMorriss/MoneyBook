@@ -1,4 +1,4 @@
-function send_add_row() {
+function sendAddRow() {
     $.post({
         url: add_url,
         data: {
@@ -8,25 +8,25 @@ function send_add_row() {
             "price": removeComma($('#a_price').val()),
             "direction": $('input[name="a_direction"]:checked').val(),
             "method": $('input[name="a_method"]:checked').val(),
-            "genre": $('input[name="a_genre"]:checked').val(),
+            "category": $('input[name="a_category"]:checked').val(),
             "temp": $('input[name="a_temp"]:checked').val(),
             "checked": "False",
         }
     }).done(() => {
-        show_result_msg("Success!", reset_add_form);
+        showResultMsg("Success!", resetAddForm);
     }).fail(() => {
         // メッセージ表示
-        show_result_msg("Error...", empty);
+        showResultMsg("Error...", empty);
     });
 }
-function key_press_add(code) {
+function keyPressAdd(code) {
     // エンターキーなら実行
     if (code === 13) {
-        send_add_row();
+        sendAddRow();
     }
 }
 
-function send_intra_move() {
+function sendIntraMove() {
     $.post({
         url: intra_move_url,
         data: {
@@ -40,20 +40,20 @@ function send_intra_move() {
             "after_method": $('input[name="m_after_method"]:checked').val(),
         }
     }).done(() => {
-        show_result_msg("Success!", reset_add_form);
+        showResultMsg("Success!", resetAddForm);
     }).fail(() => {
         // メッセージ表示
-        show_result_msg("Error...", empty);
+        showResultMsg("Error...", empty);
     });
 }
-function key_press_intra(code) {
+function keyPressIntra(code) {
     // エンターキーなら実行
     if (code === 13) {
-        send_intra_move();
+        sendIntraMove();
     }
 }
 
-function send_charge() {
+function sendCharge() {
     $.post({
         url: intra_move_url,
         data: {
@@ -66,20 +66,20 @@ function send_charge() {
             "after_method": $('input[name="c_method"]:checked').val(),
         }
     }).done(() => {
-        show_result_msg("Success!", reset_add_form);
+        showResultMsg("Success!", resetAddForm);
     }).fail(() => {
         // メッセージ表示
-        show_result_msg("Error...", empty);
+        showResultMsg("Error...", empty);
     });
 }
-function key_press_charge(code) {
+function keyPressCharge(code) {
     // エンターキーなら実行
     if (code === 13) {
-        send_charge();
+        sendCharge();
     }
 }
 
-function send_suica_charge() {
+function sendSuicaCharge() {
     $.post({
         url: add_url,
         data: {
@@ -89,19 +89,19 @@ function send_suica_charge() {
             "price": removeComma($('#s_price').val()),
             "direction": 2,
             "method": 2,
-            "genre": 4,
+            "category": 4,
             "temp": "False",
             "checked": "False",
         }
     }).done(() => {
-        show_result_msg("Success!", reset_for_shortcut);
+        showResultMsg("Success!", resetForShortcut);
     }).fail(() => {
         // メッセージ表示
-        show_result_msg("Error...", empty);
+        showResultMsg("Error...", empty);
     });
 }
 
-function reset_add_form() {
+function resetAddForm() {
     // フォームをリセット
     // チャージ
     $('#c_day').val('');
@@ -126,11 +126,12 @@ function reset_add_form() {
     $('#a_price').val('');
     $('input[name=a_direction]').val([direction_first]);
     $('input[name=a_method]').val([method_first]);
-    $('input[name=a_genre]').val([genre_first]);
+    $('input[name=a_category]').val([category_first]);
     $('input[name=a_temp]').val(["False"]);
 }
-function reset_for_shortcut() {
-    reset_add_form();
+
+function resetForShortcut() {
+    resetAddForm();
 
     // ショートカットの日付にフォーカス
     $('#s_day').focus();

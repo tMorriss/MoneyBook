@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.http import HttpResponseNotFound, HttpResponseBadRequest
 from django.shortcuts import render, redirect
 from django.views import View
-from moneybook.models import Direction, Method, Genre, Data
+from moneybook.models import Direction, Method, Category, Data
 from moneybook.forms import DataForm
 import json
 
@@ -23,8 +23,8 @@ class EditView(View):
             'data': data,
             'directions': Direction.list(),
             'methods': Method.list(),
-            'first_genres': Genre.first_list(),
-            'latter_genres': Genre.latter_list(),
+            'first_categories': Category.first_list(),
+            'latter_categories': Category.latter_list(),
             'temps': {0: "No", 1: "Yes"},
             'checked': {0: "No", 1: "Yes"},
         }
@@ -48,7 +48,7 @@ class EditView(View):
             data.price = request.POST.get("price")
             data.direction = Direction.get(request.POST.get("direction"))
             data.method = Method.get(request.POST.get("method"))
-            data.genre = Genre.get(request.POST.get("genre"))
+            data.category = Category.get(request.POST.get("category"))
             data.temp = request.POST.get("temp")
             data.checked = request.POST.get("checked")
             data.save()

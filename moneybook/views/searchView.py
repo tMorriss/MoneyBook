@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.shortcuts import render
-from moneybook.models import Direction, Method, Genre, Data
+from moneybook.models import Direction, Method, Category, Data
 from datetime import date
 
 
@@ -11,8 +11,8 @@ def search(request):
         'directions': Direction.list(),
         'methods': Method.list(),
         'unused_methods': Method.unUsedList(),
-        'first_genres': Genre.first_list(),
-        'latter_genres': Genre.latter_list(),
+        'first_categories': Category.first_list(),
+        'latter_categories': Category.latter_list(),
         'temps': {0: "No", 1: "Yes"},
         'checkeds': {0: "No", 1: "Yes"},
     }
@@ -27,7 +27,7 @@ def search(request):
     content.update(query_content)
 
     query_content = {}
-    query_list = ["direction", "method", "genre", "temp", "checked"]
+    query_list = ["direction", "method", "category", "temp", "checked"]
     for q in query_list:
         if q in request.GET:
             query_content[q] = list(map(int, request.GET.getlist(q)))
@@ -105,9 +105,9 @@ def search(request):
             except:
                 data = data
         # 分類
-        if "genre" in request.GET:
+        if "category" in request.GET:
             try:
-                data = Data.filterGenres(data, content["genre"])
+                data = Data.filterCategories(data, content["category"])
             except:
                 data = data
         # 立替

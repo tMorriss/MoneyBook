@@ -1,11 +1,18 @@
-function show_result_msg(msg, callback) {
+function separate(num) {
+    return String(num).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
+}
+function removeComma(num) {
+    return num.replace(/,/g, '');
+}
+
+function showResultMsg(msg, callback) {
     elm = document.getElementById("result_message");
     elm.innerHTML = msg;
     elm.style.display = "block"; //表示
     fadeInTimer(elm, 0);
-    timerId = setTimeout(close_result_msg, 1000, callback);
+    timerId = setTimeout(closeResultMsg, 1000, callback);
 }
-function close_result_msg(callback) {
+function closeResultMsg(callback) {
     elm = document.getElementById("result_message");
     fadeOutTimer(elm, 1, callback);
     clearTimeout(timerId);
@@ -46,10 +53,6 @@ function empty() { }
 // テキストの中身を削除
 function deleteValue(elm) {
     elm.value = "";
-}
-
-function removeComma(num) {
-    return num.replace(/,/g, '');
 }
 
 function addBlueFocus(id) {

@@ -3,7 +3,7 @@ from django.db import transaction
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render, redirect
 from django.views import View
-from moneybook.models import Direction, Method, Genre, Data
+from moneybook.models import Direction, Method, Category, Data
 from moneybook.forms import IntraMoveForm
 from datetime import date
 
@@ -23,7 +23,7 @@ class AddIntraMoveView(View):
                 out_data.price = request.POST.get("price")
                 out_data.direction = Direction.get(2)
                 out_data.method = Method.get(request.POST.get("before_method"))
-                out_data.genre = Genre.get(10)
+                out_data.category = Category.get(10)
                 out_data.temp = False
                 if request.POST.get("item"):
                     out_data.item = request.POST.get("item")
@@ -37,7 +37,7 @@ class AddIntraMoveView(View):
                 in_data.price = request.POST.get("price")
                 in_data.direction = Direction.get(1)
                 in_data.method = Method.get(request.POST.get("after_method"))
-                in_data.genre = Genre.get(10)
+                in_data.category = Category.get(10)
                 in_data.temp = False
                 if request.POST.get("item"):
                     in_data.item = request.POST.get("item")
