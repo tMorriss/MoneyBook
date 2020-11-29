@@ -100,12 +100,12 @@ class Data(models.Model):
         if v is None:
             v = 0
         return v
-    # 収入の合計
 
+    # 収入の合計
     def getIncomeSum(data):
         return Data.getSum(data, 1)
-    # 支出の合計
 
+    # 支出の合計
     def getOutgoSum(data):
         return Data.getSum(data, 2)
 

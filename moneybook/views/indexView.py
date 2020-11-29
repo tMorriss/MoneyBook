@@ -84,6 +84,8 @@ def index_balance_statistic_mini(request):
     variable_outgo = Data.getOutgoSum(
         variable_data) - Data.getTempSum(variable_data)
 
+    monthly_data_without_inmove = Data.getDataWithoutInmove(monthly_data)
+
     content = {
         'total_balance':
             Data.getIncomeSum(all_data) - Data.getOutgoSum(all_data),
@@ -95,8 +97,8 @@ def index_balance_statistic_mini(request):
         'fixed_outgo': fixed_outgo,
         'variable_remain': total_income - max(SeveralCosts.getFixedCostMark(),
                                               fixed_outgo) - variable_outgo,
-        'all_income': Data.getIncomeSum(monthly_data),
-        'all_outgo': Data.getOutgoSum(monthly_data),
+        'all_income': Data.getIncomeSum(monthly_data_without_inmove),
+        'all_outgo': Data.getOutgoSum(monthly_data_without_inmove),
         'methods_monthly_iob': methods_monthly_iob,
     }
     return render(request, '_balance_statisticMini.html', content)
