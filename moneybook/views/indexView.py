@@ -77,8 +77,8 @@ def index_balance_statistic_mini(request):
     total_outgo = Data.getOutgoSum(Data.getNormalData(
         monthly_data)) - monthly_temp_and_deposit
 
-    fixed_data = Data.getFixedData(monthly_data)
-    fixed_outgo = Data.getOutgoSum(fixed_data) - Data.getTempSum(fixed_data)
+    living_data = Data.getLivingData(monthly_data)
+    living_outgo = Data.getOutgoSum(living_data) - Data.getTempSum(living_data)
 
     variable_data = Data.getVariableData(monthly_data)
     variable_outgo = Data.getOutgoSum(
@@ -94,9 +94,9 @@ def index_balance_statistic_mini(request):
         'total_outgo': total_outgo,
         'total_inout': total_income - total_outgo,
         'variable_outgo': variable_outgo,
-        'fixed_outgo': fixed_outgo,
-        'variable_remain': total_income - max(SeveralCosts.getFixedCostMark(),
-                                              fixed_outgo) - variable_outgo,
+        'living_outgo': living_outgo,
+        'variable_remain': total_income - max(SeveralCosts.getLivingCostMark(),
+                                              living_outgo) - variable_outgo,
         'all_income': Data.getIncomeSum(monthly_data_without_inmove),
         'all_outgo': Data.getOutgoSum(monthly_data_without_inmove),
         'methods_monthly_iob': methods_monthly_iob,

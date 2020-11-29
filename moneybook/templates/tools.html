@@ -10,7 +10,7 @@
     update_actual_cash_url = "{% url 'moneybook:update_actual_cash' %}";
     checked_date_url = "{% url 'moneybook:checked_date' %}";
     several_checked_date_url = "{% url 'moneybook:several_checked_date' %}";
-    update_fixed_cost_mark_url = "{% url 'moneybook:update_fixed_cost_mark' %}";
+    update_living_cost_mark_url = "{% url 'moneybook:update_living_cost_mark' %}";
     edit_check_url = "{% url 'moneybook:edit_check' %}";
     update_now_bank_url = "{% url 'moneybook:update_now_bank' %}";
     unchecked_transaction_url = "{% url 'moneybook:unchecked_transaction' %}";
@@ -55,11 +55,11 @@
     <h1>生活費目標額</h1>
     <table class="tbl-common fcs-blue">
         <tr>
-            <td><input type="text" class="righter" id="txt_fixed_cost" style="width:10ex"
-                    onfocus="unseparate_value('#txt_fixed_cost')" onblur="separate_value('#txt_fixed_cost')"
-                    onkeypress="key_press_fixed(event.keyCode)" value="{{ fixed_cost_mark| intcomma }}"></td>
-            <td><input type="button" value="更新" class="btn-apply" onclick="update_fixed_cost_mark()"
-                    onkeypress="key_press_fixed(event.keyCode)"></td>
+            <td><input type="text" class="righter" id="txt_living_cost" style="width:10ex"
+                    onfocus="unseparate_value('#txt_living_cost')" onblur="separate_value('#txt_living_cost')"
+                    onkeypress="key_press_living(event.keyCode)" value="{{ living_cost_mark| intcomma }}"></td>
+            <td><input type="button" value="更新" class="btn-apply" onclick="update_living_cost_mark()"
+                    onkeypress="key_press_living(event.keyCode)"></td>
         </tr>
     </table>
 

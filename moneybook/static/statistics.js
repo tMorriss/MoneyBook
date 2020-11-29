@@ -13,10 +13,10 @@ function drawGraph() {
             let data = monthIoList[i].textContent.split(',');
             monthData[data[0]] = { month: data[0], income: data[1], outgo: data[2] };
         }
-        let fixedCostsList = $("#fixed_costs li");
-        for (var i = 0; i < fixedCostsList.length; i++) {
-            let data = fixedCostsList[i].textContent.split(',');
-            monthData[data[0]]["fixed"] = data[1];
+        let livingCostsList = $("#living_costs li");
+        for (var i = 0; i < livingCostsList.length; i++) {
+            let data = livingCostsList[i].textContent.split(',');
+            monthData[data[0]]["living"] = data[1];
         }
         let salaryList = $("#salary li");
         for (var i = 0; i < salaryList.length; i++) {
@@ -32,7 +32,7 @@ function drawGraph() {
         let livingSeries = chart.series.push(new am4charts.LineSeries());
         livingSeries.stroke = am4core.color("#0f0");
         livingSeries.strokeWidth = 3;
-        livingSeries.dataFields.valueY = "fixed";
+        livingSeries.dataFields.valueY = "living";
         livingSeries.dataFields.categoryX = "month";
         livingSeries.name = "生活費";
         let livingBullet = livingSeries.bullets.push(new am4charts.Bullet());

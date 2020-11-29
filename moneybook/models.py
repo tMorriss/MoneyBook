@@ -141,9 +141,9 @@ class Data(models.Model):
         return data.exclude(category=9).exclude(category=10)
 
     # 使った生活費
-    def getFixedData(data):
-        fixedCategories = [1, 2, 7]
-        return data.filter(category__in=fixedCategories)
+    def getLivingData(data):
+        livingCategories = [1, 2, 7]
+        return data.filter(category__in=livingCategories)
     # 使った変動費
 
     def getVariableData(data):
@@ -288,11 +288,11 @@ class SeveralCosts(models.Model):
     name = models.CharField(max_length=200)
     price = models.IntegerField(default=0)
 
-    def getFixedCostMark():
-        return SeveralCosts.objects.get(name="FixedCostMark").price
+    def getLivingCostMark():
+        return SeveralCosts.objects.get(name="LivingCostMark").price
 
-    def setFixedCostMark(price):
-        obj = SeveralCosts.objects.get(name="FixedCostMark")
+    def setLivingCostMark(price):
+        obj = SeveralCosts.objects.get(name="LivingCostMark")
         obj.price = price
         obj.save()
 

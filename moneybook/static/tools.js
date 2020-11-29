@@ -109,12 +109,12 @@ function update_several_checked_date(id) {
     });
 }
 
-function update_fixed_cost_mark() {
+function update_living_cost_mark() {
     $.post({
-        url: update_fixed_cost_mark_url,
+        url: update_living_cost_mark_url,
         data: {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
-            "price": Number($("#txt_fixed_cost").val().replace(",", "")),
+            "price": Number($("#txt_living_cost").val().replace(",", "")),
         }
     }).done(() => {
         location.reload();
@@ -123,10 +123,10 @@ function update_fixed_cost_mark() {
         show_result_msg("Error...", empty);
     });
 }
-function key_press_fixed(code) {
+function key_press_living(code) {
     // エンターキーなら
     if (code === 13) {
-        update_fixed_cost_mark();
+        update_living_cost_mark();
     }
 }
 

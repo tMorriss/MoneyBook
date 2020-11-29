@@ -18,7 +18,7 @@ def tools(request):
     # 銀行残高
     bank_balance = BankBalance.getAll()
     # 生活費目標額
-    fixed_cost_mark = SeveralCosts.getFixedCostMark()
+    living_cost_mark = SeveralCosts.getLivingCostMark()
     # 現在銀行
     banks = BankBalance.getAll()
 
@@ -34,7 +34,7 @@ def tools(request):
         'actual_cash_balance': actual_cash_balance,
         'credit_checked_date': credit_checked_date,
         'bank_balance': bank_balance,
-        'fixed_cost_mark': fixed_cost_mark,
+        'living_cost_mark': living_cost_mark,
         'banks': banks,
     }
     return render(request, "tools.html", content)
@@ -198,7 +198,7 @@ def update_cacheback_checked_date(request):
     return HttpResponse(json.dumps({"message": "success"}))
 
 
-def update_fixed_cost_mark(request):
+def update_living_cost_mark(request):
     if "price" not in request.POST:
         return HttpResponseBadRequest(
             json.dumps({"message": "missing parameter"})
@@ -211,7 +211,7 @@ def update_fixed_cost_mark(request):
             json.dumps({"message": "price must be int"})
         )
 
-    SeveralCosts.setFixedCostMark(price)
+    SeveralCosts.setLivingCostMark(price)
     return HttpResponse(json.dumps({"message": "success"}))
 
 
