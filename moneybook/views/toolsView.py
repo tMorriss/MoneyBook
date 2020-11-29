@@ -5,7 +5,7 @@ from django.views import View
 from datetime import date, datetime
 from moneybook.models import Method, Data, SeveralCosts, CheckedDate
 from moneybook.models import CreditCheckedDate, CachebackCheckedDate
-from moneybook.models import BankBalance, BalanceDate
+from moneybook.models import BankBalance
 import json
 
 
