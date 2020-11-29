@@ -48,7 +48,16 @@
     <input type="button" class="btn-apply" value="計算" onclick="update_diff()"
         onkeypress="key_press_diff(event.keyCode)">
 
-    <div id="checked-date"></div>
+    <h1>確認済み日付</h1>
+    <table class="tbl-common fcs-blue" id="checked-date">
+        <tr>
+            <td colspan="3">
+                <input type="text" style="width:6ex" class="righter" id="check_year" value="{{ year }}">年
+                <input type="text" style="width:5ex" class="righter" id="check_month" value="{{ month }}">月
+                <input type="text" style="width:5ex" class="righter" id="check_day" value="{{ day }}">日
+            </td>
+        </tr>
+    </table>
 
     <div id="several-checked-date"></div>
 

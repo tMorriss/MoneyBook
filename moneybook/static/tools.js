@@ -57,7 +57,26 @@ function get_checked_date() {
     $.get({
         url: checked_date_url,
     }).done((data) => {
-        $("#checked-date").html(data);
+        let dataJson = JSON.parse(data);
+
+        // 既存を削除
+        $(".checked-date-row").remove();
+
+        // 現在の値を追加
+        for (var i = 0; i < dataJson.length; i++) {
+            var checkAll = 1;
+            if (dataJson[i].pk == 2) {
+                checkAll = 0;
+            }
+            var rowText = '<tr class="checked-date-row">';
+            rowText += '<td>';
+            rowText += '<input type="button" class="btn-apply" value="' + dataJson[i].name + '" onclick="update_checked_date(' + dataJson[i].pk + ', ' + checkAll + ')">'
+            rowText += '</td>';
+            rowText += '<td>現在: ' + dataJson[i].year + '年' + dataJson[i].month + '月' + dataJson[i].day + '日</td>';
+            rowText += '<td class="righter">' + separate(dataJson[i].balance) + '円</td>';
+            rowText += '</tr>';
+            $("#checked-date").append(rowText);
+        }
     })
 }
 

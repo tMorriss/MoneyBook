@@ -59,7 +59,6 @@ def update_actual_cash(request):
 
 class CheckedDataView(View):
     def get(self, request, *args, **kwargs):
-        now = datetime.now()
         # 全データ
         all_data = Data.getAllData()
         # 支払い方法リスト
@@ -71,16 +70,16 @@ class CheckedDataView(View):
             # 銀行はチェック済みだけ
             if m.pk == 2:
                 d = Data.getCheckedData(d)
-            methods_bd.append(BalanceDate(m, Data.getIncomeSum(
-                d) - Data.getOutgoSum(d), CheckedDate.get(m.pk).date))
+            methods_bd.append({
+                'pk': m.pk,
+                'name': m.name,
+                'balance': Data.getIncomeSum(d) - Data.getOutgoSum(d),
+                'year': CheckedDate.get(m.pk).date.year,
+                'month': CheckedDate.get(m.pk).date.month,
+                'day': CheckedDate.get(m.pk).date.day
+            })
 
-        content = {
-            'year': now.year,
-            'month': now.month,
-            'day': now.day,
-            'methods_bd': methods_bd,
-        }
-        return render(request, "_checked_date.html", content)
+        return HttpResponse(json.dumps(methods_bd))
 
     def post(self, request, *args, **kwargs):
         if "year" not in request.POST or "month" not in request.POST \
