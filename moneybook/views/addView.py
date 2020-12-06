@@ -3,7 +3,6 @@ from django.shortcuts import render
 from django.views import View
 from django.http import HttpResponse, HttpResponseBadRequest
 from datetime import datetime
-from dateutil.relativedelta import relativedelta
 from moneybook.models import Direction, Method, Category
 from moneybook.forms import DataForm
 import json
