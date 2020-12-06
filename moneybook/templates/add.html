@@ -108,18 +108,22 @@
             <tr>
                 <th>日付</th>
                 <td>
-                    <input type="text" id="s_year" style="width:6ex" class="righter" value="{{ last_year }}">年
-                    <input type="text" id="s_month" style="width:5ex" class="righter" value="{{ last_month }}">月
+                    <input type="text" id="s_year" style="width:6ex" class="righter" value="{{ year }}">年
+                    <input type="text" id="s_month" style="width:5ex" class="righter" value="{{ month }}">月
                     <input type="text" id="s_day" style="width:5ex" class="righter">日
                 </td>
             </tr>
             <tr>
                 <th>金額</th>
-                <td><input type="text" id="s_price" style="width:10ex" class="righter" value="1000">円</td>
+                <td><input type="text" id="s_price" style="width:10ex" class="righter">円</td>
             </tr>
             <tr>
                 <th>項目</th>
-                <td><input type="button" class="btn-apply" onclick="sendSuicaCharge()" value="Suicaチャージ"></td>
+                <td>
+                    <input type="button" class="btn-apply" onclick="sendSuicaCharge()" value="Suicaチャージ">
+                    <input type="button" class="btn-apply" onclick="sendPayPayCachebackBonus()"
+                        value="PayPayキャッシュバック&ボーナス">
+                </td>
             </tr>
         </table>
     </form>

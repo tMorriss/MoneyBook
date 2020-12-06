@@ -12,14 +12,11 @@ import json
 class AddView(View):
     def get(self, request, *args, **kwargs):
         now = datetime.now()
-        last_month = now - relativedelta(months=1)
         content = {
             'app_name': settings.APP_NAME,
             'username': request.user,
             'year': now.year,
             'month': now.month,
-            'last_year': last_month.year,
-            'last_month': last_month.month,
             'directions': Direction.list(),
             'methods': Method.list(),
             'chargeable_methods': Method.chargeableList(),
