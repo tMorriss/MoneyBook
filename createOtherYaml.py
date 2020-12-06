@@ -18,18 +18,6 @@ for i_row in range(len(result)):
     result_str += "    show_order: " + str(result.iat[i_row, 3]) + "\n"
 result_str += "\n"
 
-# キャシュバックチェック
-query = "SELECT * FROM moneybook_cachebackcheckeddate ORDER BY id"
-result = pd.read_sql(query, con)
-for i_row in range(len(result)):
-    result_str += "- model: moneybook.CachebackCheckedDate\n"
-    result_str += "  pk: " + str(result.iat[i_row, 0]) + "\n"
-    result_str += "  fields:\n"
-    result_str += "    show_order: " + str(result.iat[i_row, 1]) + "\n"
-    result_str += "    name: " + str(result.iat[i_row, 2]) + "\n"
-    result_str += "    date: " + str(result.iat[i_row, 3]) + "\n"
-result_str += "\n"
-
 # チェック
 query = "SELECT * FROM moneybook_checkeddate ORDER BY id"
 result = pd.read_sql(query, con)
