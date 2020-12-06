@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from django.views import View
 from datetime import date, datetime
 from moneybook.models import Method, Data, SeveralCosts, CheckedDate
-from moneybook.models import CreditCheckedDate, CachebackCheckedDate
+from moneybook.models import CreditCheckedDate
 from moneybook.models import BankBalance
 import json
 
@@ -162,33 +162,6 @@ def update_credit_checked_date(request):
     try:
         # 更新
         CreditCheckedDate.setDate(pk, new_date)
-    except CheckedDate.DoesNotExist:
-        return HttpResponseBadRequest(
-            json.dumps({"message": "method id is invalid"})
-        )
-
-    return HttpResponse(json.dumps({"message": "success"}))
-
-
-def update_cacheback_checked_date(request):
-    if "year" not in request.POST or "month" not in request.POST or "day" \
-            not in request.POST or "pk" not in request.POST:
-        return HttpResponseBadRequest(
-            json.dumps({"message": "missing parameter"})
-        )
-
-    pk = request.POST.get("pk")
-    try:
-        new_date = date(int(request.POST.get("year")), int(
-            request.POST.get("month")), int(request.POST.get("day")))
-    except ValueError:
-        return HttpResponseBadRequest(
-            json.dumps({"message": "date format is invalid"})
-        )
-
-    try:
-        # 更新
-        CachebackCheckedDate.set(pk, new_date)
     except CheckedDate.DoesNotExist:
         return HttpResponseBadRequest(
             json.dumps({"message": "method id is invalid"})

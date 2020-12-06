@@ -175,10 +175,6 @@ class Data(models.Model):
     def getBankData(data):
         return Data.getMethodData(data, 2)
 
-    # PayPayのデータを取得
-    def getPayPayData(data):
-        return Data.getMethodData(data, 5)
-
     # チェック済みのデータを取得
     def getCheckedData(data):
         return Data.sortDateAscending(data.filter(checked=1))
@@ -250,23 +246,6 @@ class CreditCheckedDate(models.Model):
     def setPrice(pk, price):
         obj = CreditCheckedDate.objects.get(pk=pk)
         obj.price = price
-        obj.save()
-
-
-class CachebackCheckedDate(models.Model):
-    show_order = models.IntegerField(default=0)
-    name = models.CharField(max_length=200)
-    date = models.DateField()
-
-    def get(pk):
-        return CachebackCheckedDate.objects.get(pk=pk)
-
-    def getAll():
-        return CachebackCheckedDate.objects.all().order_by("show_order")
-
-    def set(pk, newDate):
-        obj = CachebackCheckedDate.objects.get(pk=pk)
-        obj.date = newDate
         obj.save()
 
 

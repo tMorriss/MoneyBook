@@ -101,6 +101,46 @@ function sendSuicaCharge() {
     });
 }
 
+function sendPayPayCachebackBonus() {
+    $.post({
+        url: add_url,
+        data: {
+            "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+            "date": $('#s_year').val() + "-" + $('#s_month').val() + "-" + $('#s_day').val(),
+            "item": "PayPayキャッシュバック",
+            "price": removeComma($('#s_price').val()),
+            "direction": 1,
+            "method": 5,
+            "category": 12,
+            "temp": "False",
+            "checked": "False",
+        }
+    }).done(() => {
+        $.post({
+            url: add_url,
+            data: {
+                "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+                "date": $('#s_year').val() + "-" + $('#s_month').val() + "-" + $('#s_day').val(),
+                "item": "ボーナス運用",
+                "price": removeComma($('#s_price').val()),
+                "direction": 2,
+                "method": 5,
+                "category": 11,
+                "temp": "False",
+                "checked": "False",
+            }
+        }).done(() => {
+            showResultMsg("Success!", resetForShortcut);
+        }).fail(() => {
+            // メッセージ表示
+            showResultMsg("Error...", empty);
+        });
+    }).fail(() => {
+        // メッセージ表示
+        showResultMsg("Error...", empty);
+    });
+}
+
 function resetAddForm() {
     // フォームをリセット
     // チャージ
@@ -118,7 +158,7 @@ function resetAddForm() {
 
     // ショートカット
     $('#s_day').val('');
-    $('#s_price').val('1000');
+    $('#s_price').val('');
 
     // 通常追加
     $('#a_day').val('');

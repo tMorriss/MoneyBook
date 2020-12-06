@@ -3,7 +3,6 @@ from django.shortcuts import render
 from django.views import View
 from django.http import HttpResponse, HttpResponseBadRequest
 from datetime import datetime
-from dateutil.relativedelta import relativedelta
 from moneybook.models import Direction, Method, Category
 from moneybook.forms import DataForm
 import json
@@ -12,14 +11,11 @@ import json
 class AddView(View):
     def get(self, request, *args, **kwargs):
         now = datetime.now()
-        last_month = now - relativedelta(months=1)
         content = {
             'app_name': settings.APP_NAME,
             'username': request.user,
             'year': now.year,
             'month': now.month,
-            'last_year': last_month.year,
-            'last_month': last_month.month,
             'directions': Direction.list(),
             'methods': Method.list(),
             'chargeable_methods': Method.chargeableList(),
