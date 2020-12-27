@@ -156,6 +156,8 @@ function check(id) {
     }).done(() => {
         // チェックした行を削除
         $("#unapproved-row-" + id).remove();
+        // 確認済み日付も更新
+        getCheckedDate()
         // 現在銀行も更新
         getSeveralCheckedDate();
     }).fail(() => {
