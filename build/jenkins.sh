@@ -27,8 +27,7 @@ sudo podman run \
 --rm \
 tmorriss/moneybook \
 /bin/bash -c \
-"/usr/bin/python3 /MoneyBook/manage.py makemigrations --settings config.settings.prod && \
-/usr/bin/python3 /MoneyBook/manage.py migrate --settings config.settings.prod"
+"/usr/bin/python3 /MoneyBook/manage.py migrate --settings config.settings.prod"
 
 # deploy container
 sudo podman run \
@@ -39,6 +38,7 @@ sudo podman run \
 -e DB_USER=$DB_USER \
 -e DB_PASS=$DB_PASS \
 -e DB_HOST=$DB_HOST \
+-e ALLOWD_HOSTS=$ALLOWD_HOSTS \
 -h moneybook \
 --name moneybook \
 tmorriss/moneybook
