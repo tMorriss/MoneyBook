@@ -44,4 +44,4 @@ sudo podman run \
 tmorriss/moneybook
 
 # delete old images
-sudo podman image prune
+sudo podman image prune -f

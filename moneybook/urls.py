@@ -1,9 +1,8 @@
 from django.contrib.auth.views import LogoutView
 from django.urls import path
-from moneybook.views import indexView, AddView, AddIntraMoveView
-from moneybook.views import statisticsView, searchView, toolsView
-from moneybook.views import CheckedDataView, EditView, CheckView, DeleteView
-from moneybook.views import CustomLoginView
+from moneybook.views import (AddIntraMoveView, AddView, CheckedDataView,
+                             CheckView, CustomLoginView, DeleteView, EditView,
+                             indexView, searchView, statisticsView, toolsView)
 
 app_name = 'moneybook'
 urlpatterns = [

@@ -2,6 +2,7 @@
     "python.linting.flake8Args": [
         "--ignore=E722,W503",
         "--max-line-length=120",
-        "--exclude __init__.py"
+        "--exclude __init__.py",
+        "--import-order-style smarkets"
     ]
 }

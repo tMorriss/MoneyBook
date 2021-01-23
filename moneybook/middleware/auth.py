@@ -1,6 +1,6 @@
 from django.http import HttpResponseRedirect
-from django.utils.deprecation import MiddlewareMixin
 from django.urls import reverse
+from django.utils.deprecation import MiddlewareMixin
 
 
 class authMiddleware(MiddlewareMixin):
