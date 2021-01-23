@@ -1,6 +1,5 @@
 from django.contrib.auth.views import LogoutView
 from django.urls import path
-
 from moneybook.views import (AddIntraMoveView, AddView, CheckedDataView,
                              CheckView, CustomLoginView, DeleteView, EditView,
                              indexView, searchView, statisticsView, toolsView)
