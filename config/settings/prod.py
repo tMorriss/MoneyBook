@@ -1,5 +1,6 @@
-from .common import *  # NOQA F403
 import os
+
+from .common import *  # NOQA F403
 
 DATABASES = {
     'default': {

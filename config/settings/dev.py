@@ -1,6 +1,7 @@
+import os
+
 from .common import *  # NOQA F403
 from .common import BASE_DIR
-import os
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases

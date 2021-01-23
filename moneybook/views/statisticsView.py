@@ -1,8 +1,9 @@
+import calendar
+from datetime import datetime
+
 from django.conf import settings
 from django.shortcuts import render
-from datetime import datetime
-from moneybook.models import Data, InOutBalance, LabelValue, InfraCost
-import calendar
+from moneybook.models import Data, InfraCost, InOutBalance, LabelValue
 
 
 def statistics_month(request, year):

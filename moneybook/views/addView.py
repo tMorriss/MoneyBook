@@ -1,11 +1,12 @@
+import json
+from datetime import datetime
+
 from django.conf import settings
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render
 from django.views import View
-from django.http import HttpResponse, HttpResponseBadRequest
-from datetime import datetime
-from moneybook.models import Direction, Method, Category
 from moneybook.forms import DataForm
-import json
+from moneybook.models import Category, Direction, Method
 
 
 class AddView(View):

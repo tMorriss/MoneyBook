@@ -1,5 +1,5 @@
-import pandas as pd
 import mysql.connector
+import pandas as pd
 
 con = mysql.connector.connect(host='localhost', port=3306, user='moneybooker',
                               password='want2money',

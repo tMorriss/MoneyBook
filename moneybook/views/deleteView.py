@@ -1,7 +1,8 @@
+import json
+
 from django.http import HttpResponse, HttpResponseNotFound
 from django.views import View
 from moneybook.models import Data
-import json
 
 
 class DeleteView(View):

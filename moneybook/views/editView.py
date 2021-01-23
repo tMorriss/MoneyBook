@@ -1,11 +1,12 @@
-from django.conf import settings
-from django.http import HttpResponse
-from django.http import HttpResponseNotFound, HttpResponseBadRequest
-from django.shortcuts import render, redirect
-from django.views import View
-from moneybook.models import Direction, Method, Category, Data
-from moneybook.forms import DataForm
 import json
+
+from django.conf import settings
+from django.http import (HttpResponse, HttpResponseBadRequest,
+                         HttpResponseNotFound)
+from django.shortcuts import redirect, render
+from django.views import View
+from moneybook.forms import DataForm
+from moneybook.models import Category, Data, Direction, Method
 
 
 class EditView(View):

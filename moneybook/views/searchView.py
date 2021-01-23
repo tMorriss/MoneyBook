@@ -1,7 +1,8 @@
+from datetime import date
+
 from django.conf import settings
 from django.shortcuts import render
-from moneybook.models import Direction, Method, Category, Data
-from datetime import date
+from moneybook.models import Category, Data, Direction, Method
 
 
 def search(request):

@@ -1,11 +1,12 @@
+from datetime import date
+
 from django.conf import settings
 from django.db import transaction
 from django.http import HttpResponseBadRequest
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect, render
 from django.views import View
-from moneybook.models import Direction, Method, Category, Data
 from moneybook.forms import IntraMoveForm
-from datetime import date
+from moneybook.models import Category, Data, Direction, Method
 
 
 class AddIntraMoveView(View):

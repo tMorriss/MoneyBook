@@ -1,12 +1,12 @@
-from django.conf import settings
-from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseBadRequest
-from django.views import View
-from datetime import date, datetime
-from moneybook.models import Method, Data, SeveralCosts, CheckedDate
-from moneybook.models import CreditCheckedDate
-from moneybook.models import BankBalance
 import json
+from datetime import date, datetime
+
+from django.conf import settings
+from django.http import HttpResponse, HttpResponseBadRequest
+from django.shortcuts import render
+from django.views import View
+from moneybook.models import (BankBalance, CheckedDate, CreditCheckedDate,
+                              Data, Method, SeveralCosts)
 
 
 def tools(request):

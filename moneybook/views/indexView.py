@@ -1,9 +1,10 @@
+from datetime import datetime
+
+from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.shortcuts import render
-from datetime import datetime
-from dateutil.relativedelta import relativedelta
-from moneybook.models import Direction, Method, Category, Data
-from moneybook.models import InOutBalance, SeveralCosts
+from moneybook.models import (Category, Data, Direction, InOutBalance, Method,
+                              SeveralCosts)
 
 
 def get_monthly_data_from_get_parameter(request_get):
