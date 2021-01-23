@@ -18,3 +18,5 @@ APP_NAME = "MoneyBook"
 ALLOWED_HOSTS = [os.environ.get('ALLOWD_HOSTS')]
 
 DEBUG = False
+
+SECRET_KEY = os.environ.get('SECRET_KEY')
