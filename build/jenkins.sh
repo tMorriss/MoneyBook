@@ -22,6 +22,7 @@ sudo podman run \
 -e DB_USER=$DB_USER \
 -e DB_PASS=$DB_PASS \
 -e DB_HOST=$DB_HOST \
+-e SECRET_KEY=$SECRET_KEY \
 -h moneybook_migration \
 --name moneybook_migration \
 --rm \
@@ -39,6 +40,7 @@ sudo podman run \
 -e DB_PASS=$DB_PASS \
 -e DB_HOST=$DB_HOST \
 -e ALLOWD_HOSTS=$ALLOWD_HOSTS \
+-e SECRET_KEY=$SECRET_KEY \
 -h moneybook \
 --name moneybook \
 tmorriss/moneybook
