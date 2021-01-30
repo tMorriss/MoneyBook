@@ -78,7 +78,9 @@ function drawGraph() {
         categoryAxis.dataFields.category = "month";
         categoryAxis.renderer.minGridDistance = 1;
 
-        chart.yAxes.push(new am4charts.ValueAxis());
+        let valueAxis = new am4charts.ValueAxis();
+        valueAxis.min = 0;
+        chart.yAxes.push(valueAxis);
 
         let config = [
             { value: "electricity", name: "電気代", color: "#ff0" },
@@ -124,7 +126,9 @@ function drawGraph() {
         categoryAxis.dataFields.category = "month";
         categoryAxis.renderer.minGridDistance = 1;
 
-        chart.yAxes.push(new am4charts.ValueAxis());
+        let valueAxis = new am4charts.ValueAxis();
+        valueAxis.min = 0;
+        chart.yAxes.push(valueAxis);
 
         var series = chart.series.push(new am4charts.ColumnSeries());
         series.dataFields.valueY = "food";
@@ -173,7 +177,9 @@ function drawGraph() {
         categoryAxis.dataFields.category = "month";
         categoryAxis.renderer.minGridDistance = 1;
 
-        chart.yAxes.push(new am4charts.ValueAxis());
+        let valueAxis = new am4charts.ValueAxis();
+        valueAxis.minimum = 0;
+        chart.yAxes.push(valueAxis);
 
         let series = chart.series.push(new am4charts.LineSeries());
         series.stroke = am4core.color("#0f0");
@@ -201,7 +207,9 @@ function drawIOGraph(chart) {
     categoryAxis.renderer.grid.template.marginRight = 0;
     categoryAxis.renderer.minGridDistance = 1;
 
-    chart.yAxes.push(new am4charts.ValueAxis());
+    let valueAxis = new am4charts.ValueAxis();
+    valueAxis.min = 0;
+    chart.yAxes.push(valueAxis);
 
     let config = [
         { value: "income", name: "収入", color: "#00f" },
