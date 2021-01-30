@@ -63,6 +63,14 @@ def statistics_month(request, year):
             Data.getIncomeSum(Data.getKeywordData(monthly_data, "給与"))
         ))
 
+    # 12月の水道代
+    next_month_data = Data.getMonthData(year + 1, 1)
+    w = Data.getOutgoSum(Data.getKeywordData(next_month_data, "水道代"))
+    if (w > 0):
+        if i_month > 0:
+            infra_costs[11].total += w / 2
+            infra_costs[11].water = w / 2
+
     content = {
         'app_name': settings.APP_NAME,
         'username': request.user,
