@@ -145,8 +145,8 @@ class Data(models.Model):
     def getLivingData(data):
         livingCategories = [1, 2, 7]
         return data.filter(category__in=livingCategories)
-    # 使った変動費
 
+    # 使った変動費
     def getVariableData(data):
         variableCategories = [0, 3, 4, 5, 6]
         return data.filter(category__in=variableCategories)
@@ -159,8 +159,8 @@ class Data(models.Model):
     # 日付順にソート
     def sortDateAscending(data):
         return data.order_by('date', 'id')
-    # 日付の逆にソート
 
+    # 日付の逆にソート
     def sortDateDescending(data):
         return data.order_by('-date', '-id')
 
