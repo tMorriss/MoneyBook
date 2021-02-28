@@ -45,6 +45,8 @@ class Method(models.Model):
 class Category(models.Model):
     show_order = models.IntegerField(default=-100)
     name = models.CharField(max_length=10)
+    is_living_cost = models.BooleanField(default=False)
+    is_variable_cost = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -143,12 +145,12 @@ class Data(models.Model):
 
     # 使った生活費
     def getLivingData(data):
-        livingCategories = [1, 2, 7]
+        livingCategories = Category.objects.filter(is_living_cost=True)
         return data.filter(category__in=livingCategories)
 
     # 使った変動費
     def getVariableData(data):
-        variableCategories = [0, 3, 4, 5, 6]
+        variableCategories = Category.objects.filter(is_variable_cost=True)
         return data.filter(category__in=variableCategories)
 
     def getFoodCosts(data):
