@@ -21,7 +21,7 @@ class Direction(models.Model):
 class Method(models.Model):
     show_order = models.IntegerField(default=0)
     name = models.CharField(max_length=200)
-    chargeable = models.IntegerField(default=0)
+    chargeable = models.BooleanField(default=0)
 
     def __str__(self):
         return self.name
@@ -33,7 +33,7 @@ class Method(models.Model):
         return Method.objects.filter(show_order__gt=0).order_by('show_order')
 
     def unUsedList():
-        return Method.objects.filter(show_order__lte=0).order_by('id')
+        return Method.objects.filter(show_order__lte=0).order_by('-show_order', 'id')
 
     def chargeableList():
         return Method.objects.filter(
@@ -45,6 +45,8 @@ class Method(models.Model):
 class Category(models.Model):
     show_order = models.IntegerField(default=-100)
     name = models.CharField(max_length=10)
+    is_living_cost = models.BooleanField(default=False)
+    is_variable_cost = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -143,14 +145,15 @@ class Data(models.Model):
 
     # 使った生活費
     def getLivingData(data):
-        livingCategories = [1, 2, 7]
+        livingCategories = Category.objects.filter(is_living_cost=True)
         return data.filter(category__in=livingCategories)
-    # 使った変動費
 
+    # 使った変動費
     def getVariableData(data):
-        variableCategories = [0, 3, 4, 5, 6]
+        variableCategories = Category.objects.filter(is_variable_cost=True)
         return data.filter(category__in=variableCategories)
 
+    # 食費
     def getFoodCosts(data):
         i = Data.getIncomeSum(Data.getCategoryData(data, 1).filter(temp=1))
         o = Data.getOutgoSum(Data.getCategoryData(data, 1))
@@ -159,8 +162,8 @@ class Data(models.Model):
     # 日付順にソート
     def sortDateAscending(data):
         return data.order_by('date', 'id')
-    # 日付の逆にソート
 
+    # 日付の逆にソート
     def sortDateDescending(data):
         return data.order_by('-date', '-id')
 
@@ -170,19 +173,21 @@ class Data(models.Model):
 
     # 現金のデータを取得
     def getCashData(data):
-        return Data.getMethodData(data, 1)
+        cash_category = Category.objects.get(name="現金")
+        return Data.getMethodData(data, cash_category)
 
     # 銀行のデータを取得
     def getBankData(data):
-        return Data.getMethodData(data, 2)
+        bank_category = Category.objects.get(name="銀行")
+        return Data.getMethodData(data, bank_category)
 
     # チェック済みのデータを取得
     def getCheckedData(data):
-        return Data.sortDateAscending(data.filter(checked=1))
+        return Data.sortDateAscending(data.filter(checked=True))
 
     # 未チェックのデータを取得
     def getUncheckedData(data):
-        return Data.sortDateAscending(data.filter(checked=0))
+        return Data.sortDateAscending(data.filter(checked=False))
 
     # 指定データを取得
     def get(pk):
