@@ -1,5 +1,5 @@
 from django.test import TestCase
-from moneybook.models import Category, Data, Direction, Method
+from moneybook.models import Category, Direction, Method
 
 
 class DirectionTestCase(TestCase):
@@ -14,10 +14,10 @@ class DirectionTestCase(TestCase):
         self.assertEqual(str(Direction.get(2)), "支出")
 
     def test_list(self):
-        l = Direction.list()
-        self.assertEqual(len(l), 2)
-        self.assertEqual(str(l[0]), "収入")
-        self.assertEqual(str(l[1]), "支出")
+        ls = Direction.list()
+        self.assertEqual(len(ls), 2)
+        self.assertEqual(str(ls[0]), "収入")
+        self.assertEqual(str(ls[1]), "支出")
 
 
 class MethodTestCase(TestCase):
