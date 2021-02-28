@@ -33,7 +33,7 @@ class Method(models.Model):
         return Method.objects.filter(show_order__gt=0).order_by('show_order')
 
     def unUsedList():
-        return Method.objects.filter(show_order__lte=0).order_by('id')
+        return Method.objects.filter(show_order__lte=0).order_by('-show_order', 'id')
 
     def chargeableList():
         return Method.objects.filter(

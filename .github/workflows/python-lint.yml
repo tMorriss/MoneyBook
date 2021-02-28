@@ -26,3 +26,7 @@ jobs:
     - name: Lint with flake8
       run: |
         flake8 . --count --ignore=E722,W503 --max-line-length=120 --exclude moneybook/migrations,__init__.py --show-source --statistics --import-order-style smarkets
+    - name: Unit test with coverage
+      run: |
+        coverage run --source='moneybook.models,moneybook.views' manage.py test moneybook --settings config.settings.test
+        coverage report
