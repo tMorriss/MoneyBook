@@ -153,6 +153,7 @@ class Data(models.Model):
         variableCategories = Category.objects.filter(is_variable_cost=True)
         return data.filter(category__in=variableCategories)
 
+    # 食費
     def getFoodCosts(data):
         i = Data.getIncomeSum(Data.getCategoryData(data, 1).filter(temp=1))
         o = Data.getOutgoSum(Data.getCategoryData(data, 1))
@@ -180,11 +181,11 @@ class Data(models.Model):
 
     # チェック済みのデータを取得
     def getCheckedData(data):
-        return Data.sortDateAscending(data.filter(checked=1))
+        return Data.sortDateAscending(data.filter(checked=True))
 
     # 未チェックのデータを取得
     def getUncheckedData(data):
-        return Data.sortDateAscending(data.filter(checked=0))
+        return Data.sortDateAscending(data.filter(checked=False))
 
     # 指定データを取得
     def get(pk):
