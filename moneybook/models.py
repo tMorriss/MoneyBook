@@ -21,7 +21,7 @@ class Direction(models.Model):
 class Method(models.Model):
     show_order = models.IntegerField(default=0)
     name = models.CharField(max_length=200)
-    chargeable = models.IntegerField(default=0)
+    chargeable = models.BooleanField(default=0)
 
     def __str__(self):
         return self.name
