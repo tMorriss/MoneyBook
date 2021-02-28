@@ -1,5 +1,3 @@
-from datetime import date
-
 from django.test import TestCase
 from moneybook.models import Category, Data, Direction, Method
 
@@ -37,22 +35,22 @@ class MethodTestCase(TestCase):
         self.assertEqual(str(Method.get(4)), "-2")
 
     def test_list(self):
-        l = Method.list()
-        self.assertEqual(len(l), 2)
-        self.assertEqual(str(l[0]), "1")
-        self.assertEqual(str(l[1]), "2")
+        ls = Method.list()
+        self.assertEqual(len(ls), 2)
+        self.assertEqual(str(ls[0]), "1")
+        self.assertEqual(str(ls[1]), "2")
 
     def test_unUsedList(self):
-        l = Method.unUsedList()
-        self.assertEqual(len(l), 3)
-        self.assertEqual(str(l[0]), "0")
-        self.assertEqual(str(l[1]), "-1")
-        self.assertEqual(str(l[2]), "-2")
+        ls = Method.unUsedList()
+        self.assertEqual(len(ls), 3)
+        self.assertEqual(str(ls[0]), "0")
+        self.assertEqual(str(ls[1]), "-1")
+        self.assertEqual(str(ls[2]), "-2")
 
     def test_chargeableList(self):
-        l = Method.chargeableList()
-        self.assertEqual(len(l), 1)
-        self.assertEqual(str(l[0]), "1")
+        ls = Method.chargeableList()
+        self.assertEqual(len(ls), 1)
+        self.assertEqual(str(ls[0]), "1")
 
 
 class CategoryTestCase(TestCase):
@@ -75,19 +73,19 @@ class CategoryTestCase(TestCase):
         self.assertEqual(str(Category.get(4)), "-1")
 
     def test_list(self):
-        l = Category.list()
-        self.assertEqual(len(l), 5)
-        self.assertEqual(str(l[0]), "-2")
-        self.assertEqual(str(l[4]), "2")
+        ls = Category.list()
+        self.assertEqual(len(ls), 5)
+        self.assertEqual(str(ls[0]), "-2")
+        self.assertEqual(str(ls[4]), "2")
 
     def test_first_list(self):
-        l = Category.first_list()
-        self.assertEqual(len(l), 2)
-        self.assertEqual(str(l[0]), "1")
-        self.assertEqual(str(l[1]), "2")
+        ls = Category.first_list()
+        self.assertEqual(len(ls), 2)
+        self.assertEqual(str(ls[0]), "1")
+        self.assertEqual(str(ls[1]), "2")
 
     def test_latter_list(self):
-        l = Category.latter_list()
-        self.assertEqual(len(l), 3)
-        self.assertEqual(str(l[0]), "0")
-        self.assertEqual(str(l[2]), "-2")
+        ls = Category.latter_list()
+        self.assertEqual(len(ls), 3)
+        self.assertEqual(str(ls[0]), "0")
+        self.assertEqual(str(ls[2]), "-2")
