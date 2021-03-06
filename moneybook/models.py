@@ -173,13 +173,13 @@ class Data(models.Model):
 
     # 現金のデータを取得
     def getCashData(data):
-        cash_category = Category.objects.get(name="現金")
-        return Data.getMethodData(data, cash_category)
+        cash_method = Method.objects.get(name="現金")
+        return Data.getMethodData(data, cash_method)
 
     # 銀行のデータを取得
     def getBankData(data):
-        bank_category = Category.objects.get(name="銀行")
-        return Data.getMethodData(data, bank_category)
+        bank_method = Method.objects.get(name="銀行")
+        return Data.getMethodData(data, bank_method)
 
     # チェック済みのデータを取得
     def getCheckedData(data):
