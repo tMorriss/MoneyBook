@@ -21,9 +21,8 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install flake8 flake8-import-order
-        pip install coverage
         if [ -f build/requirements.txt ]; then pip install -r build/requirements.txt; fi
+        if [ -f build/requirements_test.txt ]; then pip install -r build/requirements_test.txt; fi
     - name: Lint with flake8
       run: |
         flake8 . --count --ignore=E722,W503 --max-line-length=120 --exclude moneybook/migrations,__init__.py --show-source --statistics --import-order-style smarkets
