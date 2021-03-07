@@ -1,0 +1,381 @@
+- model: moneybook.Direction
+  pk: 1
+  fields:
+    name: 収入
+- model: moneybook.Direction
+  pk: 2
+  fields:
+    name: 支出
+
+- model: moneybook.Method
+  pk: 1
+  fields:
+    show_order: 2
+    name: 現金
+    chargeable: 0
+- model: moneybook.Method
+  pk: 2
+  fields:
+    show_order: 1
+    name: 銀行
+    chargeable: 0
+- model: moneybook.Method
+  pk: 3
+  fields:
+    show_order: 3
+    name: PayPay
+    chargeable: 1
+
+- model: moneybook.Category
+  pk: 1
+  fields:
+    name: 食費
+    show_order: 1
+    is_living_cost: 1
+    is_variable_cost: 0
+- model: moneybook.Category
+  pk: 2
+  fields:
+    name: 必需品
+    show_order: 2
+    is_living_cost: 0
+    is_variable_cost: 1
+- model: moneybook.Category
+  pk: 3
+  fields:
+    name: その他
+    show_order: 0
+    is_living_cost: 0
+    is_variable_cost: 0
+- model: moneybook.Category
+  pk: 4
+  fields:
+    name: 内部移動
+    show_order: -1
+    is_living_cost: 0
+    is_variable_cost: 0
+- model: moneybook.Category
+  pk: 5
+  fields:
+    name: 貯金
+    show_order: -2
+    is_living_cost: 0
+    is_variable_cost: 0
+- model: moneybook.Category
+  pk: 6
+  fields:
+    name: 計算外
+    show_order: -3
+    is_living_cost: 0
+    is_variable_cost: 0
+
+- model: moneybook.Data
+  fields:
+    date: 2000-01-01
+    item: コンビニ
+    price: 100
+    temp: 0
+    checked: 1
+    direction_id: 2
+    category_id: 1
+    method_id: 1
+- model: moneybook.Data
+  fields:
+    date: 2000-02-01
+    item: 必需品1
+    price: 1000
+    temp: 0
+    checked: 1
+    direction_id: 2
+    category_id: 2
+    method_id: 2
+- model: moneybook.Data
+  fields:
+    date: 2000-02-10
+    item: 収入
+    price: 3000
+    temp: 0
+    checked: 1
+    direction_id: 1
+    category_id: 2
+    method_id: 2
+- model: moneybook.Data
+  fields:
+    date: 2000-02-11
+    item: スーパー
+    price: 1000
+    temp: 0
+    checked: 1
+    direction_id: 2
+    category_id: 1
+    method_id: 3
+- model: moneybook.Data
+  fields:
+    date: 2000-03-01
+    item: 昼食
+    price: 1000
+    temp: 0
+    checked: 1
+    direction_id: 2
+    category_id: 1
+    method_id: 3
+- model: moneybook.Data
+  fields:
+    date: 2000-03-02
+    item: 昼食代
+    price: 500
+    temp: 1
+    checked: 1
+    direction_id: 1
+    category_id: 1
+    method_id: 1
+- model: moneybook.Data
+  fields:
+    date: 2000-03-03
+    item: 貯金
+    price: 700
+    temp: 0
+    checked: 1
+    direction_id: 2
+    category_id: 5
+    method_id: 1
+- model: moneybook.Data
+  fields:
+    date: 2000-04-01
+    item: 必需品1
+    price: 1000
+    temp: 0
+    checked: 1
+    direction_id: 2
+    category_id: 2
+    method_id: 2
+- model: moneybook.Data
+  fields:
+    date: 2000-04-10
+    item: 収入
+    price: 3000
+    temp: 0
+    checked: 1
+    direction_id: 1
+    category_id: 2
+    method_id: 2
+- model: moneybook.Data
+  fields:
+    date: 2000-04-10
+    item: 内部移動
+    price: 3000
+    temp: 0
+    checked: 1
+    direction_id: 1
+    category_id: 4
+    method_id: 1
+- model: moneybook.Data
+  fields:
+    date: 2000-04-10
+    item: 内部移動
+    price: 3000
+    temp: 0
+    checked: 1
+    direction_id: 2
+    category_id: 4
+    method_id: 2
+- model: moneybook.Data
+  fields:
+    date: 2000-04-11
+    item: 計算外1
+    price: 1000
+    temp: 0
+    checked: 1
+    direction_id: 2
+    category_id: 6
+    method_id: 2
+- model: moneybook.Data
+  fields:
+    date: 2000-05-01
+    item: コンビニ
+    price: 100
+    temp: 0
+    checked: 1
+    direction_id: 2
+    category_id: 1
+    method_id: 1
+- model: moneybook.Data
+  fields:
+    date: 2000-05-01
+    item: 必需品1
+    price: 1000
+    temp: 0
+    checked: 1
+    direction_id: 2
+    category_id: 2
+    method_id: 2
+- model: moneybook.Data
+  fields:
+    date: 2000-05-10
+    item: 収入
+    price: 3000
+    temp: 0
+    checked: 1
+    direction_id: 1
+    category_id: 2
+    method_id: 2
+- model: moneybook.Data
+  fields:
+    date: 2000-05-11
+    item: スーパー
+    price: 1000
+    temp: 0
+    checked: 1
+    direction_id: 2
+    category_id: 1
+    method_id: 3
+- model: moneybook.Data
+  fields:
+    date: 2000-06-01
+    item: コンビニ
+    price: 100
+    temp: 0
+    checked: 1
+    direction_id: 2
+    category_id: 1
+    method_id: 1
+- model: moneybook.Data
+  fields:
+    date: 2000-06-01
+    item: 必需品1
+    price: 1000
+    temp: 0
+    checked: 1
+    direction_id: 2
+    category_id: 2
+    method_id: 2
+- model: moneybook.Data
+  fields:
+    date: 2000-06-10
+    item: 収入
+    price: 3000
+    temp: 0
+    checked: 1
+    direction_id: 1
+    category_id: 2
+    method_id: 2
+- model: moneybook.Data
+  fields:
+    date: 2000-06-11
+    item: スーパー
+    price: 1000
+    temp: 0
+    checked: 1
+    direction_id: 2
+    category_id: 1
+    method_id: 3
+- model: moneybook.Data
+  fields:
+    date: 2000-06-11
+    item: 立替分
+    price: 500
+    temp: 1
+    checked: 1
+    direction_id: 1
+    category_id: 1
+    method_id: 3
+- model: moneybook.Data
+  fields:
+    date: 2000-07-10
+    item: コンビニ
+    price: 100
+    temp: 0
+    checked: 1
+    direction_id: 2
+    category_id: 1
+    method_id: 1
+- model: moneybook.Data
+  fields:
+    date: 2000-07-01
+    item: 必需品1
+    price: 1000
+    temp: 0
+    checked: 1
+    direction_id: 2
+    category_id: 2
+    method_id: 2
+- model: moneybook.Data
+  fields:
+    date: 2000-07-21
+    item: 収入
+    price: 3000
+    temp: 0
+    checked: 1
+    direction_id: 1
+    category_id: 2
+    method_id: 2
+- model: moneybook.Data
+  fields:
+    date: 2000-07-11
+    item: スーパー
+    price: 1000
+    temp: 0
+    checked: 1
+    direction_id: 2
+    category_id: 1
+    method_id: 3
+- model: moneybook.Data
+  fields:
+    date: 2000-07-01
+    item: 立替分
+    price: 500
+    temp: 1
+    checked: 1
+    direction_id: 1
+    category_id: 1
+    method_id: 3
+- model: moneybook.Data
+  fields:
+    date: 2000-08-01
+    item: コンビニ
+    price: 100
+    temp: 0
+    checked: 1
+    direction_id: 2
+    category_id: 1
+    method_id: 1
+- model: moneybook.Data
+  fields:
+    date: 2000-08-01
+    item: 必需品1
+    price: 1000
+    temp: 0
+    checked: 1
+    direction_id: 2
+    category_id: 2
+    method_id: 2
+- model: moneybook.Data
+  fields:
+    date: 2000-08-10
+    item: 収入
+    price: 3000
+    temp: 0
+    checked: 1
+    direction_id: 1
+    category_id: 2
+    method_id: 2
+- model: moneybook.Data
+  fields:
+    date: 2000-08-11
+    item: スーパー
+    price: 1000
+    temp: 0
+    checked: 1
+    direction_id: 2
+    category_id: 1
+    method_id: 3
+- model: moneybook.Data
+  fields:
+    date: 2000-08-11
+    item: 立替分
+    price: 500
+    temp: 1
+    checked: 1
+    direction_id: 1
+    category_id: 1
+    method_id: 3

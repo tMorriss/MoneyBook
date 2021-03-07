@@ -128,8 +128,9 @@ class Data(models.Model):
         return temp
 
     # 立替と貯金をフィルタ
-    def getTempAndDeposit(data):
-        deposit = data.filter(category=11).aggregate(
+    def getTempAndDepositSum(data):
+        category = Category.objects.get(name="貯金")
+        deposit = data.filter(category=category).aggregate(
             Sum('price'))['price__sum']
         if deposit is None:
             deposit = 0
@@ -137,11 +138,16 @@ class Data(models.Model):
 
     # 内部移動だけを排除
     def getDataWithoutInmove(data):
-        return data.exclude(category=10)
+        category = Category.objects.get(name="内部移動")
+        return data.exclude(category=category)
 
     # 計算外と内部移動を排除
     def getNormalData(data):
-        return data.exclude(category=9).exclude(category=10)
+        return data.exclude(
+            category=Category.objects.get(name="計算外")
+        ).exclude(
+            category=Category.objects.get(name="内部移動")
+        )
 
     # 使った生活費
     def getLivingData(data):
@@ -155,8 +161,11 @@ class Data(models.Model):
 
     # 食費
     def getFoodCosts(data):
-        i = Data.getIncomeSum(Data.getCategoryData(data, 1).filter(temp=1))
-        o = Data.getOutgoSum(Data.getCategoryData(data, 1))
+        category_data = Data.getCategoryData(
+            data, Category.objects.get(name="食費")
+        )
+        i = Data.getIncomeSum(category_data.filter(temp=1))
+        o = Data.getOutgoSum(category_data)
         return o - i
 
     # 日付順にソート

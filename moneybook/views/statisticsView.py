@@ -19,7 +19,7 @@ def statistics_month(request, year):
     for i_month in range(len(month_list)):
         monthly_data = Data.getMonthData(year, month_list[i_month])
         monthly_normal_data = Data.getNormalData(monthly_data)
-        t = Data.getTempAndDeposit(monthly_data)
+        t = Data.getTempAndDepositSum(monthly_data)
         i = Data.getIncomeSum(monthly_normal_data) - t
         o = Data.getOutgoSum(monthly_normal_data) - t
 

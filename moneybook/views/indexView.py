@@ -59,7 +59,7 @@ def index_balance_statistic_mini(request):
     # 支払い方法リスト
     methods = Method.list()
     # 立替と貯金
-    monthly_temp_and_deposit = Data.getTempAndDeposit(monthly_data)
+    monthly_temp_and_deposit = Data.getTempAndDepositSum(monthly_data)
 
     # 支払い方法ごとの残高
     methods_iob = []
