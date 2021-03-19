@@ -19,7 +19,7 @@ class AddView(View):
             'month': now.month,
             'directions': Direction.list(),
             'methods': Method.list(),
-            'chargeable_methods': Method.chargeableList(),
+            'chargeable_methods': Method.chargeable_list(),
             'first_categories': Category.first_list(),
             'latter_categories': Category.latter_list(),
             'temps': {0: "No", 1: "Yes"},

@@ -12,8 +12,8 @@ def get_monthly_data_from_get_parameter(request_get):
         year = request_get.get("year")
         month = request_get.get("month")
 
-    monthly_data = Data.sortDateDescending(
-        Data.getMonthData(int(year), int(month)))
+    monthly_data = Data.sort_data_descending(
+        Data.get_month_data(int(year), int(month)))
     return monthly_data
 
 
@@ -44,7 +44,7 @@ def index_month(request, year, month):
         'last_month': last_month.month,
         'directions': Direction.list(),
         'methods': methods,
-        'unused_methods': Method.unUsedList(),
+        'unused_methods': Method.un_used_list(),
         'first_categories': Category.first_list(),
         'latter_categories': Category.latter_list(),
     }
@@ -53,53 +53,51 @@ def index_month(request, year, month):
 
 def index_balance_statistic_mini(request):
     # 全データ
-    all_data = Data.getAllData()
+    all_data = Data.get_all_data()
     # 今月のデータ
     monthly_data = get_monthly_data_from_get_parameter(request.GET)
     # 支払い方法リスト
     methods = Method.list()
     # 立替と貯金
-    monthly_temp_and_deposit = Data.getTempAndDepositSum(monthly_data)
+    monthly_temp_and_deposit = Data.get_temp_and_deposit_sum(monthly_data)
 
     # 支払い方法ごとの残高
     methods_iob = []
     methods_monthly_iob = []
     for m in methods:
-        d = Data.getMethodData(all_data, m.pk)
+        d = Data.get_method_data(all_data, m.pk)
         methods_iob.append(InOutBalance(
-            m, None, None, Data.getIncomeSum(d) - Data.getOutgoSum(d)))
+            m, None, None, Data.get_income_sum(d) - Data.get_outgo_sum(d)))
 
-        i = Data.getIncomeSum(Data.getMethodData(monthly_data, m.pk))
-        o = Data.getOutgoSum(Data.getMethodData(monthly_data, m.pk))
+        i = Data.get_income_sum(Data.get_method_data(monthly_data, m.pk))
+        o = Data.get_outgo_sum(Data.get_method_data(monthly_data, m.pk))
         methods_monthly_iob.append(InOutBalance(m, i, o, None))
 
-    total_income = Data.getIncomeSum(
-        Data.getNormalData(monthly_data)) - monthly_temp_and_deposit
-    total_outgo = Data.getOutgoSum(Data.getNormalData(
+    total_income = Data.get_income_sum(
+        Data.get_normal_data(monthly_data)) - monthly_temp_and_deposit
+    total_outgo = Data.get_outgo_sum(Data.get_normal_data(
         monthly_data)) - monthly_temp_and_deposit
 
-    living_data = Data.getLivingData(monthly_data)
-    living_outgo = Data.getOutgoSum(living_data) - Data.getTempSum(living_data)
+    living_cost = Data.get_living_cost(monthly_data)
 
-    variable_data = Data.getVariableData(monthly_data)
-    variable_outgo = Data.getOutgoSum(
-        variable_data) - Data.getTempSum(variable_data)
+    variable_cost = Data.get_variable_cost(monthly_data)
 
-    monthly_data_without_inmove = Data.getDataWithoutInmove(monthly_data)
+    monthly_data_without_inmove = Data.get_data_without_intra_move(
+        monthly_data)
 
     content = {
         'total_balance':
-            Data.getIncomeSum(all_data) - Data.getOutgoSum(all_data),
+            Data.get_income_sum(all_data) - Data.get_outgo_sum(all_data),
         'methods_iob': methods_iob,
         'total_income': total_income,
         'total_outgo': total_outgo,
         'total_inout': total_income - total_outgo,
-        'variable_outgo': variable_outgo,
-        'living_outgo': living_outgo,
-        'variable_remain': total_income - max(SeveralCosts.getLivingCostMark(),
-                                              living_outgo) - variable_outgo,
-        'all_income': Data.getIncomeSum(monthly_data_without_inmove),
-        'all_outgo': Data.getOutgoSum(monthly_data_without_inmove),
+        'variable_cost': variable_cost,
+        'living_cost': living_cost,
+        'variable_remain': total_income - max(SeveralCosts.get_living_cost_mark(),
+                                              living_cost) - variable_cost,
+        'all_income': Data.get_income_sum(monthly_data_without_inmove),
+        'all_outgo': Data.get_outgo_sum(monthly_data_without_inmove),
         'methods_monthly_iob': methods_monthly_iob,
     }
     return render(request, '_balance_statisticMini.html', content)
@@ -112,9 +110,9 @@ def index_chart_data(request):
     positive_categories_outgo = {}
     for g in Category.list():
         if g.show_order >= 0:
-            d = Data.getCategoryData(monthly_data, g.pk)
-            positive_categories_outgo[g] = Data.getOutgoSum(
-                d) - Data.getTempSum(d)
+            d = Data.get_category_data(monthly_data, g.pk)
+            positive_categories_outgo[g] = Data.get_outgo_sum(
+                d) - Data.get_temp_sum(d)
     content = {
         'categories_outgo': positive_categories_outgo,
     }

@@ -12,22 +12,22 @@ from moneybook.models import (BankBalance, CheckedDate, CreditCheckedDate,
 def tools(request):
     now = datetime.now()
     # 実際の現金残高
-    actual_cash_balance = SeveralCosts.getActualCashBalance()
+    actual_cash_balance = SeveralCosts.get_actual_cash_balance()
     # クレカ確認日
-    credit_checked_date = CreditCheckedDate.getAll()
+    credit_checked_date = CreditCheckedDate.get_all()
     # 銀行残高
-    bank_balance = BankBalance.getAll()
+    bank_balance = BankBalance.get_all()
     # 生活費目標額
-    living_cost_mark = SeveralCosts.getLivingCostMark()
+    living_cost_mark = SeveralCosts.get_living_cost_mark()
     # 現在銀行
-    banks = BankBalance.getAll()
+    banks = BankBalance.get_all()
 
     content = {
         'app_name': settings.APP_NAME,
         'username': request.user,
         'cash_balance':
-            Data.getIncomeSum(Data.getCashData(Data.getAllData()))
-            - Data.getOutgoSum(Data.getCashData(Data.getAllData())),
+            Data.get_income_sum(Data.get_cash_data(Data.get_all_data()))
+            - Data.get_outgo_sum(Data.get_cash_data(Data.get_all_data())),
         'year': now.year,
         'month': now.month,
         'day': now.day,
@@ -53,27 +53,27 @@ def update_actual_cash(request):
             json.dumps({"message": "price must be int"})
         )
 
-    SeveralCosts.setActualCashBalance(price)
+    SeveralCosts.set_actual_cash_balance(price)
     return HttpResponse(json.dumps({"message": "success"}))
 
 
 class CheckedDataView(View):
     def get(self, request, *args, **kwargs):
         # 全データ
-        all_data = Data.getAllData()
+        all_data = Data.get_all_data()
         # 支払い方法リスト
         methods = Method.list()
         # 支払い方法ごとの残高
         methods_bd = []
         for m in methods:
-            d = Data.getMethodData(all_data, m.pk)
+            d = Data.get_method_data(all_data, m.pk)
             # 銀行はチェック済みだけ
             if m.pk == 2:
-                d = Data.getCheckedData(d)
+                d = Data.get_checked_data(d)
             methods_bd.append({
                 'pk': m.pk,
                 'name': m.name,
-                'balance': Data.getIncomeSum(d) - Data.getOutgoSum(d),
+                'balance': Data.get_income_sum(d) - Data.get_outgo_sum(d),
                 'year': CheckedDate.get(m.pk).date.year,
                 'month': CheckedDate.get(m.pk).date.month,
                 'day': CheckedDate.get(m.pk).date.day
@@ -96,7 +96,7 @@ class CheckedDataView(View):
             # 指定日以前のを全部チェック
             if "check_all" in request.POST and \
                     request.POST.get("check_all") == "1":
-                Data.filterCheckeds(Data.getMethodData(Data.getRangeData(
+                Data.filter_checkeds(Data.get_method_data(Data.get_range_data(
                     None, new_date), method_pk), [False]).update(checked=True)
         except ValueError:
             return HttpResponseBadRequest(
@@ -117,11 +117,11 @@ class CheckedDataView(View):
 def get_several_checked_date(request):
     now = datetime.now()
     # 全データ
-    all_data = Data.getAllData()
+    all_data = Data.get_all_data()
     # 現在銀行
-    banks = BankBalance.getAll()
+    banks = BankBalance.get_all()
     # クレカ確認日
-    credit_checked_date = CreditCheckedDate.getAll()
+    credit_checked_date = CreditCheckedDate.get_all()
     today = date.today()
     for c in credit_checked_date:
         # 日付が過ぎていたらpriceを0にする
@@ -129,10 +129,10 @@ def get_several_checked_date(request):
             c.price = 0
 
     # 銀行残高
-    all_bank_data = Data.getBankData(all_data)
-    checked_bank_data = Data.getCheckedData(all_bank_data)
-    bank_written = Data.getIncomeSum(
-        checked_bank_data) - Data.getOutgoSum(checked_bank_data)
+    all_bank_data = Data.get_bank_data(all_data)
+    checked_bank_data = Data.get_checked_data(all_bank_data)
+    bank_written = Data.get_income_sum(
+        checked_bank_data) - Data.get_outgo_sum(checked_bank_data)
 
     content = {
         'year': now.year,
@@ -161,7 +161,7 @@ def update_credit_checked_date(request):
 
     try:
         # 更新
-        CreditCheckedDate.setDate(pk, new_date)
+        CreditCheckedDate.set_date(pk, new_date)
     except CheckedDate.DoesNotExist:
         return HttpResponseBadRequest(
             json.dumps({"message": "method id is invalid"})
@@ -183,15 +183,15 @@ def update_living_cost_mark(request):
             json.dumps({"message": "price must be int"})
         )
 
-    SeveralCosts.setLivingCostMark(price)
+    SeveralCosts.set_living_cost_mark(price)
     return HttpResponse(json.dumps({"message": "success"}))
 
 
 def get_unchecked_transaction(request):
     # 全データ
-    all_data = Data.getAllData()
+    all_data = Data.get_all_data()
     # 未承認トランザクション
-    unchecked_data = Data.getUncheckedData(all_data)
+    unchecked_data = Data.get_unchecked_data(all_data)
     content = {
         'unchecked_data': unchecked_data,
     }
@@ -199,11 +199,11 @@ def get_unchecked_transaction(request):
 
 
 def update_now_bank(request):
-    written_bank_data = Data.getCheckedData(
-        Data.getBankData(Data.getAllData()))
+    written_bank_data = Data.get_checked_data(
+        Data.get_bank_data(Data.get_all_data()))
     bank_sum = 0
-    bb = BankBalance.getAll()
-    cc = CreditCheckedDate.getAll()
+    bb = BankBalance.get_all()
+    cc = CreditCheckedDate.get_all()
     try:
         for b in bb:
             key = "bank-" + str(b.pk)
@@ -216,7 +216,7 @@ def update_now_bank(request):
             key = "credit-" + str(c.pk)
             if key in request.POST:
                 value = int(request.POST.get(key))
-                CreditCheckedDate.setPrice(c.pk, value)
+                CreditCheckedDate.set_price(c.pk, value)
                 bank_sum -= value
     except ValueError:
         return HttpResponseBadRequest(
@@ -224,6 +224,6 @@ def update_now_bank(request):
         )
 
     return HttpResponse(
-        json.dumps({"balance": Data.getIncomeSum(written_bank_data)
-                    - Data.getOutgoSum(written_bank_data) - bank_sum})
+        json.dumps({"balance": Data.get_income_sum(written_bank_data)
+                    - Data.get_outgo_sum(written_bank_data) - bank_sum})
     )
