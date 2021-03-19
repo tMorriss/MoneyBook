@@ -40,5 +40,5 @@ jobs:
     - name: Unit test with coverage
       run: |
         coverage run --source='moneybook.models,moneybook.views' manage.py test moneybook --settings config.settings.test
-        coverage report
+        coverage report -m
 
