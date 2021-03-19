@@ -496,12 +496,10 @@ class DataTestCase(TestCase):
         self.assertEqual(data.count(), 0)
 
     def test_get(self):
-        data = Data.get_month_data(2000, 1)
         self.assertEqual(str(Data.get(1)), "松屋")
         self.assertEqual(str(Data.get(5)), "現金収入")
 
     def test_get_nothing(self):
-        data = Data.get_month_data(2000, 1)
         self.assertRaises(Data.DoesNotExist, Data.get, 100)
 
     def test_filter_price(self):

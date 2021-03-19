@@ -130,13 +130,13 @@ class Data(models.Model):
 
     # methodでフィルタ
     @staticmethod
-    def get_method_data(data, methodId):
-        return data.filter(method=methodId)
+    def get_method_data(data, method_id):
+        return data.filter(method=method_id)
 
     # categoryでフィルタ
     @staticmethod
-    def get_category_data(data, categoryId):
-        return data.filter(category=categoryId)
+    def get_category_data(data, category_id):
+        return data.filter(category=category_id)
 
     # 立替合計
     @staticmethod
@@ -281,9 +281,9 @@ class CheckedDate(models.Model):
         return CheckedDate.objects.get(pk=pk)
 
     @staticmethod
-    def set(pk, newDate):
+    def set(pk, new_date):
         obj = CheckedDate.objects.get(pk=pk)
-        obj.date = newDate
+        obj.date = new_date
         obj.save()
 
 
