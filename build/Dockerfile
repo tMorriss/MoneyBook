@@ -1,6 +1,6 @@
 FROM centos:8
 RUN dnf -y update && dnf -y upgrade
-RUN dnf -y install python36 git mysql-devel gcc python36-devel nginx
+RUN dnf -y install python38 git mysql-devel gcc python38-devel nginx
 
 COPY ./ /MoneyBook
 RUN pip3 install -r /MoneyBook/build/requirements.txt

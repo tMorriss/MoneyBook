@@ -11,7 +11,7 @@ def search(request):
         'username': request.user,
         'directions': Direction.list(),
         'methods': Method.list(),
-        'unused_methods': Method.unUsedList(),
+        'unused_methods': Method.un_used_list(),
         'first_categories': Category.first_list(),
         'latter_categories': Category.latter_list(),
         'temps': {0: "No", 1: "Yes"},
@@ -67,19 +67,19 @@ def search(request):
                         + "-" + request.GET.get("end_day")
                 except:
                     end_date = None
-        data = Data.getRangeData(start_date, end_date)
+        data = Data.get_range_data(start_date, end_date)
 
         # 品目
         if "item" in request.GET:
             item = request.GET.get("item")
             if item != "":
-                data = Data.getKeywordData(data, item)
+                data = Data.get_keyword_data(data, item)
 
         # 金額
         if "lower_price" in request.GET \
                 and request.GET.get("lower_price") != "":
             try:
-                data = Data.filterPrice(
+                data = Data.filter_price(
                     data, int(request.GET.get("lower_price")), None
                 )
             except:
@@ -87,7 +87,7 @@ def search(request):
         if "upper_price" in request.GET \
                 and request.GET.get("upper_price") != "":
             try:
-                data = Data.filterPrice(data, None, int(
+                data = Data.filter_price(data, None, int(
                     request.GET.get("upper_price"))
                 )
             except:
@@ -96,41 +96,41 @@ def search(request):
         # 方向
         if "direction" in request.GET:
             try:
-                data = Data.filterDirections(data, content["direction"])
+                data = Data.filter_directions(data, content["direction"])
             except:
                 data = data
         # 支払い方法
         if "method" in request.GET:
             try:
-                data = Data.filterMethods(data, content["method"])
+                data = Data.filter_methods(data, content["method"])
             except:
                 data = data
         # 分類
         if "category" in request.GET:
             try:
-                data = Data.filterCategories(data, content["category"])
+                data = Data.filter_categories(data, content["category"])
             except:
                 data = data
         # 立替
         if "temp" in request.GET:
             try:
-                data = Data.filterTemps(data, content["temp"])
+                data = Data.filter_temps(data, content["temp"])
             except:
                 data = data
         # チェック済み
         if "checked" in request.GET:
             try:
-                data = Data.filterCheckeds(data, content["checked"])
+                data = Data.filter_checkeds(data, content["checked"])
             except:
                 data = data
 
         # 日付順にソート
-        data = Data.sortDateAscending(data)
+        data = Data.sort_data_ascending(data)
 
         content.update({
             "show_data": data,
-            "income_sum": Data.getIncomeSum(data),
-            "outgo_sum": Data.getOutgoSum(data),
+            "income_sum": Data.get_income_sum(data),
+            "outgo_sum": Data.get_outgo_sum(data),
             "is_show": True,
         })
     else:

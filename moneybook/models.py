@@ -11,9 +11,11 @@ class Direction(models.Model):
     def __str__(self):
         return self.name
 
+    @staticmethod
     def get(pk):
         return Direction.objects.get(pk=pk)
 
+    @staticmethod
     def list():
         return Direction.objects.order_by('pk')
 
@@ -26,16 +28,20 @@ class Method(models.Model):
     def __str__(self):
         return self.name
 
+    @staticmethod
     def get(pk):
         return Method.objects.get(pk=pk)
 
+    @staticmethod
     def list():
         return Method.objects.filter(show_order__gt=0).order_by('show_order')
 
-    def unUsedList():
+    @staticmethod
+    def un_used_list():
         return Method.objects.filter(show_order__lte=0).order_by('-show_order', 'id')
 
-    def chargeableList():
+    @staticmethod
+    def chargeable_list():
         return Method.objects.filter(
             show_order__gt=0, chargeable=1
         ).order_by(
@@ -51,15 +57,19 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+    @staticmethod
     def get(pk):
         return Category.objects.get(pk=pk)
 
+    @staticmethod
     def list():
         return Category.objects.order_by('show_order')
 
+    @staticmethod
     def first_list():
         return Category.objects.filter(show_order__gt=0).order_by('show_order')
 
+    @staticmethod
     def latter_list():
         return Category.objects.filter(show_order__lte=0).order_by('-show_order')
 
@@ -78,12 +88,14 @@ class Data(models.Model):
         return self.item
 
     # 全データを持ってくる
-    def getAllData():
+    @staticmethod
+    def get_all_data():
         return Data.objects.all()
 
     # 指定期間のデータを持ってくる
-    def getRangeData(start, end):
-        data = Data.getAllData()
+    @staticmethod
+    def get_range_data(start, end):
+        data = Data.get_all_data()
         if start is not None:
             data = data.filter(date__gte=start)
         if end is not None:
@@ -91,13 +103,15 @@ class Data(models.Model):
         return data
 
     # 指定月のデータを持ってくる
-    def getMonthData(year, month):
+    @staticmethod
+    def get_month_data(year, month):
         start = date(year, month, 1)
         end = date(year, month, calendar.monthrange(year, month)[1])
-        return Data.getRangeData(start, end)
+        return Data.get_range_data(start, end)
 
     # 収入や支出の合計
-    def getSum(data, direction):
+    @staticmethod
+    def get_sum(data, direction):
         v = data.filter(direction=direction).aggregate(
             Sum('price'))['price__sum']
         if v is None:
@@ -105,96 +119,127 @@ class Data(models.Model):
         return v
 
     # 収入の合計
-    def getIncomeSum(data):
-        return Data.getSum(data, 1)
+    @staticmethod
+    def get_income_sum(data):
+        return Data.get_sum(data, 1)
 
     # 支出の合計
-    def getOutgoSum(data):
-        return Data.getSum(data, 2)
+    @staticmethod
+    def get_outgo_sum(data):
+        return Data.get_sum(data, 2)
 
     # methodでフィルタ
-    def getMethodData(data, methodId):
-        return data.filter(method=methodId)
+    @staticmethod
+    def get_method_data(data, method_id):
+        return data.filter(method=method_id)
 
     # categoryでフィルタ
-    def getCategoryData(data, categoryId):
-        return data.filter(category=categoryId)
+    @staticmethod
+    def get_category_data(data, category_id):
+        return data.filter(category=category_id)
 
     # 立替合計
-    def getTempSum(data):
+    @staticmethod
+    def get_temp_sum(data):
         temp = data.filter(temp=1).aggregate(Sum('price'))['price__sum']
         if temp is None:
             temp = 0
         return temp
 
     # 立替と貯金をフィルタ
-    def getTempAndDeposit(data):
-        deposit = data.filter(category=11).aggregate(
+    @staticmethod
+    def get_temp_and_deposit_sum(data):
+        category = Category.objects.get(name="貯金")
+        deposit = data.filter(category=category).aggregate(
             Sum('price'))['price__sum']
         if deposit is None:
             deposit = 0
-        return Data.getTempSum(data) + deposit
+        return Data.get_temp_sum(data) + deposit
 
     # 内部移動だけを排除
-    def getDataWithoutInmove(data):
-        return data.exclude(category=10)
+    @staticmethod
+    def get_data_without_intra_move(data):
+        category = Category.objects.get(name="内部移動")
+        return data.exclude(category=category)
 
     # 計算外と内部移動を排除
-    def getNormalData(data):
-        return data.exclude(category=9).exclude(category=10)
+    @staticmethod
+    def get_normal_data(data):
+        return data.exclude(
+            category=Category.objects.get(name="計算外")
+        ).exclude(
+            category=Category.objects.get(name="内部移動")
+        )
 
     # 使った生活費
-    def getLivingData(data):
-        livingCategories = Category.objects.filter(is_living_cost=True)
-        return data.filter(category__in=livingCategories)
+    @staticmethod
+    def get_living_cost(data):
+        categories = Category.objects.filter(is_living_cost=True)
+        data = data.filter(category__in=categories)
+        return Data.get_outgo_sum(data) - Data.get_temp_sum(data)
 
     # 使った変動費
-    def getVariableData(data):
-        variableCategories = Category.objects.filter(is_variable_cost=True)
-        return data.filter(category__in=variableCategories)
+    @staticmethod
+    def get_variable_cost(data):
+        categories = Category.objects.filter(is_variable_cost=True)
+        data = data.filter(category__in=categories)
+        return Data.get_outgo_sum(data) - Data.get_temp_sum(data)
 
     # 食費
-    def getFoodCosts(data):
-        i = Data.getIncomeSum(Data.getCategoryData(data, 1).filter(temp=1))
-        o = Data.getOutgoSum(Data.getCategoryData(data, 1))
+    @staticmethod
+    def get_food_costs(data):
+        data = Data.get_category_data(
+            data, Category.objects.get(name="食費")
+        )
+        i = Data.get_income_sum(data.filter(temp=1))
+        o = Data.get_outgo_sum(data)
         return o - i
 
     # 日付順にソート
-    def sortDateAscending(data):
+    @staticmethod
+    def sort_data_ascending(data):
         return data.order_by('date', 'id')
 
     # 日付の逆にソート
-    def sortDateDescending(data):
+    @staticmethod
+    def sort_data_descending(data):
         return data.order_by('-date', '-id')
 
     # キーワード検索
-    def getKeywordData(data, keyword):
+    @staticmethod
+    def get_keyword_data(data, keyword):
         return data.filter(item__contains=keyword)
 
     # 現金のデータを取得
-    def getCashData(data):
-        cash_method = Method.objects.get(name="現金")
-        return Data.getMethodData(data, cash_method)
+    @staticmethod
+    def get_cash_data(data):
+        method = Method.objects.get(name="現金")
+        return Data.get_method_data(data, method)
 
     # 銀行のデータを取得
-    def getBankData(data):
-        bank_method = Method.objects.get(name="銀行")
-        return Data.getMethodData(data, bank_method)
+    @staticmethod
+    def get_bank_data(data):
+        method = Method.objects.get(name="銀行")
+        return Data.get_method_data(data, method)
 
     # チェック済みのデータを取得
-    def getCheckedData(data):
-        return Data.sortDateAscending(data.filter(checked=True))
+    @staticmethod
+    def get_checked_data(data):
+        return Data.sort_data_ascending(data.filter(checked=True))
 
     # 未チェックのデータを取得
-    def getUncheckedData(data):
-        return Data.sortDateAscending(data.filter(checked=False))
+    @staticmethod
+    def get_unchecked_data(data):
+        return Data.sort_data_ascending(data.filter(checked=False))
 
     # 指定データを取得
+    @staticmethod
     def get(pk):
         return Data.objects.get(pk=pk)
 
     # 金額でフィルタ
-    def filterPrice(data, lower, upper):
+    @staticmethod
+    def filter_price(data, lower, upper):
         if lower is not None:
             data = data.filter(price__gte=lower)
         if upper is not None:
@@ -202,36 +247,43 @@ class Data(models.Model):
         return data
 
     # directionリストでフィルタ
-    def filterDirections(data, directions):
+    @staticmethod
+    def filter_directions(data, directions):
         return data.filter(direction__in=directions)
 
     # methodリストでフィルタ
-    def filterMethods(data, methods):
+    @staticmethod
+    def filter_methods(data, methods):
         return data.filter(method__in=methods)
 
     # categoryリストでフィルタ
-    def filterCategories(data, categories):
+    @staticmethod
+    def filter_categories(data, categories):
         return data.filter(category__in=categories)
 
     # tempリストでフィルタ
-    def filterTemps(data, temps):
+    @staticmethod
+    def filter_temps(data, temps):
         return data.filter(temp__in=temps)
 
     # checkedリストでフィルタ
-    def filterCheckeds(data, checkeds):
+    @staticmethod
+    def filter_checkeds(data, checkeds):
         return data.filter(checked__in=checkeds)
 
 
 class CheckedDate(models.Model):
-    method = models.ForeignKey(Method, on_delete=models.CASCADE)
+    method = models.OneToOneField(Method, on_delete=models.CASCADE)
     date = models.DateField()
 
+    @staticmethod
     def get(pk):
         return CheckedDate.objects.get(pk=pk)
 
-    def set(pk, newDate):
+    @staticmethod
+    def set(pk, new_date):
         obj = CheckedDate.objects.get(pk=pk)
-        obj.date = newDate
+        obj.date = new_date
         obj.save()
 
 
@@ -241,15 +293,18 @@ class CreditCheckedDate(models.Model):
     date = models.DateField()
     price = models.IntegerField(default=0)
 
-    def getAll():
+    @staticmethod
+    def get_all():
         return CreditCheckedDate.objects.all().order_by("show_order")
 
-    def setDate(pk, newDate):
+    @staticmethod
+    def set_date(pk, new_date):
         obj = CreditCheckedDate.objects.get(pk=pk)
-        obj.date = newDate
+        obj.date = new_date
         obj.save()
 
-    def setPrice(pk, price):
+    @staticmethod
+    def set_price(pk, price):
         obj = CreditCheckedDate.objects.get(pk=pk)
         obj.price = price
         obj.save()
@@ -260,9 +315,11 @@ class BankBalance(models.Model):
     name = models.CharField(max_length=200)
     price = models.IntegerField(default=0)
 
-    def getAll():
+    @staticmethod
+    def get_all():
         return BankBalance.objects.all().order_by("show_order")
 
+    @staticmethod
     def set(pk, price):
         obj = BankBalance.objects.get(pk=pk)
         obj.price = price
@@ -273,18 +330,22 @@ class SeveralCosts(models.Model):
     name = models.CharField(max_length=200)
     price = models.IntegerField(default=0)
 
-    def getLivingCostMark():
+    @staticmethod
+    def get_living_cost_mark():
         return SeveralCosts.objects.get(name="LivingCostMark").price
 
-    def setLivingCostMark(price):
+    @staticmethod
+    def set_living_cost_mark(price):
         obj = SeveralCosts.objects.get(name="LivingCostMark")
         obj.price = price
         obj.save()
 
-    def getActualCashBalance():
+    @staticmethod
+    def get_actual_cash_balance():
         return SeveralCosts.objects.get(name="ActualCashBalance").price
 
-    def setActualCashBalance(price):
+    @staticmethod
+    def set_actual_cash_balance(price):
         obj = SeveralCosts.objects.get(name="ActualCashBalance")
         obj.price = price
         obj.save()

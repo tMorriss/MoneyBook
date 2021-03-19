@@ -61,6 +61,8 @@ for i_row in range(len(result)):
     result_str += "  fields:\n"
     result_str += "    name: " + str(result.iat[i_row, 1]) + "\n"
     result_str += "    show_order: " + str(result.iat[i_row, 2]) + "\n"
+    result_str += "    is_living_cost: " + str(result.iat[i_row, 3]) + "\n"
+    result_str += "    is_variable_cost: " + str(result.iat[i_row, 4]) + "\n"
 result_str += "\n"
 
 # 支払い方法

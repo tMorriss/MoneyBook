@@ -51,8 +51,8 @@ class AddIntraMoveView(View):
                 year = request.POST.get('year')
                 month = request.POST.get('month')
                 # 今月のデータ
-                monthly_data = Data.sortDateDescending(
-                    Data.getMonthData(int(year), int(month)))
+                monthly_data = Data.sort_data_descending(
+                    Data.get_month_data(int(year), int(month)))
                 content = {
                     'app_name': settings.APP_NAME,
                     'username': request.user,
