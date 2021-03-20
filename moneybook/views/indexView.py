@@ -7,7 +7,7 @@ from moneybook.models import (Category, Data, Direction, InOutBalance, Method,
                               SeveralCosts)
 
 
-def get_monthly_data_from_get_parameter(request_get):
+def _get_monthly_data_from_get_parameter(request_get):
     if "year" in request_get and "month" in request_get:
         year = request_get.get("year")
         month = request_get.get("month")
@@ -55,7 +55,7 @@ def index_balance_statistic_mini(request):
     # 全データ
     all_data = Data.get_all_data()
     # 今月のデータ
-    monthly_data = get_monthly_data_from_get_parameter(request.GET)
+    monthly_data = _get_monthly_data_from_get_parameter(request.GET)
     # 支払い方法リスト
     methods = Method.list()
     # 立替と貯金
@@ -105,7 +105,7 @@ def index_balance_statistic_mini(request):
 
 def index_chart_data(request):
     # 今月のデータ
-    monthly_data = get_monthly_data_from_get_parameter(request.GET)
+    monthly_data = _get_monthly_data_from_get_parameter(request.GET)
     # ジャンルごとの支出
     positive_categories_outgo = {}
     for g in Category.list():
@@ -121,7 +121,7 @@ def index_chart_data(request):
 
 def data_table(request):
     # 今月のデータ
-    monthly_data = get_monthly_data_from_get_parameter(request.GET)
+    monthly_data = _get_monthly_data_from_get_parameter(request.GET)
 
     content = {
         'show_data': monthly_data,
