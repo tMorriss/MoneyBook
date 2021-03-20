@@ -6,7 +6,7 @@ from moneybook.models import Category, Data, Direction, Method
 
 
 def search(request):
-    content = {
+    context = {
         'app_name': settings.APP_NAME,
         'username': request.user,
         'directions': Direction.list(),
@@ -19,20 +19,20 @@ def search(request):
     }
 
     # 入力値を維持するための変数
-    query_content = {}
+    query_context = {}
     query_list = ["start_year", "start_month", "start_day", "end_year",
                   "end_month", "end_day", "item", "lower_price", "upper_price"]
     for q in query_list:
         if q in request.GET:
-            query_content[q] = request.GET.get(q)
-    content.update(query_content)
+            query_context[q] = request.GET.get(q)
+    context.update(query_context)
 
-    query_content = {}
+    query_context = {}
     query_list = ["direction", "method", "category", "temp", "checked"]
     for q in query_list:
         if q in request.GET:
-            query_content[q] = list(map(int, request.GET.getlist(q)))
-    content.update(query_content)
+            query_context[q] = list(map(int, request.GET.getlist(q)))
+    context.update(query_context)
 
     # 条件に沿うデータを検索
     if "is_query" in request.GET:
@@ -96,44 +96,44 @@ def search(request):
         # 方向
         if "direction" in request.GET:
             try:
-                data = Data.filter_directions(data, content["direction"])
+                data = Data.filter_directions(data, context["direction"])
             except:
                 data = data
         # 支払い方法
         if "method" in request.GET:
             try:
-                data = Data.filter_methods(data, content["method"])
+                data = Data.filter_methods(data, context["method"])
             except:
                 data = data
         # 分類
         if "category" in request.GET:
             try:
-                data = Data.filter_categories(data, content["category"])
+                data = Data.filter_categories(data, context["category"])
             except:
                 data = data
         # 立替
         if "temp" in request.GET:
             try:
-                data = Data.filter_temps(data, content["temp"])
+                data = Data.filter_temps(data, context["temp"])
             except:
                 data = data
         # チェック済み
         if "checked" in request.GET:
             try:
-                data = Data.filter_checkeds(data, content["checked"])
+                data = Data.filter_checkeds(data, context["checked"])
             except:
                 data = data
 
         # 日付順にソート
         data = Data.sort_data_ascending(data)
 
-        content.update({
+        context.update({
             "show_data": data,
             "income_sum": Data.get_income_sum(data),
             "outgo_sum": Data.get_outgo_sum(data),
             "is_show": True,
         })
     else:
-        content.update({"is_show": False})
+        context.update({"is_show": False})
 
-    return render(request, 'search.html', content)
+    return render(request, 'search.html', context)

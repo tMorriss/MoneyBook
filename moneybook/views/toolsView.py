@@ -22,7 +22,7 @@ def tools(request):
     # 現在銀行
     banks = BankBalance.get_all()
 
-    content = {
+    context = {
         'app_name': settings.APP_NAME,
         'username': request.user,
         'cash_balance':
@@ -37,7 +37,7 @@ def tools(request):
         'living_cost_mark': living_cost_mark,
         'banks': banks,
     }
-    return render(request, "tools.html", content)
+    return render(request, "tools.html", context)
 
 
 def update_actual_cash(request):
@@ -134,13 +134,13 @@ def get_several_checked_date(request):
     bank_written = Data.get_income_sum(
         checked_bank_data) - Data.get_outgo_sum(checked_bank_data)
 
-    content = {
+    context = {
         'year': now.year,
         'banks': banks,
         'credit_checked_date': credit_checked_date,
         'bank_written': bank_written,
     }
-    return render(request, "_several_checked_date.html", content)
+    return render(request, "_several_checked_date.html", context)
 
 
 def update_credit_checked_date(request):
@@ -192,10 +192,10 @@ def get_unchecked_transaction(request):
     all_data = Data.get_all_data()
     # 未承認トランザクション
     unchecked_data = Data.get_unchecked_data(all_data)
-    content = {
+    context = {
         'unchecked_data': unchecked_data,
     }
-    return render(request, "_unchecked_transaction.html", content)
+    return render(request, "_unchecked_transaction.html", context)
 
 
 def update_now_bank(request):

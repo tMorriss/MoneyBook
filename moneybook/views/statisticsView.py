@@ -74,7 +74,7 @@ def statistics_month(request, year):
             infra_costs[11].total += w / 2
             infra_costs[11].water = w / 2
 
-    content = {
+    context = {
         'app_name': settings.APP_NAME,
         'username': request.user,
         'year': year,
@@ -87,7 +87,7 @@ def statistics_month(request, year):
         'living_costs': living_costs,
         'salary': salary
     }
-    return render(request, 'statistics.html', content)
+    return render(request, 'statistics.html', context)
 
 
 def statistics(request):

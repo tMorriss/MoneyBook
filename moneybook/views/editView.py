@@ -18,7 +18,7 @@ class EditView(View):
         except:
             return redirect('moneybook:index')
 
-        content = {
+        context = {
             'app_name': settings.APP_NAME,
             'username': request.user,
             'data': data,
@@ -29,7 +29,7 @@ class EditView(View):
             'temps': {0: "No", 1: "Yes"},
             'checked': {0: "No", 1: "Yes"},
         }
-        return render(request, "edit.html", content)
+        return render(request, "edit.html", context)
 
     def post(self, request, *args, **kwargs):
         pk = kwargs["pk"]

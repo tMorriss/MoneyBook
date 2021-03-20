@@ -33,7 +33,7 @@ def index_month(request, year, month):
     next_month = to_month + relativedelta(months=1)
     last_month = to_month - relativedelta(months=1)
 
-    content = {
+    context = {
         'app_name': settings.APP_NAME,
         'username': request.user,
         'year': year,
@@ -48,7 +48,7 @@ def index_month(request, year, month):
         'first_categories': Category.first_list(),
         'latter_categories': Category.latter_list(),
     }
-    return render(request, 'index.html', content)
+    return render(request, 'index.html', context)
 
 
 def index_balance_statistic_mini(request):
@@ -85,7 +85,7 @@ def index_balance_statistic_mini(request):
     monthly_data_without_inmove = Data.get_data_without_intra_move(
         monthly_data)
 
-    content = {
+    context = {
         'total_balance':
             Data.get_income_sum(all_data) - Data.get_outgo_sum(all_data),
         'methods_iob': methods_iob,
@@ -100,7 +100,7 @@ def index_balance_statistic_mini(request):
         'all_outgo': Data.get_outgo_sum(monthly_data_without_inmove),
         'methods_monthly_iob': methods_monthly_iob,
     }
-    return render(request, '_balance_statisticMini.html', content)
+    return render(request, '_balance_statisticMini.html', context)
 
 
 def index_chart_data(request):
@@ -113,19 +113,19 @@ def index_chart_data(request):
             d = Data.get_category_data(monthly_data, g.pk)
             positive_categories_outgo[g] = Data.get_outgo_sum(
                 d) - Data.get_temp_sum(d)
-    content = {
+    context = {
         'categories_outgo': positive_categories_outgo,
     }
-    return render(request, '_chart_container_data.html', content)
+    return render(request, '_chart_container_data.html', context)
 
 
 def data_table(request):
     # 今月のデータ
     monthly_data = _get_monthly_data_from_get_parameter(request.GET)
 
-    content = {
+    context = {
         'show_data': monthly_data,
     }
 
     # 追加後のmonthlyテーブルを返す
-    return render(request, '_data_table.html', content)
+    return render(request, '_data_table.html', context)
