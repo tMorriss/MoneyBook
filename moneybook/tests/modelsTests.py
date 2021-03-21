@@ -114,7 +114,7 @@ class DataTestCase(TestCase):
                 self.assertEqual(str(data[i]), actuals[i])
 
     def test_get_all_data(self):
-        self.assertEqual(Data.get_all_data().count(), 15)
+        self.assertEqual(Data.get_all_data().count(), 16)
 
     def test_get_range_data(self):
         start = date(2000, 1, 1)
@@ -123,6 +123,7 @@ class DataTestCase(TestCase):
         actuals = [
             "コンビニ",
             "必需品1",
+            "その他1",
             "必需品2",
             "現金収入"
         ]
@@ -139,6 +140,7 @@ class DataTestCase(TestCase):
         actuals = [
             "コンビニ",
             "必需品1",
+            "その他1",
             "必需品2",
             "現金収入",
             "スーパー",
@@ -156,6 +158,10 @@ class DataTestCase(TestCase):
         data = Data.get_month_data(1999, 1)
         self.assertEqual(data.count(), 0)
 
+    def test_get_month_data_out(self):
+        data = Data.get_month_data(2000, 13)
+        self.assertEqual(data.count(), 0)
+
     def test_get_sum_one(self):
         data = Data.get_month_data(2000, 1)
         self.assertEqual(Data.get_sum(data, 1), 10000)
@@ -166,7 +172,7 @@ class DataTestCase(TestCase):
 
     def test_get_sum_two(self):
         data = Data.get_month_data(2000, 1)
-        self.assertEqual(Data.get_sum(data, 2), 9030)
+        self.assertEqual(Data.get_sum(data, 2), 9060)
 
     def test_get_sum_two_empty(self):
         data = Data.get_month_data(1999, 1)
@@ -186,7 +192,7 @@ class DataTestCase(TestCase):
 
     def test_get_outgo_sum(self):
         data = Data.get_month_data(2000, 1)
-        self.assertEqual(Data.get_outgo_sum(data), 9030)
+        self.assertEqual(Data.get_outgo_sum(data), 9060)
 
     def test_get_outgo_sum_nothing(self):
         data = Data.get_month_data(1999, 1)
@@ -261,6 +267,7 @@ class DataTestCase(TestCase):
         actuals = [
             "コンビニ",
             "必需品1",
+            "その他1",
             "必需品2",
             "現金収入",
             "スーパー",
@@ -288,6 +295,7 @@ class DataTestCase(TestCase):
         actuals = [
             "コンビニ",
             "必需品1",
+            "その他1",
             "必需品2",
             "現金収入",
             "スーパー",
@@ -337,6 +345,7 @@ class DataTestCase(TestCase):
         data = Data.sort_data_ascending(base_data)
         actuals = [
             "コンビニ",
+            "その他1",
             "必需品1",
             "必需品2",
             "現金収入",
@@ -371,6 +380,7 @@ class DataTestCase(TestCase):
             "現金収入",
             "必需品2",
             "必需品1",
+            "その他1",
             "コンビニ"
         ]
         self._assert_list(data, actuals)
@@ -410,6 +420,7 @@ class DataTestCase(TestCase):
         data = Data.get_cash_data(base_data)
         actuals = [
             "コンビニ",
+            "その他1",
             "必需品2",
             "現金収入",
             "スーパー"
@@ -454,6 +465,7 @@ class DataTestCase(TestCase):
         data = Data.get_checked_data(base_data)
         actuals = [
             "コンビニ",
+            "その他1",
             "必需品2",
             "現金収入",
             "銀行収入",
@@ -497,7 +509,7 @@ class DataTestCase(TestCase):
 
     def test_get(self):
         self.assertEqual(str(Data.get(1)), "松屋")
-        self.assertEqual(str(Data.get(5)), "現金収入")
+        self.assertEqual(str(Data.get(6)), "現金収入")
 
     def test_get_nothing(self):
         self.assertRaises(Data.DoesNotExist, Data.get, 100)
@@ -527,6 +539,7 @@ class DataTestCase(TestCase):
         data = Data.filter_price(base_data, None, 130)
         actuals = [
             "コンビニ",
+            "その他1",
             "貯金"
         ]
         self._assert_list(data, actuals)
@@ -568,6 +581,7 @@ class DataTestCase(TestCase):
         data = Data.filter_methods(base_data, [1, 3])
         actuals = [
             "コンビニ",
+            "その他1",
             "必需品2",
             "現金収入",
             "スーパー",
@@ -721,21 +735,34 @@ class BankBalanceTestCase(TestCase):
 
 
 class SeveralCostsTestCase(TestCase):
-    def setUp(self):
-        super().setUp()
-        SeveralCosts.objects.create(name="LivingCostMark", price=1000)
-        SeveralCosts.objects.create(name="ActualCashBalance", price=2000)
-
     def test_get_living_cost_mark(self):
+        SeveralCosts.objects.create(name="LivingCostMark", price=1000)
         self.assertEqual(SeveralCosts.get_living_cost_mark(), 1000)
 
+    def test_get_living_cost_mark_nothing(self):
+        self.assertEqual(SeveralCosts.get_living_cost_mark(), 0)
+
     def test_set_living_cost_mark(self):
+        SeveralCosts.objects.create(name="LivingCostMark", price=1000)
+        SeveralCosts.set_living_cost_mark(1001)
+        self.assertEqual(SeveralCosts.get_living_cost_mark(), 1001)
+
+    def test_set_living_cost_mark_nothing(self):
         SeveralCosts.set_living_cost_mark(1001)
         self.assertEqual(SeveralCosts.get_living_cost_mark(), 1001)
 
     def test_get_actual_cash_balance(self):
+        SeveralCosts.objects.create(name="ActualCashBalance", price=2000)
         self.assertEqual(SeveralCosts.get_actual_cash_balance(), 2000)
 
+    def test_get_actual_cash_balance_nothing(self):
+        self.assertEqual(SeveralCosts.get_actual_cash_balance(), 0)
+
     def test_set_actual_cash_balance(self):
+        SeveralCosts.objects.create(name="ActualCashBalance", price=2000)
+        SeveralCosts.set_actual_cash_balance(2001)
+        self.assertEqual(SeveralCosts.get_actual_cash_balance(), 2001)
+
+    def test_set_actual_cash_balance_nothing(self):
         SeveralCosts.set_actual_cash_balance(2001)
         self.assertEqual(SeveralCosts.get_actual_cash_balance(), 2001)

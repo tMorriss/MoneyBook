@@ -105,9 +105,12 @@ class Data(models.Model):
     # 指定月のデータを持ってくる
     @staticmethod
     def get_month_data(year, month):
-        start = date(year, month, 1)
-        end = date(year, month, calendar.monthrange(year, month)[1])
-        return Data.get_range_data(start, end)
+        try:
+            start = date(year, month, 1)
+            end = date(year, month, calendar.monthrange(year, month)[1])
+            return Data.get_range_data(start, end)
+        except ValueError:
+            return Data.objects.none()
 
     # 収入や支出の合計
     @staticmethod
@@ -332,23 +335,41 @@ class SeveralCosts(models.Model):
 
     @staticmethod
     def get_living_cost_mark():
-        return SeveralCosts.objects.get(name="LivingCostMark").price
+        try:
+            price = SeveralCosts.objects.get(name="LivingCostMark").price
+            if price is None:
+                price = 0
+            return price
+        except SeveralCosts.DoesNotExist:
+            return 0
 
     @staticmethod
     def set_living_cost_mark(price):
-        obj = SeveralCosts.objects.get(name="LivingCostMark")
-        obj.price = price
-        obj.save()
+        try:
+            obj = SeveralCosts.objects.get(name="LivingCostMark")
+            obj.price = price
+            obj.save()
+        except SeveralCosts.DoesNotExist:
+            SeveralCosts.objects.create(name="LivingCostMark", price=price)
 
     @staticmethod
     def get_actual_cash_balance():
-        return SeveralCosts.objects.get(name="ActualCashBalance").price
+        try:
+            price = SeveralCosts.objects.get(name="ActualCashBalance").price
+            if price is None:
+                price = 0
+            return price
+        except SeveralCosts.DoesNotExist:
+            return 0
 
     @staticmethod
     def set_actual_cash_balance(price):
-        obj = SeveralCosts.objects.get(name="ActualCashBalance")
-        obj.price = price
-        obj.save()
+        try:
+            obj = SeveralCosts.objects.get(name="ActualCashBalance")
+            obj.price = price
+            obj.save()
+        except SeveralCosts.DoesNotExist:
+            SeveralCosts.objects.create(name="ActualCashBalance", price=price)
 
 
 class InOutBalance:

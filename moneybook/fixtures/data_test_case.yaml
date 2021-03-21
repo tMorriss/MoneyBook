@@ -25,6 +25,12 @@
     show_order: 3
     name: PayPay
     chargeable: 1
+- model: moneybook.Method
+  pk: 4
+  fields:
+    show_order: 0
+    name: nanaco
+    chargeable: 1
 
 - model: moneybook.Category
   pk: 1
@@ -99,6 +105,16 @@
     direction_id: 2
     category_id: 2
     method_id: 2
+- model: moneybook.Data
+  fields:
+    date: 2000-01-03
+    item: その他1
+    price: 30
+    temp: 0
+    checked: 1
+    direction_id: 2
+    category_id: 3
+    method_id: 1
 - model: moneybook.Data
   fields:
     date: 2000-01-08
@@ -219,3 +235,12 @@
     direction_id: 2
     category_id: 4
     method_id: 3
+
+- model: moneybook.SeveralCosts
+  fields:
+    name: LivingCostMark
+    price: 1000
+- model: moneybook.SeveralCosts
+  fields:
+    name: ActualCashBalance
+    price: 2000

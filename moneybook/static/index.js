@@ -80,7 +80,7 @@ function updateData() {
         }),
 
         $.get({
-            url: balance_statisticMini_url,
+            url: balance_statistic_mini_url,
             data: {
                 "year": year,
                 "month": month,
