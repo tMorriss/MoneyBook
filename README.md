@@ -1,6 +1,11 @@
 # MoneyBook
 自分用家計簿Webアプリケーション
 
+## lint確認
+```
+$ flake8 . --count --ignore=E722,W503 --max-line-length=120 --exclude moneybook/migrations,__init__.py --show-source --statistics --import-order-style smarkets
+```
+
 ## テスト方法
 ```
 $ coverage run --source='moneybook.models,moneybook.views,moneybook.utils' manage.py test moneybook --settings config.settings.test
