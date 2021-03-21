@@ -336,10 +336,7 @@ class SeveralCosts(models.Model):
     @staticmethod
     def get_living_cost_mark():
         try:
-            price = SeveralCosts.objects.get(name="LivingCostMark").price
-            if price is None:
-                price = 0
-            return price
+            return SeveralCosts.objects.get(name="LivingCostMark").price
         except SeveralCosts.DoesNotExist:
             return 0
 
@@ -355,10 +352,7 @@ class SeveralCosts(models.Model):
     @staticmethod
     def get_actual_cash_balance():
         try:
-            price = SeveralCosts.objects.get(name="ActualCashBalance").price
-            if price is None:
-                price = 0
-            return price
+            return SeveralCosts.objects.get(name="ActualCashBalance").price
         except SeveralCosts.DoesNotExist:
             return 0
 
