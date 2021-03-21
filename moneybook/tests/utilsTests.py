@@ -1,7 +1,5 @@
-from moneybook.utils import is_valid_date
-
-
 from django.test import TestCase
+from moneybook.utils import is_valid_date
 
 
 class UtilsTestCase(TestCase):

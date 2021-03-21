@@ -59,7 +59,7 @@ class AddIntraMoveView(View):
                     'show_data': monthly_data,
                 }
                 # 追加後のmonthlyテーブルを返す
-                return render(request, '_data_table.html', contextcontext)
+                return render(request, '_data_table.html', context)
 
             except:
                 return HttpResponseBadRequest()

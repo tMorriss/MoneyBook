@@ -4,7 +4,6 @@ from unittest.mock import patch
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
-from moneybook.models import Direction, Method
 from moneybook.views import indexView
 
 
@@ -25,10 +24,10 @@ class IndexViewTestCase(TestCase):
     @patch.object(indexView, 'index_month', return_value=True)
     def test_index(self, index_month):
         now = datetime.now()
-        response = self.client.get(reverse('moneybook:index'))
+        self.client.get(reverse('moneybook:index'))
         request, year, month = indexView.index_month.call_args.args
-        year = now.year
-        month = now.month
+        self.assertEqual(year, now.year)
+        self.assertEqual(month, now.month)
 
     def test_index_guest(self):
         response = self.client.get(reverse('moneybook:index'))
