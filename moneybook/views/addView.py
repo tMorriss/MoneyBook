@@ -12,7 +12,7 @@ from moneybook.models import Category, Direction, Method
 class AddView(View):
     def get(self, request, *args, **kwargs):
         now = datetime.now()
-        content = {
+        context = {
             'app_name': settings.APP_NAME,
             'username': request.user,
             'year': now.year,
@@ -24,7 +24,7 @@ class AddView(View):
             'latter_categories': Category.latter_list(),
             'temps': {0: "No", 1: "Yes"},
         }
-        return render(request, 'add.html', content)
+        return render(request, 'add.html', context)
 
     def post(self, request, *args, **kwargs):
         new_data = DataForm(request.POST)

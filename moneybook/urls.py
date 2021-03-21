@@ -8,8 +8,8 @@ app_name = 'moneybook'
 urlpatterns = [
     path('', indexView.index, name='index'),
     path('<int:year>/<int:month>', indexView.index_month, name='index_month'),
-    path('_balance_statisticMini', indexView.index_balance_statistic_mini,
-         name='balance_statisticMini'),
+    path('_balance_statistic_mini', indexView.index_balance_statistic_mini,
+         name='balance_statistic_mini'),
     path('_chart_container_data', indexView.index_chart_data,
          name='chart_container_data'),
     path('_data_table', indexView.data_table, name='data_table'),

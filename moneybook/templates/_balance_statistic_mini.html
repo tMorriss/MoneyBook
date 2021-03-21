@@ -26,15 +26,15 @@
 <table class="tbl-common" id="tbl-parameters">
     <tr>
         <th>収入合計</th>
-        <td class="righter">{{ total_income|intcomma }}</td>
+        <td class="righter">{{ monthly_income|intcomma }}</td>
     </tr>
     <tr>
         <th>支出合計</th>
-        <td class="righter">{{ total_outgo|intcomma }}</td>
+        <td class="righter">{{ monthly_outgo|intcomma }}</td>
     </tr>
     <tr>
         <th>収支</th>
-        <td class="righter">{% if total_inout >= 0 %}+{% endif %}{{ total_inout|intcomma }}</td>
+        <td class="righter">{% if monthly_inout >= 0 %}+{% endif %}{{ monthly_inout|intcomma }}</td>
     </tr>
     <tr>
         <th>生活費</th>
