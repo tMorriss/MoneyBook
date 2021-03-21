@@ -3,7 +3,7 @@
 
 ## テスト方法
 ```
-$ coverage run --source='moneybook.models,moneybook.views' manage.py test moneybook --settings config.settings.test
+$ coverage run --source='moneybook.models,moneybook.views,moneybook.utils' manage.py test moneybook --settings config.settings.test
 # レポートを表示
 $ coverage report -m
 

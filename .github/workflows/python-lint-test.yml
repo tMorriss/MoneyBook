@@ -38,6 +38,6 @@ jobs:
         if [ -f build/requirements_test.txt ]; then pip install -r build/requirements_test.txt; fi
     - name: Unit test with coverage
       run: |
-        coverage run --source='moneybook.models,moneybook.views' manage.py test moneybook --settings config.settings.test
+        coverage run --source='moneybook.models,moneybook.views,moneybook.utils' manage.py test moneybook --settings config.settings.test
         coverage report -m
 
