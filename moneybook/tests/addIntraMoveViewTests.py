@@ -10,7 +10,6 @@ class AddIntraMoveViewTestCase(CommonTestCase):
     username = 'tester'
 
     def test_get(self):
-        now = datetime.now()
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:add_intra_move'))
         self.assertEqual(response.status_code, 302)
