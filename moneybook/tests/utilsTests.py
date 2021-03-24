@@ -1,8 +1,8 @@
-from django.test import TestCase
+from moneybook.tests.commonTests import CommonTestCase
 from moneybook.utils import is_valid_date
 
 
-class UtilsTestCase(TestCase):
+class UtilsTestCase(CommonTestCase):
     def test_is_valid_date_january(self):
         self.assertTrue(is_valid_date(2000, 1))
 

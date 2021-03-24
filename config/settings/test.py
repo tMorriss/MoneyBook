@@ -5,3 +5,5 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
     }
 }
+
+APP_NAME = "test-MoneyBook"

@@ -2,24 +2,14 @@ from datetime import datetime
 from unittest.mock import patch
 
 from django.contrib.auth.models import User
-from django.test import TestCase
 from django.urls import reverse
+from moneybook.tests.commonTests import CommonTestCase
 from moneybook.views import indexView
 
 
-class IndexViewTestCase(TestCase):
+class IndexViewTestCase(CommonTestCase):
     fixtures = ['data_test_case']
     username = 'tester'
-
-    @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
-
-    def _assert_list(self, data, actuals):
-        self.assertEqual(data.count(), len(actuals))
-        for i in range(len(actuals)):
-            with self.subTest(i=i):
-                self.assertEqual(str(data[i]), actuals[i])
 
     @patch.object(indexView, 'index_month', return_value=True)
     def test_index(self, index_month):
@@ -39,44 +29,39 @@ class IndexViewTestCase(TestCase):
         response = self.client.get(
             reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
         self.assertEqual(response.status_code, 200)
-        with self.subTest():
-            self.assertEqual(
-                response.context['username'].username, self.username)
-            self.assertEqual(response.context['year'], 2000)
-            self.assertEqual(response.context['month'], 1)
-            self.assertEqual(response.context['next_year'], 2000)
-            self.assertEqual(response.context['next_month'], 2)
-            self.assertEqual(response.context['last_year'], 1999)
-            self.assertEqual(response.context['last_month'], 12)
-            data = response.context['directions']
-            actuals = ['収入', '支出']
-            self._assert_list(data, actuals)
-            data = response.context['methods']
-            actuals = ['銀行', "現金", "PayPay"]
-            self._assert_list(data, actuals)
-            data = response.context['unused_methods']
-            actuals = ['nanaco']
-            self._assert_list(data, actuals)
-            data = response.context['first_categories']
-            actuals = ['食費', '必需品']
-            self._assert_list(data, actuals)
-            data = response.context['latter_categories']
-            actuals = ['その他', '内部移動', '貯金', '計算外']
-            self._assert_list(data, actuals)
+        self.assertEqual(response.context['app_name'], 'test-MoneyBook')
+        self.assertEqual(
+            response.context['username'].username, self.username)
+        self.assertEqual(response.context['year'], 2000)
+        self.assertEqual(response.context['month'], 1)
+        self.assertEqual(response.context['next_year'], 2000)
+        self.assertEqual(response.context['next_month'], 2)
+        self.assertEqual(response.context['last_year'], 1999)
+        self.assertEqual(response.context['last_month'], 12)
+        data = response.context['directions']
+        actuals = ['収入', '支出']
+        self._assert_list(data, actuals)
+        data = response.context['methods']
+        actuals = ['銀行', "現金", "PayPay"]
+        self._assert_list(data, actuals)
+        data = response.context['unused_methods']
+        actuals = ['nanaco']
+        self._assert_list(data, actuals)
+        data = response.context['first_categories']
+        actuals = ['食費', '必需品']
+        self._assert_list(data, actuals)
+        data = response.context['latter_categories']
+        actuals = ['その他', '内部移動', '貯金', '計算外']
+        self._assert_list(data, actuals)
 
-            templates = []
-            for t in response.templates:
-                templates.append(t.name)
-            self.assertEqual(
-                templates,
-                [
-                    'index.html',
-                    '_base.html',
-                    '_add_mini.html',
-                    '_filter_mini.html',
-                    '_result_message.html'
-                ]
-            )
+        actuals = [
+            'index.html',
+            '_base.html',
+            '_add_mini.html',
+            '_filter_mini.html',
+            '_result_message.html'
+        ]
+        self._assert_templates(response.templates, actuals)
 
     def test_index_month_out_of_range(self):
         self.client.force_login(User.objects.create_user(self.username))
@@ -152,10 +137,8 @@ class IndexViewTestCase(TestCase):
                 self.assertEqual(iobs[i].income, actuals[i]['income'])
                 self.assertEqual(iobs[i].outgo, actuals[i]['outgo'])
 
-        templates = []
-        for t in response.templates:
-            templates.append(t.name)
-        self.assertEqual(templates, ['_balance_statistic_mini.html'])
+        actuals = ['_balance_statistic_mini.html']
+        self._assert_templates(response.templates, actuals)
 
     def test_index_balance_statistic_mini_without_year(self):
         self.client.force_login(User.objects.create_user(self.username))
