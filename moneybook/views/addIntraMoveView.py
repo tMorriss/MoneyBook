@@ -1,9 +1,8 @@
 from datetime import date
 
-from django.conf import settings
 from django.db import transaction
 from django.http import HttpResponse, HttpResponseBadRequest
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect
 from django.views import View
 from moneybook.forms import IntraMoveForm
 from moneybook.models import Category, Data, Direction, Method
