@@ -1,9 +1,8 @@
 from datetime import date
 
-from django.conf import settings
 from django.db import transaction
-from django.http import HttpResponseBadRequest
-from django.shortcuts import redirect, render
+from django.http import HttpResponse, HttpResponseBadRequest
+from django.shortcuts import redirect
 from django.views import View
 from moneybook.forms import IntraMoveForm
 from moneybook.models import Category, Data, Direction, Method
@@ -24,13 +23,10 @@ class AddIntraMoveView(View):
                 out_data.price = request.POST.get("price")
                 out_data.direction = Direction.get(2)
                 out_data.method = Method.get(request.POST.get("before_method"))
-                out_data.category = Category.get(10)
+                out_data.category = Category.get_intra_move()
                 out_data.temp = False
-                if request.POST.get("item"):
-                    out_data.item = request.POST.get("item")
-                else:
-                    out_data.item = Method.get(
-                        request.POST.get("after_method")).name + "チャージ"
+                out_data.item = Method.get(
+                    request.POST.get("after_method")).name + "チャージ"
 
                 in_data = Data()
                 in_data.date = date(int(request.POST.get("year")), int(
@@ -38,28 +34,16 @@ class AddIntraMoveView(View):
                 in_data.price = request.POST.get("price")
                 in_data.direction = Direction.get(1)
                 in_data.method = Method.get(request.POST.get("after_method"))
-                in_data.category = Category.get(10)
+                in_data.category = Category.get_intra_move()
                 in_data.temp = False
-                if request.POST.get("item"):
-                    in_data.item = request.POST.get("item")
-                else:
-                    in_data.item = in_data.method.name + "チャージ"
+                in_data.item = in_data.method.name + "チャージ"
 
+                # 保存
                 out_data.save()
                 in_data.save()
 
-                year = request.POST.get('year')
-                month = request.POST.get('month')
-                # 今月のデータ
-                monthly_data = Data.sort_data_descending(
-                    Data.get_month_data(int(year), int(month)))
-                context = {
-                    'app_name': settings.APP_NAME,
-                    'username': request.user,
-                    'show_data': monthly_data,
-                }
-                # 追加後のmonthlyテーブルを返す
-                return render(request, '_data_table.html', context)
+                # 成功レスポンス
+                return HttpResponse()
 
             except:
                 return HttpResponseBadRequest()

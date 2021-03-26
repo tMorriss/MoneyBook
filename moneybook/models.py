@@ -73,6 +73,10 @@ class Category(models.Model):
     def latter_list():
         return Category.objects.filter(show_order__lte=0).order_by('-show_order')
 
+    @staticmethod
+    def get_intra_move():
+        return Category.objects.get(name='内部移動')
+
 
 class Data(models.Model):
     date = models.DateField()
