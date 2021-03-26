@@ -31,11 +31,8 @@ class AddView(View):
         if new_data.is_valid():
             # データ追加
             new_data.save()
-
-            res_data = {
-                "status": "success",
-            }
-            return HttpResponse(json.dumps(res_data))
+            # 成功レスポンス
+            return HttpResponse()
 
         else:
             error_list = []

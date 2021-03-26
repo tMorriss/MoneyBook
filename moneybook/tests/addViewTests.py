@@ -67,8 +67,7 @@ class AddViewTestCase(CommonTestCase):
             }
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content.decode(),
-                         json.dumps({'status': 'success'}))
+        self.assertEqual(response.content.decode(), '')
 
     def test_post_invalid(self):
         self.client.force_login(User.objects.create_user(self.username))
