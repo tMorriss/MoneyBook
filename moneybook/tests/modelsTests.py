@@ -112,7 +112,7 @@ class DataTestCase(CommonTestCase):
             "必需品2",
             "現金収入"
         ]
-        self._assert_list(data, expects)
+        self.__assert_list(data, expects)
 
     def test_get_range_data_nothing(self):
         start = date(1999, 1, 1)
@@ -137,7 +137,7 @@ class DataTestCase(CommonTestCase):
             "立替分1",
             "立替分2"
         ]
-        self._assert_list(data, expects)
+        self.__assert_list(data, expects)
 
     def test_get_month_data_nothing(self):
         data = Data.get_month_data(1999, 1)
@@ -190,7 +190,7 @@ class DataTestCase(CommonTestCase):
             "PayPayチャージ",
             "立替分1"
         ]
-        self._assert_list(data, expects)
+        self.__assert_list(data, expects)
 
     def test_get_method_data_nothing(self):
         month_data = Data.get_month_data(2000, 1)
@@ -210,7 +210,7 @@ class DataTestCase(CommonTestCase):
             "スーパー",
             "立替分1"
         ]
-        self._assert_list(data, expects)
+        self.__assert_list(data, expects)
 
     def test_get_category_data_nothing(self):
         month_data = Data.get_month_data(2000, 1)
@@ -262,7 +262,7 @@ class DataTestCase(CommonTestCase):
             "立替分1",
             "立替分2"
         ]
-        self._assert_list(data, expects)
+        self.__assert_list(data, expects)
 
     def test_get_data_without_intra_move_nothing(self):
         base_data = Data.get_month_data(2000, 3)
@@ -289,7 +289,7 @@ class DataTestCase(CommonTestCase):
             "立替分1",
             "立替分2"
         ]
-        self._assert_list(data, expects)
+        self.__assert_list(data, expects)
 
     def test_get_normal_data_nothing(self):
         base_data = Data.get_month_data(2000, 3)
@@ -343,7 +343,7 @@ class DataTestCase(CommonTestCase):
             "立替分1",
             "立替分2"
         ]
-        self._assert_list(data, expects)
+        self.__assert_list(data, expects)
 
     def test_sort_data_ascending_nothing(self):
         data = Data.get_month_data(1999, 1)
@@ -368,7 +368,7 @@ class DataTestCase(CommonTestCase):
             "その他1",
             "コンビニ"
         ]
-        self._assert_list(data, expects)
+        self.__assert_list(data, expects)
 
     def test_sort_data_descending_nothing(self):
         data = Data.get_month_data(1999, 1)
@@ -382,7 +382,7 @@ class DataTestCase(CommonTestCase):
             "立替分1",
             "立替分2"
         ]
-        self._assert_list(data, expects)
+        self.__assert_list(data, expects)
 
     def test_get_keyword_data_same(self):
         base_data = Data.get_month_data(2000, 1)
@@ -410,7 +410,7 @@ class DataTestCase(CommonTestCase):
             "現金収入",
             "スーパー"
         ]
-        self._assert_list(data, expects)
+        self.__assert_list(data, expects)
 
     def test_get_cash_data_nothing(self):
         base_data = Data.get_month_data(2000, 2)
@@ -433,7 +433,7 @@ class DataTestCase(CommonTestCase):
             "計算外",
             "立替分2"
         ]
-        self._assert_list(data, expects)
+        self.__assert_list(data, expects)
 
     def test_get_bank_data_nothing(self):
         base_data = Data.get_month_data(2000, 2)
@@ -458,7 +458,7 @@ class DataTestCase(CommonTestCase):
             "PayPayチャージ",
             "立替分2"
         ]
-        self._assert_list(data, expects)
+        self.__assert_list(data, expects)
 
     def test_get_checked_data_nothing(self):
         base_data = Data.get_month_data(2000, 3)
@@ -480,7 +480,7 @@ class DataTestCase(CommonTestCase):
             "PayPayチャージ",
             "立替分1"
         ]
-        self._assert_list(data, expects)
+        self.__assert_list(data, expects)
 
     def test_get_unchecked_data_nothing(self):
         base_data = Data.get_month_data(2000, 2)
@@ -507,7 +507,7 @@ class DataTestCase(CommonTestCase):
             "貯金",
             "立替分1"
         ]
-        self._assert_list(data, expects)
+        self.__assert_list(data, expects)
 
     def test_filter_price_lower(self):
         base_data = Data.get_month_data(2000, 1)
@@ -517,7 +517,7 @@ class DataTestCase(CommonTestCase):
             "現金収入",
             "銀行収入"
         ]
-        self._assert_list(data, expects)
+        self.__assert_list(data, expects)
 
     def test_filter_price_upper(self):
         base_data = Data.get_month_data(2000, 1)
@@ -527,7 +527,7 @@ class DataTestCase(CommonTestCase):
             "その他1",
             "貯金"
         ]
-        self._assert_list(data, expects)
+        self.__assert_list(data, expects)
 
     def test_filter_price_nothing(self):
         base_data = Data.get_month_data(2000, 1)
@@ -549,7 +549,7 @@ class DataTestCase(CommonTestCase):
             "立替分1",
             "立替分2"
         ]
-        self._assert_list(data, expects)
+        self.__assert_list(data, expects)
 
     def test_filter_directions_nothing(self):
         base_data = Data.get_month_data(2000, 1)
@@ -573,7 +573,7 @@ class DataTestCase(CommonTestCase):
             "PayPayチャージ",
             "立替分1",
         ]
-        self._assert_list(data, expects)
+        self.__assert_list(data, expects)
 
     def test_filter_methods_nothing(self):
         base_data = Data.get_month_data(2000, 1)
@@ -593,7 +593,7 @@ class DataTestCase(CommonTestCase):
             "スーパー",
             "立替分1"
         ]
-        self._assert_list(data, expects)
+        self.__assert_list(data, expects)
 
     def test_filter_categories_nothing(self):
         base_data = Data.get_month_data(2000, 1)
@@ -612,7 +612,7 @@ class DataTestCase(CommonTestCase):
             "立替分1",
             "立替分2"
         ]
-        self._assert_list(data, expects)
+        self.__assert_list(data, expects)
 
     def test_filter_temps_nothing(self):
         base_data = Data.get_month_data(2000, 2)
@@ -634,7 +634,7 @@ class DataTestCase(CommonTestCase):
             "PayPayチャージ",
             "立替分1"
         ]
-        self._assert_list(data, expects)
+        self.__assert_list(data, expects)
 
     def test_filter_checkeds_nothing(self):
         base_data = Data.get_month_data(2000, 2)

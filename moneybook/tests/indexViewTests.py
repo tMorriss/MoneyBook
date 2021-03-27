@@ -40,19 +40,19 @@ class IndexViewTestCase(CommonTestCase):
         self.assertEqual(response.context['last_month'], 12)
         data = response.context['directions']
         expects = ['収入', '支出']
-        self._assert_list(data, expects)
+        self.__assert_list(data, expects)
         data = response.context['methods']
         expects = ['銀行', "現金", "PayPay"]
-        self._assert_list(data, expects)
+        self.__assert_list(data, expects)
         data = response.context['unused_methods']
         expects = ['nanaco']
-        self._assert_list(data, expects)
+        self.__assert_list(data, expects)
         data = response.context['first_categories']
         expects = ['食費', '必需品']
-        self._assert_list(data, expects)
+        self.__assert_list(data, expects)
         data = response.context['latter_categories']
         expects = ['その他', '内部移動', '貯金', '計算外']
-        self._assert_list(data, expects)
+        self.__assert_list(data, expects)
 
         expects = [
             'index.html',
@@ -61,7 +61,7 @@ class IndexViewTestCase(CommonTestCase):
             '_filter_mini.html',
             '_result_message.html'
         ]
-        self._assert_templates(response.templates, expects)
+        self.__assert_templates(response.templates, expects)
 
     def test_index_month_out_of_range(self):
         self.client.force_login(User.objects.create_user(self.username))
@@ -138,7 +138,7 @@ class IndexViewTestCase(CommonTestCase):
                 self.assertEqual(iobs[i].outgo, expects[i]['outgo'])
 
         expects = ['_balance_statistic_mini.html']
-        self._assert_templates(response.templates, expects)
+        self.__assert_templates(response.templates, expects)
 
     def test_index_balance_statistic_mini_without_year(self):
         self.client.force_login(User.objects.create_user(self.username))
