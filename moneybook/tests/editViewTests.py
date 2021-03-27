@@ -22,16 +22,16 @@ class EditViewTestCase(CommonTestCase):
         self.assertEqual(data.item, '松屋')
         data = response.context['directions']
         expects = ['収入', '支出']
-        self.__assert_list(data, expects)
+        self._assert_list(data, expects)
         data = response.context['methods']
         expects = ['銀行', "現金", "PayPay"]
-        self.__assert_list(data, expects)
+        self._assert_list(data, expects)
         data = response.context['first_categories']
         expects = ['食費', '必需品']
-        self.__assert_list(data, expects)
+        self._assert_list(data, expects)
         data = response.context['latter_categories']
         expects = ['その他', '内部移動', '貯金', '計算外']
-        self.__assert_list(data, expects)
+        self._assert_list(data, expects)
         data = response.context['temps']
         self.assertEqual(data, {0: "No", 1: "Yes"})
         data = response.context['checked']
@@ -42,7 +42,7 @@ class EditViewTestCase(CommonTestCase):
             '_base.html',
             '_result_message.html',
         ]
-        self.__assert_templates(response.templates, expects)
+        self._assert_templates(response.templates, expects)
 
     def test_get_invalid_pk(self):
         self.client.force_login(User.objects.create_user(self.username))
