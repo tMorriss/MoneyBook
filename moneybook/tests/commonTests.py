@@ -2,14 +2,14 @@ from django.test import TestCase
 
 
 class CommonTestCase(TestCase):
-    def _assert_list(self, data, actuals):
-        self.assertEqual(data.count(), len(actuals))
-        for i in range(len(actuals)):
+    def _assert_list(self, data, expects):
+        self.assertEqual(data.count(), len(expects))
+        for i in range(len(expects)):
             with self.subTest(i=i):
-                self.assertEqual(str(data[i]), actuals[i])
+                self.assertEqual(str(data[i]), expects[i])
 
-    def _assert_templates(self, templates, actuals):
-        self.assertEqual(len(templates), len(actuals))
-        for i in range(len(actuals)):
+    def _assert_templates(self, templates, expects):
+        self.assertEqual(len(templates), len(expects))
+        for i in range(len(expects)):
             with self.subTest(i=i):
-                self.assertEqual(templates[i].name, actuals[i])
+                self.assertEqual(templates[i].name, expects[i])

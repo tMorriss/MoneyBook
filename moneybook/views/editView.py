@@ -1,8 +1,7 @@
 import json
 
 from django.conf import settings
-from django.http import (HttpResponse, HttpResponseBadRequest,
-                         HttpResponseNotFound)
+from django.http import (HttpResponse, HttpResponseBadRequest)
 from django.shortcuts import redirect, render
 from django.views import View
 from moneybook.forms import DataForm
@@ -37,7 +36,7 @@ class EditView(View):
         try:
             data = Data.get(pk)
         except:
-            return HttpResponseNotFound(
+            return HttpResponseBadRequest(
                 json.dumps({"message": "Data does not exist"})
             )
 
@@ -54,7 +53,7 @@ class EditView(View):
             data.checked = request.POST.get("checked")
             data.save()
 
-            return HttpResponse(json.dumps({"message": "success"}))
+            return HttpResponse()
         else:
             res_data = {}
             error_list = []
@@ -72,8 +71,8 @@ class CheckView(View):
             data = Data.get(pk)
         except:
             res = {"message": "Data does not exist"}
-            return HttpResponseNotFound(json.dumps(res))
+            return HttpResponseBadRequest(json.dumps(res))
 
         data.checked = True
         data.save()
-        return HttpResponse(json.dumps({"message": "success"}))
+        return HttpResponse()

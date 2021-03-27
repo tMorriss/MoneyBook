@@ -22,29 +22,29 @@ class AddViewTestCase(CommonTestCase):
         self.assertEqual(response.context['year'], now.year)
         self.assertEqual(response.context['month'], now.month)
         data = response.context['directions']
-        actuals = ['収入', '支出']
-        self._assert_list(data, actuals)
+        expects = ['収入', '支出']
+        self._assert_list(data, expects)
         data = response.context['methods']
-        actuals = ['銀行', "現金", "PayPay"]
-        self._assert_list(data, actuals)
+        expects = ['銀行', "現金", "PayPay"]
+        self._assert_list(data, expects)
         data = response.context['chargeable_methods']
-        actuals = ['PayPay']
-        self._assert_list(data, actuals)
+        expects = ['PayPay']
+        self._assert_list(data, expects)
         data = response.context['first_categories']
-        actuals = ['食費', '必需品']
-        self._assert_list(data, actuals)
+        expects = ['食費', '必需品']
+        self._assert_list(data, expects)
         data = response.context['latter_categories']
-        actuals = ['その他', '内部移動', '貯金', '計算外']
-        self._assert_list(data, actuals)
+        expects = ['その他', '内部移動', '貯金', '計算外']
+        self._assert_list(data, expects)
         data = response.context['temps']
         self.assertEqual(data, {0: "No", 1: "Yes"})
 
-        actuals = [
+        expects = [
             'add.html',
             '_base.html',
             '_result_message.html',
         ]
-        self._assert_templates(response.templates, actuals)
+        self._assert_templates(response.templates, expects)
 
     def test_get_guest(self):
         response = self.client.get(reverse('moneybook:add'))
