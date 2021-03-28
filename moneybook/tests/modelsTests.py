@@ -3,7 +3,7 @@ from datetime import date
 from moneybook.models import (BankBalance, Category, CheckedDate,
                               CreditCheckedDate, Data, Direction, Method,
                               SeveralCosts)
-from moneybook.tests.commonTests import CommonTestCase
+from moneybook.tests.common import CommonTestCase
 
 
 class DirectionTestCase(CommonTestCase):

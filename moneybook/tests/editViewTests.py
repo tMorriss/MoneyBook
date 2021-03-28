@@ -4,7 +4,7 @@ from datetime import date
 from django.contrib.auth.models import User
 from django.urls import reverse
 from moneybook.models import Data
-from moneybook.tests.commonTests import CommonTestCase
+from moneybook.tests.common import CommonTestCase
 
 
 class EditViewTestCase(CommonTestCase):
