@@ -48,6 +48,6 @@ class CommonTestCase(TestCase):
         data = response.context['temps']
         self.assertEqual(data, {0: "No", 1: "Yes"})
 
-    def _assert_all_checked(self, response):
-        data = response.context['checked']
+    def _assert_all_checkeds(self, response):
+        data = response.context['checkeds']
         self.assertEqual(data, {0: "No", 1: "Yes"})

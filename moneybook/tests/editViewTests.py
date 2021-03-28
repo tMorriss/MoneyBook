@@ -25,7 +25,7 @@ class EditViewTestCase(CommonTestCase):
         self._assert_all_first_categories(response)
         self._assert_all_latter_categories(response)
         self._assert_all_temps(response)
-        self._assert_all_checked(response)
+        self._assert_all_checkeds(response)
 
         expects = [
             'edit.html',
