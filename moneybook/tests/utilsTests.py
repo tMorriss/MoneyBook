@@ -1,4 +1,4 @@
-from moneybook.tests.commonTests import CommonTestCase
+from moneybook.tests.common import CommonTestCase
 from moneybook.utils import is_valid_date
 
 

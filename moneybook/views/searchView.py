@@ -30,7 +30,7 @@ def search(request):
     query_context = {}
     query_list = ["direction", "method", "category", "temp", "checked"]
     for q in query_list:
-        if q in request.GET:
+        if q in request.GET and request.GET.get(q) != '':
             query_context[q] = list(map(int, request.GET.getlist(q)))
     context.update(query_context)
 

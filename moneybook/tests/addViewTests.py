@@ -3,7 +3,7 @@ from datetime import datetime
 
 from django.contrib.auth.models import User
 from django.urls import reverse
-from moneybook.tests.commonTests import CommonTestCase
+from moneybook.tests.common import CommonTestCase
 
 
 class AddViewTestCase(CommonTestCase):
@@ -21,23 +21,12 @@ class AddViewTestCase(CommonTestCase):
             response.context['username'].username, self.username)
         self.assertEqual(response.context['year'], now.year)
         self.assertEqual(response.context['month'], now.month)
-        data = response.context['directions']
-        expects = ['収入', '支出']
-        self._assert_list(data, expects)
-        data = response.context['methods']
-        expects = ['銀行', "現金", "PayPay"]
-        self._assert_list(data, expects)
-        data = response.context['chargeable_methods']
-        expects = ['PayPay']
-        self._assert_list(data, expects)
-        data = response.context['first_categories']
-        expects = ['食費', '必需品']
-        self._assert_list(data, expects)
-        data = response.context['latter_categories']
-        expects = ['その他', '内部移動', '貯金', '計算外']
-        self._assert_list(data, expects)
-        data = response.context['temps']
-        self.assertEqual(data, {0: "No", 1: "Yes"})
+        self._assert_all_directions(response)
+        self._assert_all_methods(response)
+        self._assert_all_chargeable_methods(response)
+        self._assert_all_first_categories(response)
+        self._assert_all_latter_categories(response)
+        self._assert_all_temps(response)
 
         expects = [
             'add.html',

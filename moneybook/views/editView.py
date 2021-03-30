@@ -26,7 +26,7 @@ class EditView(View):
             'first_categories': Category.first_list(),
             'latter_categories': Category.latter_list(),
             'temps': {0: "No", 1: "Yes"},
-            'checked': {0: "No", 1: "Yes"},
+            'checkeds': {0: "No", 1: "Yes"},
         }
         return render(request, "edit.html", context)
 

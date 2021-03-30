@@ -88,7 +88,7 @@
             <tr>
                 <th>チェック済み</th>
                 <td class="radio-green">
-                    {% for k, v in checked.items %}
+                    {% for k, v in checkeds.items %}
                     <input type="radio" name="checked" value="{{ k }}" id="checked-{{ k }}" {% if k == data.checked %}
                         checked{% endif %} onkeypress="keyPressUpdate(event.keyCode)">
                     <label for="checked-{{ k }}">{{ v }}</label>
