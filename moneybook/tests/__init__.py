@@ -5,4 +5,5 @@ from .deleteViewTests import *
 from .editViewTests import *
 from .indexViewTests import *
 from .modelsTests import *
+from .searchViewTests import *
 from .utilsTests import *
