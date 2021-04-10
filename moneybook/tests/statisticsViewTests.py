@@ -167,6 +167,12 @@ class StatisticsViewTestCase(CommonTestCase):
                 self.assertEqual(m.label, i + 1)
                 self.assertEqual(m.value, 0)
 
+        expects = [
+            'statistics.html',
+            '_base.html'
+        ]
+        self._assert_templates(response.templates, expects)
+
     def test_statistics_month_december_water(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(
