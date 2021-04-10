@@ -6,4 +6,5 @@ from .editViewTests import *
 from .indexViewTests import *
 from .modelsTests import *
 from .searchViewTests import *
+from .statisticsViewTests import *
 from .utilsTests import *
