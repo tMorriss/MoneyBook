@@ -72,30 +72,21 @@ class IndexViewTestCase(CommonTestCase):
             {'year': 2000, 'month': 1}
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context['total_balance'], -360)
+        self.assertEqual(response.context['total_balance'], -2750)
         self.assertEqual(response.context['monthly_income'], 7870)
-        self.assertEqual(response.context['monthly_outgo'], 6430)
-        self.assertEqual(response.context['monthly_inout'], 1440)
-        self.assertEqual(response.context['variable_cost'], 3900)
+        self.assertEqual(response.context['monthly_outgo'], 7920)
+        self.assertEqual(response.context['monthly_inout'], -50)
+        self.assertEqual(response.context['variable_cost'], 5390)
         self.assertEqual(response.context['living_cost'], 2500)
         self.assertEqual(
-            response.context['variable_remain'], 7870 - 2500 - 3900)
-        self.assertEqual(response.context['all_income'], 9000)
-        self.assertEqual(response.context['all_outgo'], 8060)
+            response.context['variable_remain'], -20)
+        self.assertEqual(response.context['monthly_all_income'], 9000)
+        self.assertEqual(response.context['monthly_all_outgo'], 9550)
 
         expects = [
-            {
-                'label': '銀行',
-                'balance': 4970
-            },
-            {
-                'label': '現金',
-                'balance': -3930
-            },
-            {
-                'label': 'PayPay',
-                'balance': -1400
-            }
+            {'label': '銀行', 'balance': 2980},
+            {'label': '現金', 'balance': -3930},
+            {'label': 'PayPay', 'balance': -1800}
         ]
         iobs = response.context['methods_iob']
         for i in range(len(iobs)):
@@ -104,21 +95,9 @@ class IndexViewTestCase(CommonTestCase):
                 self.assertEqual(iobs[i].balance, expects[i]['balance'])
 
         expects = [
-            {
-                'label': '銀行',
-                'income': 6600,
-                'outgo': 1630
-            },
-            {
-                'label': '現金',
-                'income': 3000,
-                'outgo': 6430
-            },
-            {
-                'label': 'PayPay',
-                'income': 400,
-                'outgo': 1000
-            }
+            {'label': '銀行', 'income': 6600, 'outgo': 3120},
+            {'label': '現金', 'income': 3000, 'outgo': 6430},
+            {'label': 'PayPay', 'income': 400, 'outgo': 1000}
         ]
         iobs = response.context['methods_monthly_iob']
         for i in range(len(iobs)):
@@ -178,13 +157,14 @@ class IndexViewTestCase(CommonTestCase):
         actials = [
             {'name': 'その他', 'value': 30},
             {'name': '食費', 'value': 2500},
-            {'name': '必需品', 'value': 3900}
+            {'name': '必需品', 'value': 5390}
         ]
         keys = list(positive_categories_outgo.keys())
         for i in range(len(keys)):
-            self.assertEqual(keys[i], actials[i]['name'])
-            self.assertEqual(
-                positive_categories_outgo[keys[i]], actials[i]['value'])
+            with self.subTest(i=i):
+                self.assertEqual(keys[i], actials[i]['name'])
+                self.assertEqual(
+                    positive_categories_outgo[keys[i]], actials[i]['value'])
 
     def test_index_chart_data_wituout_year(self):
         self.client.force_login(User.objects.create_user(self.username))
@@ -225,6 +205,9 @@ class IndexViewTestCase(CommonTestCase):
         expects = [
             "立替分2",
             "立替分1",
+            "水道代",
+            "ガス代",
+            "電気代",
             "PayPayチャージ",
             "PayPayチャージ",
             "貯金",
@@ -238,10 +221,7 @@ class IndexViewTestCase(CommonTestCase):
             "コンビニ"
         ]
         data = response.context['show_data']
-        self.assertEqual(data.count(), len(expects))
-        for i in range(len(expects)):
-            with self.subTest(i=i):
-                self.assertEqual(str(data[i]), expects[i])
+        self._assert_list(data, expects)
 
     def test_data_table_without_year(self):
         self.client.force_login(User.objects.create_user(self.username))

@@ -52,6 +52,36 @@ class SearchViewTestCase(CommonTestCase):
                 self.assertFalse(p in response.context)
         self.assertFalse(response.context['is_show'])
 
+    def _search_all_data(self, response):
+        show_data = response.context['show_data']
+        expects = [
+            '松屋',
+            'コンビニ',
+            'その他1',
+            '必需品1',
+            '必需品2',
+            '現金収入',
+            '銀行収入',
+            'スーパー',
+            '計算外',
+            '貯金',
+            'PayPayチャージ',
+            'PayPayチャージ',
+            '電気代',
+            'ガス代',
+            '水道代',
+            '立替分1',
+            '立替分2',
+            '必需品3',
+            '内部移動1',
+            '水道代',
+            '内部移動2'
+        ]
+        self._assert_list(show_data, expects)
+        self.assertEqual(response.context['income_sum'], 10000)
+        self.assertEqual(response.context['outgo_sum'], 12750)
+        self.assertTrue(response.context['is_show'])
+
     def test_search_new(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:search'))
@@ -68,23 +98,19 @@ class SearchViewTestCase(CommonTestCase):
         self.assertEqual(response.url, reverse('moneybook:login'))
 
     def test_search_new_only_is_query(self):
+        '''is_queryだけ指定すると全データ表示される'''
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(
             reverse('moneybook:search'), {'is_query': 1})
         self._search_common(response)
         self._search_nothing_common(response)
-        show_data = response.context['show_data']
-        self.assertEqual(show_data.count(), 16)
-        self.assertEqual(str(show_data[0]), '松屋')
-        self.assertEqual(str(show_data[8]), '計算外')
-        self.assertEqual(response.context['income_sum'], 10000)
-        self.assertEqual(response.context['outgo_sum'], 10360)
-        self.assertTrue(response.context['is_show'])
+        self._search_all_data(response)
 
         expects = ['search.html', '_base.html', '_data_table.html']
         self._assert_templates(response.templates, expects)
 
     def test_search_empty_query(self):
+        '''is_query含め全部空'''
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(
             reverse('moneybook:search'),
@@ -136,18 +162,13 @@ class SearchViewTestCase(CommonTestCase):
             with self.subTest(p=p):
                 self.assertFalse(p in response.context)
 
-        show_data = response.context['show_data']
-        self.assertEqual(show_data.count(), 16)
-        self.assertEqual(str(show_data[0]), '松屋')
-        self.assertEqual(str(show_data[8]), '計算外')
-        self.assertEqual(response.context['income_sum'], 10000)
-        self.assertEqual(response.context['outgo_sum'], 10360)
-        self.assertTrue(response.context['is_show'])
+        self._search_all_data(response)
 
         expects = ['search.html', '_base.html', '_data_table.html']
         self._assert_templates(response.templates, expects)
 
     def test_search_with_input_query(self):
+        '''全queryに正しい値を入れる'''
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(
             reverse('moneybook:search'),
@@ -165,8 +186,8 @@ class SearchViewTestCase(CommonTestCase):
             }
         )
         self._search_common(response)
-        self.assertEqual(response.context['show_data'].count(), 1)
-        self.assertEqual(str(response.context['show_data'][0]), '必需品2')
+        expects = ['必需品2']
+        self._assert_list(response.context['show_data'], expects)
 
         self.assertEqual(response.context['start_year'], '2000')
         self.assertEqual(response.context['start_month'], '1')
@@ -211,10 +232,7 @@ class SearchViewTestCase(CommonTestCase):
             }
         )
         self._search_common(response)
-        self.assertEqual(response.context['show_data'].count(), 16)
-        self.assertEqual(response.context['income_sum'], 10000)
-        self.assertEqual(response.context['outgo_sum'], 10360)
-        self.assertTrue(response.context['is_show'])
+        self._search_all_data(response)
 
     def test_search_with_method(self):
         self.client.force_login(User.objects.create_user(self.username))
@@ -222,15 +240,16 @@ class SearchViewTestCase(CommonTestCase):
             reverse('moneybook:search'),
             {
                 'is_query': 1,
-                'method': 2
+                'method': 2  # 銀行
             }
         )
         self._search_common(response)
         show_data = response.context['show_data']
-        expects = ['必需品1', '銀行収入', '計算外', '貯金', 'PayPayチャージ', '立替分2']
+        expects = ['必需品1', '銀行収入', '計算外', '貯金',
+                   'PayPayチャージ', '電気代', 'ガス代', '水道代', '立替分2', '水道代']
         self._assert_list(show_data, expects)
         self.assertEqual(response.context['income_sum'], 6600)
-        self.assertEqual(response.context['outgo_sum'], 1630)
+        self.assertEqual(response.context['outgo_sum'], 3620)
         self.assertTrue(response.context['is_show'])
 
     def test_search_with_two_method(self):
@@ -239,17 +258,17 @@ class SearchViewTestCase(CommonTestCase):
             reverse('moneybook:search'),
             {
                 'is_query': 1,
-                'method': [2, 3]
+                'method': [2, 3]  # 銀行,PayPay
             }
         )
         self._search_common(response)
         show_data = response.context['show_data']
         expects = [
             '必需品1', '銀行収入', '計算外', '貯金', 'PayPayチャージ',
-            'PayPayチャージ', '立替分1', '立替分2', '必需品3', '内部移動1']
+            'PayPayチャージ', '電気代', 'ガス代', '水道代', '立替分1', '立替分2', '必需品3', '内部移動1', '水道代', '内部移動2']
         self._assert_list(show_data, expects)
         self.assertEqual(response.context['income_sum'], 7000)
-        self.assertEqual(response.context['outgo_sum'], 3430)
+        self.assertEqual(response.context['outgo_sum'], 5820)
         self.assertTrue(response.context['is_show'])
 
     def test_search_with_category(self):
@@ -263,10 +282,10 @@ class SearchViewTestCase(CommonTestCase):
         )
         self._search_common(response)
         show_data = response.context['show_data']
-        expects = ['PayPayチャージ', 'PayPayチャージ', '内部移動1']
+        expects = ['PayPayチャージ', 'PayPayチャージ', '内部移動1', '内部移動2']
         self._assert_list(show_data, expects)
         self.assertEqual(response.context['income_sum'], 1000)
-        self.assertEqual(response.context['outgo_sum'], 1400)
+        self.assertEqual(response.context['outgo_sum'], 1800)
         self.assertTrue(response.context['is_show'])
 
     def test_search_with_two_category(self):
@@ -280,10 +299,10 @@ class SearchViewTestCase(CommonTestCase):
         )
         self._search_common(response)
         show_data = response.context['show_data']
-        expects = ['貯金', 'PayPayチャージ', 'PayPayチャージ', '内部移動1']
+        expects = ['貯金', 'PayPayチャージ', 'PayPayチャージ', '内部移動1', '内部移動2']
         self._assert_list(show_data, expects)
         self.assertEqual(response.context['income_sum'], 1000)
-        self.assertEqual(response.context['outgo_sum'], 1530)
+        self.assertEqual(response.context['outgo_sum'], 1930)
         self.assertTrue(response.context['is_show'])
 
     def test_search_with_tmp(self):
@@ -313,10 +332,7 @@ class SearchViewTestCase(CommonTestCase):
             }
         )
         self._search_common(response)
-        self.assertEqual(response.context['show_data'].count(), 16)
-        self.assertEqual(response.context['income_sum'], 10000)
-        self.assertEqual(response.context['outgo_sum'], 10360)
-        self.assertTrue(response.context['is_show'])
+        self._search_all_data(response)
 
     def test_search_with_checked(self):
         self.client.force_login(User.objects.create_user(self.username))
@@ -329,10 +345,11 @@ class SearchViewTestCase(CommonTestCase):
         )
         self._search_common(response)
         show_data = response.context['show_data']
-        expects = ['必需品1', 'スーパー', '貯金', 'PayPayチャージ', '立替分1', '内部移動1']
+        expects = ['必需品1', 'スーパー', '貯金',
+                   'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
         self._assert_list(show_data, expects)
         self.assertEqual(response.context['income_sum'], 400)
-        self.assertEqual(response.context['outgo_sum'], 5330)
+        self.assertEqual(response.context['outgo_sum'], 5730)
         self.assertTrue(response.context['is_show'])
 
     def test_search_with_two_checked(self):
@@ -345,9 +362,7 @@ class SearchViewTestCase(CommonTestCase):
             }
         )
         self._search_common(response)
-        self.assertEqual(response.context['show_data'].count(), 16)
-        self.assertEqual(response.context['income_sum'], 10000)
-        self.assertEqual(response.context['outgo_sum'], 10360)
+        self._search_all_data(response)
         self.assertTrue(response.context['is_show'])
 
     def test_search_with_invalid_start_date(self):
@@ -362,9 +377,7 @@ class SearchViewTestCase(CommonTestCase):
             }
         )
         self._search_common(response)
-        self.assertEqual(response.context['show_data'].count(), 16)
-        self.assertEqual(response.context['income_sum'], 10000)
-        self.assertEqual(response.context['outgo_sum'], 10360)
+        self._search_all_data(response)
         self.assertTrue(response.context['is_show'])
 
     def test_search_with_invalid_end_date(self):
@@ -379,10 +392,7 @@ class SearchViewTestCase(CommonTestCase):
             }
         )
         self._search_common(response)
-        self.assertEqual(response.context['show_data'].count(), 16)
-        self.assertEqual(response.context['income_sum'], 10000)
-        self.assertEqual(response.context['outgo_sum'], 10360)
-        self.assertTrue(response.context['is_show'])
+        self._search_all_data(response)
 
     def test_search_with_invalid_lower_price(self):
         self.client.force_login(User.objects.create_user(self.username))
@@ -394,10 +404,7 @@ class SearchViewTestCase(CommonTestCase):
             }
         )
         self._search_common(response)
-        self.assertEqual(response.context['show_data'].count(), 16)
-        self.assertEqual(response.context['income_sum'], 10000)
-        self.assertEqual(response.context['outgo_sum'], 10360)
-        self.assertTrue(response.context['is_show'])
+        self._search_all_data(response)
 
     def test_search_with_invalid_upper_price(self):
         self.client.force_login(User.objects.create_user(self.username))
@@ -409,7 +416,4 @@ class SearchViewTestCase(CommonTestCase):
             }
         )
         self._search_common(response)
-        self.assertEqual(response.context['show_data'].count(), 16)
-        self.assertEqual(response.context['income_sum'], 10000)
-        self.assertEqual(response.context['outgo_sum'], 10360)
-        self.assertTrue(response.context['is_show'])
+        self._search_all_data(response)

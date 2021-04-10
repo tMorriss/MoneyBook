@@ -100,8 +100,8 @@ def index_balance_statistic_mini(request):
         'living_cost': living_cost,
         'variable_remain': monthly_income - max(SeveralCosts.get_living_cost_mark(),
                                                 living_cost) - variable_cost,
-        'all_income': Data.get_income_sum(monthly_data_without_inmove),
-        'all_outgo': Data.get_outgo_sum(monthly_data_without_inmove),
+        'monthly_all_income': Data.get_income_sum(monthly_data_without_inmove),
+        'monthly_all_outgo': Data.get_outgo_sum(monthly_data_without_inmove),
         'methods_monthly_iob': methods_monthly_iob,
     }
     return render(request, '_balance_statistic_mini.html', context)

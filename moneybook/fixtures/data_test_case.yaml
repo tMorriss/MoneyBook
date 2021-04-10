@@ -197,6 +197,36 @@
     method_id: 2
 - model: moneybook.Data
   fields:
+    date: 2000-01-28
+    item: 電気代
+    price: 630
+    temp: 0
+    checked: 1
+    direction_id: 2
+    category_id: 2
+    method_id: 2
+- model: moneybook.Data
+  fields:
+    date: 2000-01-28
+    item: ガス代
+    price: 260
+    temp: 0
+    checked: 1
+    direction_id: 2
+    category_id: 2
+    method_id: 2
+- model: moneybook.Data
+  fields:
+    date: 2000-01-28
+    item: 水道代
+    price: 600
+    temp: 0
+    checked: 1
+    direction_id: 2
+    category_id: 2
+    method_id: 2
+- model: moneybook.Data
+  fields:
     date: 2000-01-31
     item: 立替分1
     price: 400
@@ -229,6 +259,26 @@
   fields:
     date: 2000-03-01
     item: 内部移動1
+    price: 400
+    temp: 0
+    checked: 0
+    direction_id: 2
+    category_id: 4
+    method_id: 3
+- model: moneybook.Data
+  fields:
+    date: 2000-03-28
+    item: 水道代
+    price: 500
+    temp: 0
+    checked: 1
+    direction_id: 2
+    category_id: 2
+    method_id: 2
+- model: moneybook.Data
+  fields:
+    date: 2000-04-01
+    item: 内部移動2
     price: 400
     temp: 0
     checked: 0
