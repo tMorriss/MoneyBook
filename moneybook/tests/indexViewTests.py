@@ -72,19 +72,19 @@ class IndexViewTestCase(CommonTestCase):
             {'year': 2000, 'month': 1}
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context['total_balance'], -2750)
-        self.assertEqual(response.context['monthly_income'], 7870)
+        self.assertEqual(response.context['total_balance'], 46694)
+        self.assertEqual(response.context['monthly_income'], 32993)
         self.assertEqual(response.context['monthly_outgo'], 7920)
-        self.assertEqual(response.context['monthly_inout'], -50)
+        self.assertEqual(response.context['monthly_inout'], 25073)
         self.assertEqual(response.context['variable_cost'], 5390)
         self.assertEqual(response.context['living_cost'], 2500)
         self.assertEqual(
-            response.context['variable_remain'], -20)
-        self.assertEqual(response.context['monthly_all_income'], 9000)
+            response.context['variable_remain'], 25103)
+        self.assertEqual(response.context['monthly_all_income'], 34123)
         self.assertEqual(response.context['monthly_all_outgo'], 9550)
 
         expects = [
-            {'label': '銀行', 'balance': 2980},
+            {'label': '銀行', 'balance': 52424},
             {'label': '現金', 'balance': -3930},
             {'label': 'PayPay', 'balance': -1800}
         ]
@@ -95,7 +95,7 @@ class IndexViewTestCase(CommonTestCase):
                 self.assertEqual(iobs[i].balance, expects[i]['balance'])
 
         expects = [
-            {'label': '銀行', 'income': 6600, 'outgo': 3120},
+            {'label': '銀行', 'income': 31723, 'outgo': 3120},
             {'label': '現金', 'income': 3000, 'outgo': 6430},
             {'label': 'PayPay', 'income': 400, 'outgo': 1000}
         ]
@@ -218,7 +218,8 @@ class IndexViewTestCase(CommonTestCase):
             "必需品2",
             "必需品1",
             "その他1",
-            "コンビニ"
+            "コンビニ",
+            "給与"
         ]
         data = response.context['show_data']
         self._assert_list(data, expects)

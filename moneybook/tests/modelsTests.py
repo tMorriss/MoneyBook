@@ -99,13 +99,14 @@ class DataTestCase(CommonTestCase):
     fixtures = ['data_test_case']
 
     def test_get_all_data(self):
-        self.assertEqual(Data.get_all_data().count(), 21)
+        self.assertEqual(Data.get_all_data().count(), 23)
 
     def test_get_range_data(self):
         start = date(2000, 1, 1)
         end = date(2000, 1, 10)
         data = Data.get_range_data(start, end)
         expects = [
+            "給与",
             "コンビニ",
             "必需品1",
             "その他1",
@@ -123,6 +124,7 @@ class DataTestCase(CommonTestCase):
     def test_get_month_data(self):
         data = Data.get_month_data(2000, 1)
         expects = [
+            "給与",
             "コンビニ",
             "必需品1",
             "その他1",
@@ -152,7 +154,7 @@ class DataTestCase(CommonTestCase):
 
     def test_get_sum_one(self):
         data = Data.get_month_data(2000, 1)
-        self.assertEqual(Data.get_sum(data, 1), 10000)
+        self.assertEqual(Data.get_sum(data, 1), 35123)
 
     def test_get_sum_one_empty(self):
         data = Data.get_month_data(1999, 1)
@@ -172,7 +174,7 @@ class DataTestCase(CommonTestCase):
 
     def test_get_income_sum(self):
         data = Data.get_month_data(2000, 1)
-        self.assertEqual(Data.get_income_sum(data), 10000)
+        self.assertEqual(Data.get_income_sum(data), 35123)
 
     def test_get_income_sum_nothing(self):
         data = Data.get_month_data(1999, 1)
@@ -253,6 +255,7 @@ class DataTestCase(CommonTestCase):
         base_data = Data.get_month_data(2000, 1)
         data = Data.get_data_without_intra_move(base_data)
         expects = [
+            "給与",
             "コンビニ",
             "必需品1",
             "その他1",
@@ -285,6 +288,7 @@ class DataTestCase(CommonTestCase):
         base_data = Data.get_month_data(2000, 1)
         data = Data.get_normal_data(base_data)
         expects = [
+            "給与",
             "コンビニ",
             "必需品1",
             "その他1",
@@ -339,6 +343,7 @@ class DataTestCase(CommonTestCase):
         base_data = Data.get_month_data(2000, 1)
         data = Data.sort_data_ascending(base_data)
         expects = [
+            "給与",
             "コンビニ",
             "その他1",
             "必需品1",
@@ -382,7 +387,8 @@ class DataTestCase(CommonTestCase):
             "必需品2",
             "必需品1",
             "その他1",
-            "コンビニ"
+            "コンビニ",
+            "給与"
         ]
         self._assert_list(data, expects)
 
@@ -442,6 +448,7 @@ class DataTestCase(CommonTestCase):
         base_data = Data.get_month_data(2000, 1)
         data = Data.get_bank_data(base_data)
         expects = [
+            "給与",
             "必需品1",
             "銀行収入",
             "貯金",
@@ -455,7 +462,7 @@ class DataTestCase(CommonTestCase):
         self._assert_list(data, expects)
 
     def test_get_bank_data_nothing(self):
-        base_data = Data.get_month_data(2000, 2)
+        base_data = Data.get_month_data(2000, 4)
         data = Data.get_bank_data(base_data)
         self.assertEqual(data.count(), 0)
 
@@ -468,6 +475,7 @@ class DataTestCase(CommonTestCase):
         base_data = Data.get_month_data(2000, 1)
         data = Data.get_checked_data(base_data)
         expects = [
+            "給与",
             "コンビニ",
             "その他1",
             "必需品2",
@@ -516,7 +524,7 @@ class DataTestCase(CommonTestCase):
 
     def test_get(self):
         self.assertEqual(str(Data.get(1)), "松屋")
-        self.assertEqual(str(Data.get(6)), "現金収入")
+        self.assertEqual(str(Data.get(6)), "必需品2")
 
     def test_get_nothing(self):
         self.assertRaises(Data.DoesNotExist, Data.get, 100)
@@ -536,6 +544,7 @@ class DataTestCase(CommonTestCase):
         base_data = Data.get_month_data(2000, 1)
         data = Data.filter_price(base_data, 3000, None)
         expects = [
+            "給与",
             "必需品2",
             "現金収入",
             "銀行収入"
@@ -566,6 +575,7 @@ class DataTestCase(CommonTestCase):
         base_data = Data.get_month_data(2000, 1)
         data = Data.filter_directions(base_data, [1])
         expects = [
+            "給与",
             "現金収入",
             "銀行収入",
             "PayPayチャージ",
