@@ -99,13 +99,14 @@ class DataTestCase(CommonTestCase):
     fixtures = ['data_test_case']
 
     def test_get_all_data(self):
-        self.assertEqual(Data.get_all_data().count(), 16)
+        self.assertEqual(Data.get_all_data().count(), 23)
 
     def test_get_range_data(self):
         start = date(2000, 1, 1)
         end = date(2000, 1, 10)
         data = Data.get_range_data(start, end)
         expects = [
+            "給与",
             "コンビニ",
             "必需品1",
             "その他1",
@@ -123,6 +124,7 @@ class DataTestCase(CommonTestCase):
     def test_get_month_data(self):
         data = Data.get_month_data(2000, 1)
         expects = [
+            "給与",
             "コンビニ",
             "必需品1",
             "その他1",
@@ -134,6 +136,9 @@ class DataTestCase(CommonTestCase):
             "PayPayチャージ",
             "PayPayチャージ",
             "計算外",
+            "電気代",
+            "ガス代",
+            "水道代",
             "立替分1",
             "立替分2"
         ]
@@ -149,7 +154,7 @@ class DataTestCase(CommonTestCase):
 
     def test_get_sum_one(self):
         data = Data.get_month_data(2000, 1)
-        self.assertEqual(Data.get_sum(data, 1), 10000)
+        self.assertEqual(Data.get_sum(data, 1), 35123)
 
     def test_get_sum_one_empty(self):
         data = Data.get_month_data(1999, 1)
@@ -157,7 +162,7 @@ class DataTestCase(CommonTestCase):
 
     def test_get_sum_two(self):
         data = Data.get_month_data(2000, 1)
-        self.assertEqual(Data.get_sum(data, 2), 9060)
+        self.assertEqual(Data.get_sum(data, 2), 10550)
 
     def test_get_sum_two_empty(self):
         data = Data.get_month_data(1999, 1)
@@ -169,7 +174,7 @@ class DataTestCase(CommonTestCase):
 
     def test_get_income_sum(self):
         data = Data.get_month_data(2000, 1)
-        self.assertEqual(Data.get_income_sum(data), 10000)
+        self.assertEqual(Data.get_income_sum(data), 35123)
 
     def test_get_income_sum_nothing(self):
         data = Data.get_month_data(1999, 1)
@@ -177,7 +182,7 @@ class DataTestCase(CommonTestCase):
 
     def test_get_outgo_sum(self):
         data = Data.get_month_data(2000, 1)
-        self.assertEqual(Data.get_outgo_sum(data), 9060)
+        self.assertEqual(Data.get_outgo_sum(data), 10550)
 
     def test_get_outgo_sum_nothing(self):
         data = Data.get_month_data(1999, 1)
@@ -250,6 +255,7 @@ class DataTestCase(CommonTestCase):
         base_data = Data.get_month_data(2000, 1)
         data = Data.get_data_without_intra_move(base_data)
         expects = [
+            "給与",
             "コンビニ",
             "必需品1",
             "その他1",
@@ -259,13 +265,16 @@ class DataTestCase(CommonTestCase):
             "銀行収入",
             "貯金",
             "計算外",
+            "電気代",
+            "ガス代",
+            "水道代",
             "立替分1",
             "立替分2"
         ]
         self._assert_list(data, expects)
 
     def test_get_data_without_intra_move_nothing(self):
-        base_data = Data.get_month_data(2000, 3)
+        base_data = Data.get_month_data(2000, 4)
         data = Data.get_data_without_intra_move(base_data)
         self.assertEqual(data.count(), 0)
 
@@ -275,9 +284,11 @@ class DataTestCase(CommonTestCase):
         self.assertEqual(data.count(), 0)
 
     def test_get_normal_data(self):
+        '''計算外と内部移動を除く'''
         base_data = Data.get_month_data(2000, 1)
         data = Data.get_normal_data(base_data)
         expects = [
+            "給与",
             "コンビニ",
             "必需品1",
             "その他1",
@@ -286,13 +297,16 @@ class DataTestCase(CommonTestCase):
             "スーパー",
             "銀行収入",
             "貯金",
+            "電気代",
+            "ガス代",
+            "水道代",
             "立替分1",
             "立替分2"
         ]
         self._assert_list(data, expects)
 
     def test_get_normal_data_nothing(self):
-        base_data = Data.get_month_data(2000, 3)
+        base_data = Data.get_month_data(2000, 4)
         data = Data.get_normal_data(base_data)
         self.assertEqual(data.count(), 0)
 
@@ -311,7 +325,7 @@ class DataTestCase(CommonTestCase):
 
     def test_get_variable_cost(self):
         data = Data.get_month_data(2000, 1)
-        self.assertEqual(Data.get_variable_cost(data), 3900)
+        self.assertEqual(Data.get_variable_cost(data), 5390)
 
     def test_get_variable_data_nothing(self):
         data = Data.get_month_data(1999, 1)
@@ -329,6 +343,7 @@ class DataTestCase(CommonTestCase):
         base_data = Data.get_month_data(2000, 1)
         data = Data.sort_data_ascending(base_data)
         expects = [
+            "給与",
             "コンビニ",
             "その他1",
             "必需品1",
@@ -340,6 +355,9 @@ class DataTestCase(CommonTestCase):
             "貯金",
             "PayPayチャージ",
             "PayPayチャージ",
+            "電気代",
+            "ガス代",
+            "水道代",
             "立替分1",
             "立替分2"
         ]
@@ -356,6 +374,9 @@ class DataTestCase(CommonTestCase):
         expects = [
             "立替分2",
             "立替分1",
+            "水道代",
+            "ガス代",
+            "電気代",
             "PayPayチャージ",
             "PayPayチャージ",
             "貯金",
@@ -366,7 +387,8 @@ class DataTestCase(CommonTestCase):
             "必需品2",
             "必需品1",
             "その他1",
-            "コンビニ"
+            "コンビニ",
+            "給与"
         ]
         self._assert_list(data, expects)
 
@@ -426,17 +448,21 @@ class DataTestCase(CommonTestCase):
         base_data = Data.get_month_data(2000, 1)
         data = Data.get_bank_data(base_data)
         expects = [
+            "給与",
             "必需品1",
             "銀行収入",
             "貯金",
             "PayPayチャージ",
             "計算外",
+            "電気代",
+            "ガス代",
+            "水道代",
             "立替分2"
         ]
         self._assert_list(data, expects)
 
     def test_get_bank_data_nothing(self):
-        base_data = Data.get_month_data(2000, 2)
+        base_data = Data.get_month_data(2000, 4)
         data = Data.get_bank_data(base_data)
         self.assertEqual(data.count(), 0)
 
@@ -449,6 +475,7 @@ class DataTestCase(CommonTestCase):
         base_data = Data.get_month_data(2000, 1)
         data = Data.get_checked_data(base_data)
         expects = [
+            "給与",
             "コンビニ",
             "その他1",
             "必需品2",
@@ -456,12 +483,15 @@ class DataTestCase(CommonTestCase):
             "銀行収入",
             "計算外",
             "PayPayチャージ",
+            "電気代",
+            "ガス代",
+            "水道代",
             "立替分2"
         ]
         self._assert_list(data, expects)
 
     def test_get_checked_data_nothing(self):
-        base_data = Data.get_month_data(2000, 3)
+        base_data = Data.get_month_data(2000, 4)
         data = Data.get_checked_data(base_data)
         self.assertEqual(data.count(), 0)
 
@@ -494,7 +524,7 @@ class DataTestCase(CommonTestCase):
 
     def test_get(self):
         self.assertEqual(str(Data.get(1)), "松屋")
-        self.assertEqual(str(Data.get(6)), "現金収入")
+        self.assertEqual(str(Data.get(6)), "必需品2")
 
     def test_get_nothing(self):
         self.assertRaises(Data.DoesNotExist, Data.get, 100)
@@ -505,6 +535,7 @@ class DataTestCase(CommonTestCase):
         expects = [
             "コンビニ",
             "貯金",
+            "ガス代",
             "立替分1"
         ]
         self._assert_list(data, expects)
@@ -513,6 +544,7 @@ class DataTestCase(CommonTestCase):
         base_data = Data.get_month_data(2000, 1)
         data = Data.filter_price(base_data, 3000, None)
         expects = [
+            "給与",
             "必需品2",
             "現金収入",
             "銀行収入"
@@ -543,6 +575,7 @@ class DataTestCase(CommonTestCase):
         base_data = Data.get_month_data(2000, 1)
         data = Data.filter_directions(base_data, [1])
         expects = [
+            "給与",
             "現金収入",
             "銀行収入",
             "PayPayチャージ",

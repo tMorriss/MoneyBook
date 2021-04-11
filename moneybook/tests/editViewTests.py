@@ -171,14 +171,14 @@ class CheckViewTestCase(CommonTestCase):
     def test_post(self):
         self.client.force_login(User.objects.create_user(self.username))
         # もともとfalseであることを確認
-        data = Data.get(3)
+        data = Data.get(4)
         self.assertEqual(data.checked, False)
 
-        response = self.client.post(reverse('moneybook:edit_check'), {'id': 3})
+        response = self.client.post(reverse('moneybook:edit_check'), {'id': 4})
         self.assertEqual(response.status_code, 200)
 
         # 更新されていることを確認
-        data = Data.get(3)
+        data = Data.get(4)
         self.assertEqual(data.checked, True)
 
     def test_post_missing_id(self):

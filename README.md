@@ -8,7 +8,7 @@ $ flake8 . --count --ignore=E722,W503 --max-line-length=120 --exclude moneybook/
 
 ## テスト方法
 ```
-$ coverage run --source='moneybook.models,moneybook.views,moneybook.utils,moneybook.middleware,moneybook.forms' manage.py test moneybook --settings config.settings.test
+$ coverage run --source='moneybook.models,moneybook.views,moneybook.utils,moneybook.middleware,moneybook.forms' manage.py test moneybook.tests --settings config.settings.test
 # レポートを表示
 $ coverage report -m
 

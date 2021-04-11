@@ -19,15 +19,15 @@ def statistics_month(request, year):
     for i_month in range(len(month_list)):
         monthly_data = Data.get_month_data(year, month_list[i_month])
         monthly_normal_data = Data.get_normal_data(monthly_data)
-        t = Data.get_temp_and_deposit_sum(monthly_data)
-        i = Data.get_income_sum(monthly_normal_data) - t
-        o = Data.get_outgo_sum(monthly_normal_data) - t
+        td = Data.get_temp_and_deposit_sum(monthly_data)
+        i = Data.get_income_sum(monthly_normal_data) - td
+        o = Data.get_outgo_sum(monthly_normal_data) - td
 
-        # if i != 0 and o != 0:
         month_iob.append(InOutBalance(month_list[i_month], i, o, i - o))
 
         monthly_data_without_in_move = Data.get_data_without_intra_move(
             monthly_data)
+        t = Data.get_temp_sum(monthly_data)
         i = Data.get_income_sum(monthly_data_without_in_move) - t
         o = Data.get_outgo_sum(monthly_data_without_in_move) - t
         month_all_iob.append(InOutBalance(month_list[i_month], i, o, i - o))
@@ -81,7 +81,7 @@ def statistics_month(request, year):
         'month_list': month_list,
         'month_io_list': month_iob,
         'month_all_io_list': month_all_iob,
-        'before_balance': before_balances,
+        'before_balances': before_balances,
         'infra_costs': infra_costs,
         'food_costs': food_costs,
         'living_costs': living_costs,

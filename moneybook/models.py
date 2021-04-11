@@ -378,13 +378,6 @@ class InOutBalance:
         self.balance = balance
 
 
-class BalanceDate:
-    def __init__(self, method, balance, date):
-        self.method = method
-        self.balance = balance
-        self.date = date
-
-
 class LabelValue:
     def __init__(self, label, value):
         self.label = label
