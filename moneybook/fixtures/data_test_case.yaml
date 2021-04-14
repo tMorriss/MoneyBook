@@ -201,7 +201,7 @@
     item: 計算外
     price: 500
     temp: 0
-    checked: 1
+    checked: 0
     direction_id: 2
     category_id: 6
     method_id: 2

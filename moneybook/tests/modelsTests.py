@@ -481,7 +481,6 @@ class DataTestCase(CommonTestCase):
             "必需品2",
             "現金収入",
             "銀行収入",
-            "計算外",
             "PayPayチャージ",
             "電気代",
             "ガス代",
@@ -506,6 +505,7 @@ class DataTestCase(CommonTestCase):
         expects = [
             "必需品1",
             "スーパー",
+            "計算外",
             "貯金",
             "PayPayチャージ",
             "立替分1"
@@ -665,6 +665,7 @@ class DataTestCase(CommonTestCase):
             "スーパー",
             "貯金",
             "PayPayチャージ",
+            "計算外",
             "立替分1"
         ]
         self._assert_list(data, expects)
