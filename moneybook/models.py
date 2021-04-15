@@ -97,13 +97,13 @@ class Data(models.Model):
 
     # 全データを持ってくる
     @staticmethod
-    def get_all_data():
+    def get_all():
         return Data.objects.all()
 
     # 指定期間のデータを持ってくる
     @staticmethod
     def get_range_data(start, end):
-        data = Data.get_all_data()
+        data = Data.get_all()
         if start is not None:
             data = data.filter(date__gte=start)
         if end is not None:
@@ -169,7 +169,7 @@ class Data(models.Model):
 
     # 内部移動だけを排除
     @staticmethod
-    def get_data_without_intra_move(data):
+    def get_without_intra_move(data):
         category = Category.objects.get(name="内部移動")
         return data.exclude(category=category)
 
@@ -208,12 +208,12 @@ class Data(models.Model):
 
     # 日付順にソート
     @staticmethod
-    def sort_data_ascending(data):
+    def sort_ascending(data):
         return data.order_by('date', 'id')
 
     # 日付の逆にソート
     @staticmethod
-    def sort_data_descending(data):
+    def sort_descending(data):
         return data.order_by('-date', '-id')
 
     # キーワード検索
@@ -235,13 +235,13 @@ class Data(models.Model):
 
     # チェック済みのデータを取得
     @staticmethod
-    def get_checked_data(data):
-        return Data.sort_data_ascending(data.filter(checked=True))
+    def get_checked(data):
+        return Data.sort_ascending(data.filter(checked=True))
 
     # 未チェックのデータを取得
     @staticmethod
-    def get_unchecked_data(data):
-        return Data.sort_data_ascending(data.filter(checked=False))
+    def get_unchecked(data):
+        return Data.sort_ascending(data.filter(checked=False))
 
     # 指定データを取得
     @staticmethod

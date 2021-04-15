@@ -25,7 +25,7 @@ def statistics_month(request, year):
 
         month_iob.append(InOutBalance(month_list[i_month], i, o, i - o))
 
-        monthly_data_without_in_move = Data.get_data_without_intra_move(
+        monthly_data_without_in_move = Data.get_without_intra_move(
             monthly_data)
         t = Data.get_temp_sum(monthly_data)
         i = Data.get_income_sum(monthly_data_without_in_move) - t

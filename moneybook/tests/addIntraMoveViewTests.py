@@ -21,7 +21,7 @@ class AddIntraMoveViewTestCase(CommonTestCase):
 
     def test_post(self):
         self.client.force_login(User.objects.create_user(self.username))
-        before_count = Data.get_all_data().count()
+        before_count = Data.get_all().count()
         response = self.client.post(
             reverse('moneybook:add_intra_move'),
             {
@@ -35,12 +35,12 @@ class AddIntraMoveViewTestCase(CommonTestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content.decode(), '')
-        after_count = Data.get_all_data().count()
+        after_count = Data.get_all().count()
         self.assertEqual(after_count, before_count + 2)
 
     def test_post_month_range(self):
         self.client.force_login(User.objects.create_user(self.username))
-        before_count = Data.get_all_data().count()
+        before_count = Data.get_all().count()
         response = self.client.post(
             reverse('moneybook:add_intra_move'),
             {
@@ -54,12 +54,12 @@ class AddIntraMoveViewTestCase(CommonTestCase):
         )
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.content.decode(), '')
-        after_count = Data.get_all_data().count()
+        after_count = Data.get_all().count()
         self.assertEqual(after_count, before_count)
 
     def test_post_day_range(self):
         self.client.force_login(User.objects.create_user(self.username))
-        before_count = Data.get_all_data().count()
+        before_count = Data.get_all().count()
         response = self.client.post(
             reverse('moneybook:add_intra_move'),
             {
@@ -73,12 +73,12 @@ class AddIntraMoveViewTestCase(CommonTestCase):
         )
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.content.decode(), '')
-        after_count = Data.get_all_data().count()
+        after_count = Data.get_all().count()
         self.assertEqual(after_count, before_count)
 
     def test_post_missing_price(self):
         self.client.force_login(User.objects.create_user(self.username))
-        before_count = Data.get_all_data().count()
+        before_count = Data.get_all().count()
         response = self.client.post(
             reverse('moneybook:add_intra_move'),
             {
@@ -91,12 +91,12 @@ class AddIntraMoveViewTestCase(CommonTestCase):
         )
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.content.decode(), '')
-        after_count = Data.get_all_data().count()
+        after_count = Data.get_all().count()
         self.assertEqual(after_count, before_count)
 
     def test_post_missing_before_method(self):
         self.client.force_login(User.objects.create_user(self.username))
-        before_count = Data.get_all_data().count()
+        before_count = Data.get_all().count()
         response = self.client.post(
             reverse('moneybook:add_intra_move'),
             {
@@ -109,12 +109,12 @@ class AddIntraMoveViewTestCase(CommonTestCase):
         )
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.content.decode(), '')
-        after_count = Data.get_all_data().count()
+        after_count = Data.get_all().count()
         self.assertEqual(after_count, before_count)
 
     def test_post_missing_after_method(self):
         self.client.force_login(User.objects.create_user(self.username))
-        before_count = Data.get_all_data().count()
+        before_count = Data.get_all().count()
         response = self.client.post(
             reverse('moneybook:add_intra_move'),
             {
@@ -127,7 +127,7 @@ class AddIntraMoveViewTestCase(CommonTestCase):
         )
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.content.decode(), '')
-        after_count = Data.get_all_data().count()
+        after_count = Data.get_all().count()
         self.assertEqual(after_count, before_count)
 
     def test_post_guest(self):
