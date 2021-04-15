@@ -54,7 +54,7 @@ def index_balance_statistic_mini(request):
         return HttpResponseBadRequest("parameter error")
 
     # 全データ
-    all_data = Data.get_all()
+    all_data = Data.get_all_data()
     # 今月のデータ
     monthly_data = Data.get_month_data(int(year), int(month))
     # 支払い方法リスト
@@ -86,7 +86,7 @@ def index_balance_statistic_mini(request):
     # 変動費
     variable_cost = Data.get_variable_cost(monthly_data)
     # 内部移動以外
-    monthly_data_without_inmove = Data.get_without_intra_move(
+    monthly_data_without_inmove = Data.filter_without_intra_move(
         monthly_data)
 
     context = {

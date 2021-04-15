@@ -33,7 +33,7 @@ urlpatterns = [
     path('tools/update_now_bank', toolsView.update_now_bank,
          name="update_now_bank"),
     path('tools/unchecked_transaction',
-         toolsView.get_unchecked_transaction, name="unchecked_transaction"),
+         toolsView.get_unchecked_data_transaction, name="unchecked_transaction"),
     path('edit/<int:pk>', EditView.as_view(), name='edit'),
     path('edit/check', CheckView.as_view(), name="edit_check"),
     path('delete', DeleteView.as_view(), name='delete'),

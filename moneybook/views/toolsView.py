@@ -22,8 +22,8 @@ def tools(request):
         'app_name': settings.APP_NAME,
         'username': request.user,
         'cash_balance':
-            Data.get_income_sum(Data.get_cash_data(Data.get_all()))
-            - Data.get_outgo_sum(Data.get_cash_data(Data.get_all())),
+            Data.get_income_sum(Data.get_cash_data(Data.get_all_data()))
+            - Data.get_outgo_sum(Data.get_cash_data(Data.get_all_data())),
         'year': now.year,
         'month': now.month,
         'day': now.day,
@@ -54,7 +54,7 @@ def update_actual_cash(request):
 class CheckedDateView(View):
     def get(self, request, *args, **kwargs):
         # 全データ
-        all_data = Data.get_all()
+        all_data = Data.get_all_data()
         # 支払い方法リスト
         methods = Method.list()
         # 支払い方法ごとの残高
@@ -63,7 +63,7 @@ class CheckedDateView(View):
             d = Data.get_method_data(all_data, m.pk)
             # 銀行はチェック済みだけ
             if m.pk == Method.get_bank().pk:
-                d = Data.get_checked(d)
+                d = Data.get_checked_data(d)
             methods_bd.append({
                 'pk': m.pk,
                 'name': m.name,
@@ -110,7 +110,7 @@ class CheckedDateView(View):
 def get_several_checked_date(request):
     now = datetime.now()
     # 全データ
-    all_data = Data.get_all()
+    all_data = Data.get_all_data()
     # 現在銀行
     banks = BankBalance.get_all()
     # クレカ確認日
@@ -123,7 +123,7 @@ def get_several_checked_date(request):
 
     # 銀行残高
     all_bank_data = Data.get_bank_data(all_data)
-    checked_bank_data = Data.get_checked(all_bank_data)
+    checked_bank_data = Data.get_checked_data(all_bank_data)
     bank_written = Data.get_income_sum(
         checked_bank_data) - Data.get_outgo_sum(checked_bank_data)
 
@@ -180,11 +180,11 @@ def update_living_cost_mark(request):
     return HttpResponse(json.dumps({"message": "success"}))
 
 
-def get_unchecked_transaction(request):
+def get_unchecked_data_transaction(request):
     # 全データ
-    all_data = Data.get_all()
+    all_data = Data.get_all_data()
     # 未承認トランザクション
-    unchecked_data = Data.get_unchecked(all_data)
+    unchecked_data = Data.get_unchecked_data(all_data)
     context = {
         'unchecked_data': unchecked_data,
     }
@@ -192,8 +192,8 @@ def get_unchecked_transaction(request):
 
 
 def update_now_bank(request):
-    written_bank_data = Data.get_checked(
-        Data.get_bank_data(Data.get_all()))
+    written_bank_data = Data.get_checked_data(
+        Data.get_bank_data(Data.get_all_data()))
     bank_sum = 0
     bb = BankBalance.get_all()
     cc = CreditCheckedDate.get_all()

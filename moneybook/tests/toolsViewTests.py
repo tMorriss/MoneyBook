@@ -110,7 +110,7 @@ class ToolsViewTests(CommonTestCase):
     def test_checked_date_view_post(self):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
-        unchecked_data = Data.get_unchecked(Data.get_all())
+        unchecked_data = Data.get_unchecked_data(Data.get_all_data())
         expects = ['必需品1', 'スーパー', '計算外', '貯金',
                    'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
         self._assert_list(unchecked_data, expects)
@@ -120,13 +120,13 @@ class ToolsViewTests(CommonTestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(CheckedDate.get(2).date, date(2001, 2, 20))
-        unchecked_data = Data.get_unchecked(Data.get_all())
+        unchecked_data = Data.get_unchecked_data(Data.get_all_data())
         self._assert_list(unchecked_data, expects)
 
     def test_checked_date_view_post_check(self):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
-        unchecked_data = Data.get_unchecked(Data.get_all())
+        unchecked_data = Data.get_unchecked_data(Data.get_all_data())
         expects = ['必需品1', 'スーパー', '計算外', '貯金',
                    'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
         self._assert_list(unchecked_data, expects)
@@ -137,14 +137,14 @@ class ToolsViewTests(CommonTestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 20))
-        unchecked_data = Data.get_unchecked(Data.get_all())
+        unchecked_data = Data.get_unchecked_data(Data.get_all_data())
         expects = ['スーパー', 'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
         self._assert_list(unchecked_data, expects)
 
     def test_checked_date_view_post_check_2(self):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
-        unchecked_data = Data.get_unchecked(Data.get_all())
+        unchecked_data = Data.get_unchecked_data(Data.get_all_data())
         expects = ['必需品1', 'スーパー', '計算外', '貯金',
                    'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
         self._assert_list(unchecked_data, expects)
@@ -155,13 +155,13 @@ class ToolsViewTests(CommonTestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 20))
-        unchecked_data = Data.get_unchecked(Data.get_all())
+        unchecked_data = Data.get_unchecked_data(Data.get_all_data())
         self._assert_list(unchecked_data, expects)
 
     def test_checked_date_view_post_out_of_date_range(self):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
-        unchecked_data = Data.get_unchecked(Data.get_all())
+        unchecked_data = Data.get_unchecked_data(Data.get_all_data())
         expects = ['必需品1', 'スーパー', '計算外', '貯金',
                    'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
         self._assert_list(unchecked_data, expects)
@@ -172,13 +172,13 @@ class ToolsViewTests(CommonTestCase):
         )
         self.assertEqual(response.status_code, 400)
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
-        unchecked_data = Data.get_unchecked(Data.get_all())
+        unchecked_data = Data.get_unchecked_data(Data.get_all_data())
         self._assert_list(unchecked_data, expects)
 
     def test_checked_date_view_post_missing_year(self):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
-        unchecked_data = Data.get_unchecked(Data.get_all())
+        unchecked_data = Data.get_unchecked_data(Data.get_all_data())
         expects = ['必需品1', 'スーパー', '計算外', '貯金',
                    'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
         self._assert_list(unchecked_data, expects)
@@ -189,13 +189,13 @@ class ToolsViewTests(CommonTestCase):
         )
         self.assertEqual(response.status_code, 400)
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
-        unchecked_data = Data.get_unchecked(Data.get_all())
+        unchecked_data = Data.get_unchecked_data(Data.get_all_data())
         self._assert_list(unchecked_data, expects)
 
     def test_checked_date_view_post_missing_day(self):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
-        unchecked_data = Data.get_unchecked(Data.get_all())
+        unchecked_data = Data.get_unchecked_data(Data.get_all_data())
         expects = ['必需品1', 'スーパー', '計算外', '貯金',
                    'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
         self._assert_list(unchecked_data, expects)
@@ -206,13 +206,13 @@ class ToolsViewTests(CommonTestCase):
         )
         self.assertEqual(response.status_code, 400)
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
-        unchecked_data = Data.get_unchecked(Data.get_all())
+        unchecked_data = Data.get_unchecked_data(Data.get_all_data())
         self._assert_list(unchecked_data, expects)
 
     def test_checked_date_view_post_missing_method(self):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
-        unchecked_data = Data.get_unchecked(Data.get_all())
+        unchecked_data = Data.get_unchecked_data(Data.get_all_data())
         expects = ['必需品1', 'スーパー', '計算外', '貯金',
                    'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
         self._assert_list(unchecked_data, expects)
@@ -223,13 +223,13 @@ class ToolsViewTests(CommonTestCase):
         )
         self.assertEqual(response.status_code, 400)
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
-        unchecked_data = Data.get_unchecked(Data.get_all())
+        unchecked_data = Data.get_unchecked_data(Data.get_all_data())
         self._assert_list(unchecked_data, expects)
 
     def test_checked_date_view_post_str_year(self):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
-        unchecked_data = Data.get_unchecked(Data.get_all())
+        unchecked_data = Data.get_unchecked_data(Data.get_all_data())
         expects = ['必需品1', 'スーパー', '計算外', '貯金',
                    'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
         self._assert_list(unchecked_data, expects)
@@ -240,13 +240,13 @@ class ToolsViewTests(CommonTestCase):
         )
         self.assertEqual(response.status_code, 400)
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
-        unchecked_data = Data.get_unchecked(Data.get_all())
+        unchecked_data = Data.get_unchecked_data(Data.get_all_data())
         self._assert_list(unchecked_data, expects)
 
     def test_checked_date_view_post_str_month(self):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
-        unchecked_data = Data.get_unchecked(Data.get_all())
+        unchecked_data = Data.get_unchecked_data(Data.get_all_data())
         expects = ['必需品1', 'スーパー', '計算外', '貯金',
                    'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
         self._assert_list(unchecked_data, expects)
@@ -257,13 +257,13 @@ class ToolsViewTests(CommonTestCase):
         )
         self.assertEqual(response.status_code, 400)
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
-        unchecked_data = Data.get_unchecked(Data.get_all())
+        unchecked_data = Data.get_unchecked_data(Data.get_all_data())
         self._assert_list(unchecked_data, expects)
 
     def test_checked_date_view_post_str_day(self):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
-        unchecked_data = Data.get_unchecked(Data.get_all())
+        unchecked_data = Data.get_unchecked_data(Data.get_all_data())
         expects = ['必需品1', 'スーパー', '計算外', '貯金',
                    'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
         self._assert_list(unchecked_data, expects)
@@ -274,13 +274,13 @@ class ToolsViewTests(CommonTestCase):
         )
         self.assertEqual(response.status_code, 400)
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
-        unchecked_data = Data.get_unchecked(Data.get_all())
+        unchecked_data = Data.get_unchecked_data(Data.get_all_data())
         self._assert_list(unchecked_data, expects)
 
     def test_checked_date_view_post_not_exist(self):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
-        unchecked_data = Data.get_unchecked(Data.get_all())
+        unchecked_data = Data.get_unchecked_data(Data.get_all_data())
         expects = ['必需品1', 'スーパー', '計算外', '貯金',
                    'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
         self._assert_list(unchecked_data, expects)
@@ -291,7 +291,7 @@ class ToolsViewTests(CommonTestCase):
         )
         self.assertEqual(response.status_code, 400)
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
-        unchecked_data = Data.get_unchecked(Data.get_all())
+        unchecked_data = Data.get_unchecked_data(Data.get_all_data())
         self._assert_list(unchecked_data, expects)
 
     def test_checked_date_view_post_guest(self):
@@ -488,7 +488,7 @@ class ToolsViewTests(CommonTestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('moneybook:login'))
 
-    def test_get_unchecked_transaction(self):
+    def test_get_unchecked_data_transaction(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:unchecked_transaction'))
         self.assertEqual(response.status_code, 200)
@@ -500,7 +500,7 @@ class ToolsViewTests(CommonTestCase):
             ['_unchecked_transaction.html']
         )
 
-    def test_get_unchecked_transaction_guest(self):
+    def test_get_unchecked_data_transaction_guest(self):
         response = self.client.get(reverse('moneybook:unchecked_transaction'))
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('moneybook:login'))

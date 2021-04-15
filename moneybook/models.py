@@ -97,18 +97,18 @@ class Data(models.Model):
 
     # 全データを持ってくる
     @staticmethod
-    def get_all():
-        return Data.objects.all()
+    def get_all_data():
+        return Data.sort_ascending(Data.objects.all())
 
     # 指定期間のデータを持ってくる
     @staticmethod
     def get_range_data(start, end):
-        data = Data.get_all()
+        data = Data.get_all_data()
         if start is not None:
             data = data.filter(date__gte=start)
         if end is not None:
             data = data.filter(date__lte=end)
-        return data
+        return Data.sort_ascending(data)
 
     # 指定月のデータを持ってくる
     @staticmethod
@@ -118,7 +118,7 @@ class Data(models.Model):
             end = date(year, month, calendar.monthrange(year, month)[1])
             return Data.get_range_data(start, end)
         except ValueError:
-            return Data.objects.none()
+            return Data.sort_ascending(Data.objects.none())
 
     # 収入や支出の合計
     @staticmethod
@@ -142,12 +142,12 @@ class Data(models.Model):
     # methodでフィルタ
     @staticmethod
     def get_method_data(data, method_id):
-        return data.filter(method=method_id)
+        return Data.sort_ascending(data.filter(method=method_id))
 
     # categoryでフィルタ
     @staticmethod
     def get_category_data(data, category_id):
-        return data.filter(category=category_id)
+        return Data.sort_ascending(data.filter(category=category_id))
 
     # 立替合計
     @staticmethod
@@ -169,9 +169,9 @@ class Data(models.Model):
 
     # 内部移動だけを排除
     @staticmethod
-    def get_without_intra_move(data):
+    def filter_without_intra_move(data):
         category = Category.objects.get(name="内部移動")
-        return data.exclude(category=category)
+        return Data.sort_ascending(data.exclude(category=category))
 
     # 計算外と内部移動を排除
     @staticmethod
@@ -219,28 +219,28 @@ class Data(models.Model):
     # キーワード検索
     @staticmethod
     def get_keyword_data(data, keyword):
-        return data.filter(item__contains=keyword)
+        return Data.sort_ascending(data.filter(item__contains=keyword))
 
     # 現金のデータを取得
     @staticmethod
     def get_cash_data(data):
         method = Method.objects.get(name="現金")
-        return Data.get_method_data(data, method)
+        return Data.sort_ascending(Data.get_method_data(data, method))
 
     # 銀行のデータを取得
     @staticmethod
     def get_bank_data(data):
         method = Method.objects.get(name="銀行")
-        return Data.get_method_data(data, method)
+        return Data.sort_ascending(Data.get_method_data(data, method))
 
     # チェック済みのデータを取得
     @staticmethod
-    def get_checked(data):
+    def get_checked_data(data):
         return Data.sort_ascending(data.filter(checked=True))
 
     # 未チェックのデータを取得
     @staticmethod
-    def get_unchecked(data):
+    def get_unchecked_data(data):
         return Data.sort_ascending(data.filter(checked=False))
 
     # 指定データを取得
@@ -260,27 +260,27 @@ class Data(models.Model):
     # directionリストでフィルタ
     @staticmethod
     def filter_directions(data, directions):
-        return data.filter(direction__in=directions)
+        return Data.sort_ascending(data.filter(direction__in=directions))
 
     # methodリストでフィルタ
     @staticmethod
     def filter_methods(data, methods):
-        return data.filter(method__in=methods)
+        return Data.sort_ascending(data.filter(method__in=methods))
 
     # categoryリストでフィルタ
     @staticmethod
     def filter_categories(data, categories):
-        return data.filter(category__in=categories)
+        return Data.sort_ascending(data.filter(category__in=categories))
 
     # tempリストでフィルタ
     @staticmethod
     def filter_temps(data, temps):
-        return data.filter(temp__in=temps)
+        return Data.sort_ascending(data.filter(temp__in=temps))
 
     # checkedリストでフィルタ
     @staticmethod
     def filter_checkeds(data, checkeds):
-        return data.filter(checked__in=checkeds)
+        return Data.sort_ascending(data.filter(checked__in=checkeds))
 
 
 class CheckedDate(models.Model):
