@@ -2,7 +2,7 @@ import calendar
 from datetime import date
 
 from django.db import models
-from django.db.models import Sum
+from django.db.models import Q, Sum
 
 
 class Direction(models.Model):
@@ -161,11 +161,11 @@ class Data(models.Model):
     @staticmethod
     def get_temp_and_deposit_sum(data):
         category = Category.objects.get(name="貯金")
-        deposit = data.filter(category=category).aggregate(
+        deposit = data.filter(Q(category=category) | Q(temp=1)).aggregate(
             Sum('price'))['price__sum']
         if deposit is None:
             deposit = 0
-        return Data.get_temp_sum(data) + deposit
+        return deposit
 
     # 内部移動だけを排除
     @staticmethod
