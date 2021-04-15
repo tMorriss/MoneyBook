@@ -718,6 +718,13 @@ class CreditCheckedDateTestCase(CommonTestCase):
         self.assertEqual(data[1].name, "テスト2")
         self.assertEqual(data[1].price, 2000)
 
+    def test_get_price(self):
+        self.assertEqual(CreditCheckedDate.get_price(1), 2000)
+        self.assertEqual(CreditCheckedDate.get_price(2), 1000)
+
+    def test_get_price_invalid_pk(self):
+        self.assertEqual(CreditCheckedDate.get_price(10000), 0)
+
     def test_set_date(self):
         CreditCheckedDate.set_date(2, date(2000, 1, 2))
         data = CreditCheckedDate.get_all()
@@ -744,6 +751,13 @@ class BankBalanceTestCase(CommonTestCase):
         self.assertEqual(data[0].price, 1000)
         self.assertEqual(data[1].name, "テスト2")
         self.assertEqual(data[1].price, 2000)
+
+    def test_get_price(self):
+        self.assertEqual(BankBalance.get_price(1), 2000)
+        self.assertEqual(BankBalance.get_price(2), 1000)
+
+    def test_get_price_invalid_pk(self):
+        self.assertEqual(BankBalance.get_price(10000), 0)
 
     def test_set(self):
         BankBalance.set(2, 1001)

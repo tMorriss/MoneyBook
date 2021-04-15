@@ -47,6 +47,10 @@ class Method(models.Model):
         ).order_by(
             'show_order')
 
+    @staticmethod
+    def get_bank():
+        return Method.objects.get(name="銀行")
+
 
 class Category(models.Model):
     show_order = models.IntegerField(default=-100)
@@ -300,6 +304,9 @@ class CreditCheckedDate(models.Model):
     date = models.DateField()
     price = models.IntegerField(default=0)
 
+    def __str__(self):
+        return self.name
+
     @staticmethod
     def get_all():
         return CreditCheckedDate.objects.all().order_by("show_order")
@@ -309,6 +316,13 @@ class CreditCheckedDate(models.Model):
         obj = CreditCheckedDate.objects.get(pk=pk)
         obj.date = new_date
         obj.save()
+
+    @staticmethod
+    def get_price(pk):
+        try:
+            return CreditCheckedDate.objects.get(pk=pk).price
+        except CreditCheckedDate.DoesNotExist:
+            return 0
 
     @staticmethod
     def set_price(pk, price):
@@ -325,6 +339,13 @@ class BankBalance(models.Model):
     @staticmethod
     def get_all():
         return BankBalance.objects.all().order_by("show_order")
+
+    @staticmethod
+    def get_price(pk):
+        try:
+            return BankBalance.objects.get(pk=pk).price
+        except BankBalance.DoesNotExist:
+            return 0
 
     @staticmethod
     def set(pk, price):
