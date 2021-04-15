@@ -347,7 +347,7 @@ class SearchViewTestCase(CommonTestCase):
         )
         self._search_common(response)
         show_data = response.context['show_data']
-        expects = ['必需品1', 'スーパー', '計算外',  '貯金',
+        expects = ['必需品1', 'スーパー', '計算外', '貯金',
                    'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
         self._assert_list(show_data, expects)
         self.assertEqual(response.context['income_sum'], 400)

@@ -163,7 +163,7 @@ class ToolsViewTests(CommonTestCase):
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
         expects = ['必需品1', 'スーパー', '計算外', '貯金',
-                   'PayPayチャージ',  '立替分1', '内部移動1', '内部移動2']
+                   'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
         self._assert_list(unchecked_data, expects)
 
         response = self.client.post(
@@ -180,7 +180,7 @@ class ToolsViewTests(CommonTestCase):
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
         expects = ['必需品1', 'スーパー', '計算外', '貯金',
-                   'PayPayチャージ',  '立替分1', '内部移動1', '内部移動2']
+                   'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
         self._assert_list(unchecked_data, expects)
 
         response = self.client.post(
@@ -213,7 +213,7 @@ class ToolsViewTests(CommonTestCase):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
-        expects = ['必需品1', 'スーパー', '計算外',  '貯金',
+        expects = ['必需品1', 'スーパー', '計算外', '貯金',
                    'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
         self._assert_list(unchecked_data, expects)
 
@@ -230,8 +230,8 @@ class ToolsViewTests(CommonTestCase):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
-        expects = ['必需品1', 'スーパー', '計算外',  '貯金',
-                   'PayPayチャージ',  '立替分1', '内部移動1', '内部移動2']
+        expects = ['必需品1', 'スーパー', '計算外', '貯金',
+                   'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
         self._assert_list(unchecked_data, expects)
 
         response = self.client.post(
@@ -377,7 +377,7 @@ class ToolsViewTests(CommonTestCase):
 
         response = self.client.post(
             reverse('moneybook:update_credit_checked_date'),
-            {'year': 2001,  'day': 10, 'pk': 2}
+            {'year': 2001, 'day': 10, 'pk': 2}
         )
         self.assertEqual(response.status_code, 400)
         d = CreditCheckedDate.objects.get(pk=2)
@@ -493,7 +493,7 @@ class ToolsViewTests(CommonTestCase):
         response = self.client.get(reverse('moneybook:unchecked_transaction'))
         self.assertEqual(response.status_code, 200)
         expects = ['必需品1', 'スーパー', '計算外', '貯金',
-                   'PayPayチャージ',  '立替分1', '内部移動1', '内部移動2']
+                   'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
         self._assert_list(response.context['unchecked_data'], expects)
         self._assert_templates(
             response.templates,
