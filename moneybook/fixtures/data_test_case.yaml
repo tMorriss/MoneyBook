@@ -201,7 +201,7 @@
     item: 計算外
     price: 500
     temp: 0
-    checked: 1
+    checked: 0
     direction_id: 2
     category_id: 6
     method_id: 2
@@ -314,3 +314,41 @@
   fields:
     name: ActualCashBalance
     price: 2000
+
+- model: moneybook.CreditCheckedDate
+  pk: 1
+  fields:
+    name: センチュリオン
+    date: 3000-01-01
+    price: 30000
+    show_order: 2
+- model: moneybook.CreditCheckedDate
+  pk: 2
+  fields:
+    name: AmexGold
+    date: 2000-02-04
+    price: 2000
+    show_order: 1
+
+- model: moneybook.BankBalance
+  pk: 1
+  fields:
+    name: みずほ
+    price: 40000
+    show_order: 1
+
+- model: moneybook.CheckedDate
+  pk: 1
+  fields:
+    method: 1
+    date: 2000-01-02
+- model: moneybook.CheckedDate
+  pk: 2
+  fields:
+    method: 2
+    date: 2000-01-05
+- model: moneybook.CheckedDate
+  pk: 3
+  fields:
+    method: 3
+    date: 2000-02-02

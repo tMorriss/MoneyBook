@@ -1,6 +1,6 @@
 from django.contrib.auth.views import LogoutView
 from django.urls import path
-from moneybook.views import (AddIntraMoveView, AddView, CheckedDataView,
+from moneybook.views import (AddIntraMoveView, AddView, CheckedDateView,
                              CheckView, CustomLoginView, DeleteView, EditView,
                              indexView, searchView, statisticsView, toolsView)
 
@@ -22,7 +22,7 @@ urlpatterns = [
     path('tools', toolsView.tools, name='tools'),
     path('tools/update-actual-cash',
          toolsView.update_actual_cash, name="update_actual_cash"),
-    path('tools/checked_date', CheckedDataView.as_view(), name="checked_date"),
+    path('tools/checked_date', CheckedDateView.as_view(), name="checked_date"),
     path('tools/get_several_checked_date',
          toolsView.get_several_checked_date, name="several_checked_date"),
     path('tools/update_credit_checked_date',
@@ -33,7 +33,7 @@ urlpatterns = [
     path('tools/update_now_bank', toolsView.update_now_bank,
          name="update_now_bank"),
     path('tools/unchecked_transaction',
-         toolsView.get_unchecked_transaction, name="unchecked_transaction"),
+         toolsView.get_unchecked_data_transaction, name="unchecked_transaction"),
     path('edit/<int:pk>', EditView.as_view(), name='edit'),
     path('edit/check', CheckView.as_view(), name="edit_check"),
     path('delete', DeleteView.as_view(), name='delete'),

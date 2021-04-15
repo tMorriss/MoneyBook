@@ -66,7 +66,7 @@ function sendCharge() {
             "after_method": $('input[name="c_method"]:checked').val(),
         }
     }).done(() => {
-        showResultMsg("Success!", resetAddForm);
+        showResultMsg("Success!", resetForCharge);
     }).fail(() => {
         // メッセージ表示
         showResultMsg("Error...", empty);
@@ -170,6 +170,12 @@ function resetAddForm() {
     $('input[name=a_temp]').val(["False"]);
 }
 
+function resetForCharge() {
+    resetAddForm();
+
+    // チャージの日付にフォーカス
+    $('#c_day').focus();
+}
 function resetForShortcut() {
     resetAddForm();
 

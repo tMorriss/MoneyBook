@@ -86,7 +86,7 @@ def index_balance_statistic_mini(request):
     # 変動費
     variable_cost = Data.get_variable_cost(monthly_data)
     # 内部移動以外
-    monthly_data_without_inmove = Data.get_data_without_intra_move(
+    monthly_data_without_inmove = Data.filter_without_intra_move(
         monthly_data)
 
     context = {
@@ -143,7 +143,7 @@ def data_table(request):
         return HttpResponseBadRequest("parameter error")
 
     # 今月のデータ
-    monthly_data = Data.sort_data_descending(
+    monthly_data = Data.sort_descending(
         Data.get_month_data(int(year), int(month)))
 
     context = {

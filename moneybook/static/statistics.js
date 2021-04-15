@@ -168,9 +168,13 @@ function drawGraph() {
         // データ収集
         let balanceList = $("#monthly_balance li");
         chart.data = [];
+        minValue = null;
         for (var i = 0; i < balanceList.length; i++) {
             data = balanceList[i].textContent.split(',');
             chart.data.push({ month: data[0], balance: data[1] });
+            if (minValue == null || minValue > Number(data[1])) {
+                minValue = Number(data[1])
+            }
         }
 
         let categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
@@ -178,7 +182,9 @@ function drawGraph() {
         categoryAxis.renderer.minGridDistance = 1;
 
         let valueAxis = new am4charts.ValueAxis();
-        valueAxis.minimum = 0;
+        if (minValue > 0) {
+            valueAxis.min = 0;
+        }
         chart.yAxes.push(valueAxis);
 
         let series = chart.series.push(new am4charts.LineSeries());

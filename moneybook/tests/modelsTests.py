@@ -108,8 +108,8 @@ class DataTestCase(CommonTestCase):
         expects = [
             "給与",
             "コンビニ",
-            "必需品1",
             "その他1",
+            "必需品1",
             "必需品2",
             "現金収入"
         ]
@@ -126,16 +126,16 @@ class DataTestCase(CommonTestCase):
         expects = [
             "給与",
             "コンビニ",
-            "必需品1",
             "その他1",
+            "必需品1",
             "必需品2",
             "現金収入",
-            "スーパー",
             "銀行収入",
+            "スーパー",
+            "計算外",
             "貯金",
             "PayPayチャージ",
             "PayPayチャージ",
-            "計算外",
             "電気代",
             "ガス代",
             "水道代",
@@ -251,20 +251,20 @@ class DataTestCase(CommonTestCase):
         data = Data.get_month_data(1999, 1)
         self.assertEqual(Data.get_temp_and_deposit_sum(data), 0)
 
-    def test_get_data_without_intra_move(self):
+    def test_filter_without_intra_move(self):
         base_data = Data.get_month_data(2000, 1)
-        data = Data.get_data_without_intra_move(base_data)
+        data = Data.filter_without_intra_move(base_data)
         expects = [
             "給与",
             "コンビニ",
-            "必需品1",
             "その他1",
+            "必需品1",
             "必需品2",
             "現金収入",
-            "スーパー",
             "銀行収入",
-            "貯金",
+            "スーパー",
             "計算外",
+            "貯金",
             "電気代",
             "ガス代",
             "水道代",
@@ -273,14 +273,14 @@ class DataTestCase(CommonTestCase):
         ]
         self._assert_list(data, expects)
 
-    def test_get_data_without_intra_move_nothing(self):
+    def test_filter_without_intra_move_nothing(self):
         base_data = Data.get_month_data(2000, 4)
-        data = Data.get_data_without_intra_move(base_data)
+        data = Data.filter_without_intra_move(base_data)
         self.assertEqual(data.count(), 0)
 
-    def test_get_data_without_intra_move_empty(self):
+    def test_filter_without_intra_move_empty(self):
         base_data = Data.get_month_data(1999, 1)
-        data = Data.get_data_without_intra_move(base_data)
+        data = Data.filter_without_intra_move(base_data)
         self.assertEqual(data.count(), 0)
 
     def test_get_normal_data(self):
@@ -290,12 +290,12 @@ class DataTestCase(CommonTestCase):
         expects = [
             "給与",
             "コンビニ",
-            "必需品1",
             "その他1",
+            "必需品1",
             "必需品2",
             "現金収入",
-            "スーパー",
             "銀行収入",
+            "スーパー",
             "貯金",
             "電気代",
             "ガス代",
@@ -339,9 +339,9 @@ class DataTestCase(CommonTestCase):
         data = Data.get_month_data(1999, 1)
         self.assertEqual(Data.get_food_costs(data), 0)
 
-    def test_sort_data_ascending(self):
+    def test_sort_ascending(self):
         base_data = Data.get_month_data(2000, 1)
-        data = Data.sort_data_ascending(base_data)
+        data = Data.sort_ascending(base_data)
         expects = [
             "給与",
             "コンビニ",
@@ -363,14 +363,14 @@ class DataTestCase(CommonTestCase):
         ]
         self._assert_list(data, expects)
 
-    def test_sort_data_ascending_nothing(self):
+    def test_sort_ascending_nothing(self):
         data = Data.get_month_data(1999, 1)
-        sorted_data = Data.sort_data_ascending(data)
+        sorted_data = Data.sort_ascending(data)
         self.assertEqual(sorted_data.count(), 0)
 
-    def test_sort_data_descending(self):
+    def test_sort_descending(self):
         base_data = Data.get_month_data(2000, 1)
-        data = Data.sort_data_descending(base_data)
+        data = Data.sort_descending(base_data)
         expects = [
             "立替分2",
             "立替分1",
@@ -392,9 +392,9 @@ class DataTestCase(CommonTestCase):
         ]
         self._assert_list(data, expects)
 
-    def test_sort_data_descending_nothing(self):
+    def test_sort_descending_nothing(self):
         data = Data.get_month_data(1999, 1)
-        sorted_data = Data.sort_data_descending(data)
+        sorted_data = Data.sort_descending(data)
         self.assertEqual(sorted_data.count(), 0)
 
     def test_get_keyword_data_part(self):
@@ -451,9 +451,9 @@ class DataTestCase(CommonTestCase):
             "給与",
             "必需品1",
             "銀行収入",
+            "計算外",
             "貯金",
             "PayPayチャージ",
-            "計算外",
             "電気代",
             "ガス代",
             "水道代",
@@ -481,7 +481,6 @@ class DataTestCase(CommonTestCase):
             "必需品2",
             "現金収入",
             "銀行収入",
-            "計算外",
             "PayPayチャージ",
             "電気代",
             "ガス代",
@@ -506,6 +505,7 @@ class DataTestCase(CommonTestCase):
         expects = [
             "必需品1",
             "スーパー",
+            "計算外",
             "貯金",
             "PayPayチャージ",
             "立替分1"
@@ -663,6 +663,7 @@ class DataTestCase(CommonTestCase):
         expects = [
             "必需品1",
             "スーパー",
+            "計算外",
             "貯金",
             "PayPayチャージ",
             "立替分1"
@@ -717,6 +718,13 @@ class CreditCheckedDateTestCase(CommonTestCase):
         self.assertEqual(data[1].name, "テスト2")
         self.assertEqual(data[1].price, 2000)
 
+    def test_get_price(self):
+        self.assertEqual(CreditCheckedDate.get_price(1), 2000)
+        self.assertEqual(CreditCheckedDate.get_price(2), 1000)
+
+    def test_get_price_invalid_pk(self):
+        self.assertEqual(CreditCheckedDate.get_price(10000), 0)
+
     def test_set_date(self):
         CreditCheckedDate.set_date(2, date(2000, 1, 2))
         data = CreditCheckedDate.get_all()
@@ -743,6 +751,13 @@ class BankBalanceTestCase(CommonTestCase):
         self.assertEqual(data[0].price, 1000)
         self.assertEqual(data[1].name, "テスト2")
         self.assertEqual(data[1].price, 2000)
+
+    def test_get_price(self):
+        self.assertEqual(BankBalance.get_price(1), 2000)
+        self.assertEqual(BankBalance.get_price(2), 1000)
+
+    def test_get_price_invalid_pk(self):
+        self.assertEqual(BankBalance.get_price(10000), 0)
 
     def test_set(self):
         BankBalance.set(2, 1001)

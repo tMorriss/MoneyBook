@@ -7,4 +7,5 @@ from .indexViewTests import *
 from .modelsTests import *
 from .searchViewTests import *
 from .statisticsViewTests import *
+from .toolsViewTests import *
 from .utilsTests import *

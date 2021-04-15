@@ -125,7 +125,7 @@ def search(request):
                 data = data
 
         # 日付順にソート
-        data = Data.sort_data_ascending(data)
+        data = Data.sort_ascending(data)
 
         context.update({
             "show_data": data,
