@@ -55,8 +55,8 @@ function keyPressAdd(code) {
 }
 
 function moveMonth() {
-    year = document.getElementById("jump_year").value;
-    month = document.getElementById("jump_month").value;
+    year = $("#jump_year").val();
+    month = $("#jump_month").val();
     window.location.href = index_url + year + "/" + month;
 }
 function key_press_move(code) {

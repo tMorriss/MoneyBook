@@ -234,7 +234,7 @@ function drawIOGraph(chart) {
 }
 
 function move_year() {
-    year = document.getElementById("jump_year").value;
+    year = $("#jump_year").val();
     window.location.href = statistics_url + "/" + year;
 }
 function key_press_move(code) {
