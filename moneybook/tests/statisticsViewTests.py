@@ -88,17 +88,17 @@ class StatisticsViewTestCase(CommonTestCase):
                 self.assertEqual(m.balance, 0)
 
         # 途中残高
-        before_balances = response.context['before_balances']
-        self.assertEqual(before_balances[0].label, 1)
-        self.assertEqual(before_balances[0].value, 24073)
-        self.assertEqual(before_balances[1].label, 2)
-        self.assertEqual(before_balances[1].value, 47994)
-        self.assertEqual(before_balances[2].label, 3)
-        self.assertEqual(before_balances[2].value, 47094)
+        period_balances = response.context['period_balances']
+        self.assertEqual(period_balances[0].label, 1)
+        self.assertEqual(period_balances[0].value, 24073)
+        self.assertEqual(period_balances[1].label, 2)
+        self.assertEqual(period_balances[1].value, 47994)
+        self.assertEqual(period_balances[2].label, 3)
+        self.assertEqual(period_balances[2].value, 47094)
         zero_list = list(range(3, 12))
         for i in zero_list:
             with self.subTest(i=i):
-                m = before_balances[i]
+                m = period_balances[i]
                 self.assertEqual(m.label, i + 1)
                 self.assertEqual(m.value, 46694)
 
@@ -169,7 +169,8 @@ class StatisticsViewTestCase(CommonTestCase):
 
         expects = [
             'statistics.html',
-            '_base.html'
+            '_base.html',
+            '_statistics_task_bar.html'
         ]
         self._assert_templates(response.templates, expects)
 

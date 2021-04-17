@@ -11,7 +11,7 @@ def statistics_month(request, year):
     month_list = list(range(1, 13))
     month_iob = []
     month_all_iob = []
-    before_balances = []
+    period_balances = []
     infra_costs = []
     food_costs = []
     living_costs = []
@@ -36,7 +36,7 @@ def statistics_month(request, year):
             year,
             month_list[i_month],
             calendar.monthrange(year, month_list[i_month])[1]))
-        before_balances.append(LabelValue(
+        period_balances.append(LabelValue(
             month_list[i_month], Data.get_income_sum(d) - Data.get_outgo_sum(d)))
 
         e = Data.get_outgo_sum(Data.get_keyword_data(monthly_data, "電気代"))
@@ -81,7 +81,7 @@ def statistics_month(request, year):
         'month_list': month_list,
         'month_io_list': month_iob,
         'month_all_io_list': month_all_iob,
-        'before_balances': before_balances,
+        'period_balances': period_balances,
         'infra_costs': infra_costs,
         'food_costs': food_costs,
         'living_costs': living_costs,

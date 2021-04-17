@@ -234,8 +234,8 @@ function drawIOGraph(chart) {
 }
 
 function move_year() {
-    year = document.getElementById("jump_year").value;
-    window.location.href = "{% url 'moneybook:statistics' %}/" + year;
+    year = $("#jump_year").val();
+    window.location.href = statistics_url + "/" + year;
 }
 function key_press_move(code) {
     //エンターキーなら

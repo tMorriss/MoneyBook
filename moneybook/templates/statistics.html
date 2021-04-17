@@ -12,6 +12,7 @@
 <script src="{% static 'amcharts4/animated.js' %}"></script>
 <script src="{% static 'amcharts4/kelly.js' %}"></script>
 <script type="text/javascript">
+    statistics_url = "{% url 'moneybook:statistics' %}";
     window.onload = function () {
         drawGraph();
     }
@@ -19,6 +20,7 @@
 {% endblock %}
 
 {% block content %}
+{% include "_statistics_task_bar.html" %}
 <section>
     <h1>統計情報</h1>
     <h2>ジャンプ</h2>
@@ -123,7 +125,7 @@
         </tr>
         <tr>
             <th>途中残高</th>
-            {% for b in before_balances %}
+            {% for b in period_balances %}
             <td>{{ b.value |intcomma }}</td>
             {% endfor %}
         </tr>
@@ -137,7 +139,7 @@
     <h3>途中残高</h3>
     <div id="lineplot_monthly_balance" class="graph-statistic"></div>
     <ul id="monthly_balance" hidden>
-        {% for b in before_balances %}<li>{{ b.label }}月,{{ b.value }}</li>
+        {% for b in period_balances %}<li>{{ b.label }}月,{{ b.value }}</li>
         {% endfor %}
     </ul>
 </section>

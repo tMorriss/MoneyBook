@@ -2,7 +2,8 @@ from django.contrib.auth.views import LogoutView
 from django.urls import path
 from moneybook.views import (AddIntraMoveView, AddView, CheckedDateView,
                              CheckView, CustomLoginView, DeleteView, EditView,
-                             indexView, searchView, statisticsView, toolsView)
+                             indexView, periodBalanceView, searchView,
+                             statisticsView, toolsView)
 
 app_name = 'moneybook'
 urlpatterns = [
@@ -18,6 +19,8 @@ urlpatterns = [
     path('statistics', statisticsView.statistics, name='statistics'),
     path('statistics/<int:year>', statisticsView.statistics_month,
          name='statistics_month'),
+    path('period_balances', periodBalanceView.period_balances,
+         name='period_balances'),
     path('search', searchView.search, name='search'),
     path('tools', toolsView.tools, name='tools'),
     path('tools/update-actual-cash',
