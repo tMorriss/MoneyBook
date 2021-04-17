@@ -5,6 +5,7 @@ from .deleteViewTests import *
 from .editViewTests import *
 from .indexViewTests import *
 from .modelsTests import *
+from .periodBalanceViewTests import *
 from .searchViewTests import *
 from .statisticsViewTests import *
 from .toolsViewTests import *

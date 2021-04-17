@@ -169,7 +169,8 @@ class StatisticsViewTestCase(CommonTestCase):
 
         expects = [
             'statistics.html',
-            '_base.html'
+            '_base.html',
+            '_statistics_task_bar.html'
         ]
         self._assert_templates(response.templates, expects)
 

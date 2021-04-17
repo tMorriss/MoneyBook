@@ -1,0 +1,52 @@
+{% extends "_base.html" %}
+{% load static %}
+
+{% block title %}{{ app_name }} PeriodBalance{% endblock %}
+
+{% block header %}
+<link rel="stylesheet" type="text/css" href="{% static 'statistics.css' %}">
+<script src="{% static 'period_balances.js' %}"></script>
+<script src="{% static 'amcharts4/core.js' %}"></script>
+<script src="{% static 'amcharts4/charts.js' %}"></script>
+<script src="{% static 'amcharts4/animated.js' %}"></script>
+<script src="{% static 'amcharts4/kelly.js' %}"></script>
+<script type="text/javascript">
+    period_balances_url = "{% url 'moneybook:period_balances' %}";
+    window.onload = function () {
+        drawGraph();
+    }
+</script>
+{% endblock %}
+
+{% block content %}
+{% include "_statistics_task_bar.html" %}
+<section>
+    <h1>途中残高</h1>
+    <table class="tbl-common fcs-blue">
+        <tr>
+            <td>
+                <input type="text" id="start_year" style="width:6ex" class="righter" value="{{ start_year }}"
+                    onkeypress="key_press_update_range(event.keyCode)">年
+                <input type="text" id="start_month" style="width:5ex" class="righter" value="{{ start_month }}"
+                    onkeypress="key_press_update_range(event.keyCode)">月
+                ～
+                <input type="text" id="end_year" style="width:6ex" class="righter" value="{{ end_year }}"
+                    onkeypress="key_press_update_range(event.keyCode)">年
+                <input type="text" id="end_month" style="width:5ex" class="righter" value="{{ end_month }}"
+                    onkeypress="key_press_update_range(event.keyCode)">月
+            </td>
+        </tr>
+        <tr>
+            <td><input type="button" class="btn-apply" value="更新" onclick="update_range()"></td>
+        </tr>
+    </table>
+    {% if draw_graph %}
+    <h3>グラフ</h3>
+    <div id="lineplot_monthly_balance" class="graph-statistic"></div>
+    <ul id="monthly_balance" hidden>
+        {% for b in period_balances %}<li>{{ b.label }},{{ b.value }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</section>
+{% endblock %}
