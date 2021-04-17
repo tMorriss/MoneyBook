@@ -12,6 +12,7 @@
 <script src="{% static 'amcharts4/animated.js' %}"></script>
 <script src="{% static 'amcharts4/kelly.js' %}"></script>
 <script type="text/javascript">
+    statistics_url = "{% url 'moneybook:statistics' %}";
     window.onload = function () {
         drawGraph();
     }
