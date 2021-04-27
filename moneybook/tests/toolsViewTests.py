@@ -527,7 +527,7 @@ class UncheckedDataViewTests(CommonTestCase):
         self._assert_list(response.context['unchecked_data'], expects)
         self._assert_templates(
             response.templates,
-            ['_unchecked_transaction.html']
+            ['_unchecked_data.html']
         )
 
     def test_get_guest(self):
