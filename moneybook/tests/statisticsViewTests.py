@@ -4,26 +4,31 @@ from unittest.mock import patch
 from django.contrib.auth.models import User
 from django.urls import reverse
 from moneybook.tests.common import CommonTestCase
-from moneybook.views import statisticsView
+from moneybook.views import StatisticsMonthView
 
 
 class StatisticsViewTestCase(CommonTestCase):
     fixtures = ['data_test_case']
     username = 'tester'
 
-    @patch.object(statisticsView, 'statistics_month', return_value=True)
-    def test_statistics(self, statistics_month):
+    @patch.object(StatisticsMonthView, 'get', return_value=True)
+    def test_get(self, statistics_month):
         now = datetime.now()
         self.client.get(reverse('moneybook:statistics'))
-        request, year = statisticsView.statistics_month.call_args.args
-        self.assertEqual(year, now.year)
+        kwargs = StatisticsMonthView.get.call_args.kwargs
+        self.assertEqual(kwargs['year'], now.year)
 
-    def test_statistics_guest(self):
+    def test_get_guest(self):
         response = self.client.get(reverse('moneybook:statistics'))
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('moneybook:login'))
 
-    def test_statistics_month(self):
+
+class StatisticsMonthViewTestCase(CommonTestCase):
+    fixtures = ['data_test_case']
+    username = 'tester'
+
+    def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(
             reverse('moneybook:statistics_month', kwargs={'year': 2000}))
@@ -174,7 +179,7 @@ class StatisticsViewTestCase(CommonTestCase):
         ]
         self._assert_templates(response.templates, expects)
 
-    def test_statistics_month_december_water(self):
+    def test_get_december_water(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(
             reverse('moneybook:statistics_month', kwargs={'year': 1999}))
@@ -184,7 +189,7 @@ class StatisticsViewTestCase(CommonTestCase):
         self.assertEqual(len(infra_costs), 12)
         self.assertEqual(infra_costs[11].water, 300)
 
-    def test_statistics_month_guest(self):
+    def test_get_guest(self):
         response = self.client.get(
             reverse('moneybook:statistics_month', kwargs={'year': 2000}))
         self.assertEqual(response.status_code, 302)

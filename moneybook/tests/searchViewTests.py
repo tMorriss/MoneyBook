@@ -84,7 +84,7 @@ class SearchViewTestCase(CommonTestCase):
         self.assertEqual(response.context['outgo_sum'], 12750)
         self.assertTrue(response.context['is_show'])
 
-    def test_search_new(self):
+    def test_get_new(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:search'))
         self._search_common(response)
@@ -94,12 +94,12 @@ class SearchViewTestCase(CommonTestCase):
         expects = ['search.html', '_base.html']
         self._assert_templates(response.templates, expects)
 
-    def test_search_guest(self):
+    def test_get_guest(self):
         response = self.client.get(reverse('moneybook:search'))
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('moneybook:login'))
 
-    def test_search_new_only_is_query(self):
+    def test_get_new_only_is_query(self):
         '''is_queryだけ指定すると全データ表示される'''
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(
@@ -111,7 +111,7 @@ class SearchViewTestCase(CommonTestCase):
         expects = ['search.html', '_base.html', '_data_table.html']
         self._assert_templates(response.templates, expects)
 
-    def test_search_empty_query(self):
+    def test_get_empty_query(self):
         '''is_query含め全部空'''
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(
@@ -169,7 +169,7 @@ class SearchViewTestCase(CommonTestCase):
         expects = ['search.html', '_base.html', '_data_table.html']
         self._assert_templates(response.templates, expects)
 
-    def test_search_with_input_query(self):
+    def test_get_with_input_query(self):
         '''全queryに正しい値を入れる'''
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(
@@ -207,7 +207,7 @@ class SearchViewTestCase(CommonTestCase):
         self.assertEqual(response.context['outgo_sum'], 3500)
         self.assertTrue(response.context['is_show'])
 
-    def test_search_with_direction(self):
+    def test_get_with_direction(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(
             reverse('moneybook:search'),
@@ -224,7 +224,7 @@ class SearchViewTestCase(CommonTestCase):
         self.assertEqual(response.context['outgo_sum'], 0)
         self.assertTrue(response.context['is_show'])
 
-    def test_search_with_two_direction(self):
+    def test_get_with_two_direction(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(
             reverse('moneybook:search'),
@@ -236,7 +236,7 @@ class SearchViewTestCase(CommonTestCase):
         self._search_common(response)
         self._search_all_data(response)
 
-    def test_search_with_method(self):
+    def test_get_with_method(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(
             reverse('moneybook:search'),
@@ -254,7 +254,7 @@ class SearchViewTestCase(CommonTestCase):
         self.assertEqual(response.context['outgo_sum'], 3620)
         self.assertTrue(response.context['is_show'])
 
-    def test_search_with_two_method(self):
+    def test_get_with_two_method(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(
             reverse('moneybook:search'),
@@ -273,7 +273,7 @@ class SearchViewTestCase(CommonTestCase):
         self.assertEqual(response.context['outgo_sum'], 5820)
         self.assertTrue(response.context['is_show'])
 
-    def test_search_with_category(self):
+    def test_get_with_category(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(
             reverse('moneybook:search'),
@@ -290,7 +290,7 @@ class SearchViewTestCase(CommonTestCase):
         self.assertEqual(response.context['outgo_sum'], 1800)
         self.assertTrue(response.context['is_show'])
 
-    def test_search_with_two_category(self):
+    def test_get_with_two_category(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(
             reverse('moneybook:search'),
@@ -307,7 +307,7 @@ class SearchViewTestCase(CommonTestCase):
         self.assertEqual(response.context['outgo_sum'], 1930)
         self.assertTrue(response.context['is_show'])
 
-    def test_search_with_tmp(self):
+    def test_get_with_tmp(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(
             reverse('moneybook:search'),
@@ -324,7 +324,7 @@ class SearchViewTestCase(CommonTestCase):
         self.assertEqual(response.context['outgo_sum'], 0)
         self.assertTrue(response.context['is_show'])
 
-    def test_search_with_two_tmp(self):
+    def test_get_with_two_tmp(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(
             reverse('moneybook:search'),
@@ -336,7 +336,7 @@ class SearchViewTestCase(CommonTestCase):
         self._search_common(response)
         self._search_all_data(response)
 
-    def test_search_with_checked(self):
+    def test_get_with_checked(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(
             reverse('moneybook:search'),
@@ -354,7 +354,7 @@ class SearchViewTestCase(CommonTestCase):
         self.assertEqual(response.context['outgo_sum'], 6230)
         self.assertTrue(response.context['is_show'])
 
-    def test_search_with_two_checked(self):
+    def test_get_with_two_checked(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(
             reverse('moneybook:search'),
@@ -367,7 +367,7 @@ class SearchViewTestCase(CommonTestCase):
         self._search_all_data(response)
         self.assertTrue(response.context['is_show'])
 
-    def test_search_with_invalid_start_date(self):
+    def test_get_with_invalid_start_date(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(
             reverse('moneybook:search'),
@@ -382,7 +382,7 @@ class SearchViewTestCase(CommonTestCase):
         self._search_all_data(response)
         self.assertTrue(response.context['is_show'])
 
-    def test_search_with_invalid_end_date(self):
+    def test_get_with_invalid_end_date(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(
             reverse('moneybook:search'),
@@ -396,7 +396,7 @@ class SearchViewTestCase(CommonTestCase):
         self._search_common(response)
         self._search_all_data(response)
 
-    def test_search_with_invalid_lower_price(self):
+    def test_get_with_invalid_lower_price(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(
             reverse('moneybook:search'),
@@ -408,7 +408,7 @@ class SearchViewTestCase(CommonTestCase):
         self._search_common(response)
         self._search_all_data(response)
 
-    def test_search_with_invalid_upper_price(self):
+    def test_get_with_invalid_upper_price(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(
             reverse('moneybook:search'),
