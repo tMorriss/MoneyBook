@@ -7,14 +7,14 @@
 {% block header %}
 <script type="text/javascript" src="{% static 'tools.js' %}"></script>
 <script type="text/javascript">
-    update_actual_cash_url = "{% url 'moneybook:update_actual_cash' %}";
+    actual_cash_url = "{% url 'moneybook:actual_cash' %}";
     checked_date_url = "{% url 'moneybook:checked_date' %}";
     several_checked_date_url = "{% url 'moneybook:several_checked_date' %}";
-    update_living_cost_mark_url = "{% url 'moneybook:update_living_cost_mark' %}";
+    living_cost_mark_url = "{% url 'moneybook:living_cost_mark' %}";
     edit_check_url = "{% url 'moneybook:edit_check' %}";
-    update_now_bank_url = "{% url 'moneybook:update_now_bank' %}";
+    now_bank_url = "{% url 'moneybook:now_bank' %}";
     unchecked_transaction_url = "{% url 'moneybook:unchecked_transaction' %}";
-    update_credit_checked_date_url = "{% url 'moneybook:update_credit_checked_date' %}";
+    credit_checked_date_url = "{% url 'moneybook:credit_checked_date' %}";
 
     window.onload = function () {
         showDiff();

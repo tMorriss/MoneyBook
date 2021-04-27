@@ -50,7 +50,7 @@ class PeriodBalanceViewTestCase(CommonTestCase):
         ]
         self._assert_templates(response.templates, expects)
 
-    def test_period_balances(self):
+    def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(
             reverse('moneybook:period_balances'),
@@ -83,7 +83,7 @@ class PeriodBalanceViewTestCase(CommonTestCase):
         ]
         self._assert_templates(response.templates, expects)
 
-    def test_period_balances_start_zero(self):
+    def test_get_start_zero(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(
             reverse('moneybook:period_balances'),
@@ -115,12 +115,12 @@ class PeriodBalanceViewTestCase(CommonTestCase):
         ]
         self._assert_templates(response.templates, expects)
 
-    def test_period_balances_without_draw(self):
+    def test_get_without_draw(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:period_balances'))
         self._assert_now(response)
 
-    def test_period_balances_missing_param(self):
+    def test_get_missing_param(self):
         self.client.force_login(User.objects.create_user(self.username))
         body = [
             {'start_month': 1, 'end_year': 2000, 'end_month': 5},
@@ -134,7 +134,7 @@ class PeriodBalanceViewTestCase(CommonTestCase):
                     reverse('moneybook:period_balances'), b)
                 self._assert_now(response)
 
-    def test_period_balances_str_param(self):
+    def test_get_str_param(self):
         self.client.force_login(User.objects.create_user(self.username))
         body = [
             {'start_year': 'a', 'start_month': 1,

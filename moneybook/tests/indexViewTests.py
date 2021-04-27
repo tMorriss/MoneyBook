@@ -4,27 +4,32 @@ from unittest.mock import patch
 from django.contrib.auth.models import User
 from django.urls import reverse
 from moneybook.tests.common import CommonTestCase
-from moneybook.views import indexView
+from moneybook.views import IndexMonthView
 
 
 class IndexViewTestCase(CommonTestCase):
     fixtures = ['data_test_case']
     username = 'tester'
 
-    @patch.object(indexView, 'index_month', return_value=True)
-    def test_index(self, index_month):
+    @patch.object(IndexMonthView, 'get', return_value=True)
+    def test_get(self, index_month):
         now = datetime.now()
         self.client.get(reverse('moneybook:index'))
-        request, year, month = indexView.index_month.call_args.args
-        self.assertEqual(year, now.year)
-        self.assertEqual(month, now.month)
+        kwargs = IndexMonthView.get.call_args.kwargs
+        self.assertEqual(kwargs['year'], now.year)
+        self.assertEqual(kwargs['month'], now.month)
 
-    def test_index_guest(self):
+    def test_get_guest(self):
         response = self.client.get(reverse('moneybook:index'))
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('moneybook:login'))
 
-    def test_index_month(self):
+
+class IndexMonthViewTestCase(CommonTestCase):
+    fixtures = ['data_test_case']
+    username = 'tester'
+
+    def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(
             reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
@@ -53,19 +58,24 @@ class IndexViewTestCase(CommonTestCase):
         ]
         self._assert_templates(response.templates, expects)
 
-    def test_index_month_out_of_range(self):
+    def test_get_out_of_range(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(
             reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 13}))
         self.assertEqual(response.status_code, 400)
 
-    def test_index_month_guest(self):
+    def test_get_guest(self):
         response = self.client.get(
             reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('moneybook:login'))
 
-    def test_index_balance_statistic_mini(self):
+
+class IndexBalanceStatisticMiniViewTestCase(CommonTestCase):
+    fixtures = ['data_test_case']
+    username = 'tester'
+
+    def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(
             reverse('moneybook:balance_statistic_mini'),
@@ -109,7 +119,7 @@ class IndexViewTestCase(CommonTestCase):
         expects = ['_balance_statistic_mini.html']
         self._assert_templates(response.templates, expects)
 
-    def test_index_balance_statistic_mini_without_year(self):
+    def test_get_without_year(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(
             reverse('moneybook:balance_statistic_mini'),
@@ -117,7 +127,7 @@ class IndexViewTestCase(CommonTestCase):
         )
         self.assertEqual(response.status_code, 400)
 
-    def test_index_balance_statistic_mini_without_month(self):
+    def test_get_without_month(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(
             reverse('moneybook:balance_statistic_mini'),
@@ -125,7 +135,7 @@ class IndexViewTestCase(CommonTestCase):
         )
         self.assertEqual(response.status_code, 400)
 
-    def test_index_balance_statistic_mini_out_of_range(self):
+    def test_get_out_of_range(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(
             reverse('moneybook:balance_statistic_mini'),
@@ -133,12 +143,12 @@ class IndexViewTestCase(CommonTestCase):
         )
         self.assertEqual(response.status_code, 400)
 
-    def test_index_balance_statistic_mini_without_parameters(self):
+    def test_get_without_parameters(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:balance_statistic_mini'))
         self.assertEqual(response.status_code, 400)
 
-    def test_index_balance_statistic_mini_guest(self):
+    def test_get_guest(self):
         response = self.client.get(
             reverse('moneybook:balance_statistic_mini'),
             {'year': 2000, 'month': 1}
@@ -146,7 +156,12 @@ class IndexViewTestCase(CommonTestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('moneybook:login'))
 
-    def test_index_chart_data(self):
+
+class IndexChartDataViewTestCase(CommonTestCase):
+    fixtures = ['data_test_case']
+    username = 'tester'
+
+    def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(
             reverse('moneybook:chart_container_data'),
@@ -166,7 +181,7 @@ class IndexViewTestCase(CommonTestCase):
                 self.assertEqual(
                     positive_categories_outgo[keys[i]], actials[i]['value'])
 
-    def test_index_chart_data_wituout_year(self):
+    def test_get_wituout_year(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(
             reverse('moneybook:chart_container_data'),
@@ -174,7 +189,7 @@ class IndexViewTestCase(CommonTestCase):
         )
         self.assertEqual(response.status_code, 400)
 
-    def test_index_chart_data_wituout_month(self):
+    def test_get_wituout_month(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(
             reverse('moneybook:chart_container_data'),
@@ -182,12 +197,12 @@ class IndexViewTestCase(CommonTestCase):
         )
         self.assertEqual(response.status_code, 400)
 
-    def test_index_chart_data_without_parameters(self):
+    def test_get_without_parameters(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:chart_container_data'))
         self.assertEqual(response.status_code, 400)
 
-    def test_index_chart_data_out_of_range(self):
+    def test_get_out_of_range(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(
             reverse('moneybook:chart_container_data'),
@@ -195,7 +210,12 @@ class IndexViewTestCase(CommonTestCase):
         )
         self.assertEqual(response.status_code, 400)
 
-    def test_data_table(self):
+
+class DataTableViewTestCase(CommonTestCase):
+    fixtures = ['data_test_case']
+    username = 'tester'
+
+    def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(
             reverse('moneybook:data_table'),
@@ -224,7 +244,7 @@ class IndexViewTestCase(CommonTestCase):
         data = response.context['show_data']
         self._assert_list(data, expects)
 
-    def test_data_table_without_year(self):
+    def test_get_without_year(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(
             reverse('moneybook:data_table'),
@@ -232,7 +252,7 @@ class IndexViewTestCase(CommonTestCase):
         )
         self.assertEqual(response.status_code, 400)
 
-    def test_data_table_without_month(self):
+    def test_get_without_month(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(
             reverse('moneybook:data_table'),
@@ -240,12 +260,12 @@ class IndexViewTestCase(CommonTestCase):
         )
         self.assertEqual(response.status_code, 400)
 
-    def test_data_table_without_parameters(self):
+    def test_get_without_parameters(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:data_table'))
         self.assertEqual(response.status_code, 400)
 
-    def test_data_table_out_of_range(self):
+    def test_get_out_of_range(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(
             reverse('moneybook:data_table'),

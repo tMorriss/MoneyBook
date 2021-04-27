@@ -20,7 +20,7 @@ function updateDiff() {
 
     var value = written - actual;
     $.post({
-        url: update_actual_cash_url,
+        url: actual_cash_url,
         data: {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
             "price": actual,
@@ -108,7 +108,7 @@ function updateCheckedDate(method_id, checkAll) {
 
 function updateSeveralCheckedDate(id) {
     $.post({
-        url: update_credit_checked_date_url,
+        url: credit_checked_date_url,
         data: {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
             "year": $("#credit_check_year").val(),
@@ -127,7 +127,7 @@ function updateSeveralCheckedDate(id) {
 
 function updateLivingCostMark() {
     $.post({
-        url: update_living_cost_mark_url,
+        url: living_cost_mark_url,
         data: {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
             "price": Number($("#txt_living_cost").val().replace(",", "")),
@@ -191,7 +191,7 @@ function calculateNowBank(isAllUpdate) {
     });
 
     $.post({
-        url: update_now_bank_url,
+        url: now_bank_url,
         data: data
     }).done((data) => {
         result = JSON.parse(data);

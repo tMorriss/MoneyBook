@@ -9,46 +9,48 @@ from moneybook.models import (BankBalance, CheckedDate, CreditCheckedDate,
                               Data, Method, SeveralCosts)
 
 
-def tools(request):
-    now = datetime.now()
-    # 実際の現金残高
-    actual_cash_balance = SeveralCosts.get_actual_cash_balance()
-    # クレカ確認日
-    credit_checked_date = CreditCheckedDate.get_all()
-    # 生活費目標額
-    living_cost_mark = SeveralCosts.get_living_cost_mark()
+class ToolsView(View):
+    def get(self, request, *args, **kwargs):
+        now = datetime.now()
+        # 実際の現金残高
+        actual_cash_balance = SeveralCosts.get_actual_cash_balance()
+        # クレカ確認日
+        credit_checked_date = CreditCheckedDate.get_all()
+        # 生活費目標額
+        living_cost_mark = SeveralCosts.get_living_cost_mark()
 
-    context = {
-        'app_name': settings.APP_NAME,
-        'username': request.user,
-        'cash_balance':
-            Data.get_income_sum(Data.get_cash_data(Data.get_all_data()))
-            - Data.get_outgo_sum(Data.get_cash_data(Data.get_all_data())),
-        'year': now.year,
-        'month': now.month,
-        'day': now.day,
-        'actual_cash_balance': actual_cash_balance,
-        'credit_checked_date': credit_checked_date,
-        'living_cost_mark': living_cost_mark,
-    }
-    return render(request, "tools.html", context)
+        context = {
+            'app_name': settings.APP_NAME,
+            'username': request.user,
+            'cash_balance':
+                Data.get_income_sum(Data.get_cash_data(Data.get_all_data()))
+                - Data.get_outgo_sum(Data.get_cash_data(Data.get_all_data())),
+            'year': now.year,
+            'month': now.month,
+            'day': now.day,
+            'actual_cash_balance': actual_cash_balance,
+            'credit_checked_date': credit_checked_date,
+            'living_cost_mark': living_cost_mark,
+        }
+        return render(request, "tools.html", context)
 
 
-def update_actual_cash(request):
-    if "price" not in request.POST:
-        return HttpResponseBadRequest(
-            json.dumps({"message": "missing parameter"})
-        )
+class ActualCashView(View):
+    def post(self, request, *args, **kwargs):
+        if "price" not in request.POST:
+            return HttpResponseBadRequest(
+                json.dumps({"message": "missing parameter"})
+            )
 
-    try:
-        price = int(request.POST.get("price"))
-    except ValueError:
-        return HttpResponseBadRequest(
-            json.dumps({"message": "price must be int"})
-        )
+        try:
+            price = int(request.POST.get("price"))
+        except ValueError:
+            return HttpResponseBadRequest(
+                json.dumps({"message": "price must be int"})
+            )
 
-    SeveralCosts.set_actual_cash_balance(price)
-    return HttpResponse()
+        SeveralCosts.set_actual_cash_balance(price)
+        return HttpResponse()
 
 
 class CheckedDateView(View):
@@ -107,128 +109,133 @@ class CheckedDateView(View):
         return HttpResponse()
 
 
-def get_several_checked_date(request):
-    now = datetime.now()
-    # 全データ
-    all_data = Data.get_all_data()
-    # 現在銀行
-    banks = BankBalance.get_all()
-    # クレカ確認日
-    credit_checked_date = CreditCheckedDate.get_all()
-    today = date.today()
-    for c in credit_checked_date:
-        # 日付が過ぎていたらpriceを0にする
-        if c.date <= today:
-            c.price = 0
+class SeveralCheckedDateView(View):
+    def get(self, request, *args, **kwargs):
+        now = datetime.now()
+        # 全データ
+        all_data = Data.get_all_data()
+        # 現在銀行
+        banks = BankBalance.get_all()
+        # クレカ確認日
+        credit_checked_date = CreditCheckedDate.get_all()
+        today = date.today()
+        for c in credit_checked_date:
+            # 日付が過ぎていたらpriceを0にする
+            if c.date <= today:
+                c.price = 0
 
-    # 銀行残高
-    all_bank_data = Data.get_bank_data(all_data)
-    checked_bank_data = Data.get_checked_data(all_bank_data)
-    bank_written = Data.get_income_sum(
-        checked_bank_data) - Data.get_outgo_sum(checked_bank_data)
+        # 銀行残高
+        all_bank_data = Data.get_bank_data(all_data)
+        checked_bank_data = Data.get_checked_data(all_bank_data)
+        bank_written = Data.get_income_sum(
+            checked_bank_data) - Data.get_outgo_sum(checked_bank_data)
 
-    context = {
-        'year': now.year,
-        'banks': banks,
-        'credit_checked_date': credit_checked_date,
-        'bank_written': bank_written,
-    }
-    return render(request, "_several_checked_date.html", context)
-
-
-def update_credit_checked_date(request):
-    if "year" not in request.POST or "month" not in request.POST \
-            or "day" not in request.POST or "pk" not in request.POST:
-        return HttpResponseBadRequest(
-            json.dumps({"message": "missing parameter"})
-        )
-
-    pk = request.POST.get("pk")
-    try:
-        new_date = date(int(request.POST.get("year")), int(
-            request.POST.get("month")), int(request.POST.get("day")))
-    except ValueError:
-        return HttpResponseBadRequest(
-            json.dumps({"message": "date format is invalid"})
-        )
-
-    try:
-        # 更新
-        CreditCheckedDate.set_date(pk, new_date)
-    except CreditCheckedDate.DoesNotExist:
-        return HttpResponseBadRequest(
-            json.dumps({"message": "method id is invalid"})
-        )
-
-    return HttpResponse()
+        context = {
+            'year': now.year,
+            'banks': banks,
+            'credit_checked_date': credit_checked_date,
+            'bank_written': bank_written,
+        }
+        return render(request, "_several_checked_date.html", context)
 
 
-def update_living_cost_mark(request):
-    if "price" not in request.POST:
-        return HttpResponseBadRequest(
-            json.dumps({"message": "missing parameter"})
-        )
+class CreditCheckedDateView(View):
+    def post(self, request, *args, **kwargs):
+        if "year" not in request.POST or "month" not in request.POST \
+                or "day" not in request.POST or "pk" not in request.POST:
+            return HttpResponseBadRequest(
+                json.dumps({"message": "missing parameter"})
+            )
 
-    try:
-        price = int(request.POST.get("price"))
-    except ValueError:
-        return HttpResponseBadRequest(
-            json.dumps({"message": "price must be int"})
-        )
+        pk = request.POST.get("pk")
+        try:
+            new_date = date(int(request.POST.get("year")), int(
+                request.POST.get("month")), int(request.POST.get("day")))
+        except ValueError:
+            return HttpResponseBadRequest(
+                json.dumps({"message": "date format is invalid"})
+            )
 
-    SeveralCosts.set_living_cost_mark(price)
-    return HttpResponse(json.dumps({"message": "success"}))
+        try:
+            # 更新
+            CreditCheckedDate.set_date(pk, new_date)
+        except CreditCheckedDate.DoesNotExist:
+            return HttpResponseBadRequest(
+                json.dumps({"message": "method id is invalid"})
+            )
 
-
-def get_unchecked_data_transaction(request):
-    # 全データ
-    all_data = Data.get_all_data()
-    # 未承認トランザクション
-    unchecked_data = Data.get_unchecked_data(all_data)
-    context = {
-        'unchecked_data': unchecked_data,
-    }
-    return render(request, "_unchecked_transaction.html", context)
+        return HttpResponse()
 
 
-def update_now_bank(request):
-    written_bank_data = Data.get_checked_data(
-        Data.get_bank_data(Data.get_all_data()))
-    bank_sum = 0
-    bb = BankBalance.get_all()
-    cc = CreditCheckedDate.get_all()
+class LivingCostMarkView(View):
+    def post(self, request, *args, **kwargs):
+        if "price" not in request.POST:
+            return HttpResponseBadRequest(
+                json.dumps({"message": "missing parameter"})
+            )
 
-    # フォーマットチェック
-    try:
+        try:
+            price = int(request.POST.get("price"))
+        except ValueError:
+            return HttpResponseBadRequest(
+                json.dumps({"message": "price must be int"})
+            )
+
+        SeveralCosts.set_living_cost_mark(price)
+        return HttpResponse(json.dumps({"message": "success"}))
+
+
+class UncheckedDataView(View):
+    def get(self, request, *args, **kwargs):
+        # 全データ
+        all_data = Data.get_all_data()
+        # 未承認トランザクション
+        unchecked_data = Data.get_unchecked_data(all_data)
+        context = {
+            'unchecked_data': unchecked_data,
+        }
+        return render(request, "_unchecked_data.html", context)
+
+
+class NowBankView(View):
+    def post(self, request, *args, **kwargs):
+        written_bank_data = Data.get_checked_data(
+            Data.get_bank_data(Data.get_all_data()))
+        bank_sum = 0
+        bb = BankBalance.get_all()
+        cc = CreditCheckedDate.get_all()
+
+        # フォーマットチェック
+        try:
+            for b in bb:
+                key = "bank-" + str(b.pk)
+                if key in request.POST:
+                    int(request.POST.get(key))
+
+            for c in cc:
+                key = "credit-" + str(c.pk)
+                if key in request.POST:
+                    int(request.POST.get(key))
+        except ValueError:
+            return HttpResponseBadRequest(
+                json.dumps({"message": "invalid parameter"})
+            )
+
+        # 更新と計算
         for b in bb:
             key = "bank-" + str(b.pk)
             if key in request.POST:
-                int(request.POST.get(key))
+                value = int(request.POST.get(key))
+                BankBalance.set(b.pk, value)
+            bank_sum += BankBalance.get_price(b.pk)
 
         for c in cc:
             key = "credit-" + str(c.pk)
             if key in request.POST:
-                int(request.POST.get(key))
-    except ValueError:
-        return HttpResponseBadRequest(
-            json.dumps({"message": "invalid parameter"})
+                value = int(request.POST.get(key))
+                CreditCheckedDate.set_price(c.pk, value)
+            bank_sum -= CreditCheckedDate.get_price(c.pk)
+        return HttpResponse(
+            json.dumps({"balance": Data.get_income_sum(written_bank_data)
+                        - Data.get_outgo_sum(written_bank_data) - bank_sum})
         )
-
-    # 更新と計算
-    for b in bb:
-        key = "bank-" + str(b.pk)
-        if key in request.POST:
-            value = int(request.POST.get(key))
-            BankBalance.set(b.pk, value)
-        bank_sum += BankBalance.get_price(b.pk)
-
-    for c in cc:
-        key = "credit-" + str(c.pk)
-        if key in request.POST:
-            value = int(request.POST.get(key))
-            CreditCheckedDate.set_price(c.pk, value)
-        bank_sum -= CreditCheckedDate.get_price(c.pk)
-    return HttpResponse(
-        json.dumps({"balance": Data.get_income_sum(written_bank_data)
-                    - Data.get_outgo_sum(written_bank_data) - bank_sum})
-    )

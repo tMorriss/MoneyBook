@@ -12,7 +12,7 @@ class ToolsViewTests(CommonTestCase):
     fixtures = ['data_test_case']
     username = 'tester'
 
-    def test_tools(self):
+    def test_get(self):
         now = datetime.now()
 
         self.client.force_login(User.objects.create_user(self.username))
@@ -36,40 +36,50 @@ class ToolsViewTests(CommonTestCase):
             ['tools.html', '_base.html', '_result_message.html']
         )
 
-    def test_tools_guest(self):
+    def test_get_guest(self):
         response = self.client.get(reverse('moneybook:tools'))
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('moneybook:login'))
 
-    def test_update_actual_cash(self):
+
+class ActualCashViewTests(CommonTestCase):
+    fixtures = ['data_test_case']
+    username = 'tester'
+
+    def test_post(self):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(SeveralCosts.get_actual_cash_balance(), 2000)
         response = self.client.post(
-            reverse('moneybook:update_actual_cash'), {'price': 1200})
+            reverse('moneybook:actual_cash'), {'price': 1200})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(SeveralCosts.get_actual_cash_balance(), 1200)
 
-    def test_update_actual_cash_str(self):
+    def test_post_str(self):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(SeveralCosts.get_actual_cash_balance(), 2000)
         response = self.client.post(
-            reverse('moneybook:update_actual_cash'), {'price': 'a'})
+            reverse('moneybook:actual_cash'), {'price': 'a'})
         self.assertEqual(response.status_code, 400)
         self.assertEqual(SeveralCosts.get_actual_cash_balance(), 2000)
 
-    def test_update_actual_cash_missing(self):
+    def test_post_missing(self):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(SeveralCosts.get_actual_cash_balance(), 2000)
-        response = self.client.post(reverse('moneybook:update_actual_cash'))
+        response = self.client.post(reverse('moneybook:actual_cash'))
         self.assertEqual(response.status_code, 400)
         self.assertEqual(SeveralCosts.get_actual_cash_balance(), 2000)
 
-    def test_update_actual_cash_guest(self):
-        response = self.client.get(reverse('moneybook:update_actual_cash'))
+    def test_post_guest(self):
+        response = self.client.get(reverse('moneybook:actual_cash'))
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('moneybook:login'))
 
-    def test_checked_date_view_get(self):
+
+class CheckedDateViewTests(CommonTestCase):
+    fixtures = ['data_test_case']
+    username = 'tester'
+
+    def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:checked_date'))
         self.assertEqual(response.status_code, 200)
@@ -107,7 +117,7 @@ class ToolsViewTests(CommonTestCase):
                 self.assertEqual(content_json[i]['month'], expects[i]['month'])
                 self.assertEqual(content_json[i]['day'], expects[i]['day'])
 
-    def test_checked_date_view_post(self):
+    def test_post(self):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
@@ -123,7 +133,7 @@ class ToolsViewTests(CommonTestCase):
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
         self._assert_list(unchecked_data, expects)
 
-    def test_checked_date_view_post_check(self):
+    def test_post_check(self):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
@@ -141,7 +151,7 @@ class ToolsViewTests(CommonTestCase):
         expects = ['スーパー', 'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
         self._assert_list(unchecked_data, expects)
 
-    def test_checked_date_view_post_check_2(self):
+    def test_post_check_2(self):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
@@ -158,7 +168,7 @@ class ToolsViewTests(CommonTestCase):
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
         self._assert_list(unchecked_data, expects)
 
-    def test_checked_date_view_post_out_of_date_range(self):
+    def test_post_out_of_date_range(self):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
@@ -175,7 +185,7 @@ class ToolsViewTests(CommonTestCase):
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
         self._assert_list(unchecked_data, expects)
 
-    def test_checked_date_view_post_missing_year(self):
+    def test_post_missing_year(self):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
@@ -192,7 +202,7 @@ class ToolsViewTests(CommonTestCase):
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
         self._assert_list(unchecked_data, expects)
 
-    def test_checked_date_view_post_missing_day(self):
+    def test_post_missing_day(self):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
@@ -209,7 +219,7 @@ class ToolsViewTests(CommonTestCase):
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
         self._assert_list(unchecked_data, expects)
 
-    def test_checked_date_view_post_missing_method(self):
+    def test_post_missing_method(self):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
@@ -226,7 +236,7 @@ class ToolsViewTests(CommonTestCase):
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
         self._assert_list(unchecked_data, expects)
 
-    def test_checked_date_view_post_str_year(self):
+    def test_post_str_year(self):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
@@ -243,7 +253,7 @@ class ToolsViewTests(CommonTestCase):
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
         self._assert_list(unchecked_data, expects)
 
-    def test_checked_date_view_post_str_month(self):
+    def test_post_str_month(self):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
@@ -260,7 +270,7 @@ class ToolsViewTests(CommonTestCase):
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
         self._assert_list(unchecked_data, expects)
 
-    def test_checked_date_view_post_str_day(self):
+    def test_post_str_day(self):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
@@ -277,7 +287,7 @@ class ToolsViewTests(CommonTestCase):
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
         self._assert_list(unchecked_data, expects)
 
-    def test_checked_date_view_post_not_exist(self):
+    def test_post_not_exist(self):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
@@ -294,15 +304,20 @@ class ToolsViewTests(CommonTestCase):
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
         self._assert_list(unchecked_data, expects)
 
-    def test_checked_date_view_post_guest(self):
+    def test_post_guest(self):
         response = self.client.get(reverse('moneybook:checked_date'))
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('moneybook:login'))
 
-    def test_get_several_checked_date(self):
+
+class SeveralCheckedDateViewTests(CommonTestCase):
+    fixtures = ['data_test_case']
+    username = 'tester'
+
+    def test_get(self):
         now = datetime.now()
         self.client.force_login(User.objects.create_user(self.username))
-        response = self.client.post(reverse('moneybook:several_checked_date'))
+        response = self.client.get(reverse('moneybook:several_checked_date'))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['year'], now.year)
 
@@ -329,12 +344,17 @@ class ToolsViewTests(CommonTestCase):
             ['_several_checked_date.html']
         )
 
-    def test_get_several_checked_date_guest(self):
+    def test_get_guest(self):
         response = self.client.post(reverse('moneybook:several_checked_date'))
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('moneybook:login'))
 
-    def test_update_credit_checked_date(self):
+
+class CreditCheckedDateViewTests(CommonTestCase):
+    fixtures = ['data_test_case']
+    username = 'tester'
+
+    def test_post(self):
         self.client.force_login(User.objects.create_user(self.username))
         d = CreditCheckedDate.objects.get(pk=2)
         self.assertEqual(d.name, 'AmexGold')
@@ -342,7 +362,7 @@ class ToolsViewTests(CommonTestCase):
         self.assertEqual(d.price, 2000)
 
         response = self.client.post(
-            reverse('moneybook:update_credit_checked_date'),
+            reverse('moneybook:credit_checked_date'),
             {'year': 2001, 'month': 3, 'day': 10, 'pk': 2}
         )
         self.assertEqual(response.status_code, 200)
@@ -351,7 +371,7 @@ class ToolsViewTests(CommonTestCase):
         self.assertEqual(d.date, date(2001, 3, 10))
         self.assertEqual(d.price, 2000)
 
-    def test_update_credit_checked_date_missing_year(self):
+    def test_post_missing_year(self):
         self.client.force_login(User.objects.create_user(self.username))
         d = CreditCheckedDate.objects.get(pk=2)
         self.assertEqual(d.name, 'AmexGold')
@@ -359,7 +379,7 @@ class ToolsViewTests(CommonTestCase):
         self.assertEqual(d.price, 2000)
 
         response = self.client.post(
-            reverse('moneybook:update_credit_checked_date'),
+            reverse('moneybook:credit_checked_date'),
             {'month': 3, 'day': 10, 'pk': 2}
         )
         self.assertEqual(response.status_code, 400)
@@ -368,7 +388,7 @@ class ToolsViewTests(CommonTestCase):
         self.assertEqual(d.date, date(2000, 2, 4))
         self.assertEqual(d.price, 2000)
 
-    def test_update_credit_checked_date_missing_month(self):
+    def test_post_missing_month(self):
         self.client.force_login(User.objects.create_user(self.username))
         d = CreditCheckedDate.objects.get(pk=2)
         self.assertEqual(d.name, 'AmexGold')
@@ -376,7 +396,7 @@ class ToolsViewTests(CommonTestCase):
         self.assertEqual(d.price, 2000)
 
         response = self.client.post(
-            reverse('moneybook:update_credit_checked_date'),
+            reverse('moneybook:credit_checked_date'),
             {'year': 2001, 'day': 10, 'pk': 2}
         )
         self.assertEqual(response.status_code, 400)
@@ -385,7 +405,7 @@ class ToolsViewTests(CommonTestCase):
         self.assertEqual(d.date, date(2000, 2, 4))
         self.assertEqual(d.price, 2000)
 
-    def test_update_credit_checked_date_missing_day(self):
+    def test_post_missing_day(self):
         self.client.force_login(User.objects.create_user(self.username))
         d = CreditCheckedDate.objects.get(pk=2)
         self.assertEqual(d.name, 'AmexGold')
@@ -393,7 +413,7 @@ class ToolsViewTests(CommonTestCase):
         self.assertEqual(d.price, 2000)
 
         response = self.client.post(
-            reverse('moneybook:update_credit_checked_date'),
+            reverse('moneybook:credit_checked_date'),
             {'year': 2001, 'month': 3, 'pk': 2}
         )
         self.assertEqual(response.status_code, 400)
@@ -402,7 +422,7 @@ class ToolsViewTests(CommonTestCase):
         self.assertEqual(d.date, date(2000, 2, 4))
         self.assertEqual(d.price, 2000)
 
-    def test_update_credit_checked_date_missing_pk(self):
+    def test_post_missing_pk(self):
         self.client.force_login(User.objects.create_user(self.username))
         d = CreditCheckedDate.objects.get(pk=2)
         self.assertEqual(d.name, 'AmexGold')
@@ -410,7 +430,7 @@ class ToolsViewTests(CommonTestCase):
         self.assertEqual(d.price, 2000)
 
         response = self.client.post(
-            reverse('moneybook:update_credit_checked_date'),
+            reverse('moneybook:credit_checked_date'),
             {'year': 2001, 'month': 3, 'day': 10}
         )
         self.assertEqual(response.status_code, 400)
@@ -419,7 +439,7 @@ class ToolsViewTests(CommonTestCase):
         self.assertEqual(d.date, date(2000, 2, 4))
         self.assertEqual(d.price, 2000)
 
-    def test_update_credit_checked_date_str_year(self):
+    def test_post_str_year(self):
         self.client.force_login(User.objects.create_user(self.username))
         d = CreditCheckedDate.objects.get(pk=2)
         self.assertEqual(d.name, 'AmexGold')
@@ -427,7 +447,7 @@ class ToolsViewTests(CommonTestCase):
         self.assertEqual(d.price, 2000)
 
         response = self.client.post(
-            reverse('moneybook:update_credit_checked_date'),
+            reverse('moneybook:credit_checked_date'),
             {'year': 'a', 'month': 3, 'day': 10, 'pk': 2}
         )
         self.assertEqual(response.status_code, 400)
@@ -436,59 +456,69 @@ class ToolsViewTests(CommonTestCase):
         self.assertEqual(d.date, date(2000, 2, 4))
         self.assertEqual(d.price, 2000)
 
-    def test_update_credit_checked_date_invalid_pk(self):
+    def test_post_invalid_pk(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.post(
-            reverse('moneybook:update_credit_checked_date'),
+            reverse('moneybook:credit_checked_date'),
             {'year': 2001, 'month': 3, 'day': 10, 'pk': 1000000}
         )
         self.assertEqual(response.status_code, 400)
 
-    def test_update_credit_checked_date_guest(self):
+    def test_post_guest(self):
         response = self.client.post(
-            reverse('moneybook:update_credit_checked_date'),
+            reverse('moneybook:credit_checked_date'),
             {'year': 2001, 'month': 3, 'day': 10, 'pk': 2}
         )
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('moneybook:login'))
 
-    def test_update_living_cost_mark(self):
+
+class LivingCostMarkViewTests(CommonTestCase):
+    fixtures = ['data_test_case']
+    username = 'tester'
+
+    def test_post(self):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(SeveralCosts.get_living_cost_mark(), 1000)
         response = self.client.post(
-            reverse('moneybook:update_living_cost_mark'),
+            reverse('moneybook:living_cost_mark'),
             {'price': 2000}
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(SeveralCosts.get_living_cost_mark(), 2000)
 
-    def test_update_living_cost_mark_missing_price(self):
+    def test_post_missing_price(self):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(SeveralCosts.get_living_cost_mark(), 1000)
         response = self.client.post(
-            reverse('moneybook:update_living_cost_mark'))
+            reverse('moneybook:living_cost_mark'))
         self.assertEqual(response.status_code, 400)
         self.assertEqual(SeveralCosts.get_living_cost_mark(), 1000)
 
-    def test_update_living_cost_mark_str_price(self):
+    def test_post_str_price(self):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(SeveralCosts.get_living_cost_mark(), 1000)
         response = self.client.post(
-            reverse('moneybook:update_living_cost_mark'),
+            reverse('moneybook:living_cost_mark'),
             {'price': 'a'}
         )
         self.assertEqual(response.status_code, 400)
         self.assertEqual(SeveralCosts.get_living_cost_mark(), 1000)
 
-    def test_update_living_cost_mark_guest(self):
+    def test_post_guest(self):
         response = self.client.post(
-            reverse('moneybook:update_living_cost_mark'),
+            reverse('moneybook:living_cost_mark'),
             {'price': 2000}
         )
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('moneybook:login'))
 
-    def test_get_unchecked_data_transaction(self):
+
+class UncheckedDataViewTests(CommonTestCase):
+    fixtures = ['data_test_case']
+    username = 'tester'
+
+    def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:unchecked_transaction'))
         self.assertEqual(response.status_code, 200)
@@ -497,21 +527,26 @@ class ToolsViewTests(CommonTestCase):
         self._assert_list(response.context['unchecked_data'], expects)
         self._assert_templates(
             response.templates,
-            ['_unchecked_transaction.html']
+            ['_unchecked_data.html']
         )
 
-    def test_get_unchecked_data_transaction_guest(self):
+    def test_get_guest(self):
         response = self.client.get(reverse('moneybook:unchecked_transaction'))
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('moneybook:login'))
 
-    def test_update_now_bank(self):
+
+class NowBankViewTests(CommonTestCase):
+    fixtures = ['data_test_case']
+    username = 'tester'
+
+    def test_post(self):
         self.assertEqual(BankBalance.get_price(1), 40000)
         self.assertEqual(CreditCheckedDate.get_price(1), 30000)
         self.assertEqual(CreditCheckedDate.get_price(2), 2000)
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.post(
-            reverse('moneybook:update_now_bank'),
+            reverse('moneybook:now_bank'),
             {'bank-1': 50000, 'credit-1': 20000, 'credit-2': 3000}
         )
         self.assertEqual(response.status_code, 200)
@@ -522,12 +557,12 @@ class ToolsViewTests(CommonTestCase):
         self.assertEqual(response_json['balance'],
                          54054 - (50000 - 20000 - 3000))
 
-    def test_update_now_bank_empty(self):
+    def test_post_empty(self):
         self.assertEqual(BankBalance.get_price(1), 40000)
         self.assertEqual(CreditCheckedDate.get_price(1), 30000)
         self.assertEqual(CreditCheckedDate.get_price(2), 2000)
         self.client.force_login(User.objects.create_user(self.username))
-        response = self.client.post(reverse('moneybook:update_now_bank'))
+        response = self.client.post(reverse('moneybook:now_bank'))
         self.assertEqual(response.status_code, 200)
         response_json = json.loads(response.content.decode())
         self.assertEqual(response_json['balance'],
@@ -536,13 +571,13 @@ class ToolsViewTests(CommonTestCase):
         self.assertEqual(CreditCheckedDate.get_price(1), 30000)
         self.assertEqual(CreditCheckedDate.get_price(2), 2000)
 
-    def test_update_now_bank_str_bank(self):
+    def test_post_str_bank(self):
         self.assertEqual(BankBalance.get_price(1), 40000)
         self.assertEqual(CreditCheckedDate.get_price(1), 30000)
         self.assertEqual(CreditCheckedDate.get_price(2), 2000)
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.post(
-            reverse('moneybook:update_now_bank'),
+            reverse('moneybook:now_bank'),
             {'bank-1': 'a', 'credit-1': 20000, 'credit-2': 3000}
         )
         self.assertEqual(response.status_code, 400)
@@ -550,13 +585,13 @@ class ToolsViewTests(CommonTestCase):
         self.assertEqual(CreditCheckedDate.get_price(1), 30000)
         self.assertEqual(CreditCheckedDate.get_price(2), 2000)
 
-    def test_update_now_bank_str_credit(self):
+    def test_post_str_credit(self):
         self.assertEqual(BankBalance.get_price(1), 40000)
         self.assertEqual(CreditCheckedDate.get_price(1), 30000)
         self.assertEqual(CreditCheckedDate.get_price(2), 2000)
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.post(
-            reverse('moneybook:update_now_bank'),
+            reverse('moneybook:now_bank'),
             {'bank-1': 50000, 'credit-1': 'a', 'credit-2': 3000}
         )
         self.assertEqual(response.status_code, 400)
@@ -564,13 +599,13 @@ class ToolsViewTests(CommonTestCase):
         self.assertEqual(CreditCheckedDate.get_price(1), 30000)
         self.assertEqual(CreditCheckedDate.get_price(2), 2000)
 
-    def test_update_now_bank_str_credit_2(self):
+    def test_post_str_credit_2(self):
         self.assertEqual(BankBalance.get_price(1), 40000)
         self.assertEqual(CreditCheckedDate.get_price(1), 30000)
         self.assertEqual(CreditCheckedDate.get_price(2), 2000)
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.post(
-            reverse('moneybook:update_now_bank'),
+            reverse('moneybook:now_bank'),
             {'bank-1': 50000, 'credit-1': 40000, 'credit-2': 'a'}
         )
         self.assertEqual(response.status_code, 400)
@@ -578,12 +613,12 @@ class ToolsViewTests(CommonTestCase):
         self.assertEqual(CreditCheckedDate.get_price(1), 30000)
         self.assertEqual(CreditCheckedDate.get_price(2), 2000)
 
-    def test_update_now_bank_guest(self):
+    def test_post_guest(self):
         self.assertEqual(BankBalance.get_price(1), 40000)
         self.assertEqual(CreditCheckedDate.get_price(1), 30000)
         self.assertEqual(CreditCheckedDate.get_price(2), 2000)
         response = self.client.post(
-            reverse('moneybook:update_now_bank'),
+            reverse('moneybook:now_bank'),
             {'bank-1': 50000, 'credit-1': 20000, 'credit-2': 3000}
         )
         self.assertEqual(response.status_code, 302)
