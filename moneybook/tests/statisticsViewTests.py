@@ -2,18 +2,17 @@ from datetime import datetime
 from unittest.mock import patch
 
 from django.contrib.auth.models import User
+from django.http import HttpResponse
 from django.urls import reverse
 from moneybook.tests.common import CommonTestCase
 from moneybook.views import StatisticsMonthView
 
 
 class StatisticsViewTestCase(CommonTestCase):
-    fixtures = ['data_test_case']
-    username = 'tester'
-
-    @patch.object(StatisticsMonthView, 'get', return_value=True)
+    @patch.object(StatisticsMonthView, 'get', return_value=HttpResponse())
     def test_get(self, statistics_month):
         now = datetime.now()
+        self.client.force_login(User.objects.create_user(self.username))
         self.client.get(reverse('moneybook:statistics'))
         kwargs = StatisticsMonthView.get.call_args.kwargs
         self.assertEqual(kwargs['year'], now.year)
@@ -25,9 +24,6 @@ class StatisticsViewTestCase(CommonTestCase):
 
 
 class StatisticsMonthViewTestCase(CommonTestCase):
-    fixtures = ['data_test_case']
-    username = 'tester'
-
     def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(
@@ -35,8 +31,7 @@ class StatisticsMonthViewTestCase(CommonTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['app_name'], 'test-MoneyBook')
-        self.assertEqual(
-            response.context['username'].username, self.username)
+        self.assertEqual(response.context['username'].username, self.username)
         self.assertEqual(response.context['year'], 2000)
         self.assertEqual(response.context['month_list'], list(range(1, 13)))
 
@@ -181,8 +176,7 @@ class StatisticsMonthViewTestCase(CommonTestCase):
 
     def test_get_december_water(self):
         self.client.force_login(User.objects.create_user(self.username))
-        response = self.client.get(
-            reverse('moneybook:statistics_month', kwargs={'year': 1999}))
+        response = self.client.get(reverse('moneybook:statistics_month', kwargs={'year': 1999}))
         self.assertEqual(response.status_code, 200)
 
         infra_costs = response.context['infra_costs']
@@ -190,7 +184,6 @@ class StatisticsMonthViewTestCase(CommonTestCase):
         self.assertEqual(infra_costs[11].water, 300)
 
     def test_get_guest(self):
-        response = self.client.get(
-            reverse('moneybook:statistics_month', kwargs={'year': 2000}))
+        response = self.client.get(reverse('moneybook:statistics_month', kwargs={'year': 2000}))
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('moneybook:login'))

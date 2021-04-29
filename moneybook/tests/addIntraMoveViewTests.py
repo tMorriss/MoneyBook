@@ -5,9 +5,6 @@ from moneybook.tests.common import CommonTestCase
 
 
 class AddIntraMoveViewTestCase(CommonTestCase):
-    fixtures = ['data_test_case']
-    username = 'tester'
-
     def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:add_intra_move'))
@@ -131,6 +128,7 @@ class AddIntraMoveViewTestCase(CommonTestCase):
         self.assertEqual(after_count, before_count)
 
     def test_post_guest(self):
+        before_count = Data.get_all_data().count()
         response = self.client.post(
             reverse('moneybook:add_intra_move'),
             {
@@ -144,3 +142,5 @@ class AddIntraMoveViewTestCase(CommonTestCase):
         )
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('moneybook:login'))
+        after_count = Data.get_all_data().count()
+        self.assertEqual(after_count, before_count)

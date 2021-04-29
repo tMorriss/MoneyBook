@@ -31,6 +31,12 @@
     show_order: 0
     name: nanaco
     chargeable: 1
+- model: moneybook.Method
+  pk: 5
+  fields:
+    show_order: -1
+    name: Edy
+    chargeable: 1
 
 - model: moneybook.Category
   pk: 1
@@ -335,6 +341,12 @@
   fields:
     name: みずほ
     price: 40000
+    show_order: 2
+- model: moneybook.BankBalance
+  pk: 2
+  fields:
+    name: 三井住友
+    price: 20000
     show_order: 1
 
 - model: moneybook.CheckedDate

@@ -8,16 +8,12 @@ from moneybook.tests.common import CommonTestCase
 
 
 class EditViewTestCase(CommonTestCase):
-    fixtures = ['data_test_case']
-    username = 'tester'
-
     def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:edit', kwargs={'pk': 1}))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['app_name'], 'test-MoneyBook')
-        self.assertEqual(
-            response.context['username'].username, self.username)
+        self.assertEqual(response.context['username'].username, self.username)
         data = response.context['data']
         self.assertEqual(data.item, '松屋')
         self._assert_all_directions(response)
@@ -27,11 +23,7 @@ class EditViewTestCase(CommonTestCase):
         self._assert_all_temps(response)
         self._assert_all_checkeds(response)
 
-        expects = [
-            'edit.html',
-            '_base.html',
-            '_result_message.html',
-        ]
+        expects = ['edit.html', '_base.html', '_result_message.html', ]
         self._assert_templates(response.templates, expects)
 
     def test_get_invalid_pk(self):
@@ -142,6 +134,16 @@ class EditViewTestCase(CommonTestCase):
         self.assertEqual(response.status_code, 400)
 
     def test_post_guest(self):
+        # 更新前の値を確認
+        data = Data.get(1)
+        self.assertEqual(data.date, date(1999, 12, 31))
+        self.assertEqual(data.item, '松屋')
+        self.assertEqual(data.price, 500)
+        self.assertEqual(data.direction.pk, 2)
+        self.assertEqual(data.method.pk, 1)
+        self.assertEqual(data.category.pk, 1)
+        self.assertEqual(data.temp, False)
+        self.assertEqual(data.checked, True)
         response = self.client.post(
             reverse('moneybook:edit', kwargs={'pk': 1}),
             {
@@ -158,11 +160,19 @@ class EditViewTestCase(CommonTestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('moneybook:login'))
 
+        # 更新されていないことを確認
+        data = Data.get(1)
+        self.assertEqual(data.date, date(1999, 12, 31))
+        self.assertEqual(data.item, '松屋')
+        self.assertEqual(data.price, 500)
+        self.assertEqual(data.direction.pk, 2)
+        self.assertEqual(data.method.pk, 1)
+        self.assertEqual(data.category.pk, 1)
+        self.assertEqual(data.temp, False)
+        self.assertEqual(data.checked, True)
+
 
 class CheckViewTestCase(CommonTestCase):
-    fixtures = ['data_test_case']
-    username = 'tester'
-
     def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:edit_check'))
@@ -188,11 +198,18 @@ class CheckViewTestCase(CommonTestCase):
 
     def test_post_invalid_id(self):
         self.client.force_login(User.objects.create_user(self.username))
-        response = self.client.post(
-            reverse('moneybook:edit_check'), {'id': 10000})
+        response = self.client.post(reverse('moneybook:edit_check'), {'id': 10000})
         self.assertEqual(response.status_code, 400)
 
     def test_post_guest(self):
-        response = self.client.post(reverse('moneybook:edit_check'), {'id': 3})
+        # もともとfalseであることを確認
+        data = Data.get(4)
+        self.assertEqual(data.checked, False)
+
+        response = self.client.post(reverse('moneybook:edit_check'), {'id': 4})
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('moneybook:login'))
+
+        # 更新されていないことを確認
+        data = Data.get(4)
+        self.assertEqual(data.checked, False)

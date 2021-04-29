@@ -18,8 +18,7 @@ class AddIntraMoveView(View):
         if form.is_valid():
             try:
                 out_data = Data()
-                out_data.date = date(int(request.POST.get("year")), int(
-                    request.POST.get("month")), int(request.POST.get("day")))
+                out_data.date = date(int(request.POST.get("year")), int(request.POST.get("month")), int(request.POST.get("day")))
                 out_data.price = request.POST.get("price")
                 out_data.direction = Direction.get(2)
                 out_data.method = Method.get(request.POST.get("before_method"))

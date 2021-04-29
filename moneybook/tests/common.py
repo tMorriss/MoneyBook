@@ -2,6 +2,9 @@ from django.test import TestCase
 
 
 class CommonTestCase(TestCase):
+    fixtures = ['data_test_case']
+    username = 'tester'
+
     def _assert_list(self, data, expects):
         self.assertEqual(data.count(), len(expects))
         for i in range(len(expects)):
@@ -26,7 +29,7 @@ class CommonTestCase(TestCase):
 
     def _assert_all_unused_methods(self, response):
         data = response.context['unused_methods']
-        expects = ['nanaco']
+        expects = ['nanaco', 'Edy']
         self._assert_list(data, expects)
 
     def _assert_all_chargeable_methods(self, response):
