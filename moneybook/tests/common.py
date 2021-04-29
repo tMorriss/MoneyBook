@@ -26,7 +26,7 @@ class CommonTestCase(TestCase):
 
     def _assert_all_unused_methods(self, response):
         data = response.context['unused_methods']
-        expects = ['nanaco']
+        expects = ['nanaco', 'Edy']
         self._assert_list(data, expects)
 
     def _assert_all_chargeable_methods(self, response):
