@@ -341,6 +341,12 @@
   fields:
     name: みずほ
     price: 40000
+    show_order: 2
+- model: moneybook.BankBalance
+  pk: 2
+  fields:
+    name: 三井住友
+    price: 20000
     show_order: 1
 
 - model: moneybook.CheckedDate

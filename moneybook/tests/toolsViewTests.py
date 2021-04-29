@@ -300,9 +300,11 @@ class SeveralCheckedDateViewTests(CommonTestCase):
         self.assertEqual(response.context['year'], now.year)
 
         banks = response.context['banks']
-        self.assertEqual(banks.count(), 1)
-        self.assertEqual(banks[0].name, 'みずほ')
-        self.assertEqual(banks[0].price, 40000)
+        self.assertEqual(banks.count(), 2)
+        self.assertEqual(banks[0].name, '三井住友')
+        self.assertEqual(banks[0].price, 20000)
+        self.assertEqual(banks[1].name, 'みずほ')
+        self.assertEqual(banks[1].price, 40000)
 
         credit_checked_date = response.context['credit_checked_date']
         self.assertEqual(credit_checked_date.count(), 2)
@@ -518,85 +520,99 @@ class NowBankViewTests(CommonTestCase):
 
     def test_post(self):
         self.assertEqual(BankBalance.get_price(1), 40000)
+        self.assertEqual(BankBalance.get_price(2), 20000)
         self.assertEqual(CreditCheckedDate.get_price(1), 30000)
         self.assertEqual(CreditCheckedDate.get_price(2), 2000)
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.post(
             reverse('moneybook:now_bank'),
-            {'bank-1': 50000, 'credit-1': 20000, 'credit-2': 3000}
+            {'bank-1': 50000, 'bank-2': 10000, 'credit-1': 20000, 'credit-2': 3000}
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(BankBalance.get_price(1), 50000)
+        self.assertEqual(BankBalance.get_price(2), 10000)
         self.assertEqual(CreditCheckedDate.get_price(1), 20000)
         self.assertEqual(CreditCheckedDate.get_price(2), 3000)
         response_json = json.loads(response.content.decode())
-        self.assertEqual(response_json['balance'], 54054 - (50000 - 20000 - 3000))
+        self.assertEqual(response_json['balance'], 54054 - (50000 + 10000 - 20000 - 3000))
+
+    def test_post_part(self):
+        self.assertEqual(BankBalance.get_price(1), 40000)
+        self.assertEqual(BankBalance.get_price(2), 20000)
+        self.assertEqual(CreditCheckedDate.get_price(1), 30000)
+        self.assertEqual(CreditCheckedDate.get_price(2), 2000)
+        self.client.force_login(User.objects.create_user(self.username))
+        response = self.client.post(
+            reverse('moneybook:now_bank'),
+            {'bank-1': 50000, 'credit-2': 3000}
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(BankBalance.get_price(1), 50000)
+        self.assertEqual(BankBalance.get_price(2), 20000)
+        self.assertEqual(CreditCheckedDate.get_price(1), 30000)
+        self.assertEqual(CreditCheckedDate.get_price(2), 3000)
+        response_json = json.loads(response.content.decode())
+        self.assertEqual(response_json['balance'], 54054 - (50000 + 20000 - 30000 - 3000))
 
     def test_post_empty(self):
         self.assertEqual(BankBalance.get_price(1), 40000)
+        self.assertEqual(BankBalance.get_price(2), 20000)
         self.assertEqual(CreditCheckedDate.get_price(1), 30000)
         self.assertEqual(CreditCheckedDate.get_price(2), 2000)
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.post(reverse('moneybook:now_bank'))
         self.assertEqual(response.status_code, 200)
         response_json = json.loads(response.content.decode())
-        self.assertEqual(response_json['balance'], 54054 - (40000 - 30000 - 2000))
+        self.assertEqual(response_json['balance'], 54054 - (40000 + 20000 - 30000 - 2000))
         self.assertEqual(BankBalance.get_price(1), 40000)
+        self.assertEqual(BankBalance.get_price(2), 20000)
         self.assertEqual(CreditCheckedDate.get_price(1), 30000)
         self.assertEqual(CreditCheckedDate.get_price(2), 2000)
 
     def test_post_str_bank(self):
         self.assertEqual(BankBalance.get_price(1), 40000)
+        self.assertEqual(BankBalance.get_price(2), 20000)
         self.assertEqual(CreditCheckedDate.get_price(1), 30000)
         self.assertEqual(CreditCheckedDate.get_price(2), 2000)
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.post(
             reverse('moneybook:now_bank'),
-            {'bank-1': 'a', 'credit-1': 20000, 'credit-2': 3000}
+            {'bank-1': 'a', 'bank-2': 10000, 'credit-1': 20000, 'credit-2': 3000}
         )
         self.assertEqual(response.status_code, 400)
         self.assertEqual(BankBalance.get_price(1), 40000)
+        self.assertEqual(BankBalance.get_price(2), 20000)
         self.assertEqual(CreditCheckedDate.get_price(1), 30000)
         self.assertEqual(CreditCheckedDate.get_price(2), 2000)
 
     def test_post_str_credit(self):
         self.assertEqual(BankBalance.get_price(1), 40000)
+        self.assertEqual(BankBalance.get_price(2), 20000)
         self.assertEqual(CreditCheckedDate.get_price(1), 30000)
         self.assertEqual(CreditCheckedDate.get_price(2), 2000)
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.post(
             reverse('moneybook:now_bank'),
-            {'bank-1': 50000, 'credit-1': 'a', 'credit-2': 3000}
+            {'bank-1': 50000, 'bank-2': 10000, 'credit-1': 'a', 'credit-2': 3000}
         )
         self.assertEqual(response.status_code, 400)
         self.assertEqual(BankBalance.get_price(1), 40000)
-        self.assertEqual(CreditCheckedDate.get_price(1), 30000)
-        self.assertEqual(CreditCheckedDate.get_price(2), 2000)
-
-    def test_post_str_credit_2(self):
-        self.assertEqual(BankBalance.get_price(1), 40000)
-        self.assertEqual(CreditCheckedDate.get_price(1), 30000)
-        self.assertEqual(CreditCheckedDate.get_price(2), 2000)
-        self.client.force_login(User.objects.create_user(self.username))
-        response = self.client.post(
-            reverse('moneybook:now_bank'),
-            {'bank-1': 50000, 'credit-1': 40000, 'credit-2': 'a'}
-        )
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(BankBalance.get_price(1), 40000)
+        self.assertEqual(BankBalance.get_price(2), 20000)
         self.assertEqual(CreditCheckedDate.get_price(1), 30000)
         self.assertEqual(CreditCheckedDate.get_price(2), 2000)
 
     def test_post_guest(self):
         self.assertEqual(BankBalance.get_price(1), 40000)
+        self.assertEqual(BankBalance.get_price(2), 20000)
         self.assertEqual(CreditCheckedDate.get_price(1), 30000)
         self.assertEqual(CreditCheckedDate.get_price(2), 2000)
         response = self.client.post(
             reverse('moneybook:now_bank'),
-            {'bank-1': 50000, 'credit-1': 20000, 'credit-2': 3000}
+            {'bank-1': 50000, 'bank-2': 10000, 'credit-1': 20000, 'credit-2': 3000}
         )
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('moneybook:login'))
         self.assertEqual(BankBalance.get_price(1), 50000)
+        self.assertEqual(BankBalance.get_price(2), 10000)
         self.assertEqual(CreditCheckedDate.get_price(1), 20000)
         self.assertEqual(CreditCheckedDate.get_price(2), 3000)
