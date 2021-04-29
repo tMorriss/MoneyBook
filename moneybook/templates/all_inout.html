@@ -2,18 +2,18 @@
 {% load static %}
 {% load humanize %}
 
-{% block title %}{{ app_name }} Statistics{% endblock %}
+{% block title %}{{ app_name }} AllInout{% endblock %}
 
 {% block header %}
 <link rel="stylesheet" type="text/css" href="{% static 'statistics.css' %}">
 <script src="{% static 'statistics_common.js' %}"></script>
-<script src="{% static 'statistics.js' %}"></script>
+<script src="{% static 'all_inout.js' %}"></script>
 <script src="{% static 'amcharts4/core.js' %}"></script>
 <script src="{% static 'amcharts4/charts.js' %}"></script>
 <script src="{% static 'amcharts4/animated.js' %}"></script>
 <script src="{% static 'amcharts4/kelly.js' %}"></script>
 <script type="text/javascript">
-    statistics_url = "{% url 'moneybook:statistics' %}";
+    all_inout_url = "{% url 'moneybook:all_inout' %}";
     window.onload = function () {
         drawGraph();
     }
@@ -23,82 +23,27 @@
 {% block content %}
 {% include "_statistics_task_bar.html" %}
 <section>
-    <h1>統計情報</h1>
-    <h2>ジャンプ</h2>
+    <h1>ジャンプ</h1>
     <table class="tbl-common fcs-blue">
         <tr>
             <td rowspan="2">
-                <a href="{% url 'moneybook:statistics_month' year|add:'-1' %}"><img src="{% static 'images/left.png' %}"
+                <a href="{% url 'moneybook:all_inout_month' year|add:'-1' %}"><img src="{% static 'images/left.png' %}"
                         alt="←" width="40px" valign="middle"></a>
             </td>
             <td class="jump-date">
                 <input type="text" name="year" id="jump_year" style="width:6ex" class="righter" value="{{ year }}"
-                    onkeypress="key_press_move(event.keyCode)" onfocus="deleteValue(this)">年
+                    onkeypress="keyPressMove(event.keyCode)" onfocus="deleteValue(this)">年
             </td>
             <td rowspan="2">
-                <a href="{% url 'moneybook:statistics_month' year|add:'1' %}"><img src="{% static 'images/right.png' %}"
+                <a href="{% url 'moneybook:all_inout_month' year|add:'1' %}"><img src="{% static 'images/right.png' %}"
                         alt="→" width="40px" valign="middle"></a>
             </td>
         </tr>
         <tr>
-            <td><input type="button" class="btn-apply" value="更新" onclick="move_year()"></td>
+            <td><input type="button" class="btn-apply" value="更新" onclick="moveYear()"></td>
         </tr>
     </table>
-    <h2>月ごとの収支</h2>
-    <table class="tbl-per-month tbl-common">
-        <tr>
-            <th></th>
-            {% for m in month_io_list %}
-            <th>{{ m.label }}</th>
-            {% endfor %}
-        </tr>
-        <tr>
-            <th>収入</th>
-            {% for m in month_io_list %}
-            <td>{{ m.income| intcomma }}</td>
-            {% endfor %}
-        </tr>
-        <tr>
-            <th>支出</th>
-            {% for m in month_io_list %}
-            <td>{{ m.outgo| intcomma }}</td>
-            {% endfor %}
-        </tr>
-        <tr>
-            <th>収支</th>
-            {% for m in month_io_list %}
-            <td>{{ m.balance| intcomma }}</td>
-            {% endfor %}
-        </tr>
-    </table>
-    <h2>グラフ</h2>
-    <h3>収入・支出</h3>
-    <div id="barplot_inout" class="graph-statistic"></div>
-    <ul id="month_io_list" hidden>
-        {% for m in month_io_list %}<li>{{ m.label }}月,{{ m.income }},{{ m.outgo }}</li>
-        {% endfor %}
-    </ul>
-    <ul id="living_costs" hidden>
-        {% for fc in living_costs %}<li>{{ fc.label }}月,{{ fc.value }}</li>
-        {% endfor %}
-    </ul>
-    <ul id="salary" hidden>
-        {% for s in salary %}<li>{{ s.label }}月,{{ s.value }}</li>
-        {% endfor %}
-    </ul>
-    <h3>インフラ</h3>
-    <div id="lineplot_infra" class="graph-statistic"></div>
-    <ul id="infra_costs" hidden>
-        {% for i in infra_costs %}<li>{{ i.label }}月,{{ i.electricity }},{{ i.gus }},{{ i.water }},{{ i.total }}</li>
-        {% endfor %}
-    </ul>
-    <h3>食費</h3>
-    <div id="lineplot_food" class="graph-statistic"></div>
-    <ul id="food_costs" hidden>
-        {% for f in food_costs %}<li>{{ f.label }}月,{{ f.value }}</li>
-        {% endfor %}
-    </ul>
-    <h2>全収支</h2>
+    <h1>全収支</h1>
     <table class="tbl-per-month tbl-common">
         <tr>
             <th></th>
