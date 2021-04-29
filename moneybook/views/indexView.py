@@ -5,8 +5,7 @@ from django.conf import settings
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render
 from django.views import View
-from moneybook.models import (Category, Data, Direction, InOutBalance, Method,
-                              SeveralCosts)
+from moneybook.models import Category, Data, Direction, InOutBalance, Method, SeveralCosts
 from moneybook.utils import is_valid_date
 
 
