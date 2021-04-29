@@ -3,8 +3,7 @@ from datetime import date, datetime
 
 from django.contrib.auth.models import User
 from django.urls import reverse
-from moneybook.models import (BankBalance, CheckedDate, CreditCheckedDate,
-                              Data, SeveralCosts)
+from moneybook.models import BankBalance, CheckedDate, CreditCheckedDate, Data, SeveralCosts
 from moneybook.tests.common import CommonTestCase
 
 
@@ -19,22 +18,15 @@ class ToolsViewTests(CommonTestCase):
         response = self.client.get(reverse('moneybook:tools'))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['app_name'], 'test-MoneyBook')
-        self.assertEqual(
-            response.context['username'].username, self.username)
+        self.assertEqual(response.context['username'].username, self.username)
         self.assertEqual(response.context['cash_balance'], -3930)
         self.assertEqual(response.context['year'], now.year)
         self.assertEqual(response.context['month'], now.month)
         self.assertEqual(response.context['day'], now.day)
         self.assertEqual(response.context['actual_cash_balance'], 2000)
-        self._assert_list(
-            response.context['credit_checked_date'],
-            ['AmexGold', 'センチュリオン']
-        )
+        self._assert_list(response.context['credit_checked_date'], ['AmexGold', 'センチュリオン'])
         self.assertEqual(response.context['living_cost_mark'], 1000)
-        self._assert_templates(
-            response.templates,
-            ['tools.html', '_base.html', '_result_message.html']
-        )
+        self._assert_templates(response.templates, ['tools.html', '_base.html', '_result_message.html'])
 
     def test_get_guest(self):
         response = self.client.get(reverse('moneybook:tools'))
@@ -49,16 +41,14 @@ class ActualCashViewTests(CommonTestCase):
     def test_post(self):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(SeveralCosts.get_actual_cash_balance(), 2000)
-        response = self.client.post(
-            reverse('moneybook:actual_cash'), {'price': 1200})
+        response = self.client.post(reverse('moneybook:actual_cash'), {'price': 1200})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(SeveralCosts.get_actual_cash_balance(), 1200)
 
     def test_post_str(self):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(SeveralCosts.get_actual_cash_balance(), 2000)
-        response = self.client.post(
-            reverse('moneybook:actual_cash'), {'price': 'a'})
+        response = self.client.post(reverse('moneybook:actual_cash'), {'price': 'a'})
         self.assertEqual(response.status_code, 400)
         self.assertEqual(SeveralCosts.get_actual_cash_balance(), 2000)
 
@@ -111,8 +101,7 @@ class CheckedDateViewTests(CommonTestCase):
         for i in range(len(expects)):
             with self.subTest(i=i):
                 self.assertEqual(content_json[i]['name'], expects[i]['name'])
-                self.assertEqual(
-                    content_json[i]['balance'], expects[i]['balance'])
+                self.assertEqual(content_json[i]['balance'], expects[i]['balance'])
                 self.assertEqual(content_json[i]['year'], expects[i]['year'])
                 self.assertEqual(content_json[i]['month'], expects[i]['month'])
                 self.assertEqual(content_json[i]['day'], expects[i]['day'])
@@ -121,8 +110,7 @@ class CheckedDateViewTests(CommonTestCase):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
-        expects = ['必需品1', 'スーパー', '計算外', '貯金',
-                   'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
+        expects = ['必需品1', 'スーパー', '計算外', '貯金', 'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
         self._assert_list(unchecked_data, expects)
         response = self.client.post(
             reverse('moneybook:checked_date'),
@@ -137,8 +125,7 @@ class CheckedDateViewTests(CommonTestCase):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
-        expects = ['必需品1', 'スーパー', '計算外', '貯金',
-                   'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
+        expects = ['必需品1', 'スーパー', '計算外', '貯金', 'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
         self._assert_list(unchecked_data, expects)
 
         response = self.client.post(
@@ -155,8 +142,7 @@ class CheckedDateViewTests(CommonTestCase):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
-        expects = ['必需品1', 'スーパー', '計算外', '貯金',
-                   'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
+        expects = ['必需品1', 'スーパー', '計算外', '貯金', 'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
         self._assert_list(unchecked_data, expects)
 
         response = self.client.post(
@@ -172,8 +158,7 @@ class CheckedDateViewTests(CommonTestCase):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
-        expects = ['必需品1', 'スーパー', '計算外', '貯金',
-                   'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
+        expects = ['必需品1', 'スーパー', '計算外', '貯金', 'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
         self._assert_list(unchecked_data, expects)
 
         response = self.client.post(
@@ -189,8 +174,7 @@ class CheckedDateViewTests(CommonTestCase):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
-        expects = ['必需品1', 'スーパー', '計算外', '貯金',
-                   'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
+        expects = ['必需品1', 'スーパー', '計算外', '貯金', 'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
         self._assert_list(unchecked_data, expects)
 
         response = self.client.post(
@@ -206,8 +190,7 @@ class CheckedDateViewTests(CommonTestCase):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
-        expects = ['必需品1', 'スーパー', '計算外', '貯金',
-                   'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
+        expects = ['必需品1', 'スーパー', '計算外', '貯金', 'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
         self._assert_list(unchecked_data, expects)
 
         response = self.client.post(
@@ -223,8 +206,7 @@ class CheckedDateViewTests(CommonTestCase):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
-        expects = ['必需品1', 'スーパー', '計算外', '貯金',
-                   'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
+        expects = ['必需品1', 'スーパー', '計算外', '貯金', 'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
         self._assert_list(unchecked_data, expects)
 
         response = self.client.post(
@@ -240,8 +222,7 @@ class CheckedDateViewTests(CommonTestCase):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
-        expects = ['必需品1', 'スーパー', '計算外', '貯金',
-                   'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
+        expects = ['必需品1', 'スーパー', '計算外', '貯金', 'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
         self._assert_list(unchecked_data, expects)
 
         response = self.client.post(
@@ -257,8 +238,7 @@ class CheckedDateViewTests(CommonTestCase):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
-        expects = ['必需品1', 'スーパー', '計算外', '貯金',
-                   'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
+        expects = ['必需品1', 'スーパー', '計算外', '貯金', 'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
         self._assert_list(unchecked_data, expects)
 
         response = self.client.post(
@@ -274,8 +254,7 @@ class CheckedDateViewTests(CommonTestCase):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
-        expects = ['必需品1', 'スーパー', '計算外', '貯金',
-                   'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
+        expects = ['必需品1', 'スーパー', '計算外', '貯金', 'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
         self._assert_list(unchecked_data, expects)
 
         response = self.client.post(
@@ -291,8 +270,7 @@ class CheckedDateViewTests(CommonTestCase):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
-        expects = ['必需品1', 'スーパー', '計算外', '貯金',
-                   'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
+        expects = ['必需品1', 'スーパー', '計算外', '貯金', 'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
         self._assert_list(unchecked_data, expects)
 
         response = self.client.post(
@@ -490,8 +468,7 @@ class LivingCostMarkViewTests(CommonTestCase):
     def test_post_missing_price(self):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(SeveralCosts.get_living_cost_mark(), 1000)
-        response = self.client.post(
-            reverse('moneybook:living_cost_mark'))
+        response = self.client.post(reverse('moneybook:living_cost_mark'))
         self.assertEqual(response.status_code, 400)
         self.assertEqual(SeveralCosts.get_living_cost_mark(), 1000)
 
@@ -522,8 +499,7 @@ class UncheckedDataViewTests(CommonTestCase):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:unchecked_transaction'))
         self.assertEqual(response.status_code, 200)
-        expects = ['必需品1', 'スーパー', '計算外', '貯金',
-                   'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
+        expects = ['必需品1', 'スーパー', '計算外', '貯金', 'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
         self._assert_list(response.context['unchecked_data'], expects)
         self._assert_templates(
             response.templates,
@@ -554,8 +530,7 @@ class NowBankViewTests(CommonTestCase):
         self.assertEqual(CreditCheckedDate.get_price(1), 20000)
         self.assertEqual(CreditCheckedDate.get_price(2), 3000)
         response_json = json.loads(response.content.decode())
-        self.assertEqual(response_json['balance'],
-                         54054 - (50000 - 20000 - 3000))
+        self.assertEqual(response_json['balance'], 54054 - (50000 - 20000 - 3000))
 
     def test_post_empty(self):
         self.assertEqual(BankBalance.get_price(1), 40000)
@@ -565,8 +540,7 @@ class NowBankViewTests(CommonTestCase):
         response = self.client.post(reverse('moneybook:now_bank'))
         self.assertEqual(response.status_code, 200)
         response_json = json.loads(response.content.decode())
-        self.assertEqual(response_json['balance'],
-                         54054 - (40000 - 30000 - 2000))
+        self.assertEqual(response_json['balance'], 54054 - (40000 - 30000 - 2000))
         self.assertEqual(BankBalance.get_price(1), 40000)
         self.assertEqual(CreditCheckedDate.get_price(1), 30000)
         self.assertEqual(CreditCheckedDate.get_price(2), 2000)

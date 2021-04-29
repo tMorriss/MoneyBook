@@ -16,8 +16,8 @@ class PeriodBalanceView(View):
         }
 
         # パラメータ取得
-        if 'start_year' not in request.GET or 'start_month' not in request.GET or 'end_year' not in request.GET \
-                or 'end_month' not in request.GET:
+        if 'start_year' not in request.GET or 'start_month' not in request.GET or \
+                'end_year' not in request.GET or 'end_month' not in request.GET:
             # パラメータが無いときはデフォルト値で今年~今月を入れる
             start_year = now.year
             start_month = 1
@@ -39,8 +39,7 @@ class PeriodBalanceView(View):
         while True:
             last_day = i_date + relativedelta(months=1) - timedelta(days=1)
             d = Data.get_range_data(None, last_day)
-            period_balances.append(LabelValue(
-                datetime.strftime(i_date, '%Y-%m'), Data.get_income_sum(d) - Data.get_outgo_sum(d)))
+            period_balances.append(LabelValue(datetime.strftime(i_date, '%Y-%m'), Data.get_income_sum(d) - Data.get_outgo_sum(d)))
 
             if i_date == end_date:
                 break

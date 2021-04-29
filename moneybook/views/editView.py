@@ -36,9 +36,7 @@ class EditView(View):
         try:
             data = Data.get(pk)
         except:
-            return HttpResponseBadRequest(
-                json.dumps({"message": "Data does not exist"})
-            )
+            return HttpResponseBadRequest(json.dumps({"message": "Data does not exist"}))
 
         new_data = DataForm(request.POST)
         if new_data.is_valid():

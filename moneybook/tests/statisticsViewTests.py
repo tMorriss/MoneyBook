@@ -35,8 +35,7 @@ class StatisticsMonthViewTestCase(CommonTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['app_name'], 'test-MoneyBook')
-        self.assertEqual(
-            response.context['username'].username, self.username)
+        self.assertEqual(response.context['username'].username, self.username)
         self.assertEqual(response.context['year'], 2000)
         self.assertEqual(response.context['month_list'], list(range(1, 13)))
 
@@ -181,8 +180,7 @@ class StatisticsMonthViewTestCase(CommonTestCase):
 
     def test_get_december_water(self):
         self.client.force_login(User.objects.create_user(self.username))
-        response = self.client.get(
-            reverse('moneybook:statistics_month', kwargs={'year': 1999}))
+        response = self.client.get(reverse('moneybook:statistics_month', kwargs={'year': 1999}))
         self.assertEqual(response.status_code, 200)
 
         infra_costs = response.context['infra_costs']
@@ -190,7 +188,6 @@ class StatisticsMonthViewTestCase(CommonTestCase):
         self.assertEqual(infra_costs[11].water, 300)
 
     def test_get_guest(self):
-        response = self.client.get(
-            reverse('moneybook:statistics_month', kwargs={'year': 2000}))
+        response = self.client.get(reverse('moneybook:statistics_month', kwargs={'year': 2000}))
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('moneybook:login'))

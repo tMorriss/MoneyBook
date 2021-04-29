@@ -22,8 +22,7 @@ class SearchView(View):
 
         # 入力値を維持するための変数
         query_context = {}
-        query_list = ["start_year", "start_month", "start_day", "end_year",
-                      "end_month", "end_day", "item", "lower_price", "upper_price"]
+        query_list = ["start_year", "start_month", "start_day", "end_year", "end_month", "end_day", "item", "lower_price", "upper_price"]
         for q in query_list:
             if q in request.GET:
                 query_context[q] = request.GET.get(q)
@@ -49,24 +48,18 @@ class SearchView(View):
                         date(int(request.GET.get("start_year")),
                              int(request.GET.get("start_month")),
                              int(request.GET.get("start_day")))
-                        start_date = request.GET.get(
-                            "start_year") + "-" + request.GET.get("start_month") \
-                            + "-" + request.GET.get("start_day")
+                        start_date = request.GET.get("start_year") + "-" + request.GET.get("start_month") + \
+                            "-" + request.GET.get("start_day")
                     except:
                         start_date = None
             end_date = None
-            if "end_year" in request.GET and "end_month" in request.GET \
-                    and "end_day" in request.GET:
-                if request.GET.get("end_year") != "" \
-                    and request.GET.get("end_month") != "" \
-                        and request.GET.get("end_day") != "":
+            if "end_year" in request.GET and "end_month" in request.GET and "end_day" in request.GET:
+                if request.GET.get("end_year") != "" and request.GET.get("end_month") != "" and request.GET.get("end_day") != "":
                     try:
                         date(int(request.GET.get("end_year")),
                              int(request.GET.get("end_month")),
                              int(request.GET.get("end_day")))
-                        end_date = request.GET.get("end_year") \
-                            + "-" + request.GET.get("end_month") \
-                            + "-" + request.GET.get("end_day")
+                        end_date = request.GET.get("end_year") + "-" + request.GET.get("end_month") + "-" + request.GET.get("end_day")
                     except:
                         end_date = None
             data = Data.get_range_data(start_date, end_date)
@@ -78,20 +71,14 @@ class SearchView(View):
                     data = Data.get_keyword_data(data, item)
 
             # 金額
-            if "lower_price" in request.GET \
-                    and request.GET.get("lower_price") != "":
+            if "lower_price" in request.GET and request.GET.get("lower_price") != "":
                 try:
-                    data = Data.filter_price(
-                        data, int(request.GET.get("lower_price")), None
-                    )
+                    data = Data.filter_price(data, int(request.GET.get("lower_price")), None)
                 except:
                     data = data
-            if "upper_price" in request.GET \
-                    and request.GET.get("upper_price") != "":
+            if "upper_price" in request.GET and request.GET.get("upper_price") != "":
                 try:
-                    data = Data.filter_price(data, None, int(
-                        request.GET.get("upper_price"))
-                    )
+                    data = Data.filter_price(data, None, int(request.GET.get("upper_price")))
                 except:
                     data = data
 

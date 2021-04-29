@@ -13,8 +13,7 @@ for i_row in range(len(result)):
     result_str += "  pk: " + str(i_row + 1) + "\n"
     result_str += "  fields: \n"
     result_str += "    date: " + str(result.iat[i_row, 1]) + "\n"
-    result_str += "    item: " + \
-        str(result.iat[i_row, 2]).replace("amp;", "") + "\n"
+    result_str += "    item: " + str(result.iat[i_row, 2]).replace("amp;", "") + "\n"
     result_str += "    price: " + str(result.iat[i_row, 3]) + "\n"
     result_str += "    temp: " + str(result.iat[i_row, 4]) + "\n"
     result_str += "    checked: " + str(result.iat[i_row, 5]) + "\n"

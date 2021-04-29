@@ -34,20 +34,14 @@ class StatisticsMonthView(View):
 
             month_iob.append(InOutBalance(month_list[i_month], i, o, i - o))
 
-            monthly_data_without_in_move = Data.filter_without_intra_move(
-                monthly_data)
+            monthly_data_without_in_move = Data.filter_without_intra_move(monthly_data)
             t = Data.get_temp_sum(monthly_data)
             i = Data.get_income_sum(monthly_data_without_in_move) - t
             o = Data.get_outgo_sum(monthly_data_without_in_move) - t
-            month_all_iob.append(InOutBalance(
-                month_list[i_month], i, o, i - o))
+            month_all_iob.append(InOutBalance(month_list[i_month], i, o, i - o))
 
-            d = Data.get_range_data(None, datetime(
-                year,
-                month_list[i_month],
-                calendar.monthrange(year, month_list[i_month])[1]))
-            period_balances.append(LabelValue(
-                month_list[i_month], Data.get_income_sum(d) - Data.get_outgo_sum(d)))
+            d = Data.get_range_data(None, datetime(year, month_list[i_month], calendar.monthrange(year, month_list[i_month])[1]))
+            period_balances.append(LabelValue(month_list[i_month], Data.get_income_sum(d) - Data.get_outgo_sum(d)))
 
             e = Data.get_outgo_sum(Data.get_keyword_data(monthly_data, "電気代"))
             g = Data.get_outgo_sum(Data.get_keyword_data(monthly_data, "ガス代"))
@@ -56,13 +50,9 @@ class StatisticsMonthView(View):
                 if i_month > 0:
                     infra_costs[i_month - 1].total += w / 2
                     infra_costs[i_month - 1].water = w / 2
-            infra_costs.append(
-                InfraCost(month_list[i_month], e + g + w / 2, e, g, w / 2))
+            infra_costs.append(InfraCost(month_list[i_month], e + g + w / 2, e, g, w / 2))
 
-            food_costs.append(LabelValue(
-                month_list[i_month],
-                Data.get_food_costs(monthly_data))
-            )
+            food_costs.append(LabelValue(month_list[i_month], Data.get_food_costs(monthly_data)))
 
             living_costs.append(
                 LabelValue(
@@ -71,10 +61,7 @@ class StatisticsMonthView(View):
                 )
             )
 
-            salary.append(LabelValue(
-                month_list[i_month],
-                Data.get_income_sum(Data.get_keyword_data(monthly_data, "給与"))
-            ))
+            salary.append(LabelValue(month_list[i_month], Data.get_income_sum(Data.get_keyword_data(monthly_data, "給与"))))
 
         # 12月の水道代
         next_month_data = Data.get_month_data(year + 1, 1)

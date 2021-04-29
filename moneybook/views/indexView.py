@@ -70,8 +70,7 @@ class IndexBalanceStatisticMiniView(View):
         methods_monthly_iob = []
         for m in methods:
             d = Data.get_method_data(all_data, m.pk)
-            methods_iob.append(InOutBalance(
-                m.name, None, None, Data.get_income_sum(d) - Data.get_outgo_sum(d)))
+            methods_iob.append(InOutBalance(m.name, None, None, Data.get_income_sum(d) - Data.get_outgo_sum(d)))
 
             i = Data.get_income_sum(Data.get_method_data(monthly_data, m.pk))
             o = Data.get_outgo_sum(Data.get_method_data(monthly_data, m.pk))
@@ -82,30 +81,25 @@ class IndexBalanceStatisticMiniView(View):
         # 通常データ
         monthly_normal_data = Data.get_normal_data(monthly_data)
         # 今月の収入
-        monthly_income = Data.get_income_sum(
-            monthly_normal_data) - monthly_temp_and_deposit
+        monthly_income = Data.get_income_sum(monthly_normal_data) - monthly_temp_and_deposit
         # 今月の支出
-        monthly_outgo = Data.get_outgo_sum(
-            monthly_normal_data) - monthly_temp_and_deposit
+        monthly_outgo = Data.get_outgo_sum(monthly_normal_data) - monthly_temp_and_deposit
         # 生活費
         living_cost = Data.get_living_cost(monthly_data)
         # 変動費
         variable_cost = Data.get_variable_cost(monthly_data)
         # 内部移動以外
-        monthly_data_without_inmove = Data.filter_without_intra_move(
-            monthly_data)
+        monthly_data_without_inmove = Data.filter_without_intra_move(monthly_data)
 
         context = {
-            'total_balance':
-                Data.get_income_sum(all_data) - Data.get_outgo_sum(all_data),
+            'total_balance': Data.get_income_sum(all_data) - Data.get_outgo_sum(all_data),
             'methods_iob': methods_iob,
             'monthly_income': monthly_income,
             'monthly_outgo': monthly_outgo,
             'monthly_inout': monthly_income - monthly_outgo,
             'variable_cost': variable_cost,
             'living_cost': living_cost,
-            'variable_remain': monthly_income - max(SeveralCosts.get_living_cost_mark(),
-                                                    living_cost) - variable_cost,
+            'variable_remain': monthly_income - max(SeveralCosts.get_living_cost_mark(), living_cost) - variable_cost,
             'monthly_all_income': Data.get_income_sum(monthly_data_without_inmove),
             'monthly_all_outgo': Data.get_outgo_sum(monthly_data_without_inmove),
             'methods_monthly_iob': methods_monthly_iob,

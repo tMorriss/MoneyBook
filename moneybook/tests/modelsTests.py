@@ -1,8 +1,6 @@
 from datetime import date
 
-from moneybook.models import (BankBalance, Category, CheckedDate,
-                              CreditCheckedDate, Data, Direction, Method,
-                              SeveralCosts)
+from moneybook.models import BankBalance, Category, CheckedDate, CreditCheckedDate, Data, Direction, Method, SeveralCosts
 from moneybook.tests.common import CommonTestCase
 
 
@@ -61,16 +59,11 @@ class CategoryTestCase(CommonTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        Category.objects.create(show_order=1, name="1",
-                                is_living_cost=True, is_variable_cost=False)
-        Category.objects.create(show_order=2, name="2",
-                                is_living_cost=False, is_variable_cost=True)
-        Category.objects.create(show_order=0, name="0",
-                                is_living_cost=False, is_variable_cost=False)
-        Category.objects.create(show_order=-1, name="-1",
-                                is_living_cost=False, is_variable_cost=False)
-        Category.objects.create(show_order=-2, name="-2",
-                                is_living_cost=False, is_variable_cost=False)
+        Category.objects.create(show_order=1, name="1", is_living_cost=True, is_variable_cost=False)
+        Category.objects.create(show_order=2, name="2", is_living_cost=False, is_variable_cost=True)
+        Category.objects.create(show_order=0, name="0", is_living_cost=False, is_variable_cost=False)
+        Category.objects.create(show_order=-1, name="-1", is_living_cost=False, is_variable_cost=False)
+        Category.objects.create(show_order=-2, name="-2", is_living_cost=False, is_variable_cost=False)
 
     def test_get(self):
         self.assertEqual(str(Category.get(1)), "1")

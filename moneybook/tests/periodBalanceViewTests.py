@@ -54,8 +54,10 @@ class PeriodBalanceViewTestCase(CommonTestCase):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(
             reverse('moneybook:period_balances'),
-            {'start_year': 2000, 'start_month': 1,
-                'end_year': 2000, 'end_month': 5}
+            {
+                'start_year': 2000, 'start_month': 1,
+                'end_year': 2000, 'end_month': 5
+            }
         )
         self.assertEqual(response.status_code, 200)
         period_balances = response.context['period_balances']
@@ -87,8 +89,10 @@ class PeriodBalanceViewTestCase(CommonTestCase):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(
             reverse('moneybook:period_balances'),
-            {'start_year': 1999, 'start_month': 10,
-                'end_year': 2000, 'end_month': 1}
+            {
+                'start_year': 1999, 'start_month': 10,
+                'end_year': 2000, 'end_month': 1
+            }
         )
         self.assertEqual(response.status_code, 200)
         period_balances = response.context['period_balances']
@@ -130,24 +134,27 @@ class PeriodBalanceViewTestCase(CommonTestCase):
         ]
         for b in body:
             with self.subTest(b=b):
-                response = self.client.get(
-                    reverse('moneybook:period_balances'), b)
+                response = self.client.get(reverse('moneybook:period_balances'), b)
                 self._assert_now(response)
 
     def test_get_str_param(self):
         self.client.force_login(User.objects.create_user(self.username))
         body = [
-            {'start_year': 'a', 'start_month': 1,
-                'end_year': 2000, 'end_month': 5},
-            {'start_year': 2000, 'start_month': 'a',
-                'end_year': 2000, 'end_month': 5},
-            {'start_year': 2000, 'start_month': 1,
-                'end_year': 'a', 'end_month': 5},
-            {'start_year': 2000, 'start_month': 1,
-                'end_year': 2000, 'end_month': 'a'}
+            {
+                'start_year': 'a', 'start_month': 1,
+                'end_year': 2000, 'end_month': 5
+            }, {
+                'start_year': 2000, 'start_month': 'a',
+                'end_year': 2000, 'end_month': 5
+            }, {
+                'start_year': 2000, 'start_month': 1,
+                'end_year': 'a', 'end_month': 5
+            }, {
+                'start_year': 2000, 'start_month': 1,
+                'end_year': 2000, 'end_month': 'a'
+            }
         ]
         for b in body:
             with self.subTest(b=b):
-                response = self.client.get(
-                    reverse('moneybook:period_balances'), b)
+                response = self.client.get(reverse('moneybook:period_balances'), b)
                 self._assert_without_draw(response)

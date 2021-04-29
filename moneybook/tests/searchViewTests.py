@@ -10,8 +10,7 @@ class SearchViewTestCase(CommonTestCase):
     def _search_common(self, response):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['app_name'], 'test-MoneyBook')
-        self.assertEqual(
-            response.context['username'].username, self.username)
+        self.assertEqual(response.context['username'].username, self.username)
         self._assert_all_directions(response)
         self._assert_all_methods(response)
         self._assert_all_unused_methods(response)
@@ -102,8 +101,7 @@ class SearchViewTestCase(CommonTestCase):
     def test_get_new_only_is_query(self):
         '''is_queryだけ指定すると全データ表示される'''
         self.client.force_login(User.objects.create_user(self.username))
-        response = self.client.get(
-            reverse('moneybook:search'), {'is_query': 1})
+        response = self.client.get(reverse('moneybook:search'), {'is_query': 1})
         self._search_common(response)
         self._search_nothing_common(response)
         self._search_all_data(response)
@@ -247,8 +245,7 @@ class SearchViewTestCase(CommonTestCase):
         )
         self._search_common(response)
         show_data = response.context['show_data']
-        expects = ['給与', '必需品1', '銀行収入', '計算外', '貯金',
-                   'PayPayチャージ', '電気代', 'ガス代', '水道代', '立替分2', '給与', '水道代']
+        expects = ['給与', '必需品1', '銀行収入', '計算外', '貯金', 'PayPayチャージ', '電気代', 'ガス代', '水道代', '立替分2', '給与', '水道代']
         self._assert_list(show_data, expects)
         self.assertEqual(response.context['income_sum'], 56044)
         self.assertEqual(response.context['outgo_sum'], 3620)
@@ -265,9 +262,8 @@ class SearchViewTestCase(CommonTestCase):
         )
         self._search_common(response)
         show_data = response.context['show_data']
-        expects = [
-            '給与', '必需品1', '銀行収入', '計算外', '貯金', 'PayPayチャージ',
-            'PayPayチャージ', '電気代', 'ガス代', '水道代', '立替分1', '立替分2', '給与', '必需品3', '内部移動1', '水道代', '内部移動2']
+        expects = ['給与', '必需品1', '銀行収入', '計算外', '貯金', 'PayPayチャージ', 'PayPayチャージ',
+                   '電気代', 'ガス代', '水道代', '立替分1', '立替分2', '給与', '必需品3', '内部移動1', '水道代', '内部移動2']
         self._assert_list(show_data, expects)
         self.assertEqual(response.context['income_sum'], 56444)
         self.assertEqual(response.context['outgo_sum'], 5820)
@@ -347,8 +343,7 @@ class SearchViewTestCase(CommonTestCase):
         )
         self._search_common(response)
         show_data = response.context['show_data']
-        expects = ['必需品1', 'スーパー', '計算外', '貯金',
-                   'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
+        expects = ['必需品1', 'スーパー', '計算外', '貯金', 'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
         self._assert_list(show_data, expects)
         self.assertEqual(response.context['income_sum'], 400)
         self.assertEqual(response.context['outgo_sum'], 6230)

@@ -42,10 +42,7 @@ class Method(models.Model):
 
     @staticmethod
     def chargeable_list():
-        return Method.objects.filter(
-            show_order__gt=0, chargeable=1
-        ).order_by(
-            'show_order')
+        return Method.objects.filter(show_order__gt=0, chargeable=1).order_by('show_order')
 
     @staticmethod
     def get_bank():
@@ -123,8 +120,7 @@ class Data(models.Model):
     @staticmethod
     def get_sum(data, direction):
         """収入や支出の合計"""
-        v = data.filter(direction=direction).aggregate(
-            Sum('price'))['price__sum']
+        v = data.filter(direction=direction).aggregate(Sum('price'))['price__sum']
         if v is None:
             v = 0
         return v
@@ -161,8 +157,7 @@ class Data(models.Model):
     def get_temp_and_deposit_sum(data):
         """立替と貯金をフィルタ"""
         category = Category.objects.get(name="貯金")
-        deposit = data.filter(Q(category=category) | Q(temp=1)).aggregate(
-            Sum('price'))['price__sum']
+        deposit = data.filter(Q(category=category) | Q(temp=1)).aggregate(Sum('price'))['price__sum']
         if deposit is None:
             deposit = 0
         return deposit
@@ -176,11 +171,7 @@ class Data(models.Model):
     @staticmethod
     def get_normal_data(data):
         """計算外と内部移動を排除"""
-        return data.exclude(
-            category=Category.objects.get(name="計算外")
-        ).exclude(
-            category=Category.objects.get(name="内部移動")
-        )
+        return data.exclude(category=Category.objects.get(name="計算外")).exclude(category=Category.objects.get(name="内部移動"))
 
     @staticmethod
     def get_living_cost(data):
@@ -199,9 +190,7 @@ class Data(models.Model):
     @staticmethod
     def get_food_costs(data):
         """食費"""
-        data = Data.get_category_data(
-            data, Category.objects.get(name="食費")
-        )
+        data = Data.get_category_data(data, Category.objects.get(name="食費"))
         i = Data.get_income_sum(data.filter(temp=1))
         o = Data.get_outgo_sum(data)
         return o - i

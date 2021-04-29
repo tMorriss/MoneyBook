@@ -16,8 +16,7 @@ class EditViewTestCase(CommonTestCase):
         response = self.client.get(reverse('moneybook:edit', kwargs={'pk': 1}))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['app_name'], 'test-MoneyBook')
-        self.assertEqual(
-            response.context['username'].username, self.username)
+        self.assertEqual(response.context['username'].username, self.username)
         data = response.context['data']
         self.assertEqual(data.item, '松屋')
         self._assert_all_directions(response)
@@ -27,11 +26,7 @@ class EditViewTestCase(CommonTestCase):
         self._assert_all_temps(response)
         self._assert_all_checkeds(response)
 
-        expects = [
-            'edit.html',
-            '_base.html',
-            '_result_message.html',
-        ]
+        expects = ['edit.html', '_base.html', '_result_message.html', ]
         self._assert_templates(response.templates, expects)
 
     def test_get_invalid_pk(self):
@@ -188,8 +183,7 @@ class CheckViewTestCase(CommonTestCase):
 
     def test_post_invalid_id(self):
         self.client.force_login(User.objects.create_user(self.username))
-        response = self.client.post(
-            reverse('moneybook:edit_check'), {'id': 10000})
+        response = self.client.post(reverse('moneybook:edit_check'), {'id': 10000})
         self.assertEqual(response.status_code, 400)
 
     def test_post_guest(self):
