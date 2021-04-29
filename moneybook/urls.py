@@ -1,14 +1,15 @@
 from django.contrib.auth.views import LogoutView
 from django.urls import path
 from moneybook.views import (ActualCashView, AddIntraMoveView, AddView,
-                             AllInoutMonthView, AllInoutView, CheckedDateView,
-                             CheckView, CreditCheckedDateView, CustomLoginView,
-                             DataTableView, DeleteView, EditView,
-                             IndexBalanceStatisticMiniView, IndexChartDataView,
-                             IndexMonthView, IndexView, LivingCostMarkView,
-                             NowBankView, PeriodBalanceView, SearchView,
+                             CheckedDateView, CheckView, CreditCheckedDateView,
+                             CustomLoginView, DataTableView, DeleteView,
+                             EditView, IndexBalanceStatisticMiniView,
+                             IndexChartDataView, IndexMonthView, IndexView,
+                             LivingCostMarkView, NowBankView,
+                             PeriodBalanceView, SearchView,
                              SeveralCheckedDateView, StatisticsMonthView,
-                             StatisticsView, ToolsView, UncheckedDataView)
+                             StatisticsView, ToolsView,
+                             UncheckedDataView)
 
 app_name = 'moneybook'
 urlpatterns = [
@@ -21,8 +22,6 @@ urlpatterns = [
     path('add/intra-move', AddIntraMoveView.as_view(), name='add_intra_move'),
     path('statistics', StatisticsView.as_view(), name='statistics'),
     path('statistics/<int:year>', StatisticsMonthView.as_view(), name='statistics_month'),
-    path('all_inout', AllInoutView.as_view(), name='all_inout'),
-    path('all_inout/<int:year>', AllInoutMonthView.as_view(), name='all_inout_month'),
     path('period_balances', PeriodBalanceView.as_view(), name='period_balances'),
     path('search', SearchView.as_view(), name='search'),
     path('tools', ToolsView.as_view(), name='tools'),
