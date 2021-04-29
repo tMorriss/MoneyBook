@@ -2,15 +2,17 @@ from datetime import datetime
 from unittest.mock import patch
 
 from django.contrib.auth.models import User
+from django.http import HttpResponse
 from django.urls import reverse
 from moneybook.tests.common import CommonTestCase
 from moneybook.views import IndexMonthView
 
 
 class IndexViewTestCase(CommonTestCase):
-    @patch.object(IndexMonthView, 'get', return_value=True)
+    @patch.object(IndexMonthView, 'get', return_value=HttpResponse())
     def test_get(self, index_month):
         now = datetime.now()
+        self.client.force_login(User.objects.create_user(self.username))
         self.client.get(reverse('moneybook:index'))
         kwargs = IndexMonthView.get.call_args.kwargs
         self.assertEqual(kwargs['year'], now.year)

@@ -54,9 +54,11 @@ class ActualCashViewTests(CommonTestCase):
         self.assertEqual(SeveralCosts.get_actual_cash_balance(), 2000)
 
     def test_post_guest(self):
-        response = self.client.get(reverse('moneybook:actual_cash'))
+        self.assertEqual(SeveralCosts.get_actual_cash_balance(), 2000)
+        response = self.client.post(reverse('moneybook:actual_cash'), {'price': 1200})
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('moneybook:login'))
+        self.assertEqual(SeveralCosts.get_actual_cash_balance(), 2000)
 
 
 class CheckedDateViewTests(CommonTestCase):
@@ -274,9 +276,20 @@ class CheckedDateViewTests(CommonTestCase):
         self._assert_list(unchecked_data, expects)
 
     def test_post_guest(self):
-        response = self.client.get(reverse('moneybook:checked_date'))
+        self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
+        unchecked_data = Data.get_unchecked_data(Data.get_all_data())
+        expects = ['必需品1', 'スーパー', '計算外', '貯金', 'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
+        self._assert_list(unchecked_data, expects)
+        response = self.client.post(
+            reverse('moneybook:checked_date'),
+            {'year': 2001, 'month': 2, 'day': 20, 'method': 2}
+        )
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('moneybook:login'))
+
+        self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
+        unchecked_data = Data.get_unchecked_data(Data.get_all_data())
+        self._assert_list(unchecked_data, expects)
 
 
 class SeveralCheckedDateViewTests(CommonTestCase):
@@ -430,12 +443,20 @@ class CreditCheckedDateViewTests(CommonTestCase):
         self.assertEqual(response.status_code, 400)
 
     def test_post_guest(self):
+        d = CreditCheckedDate.objects.get(pk=2)
+        self.assertEqual(d.name, 'AmexGold')
+        self.assertEqual(d.date, date(2000, 2, 4))
+        self.assertEqual(d.price, 2000)
         response = self.client.post(
             reverse('moneybook:credit_checked_date'),
             {'year': 2001, 'month': 3, 'day': 10, 'pk': 2}
         )
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('moneybook:login'))
+        d = CreditCheckedDate.objects.get(pk=2)
+        self.assertEqual(d.name, 'AmexGold')
+        self.assertEqual(d.date, date(2000, 2, 4))
+        self.assertEqual(d.price, 2000)
 
 
 class LivingCostMarkViewTests(CommonTestCase):
@@ -467,12 +488,14 @@ class LivingCostMarkViewTests(CommonTestCase):
         self.assertEqual(SeveralCosts.get_living_cost_mark(), 1000)
 
     def test_post_guest(self):
+        self.assertEqual(SeveralCosts.get_living_cost_mark(), 1000)
         response = self.client.post(
             reverse('moneybook:living_cost_mark'),
             {'price': 2000}
         )
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('moneybook:login'))
+        self.assertEqual(SeveralCosts.get_living_cost_mark(), 1000)
 
 
 class UncheckedDataViewTests(CommonTestCase):
@@ -588,7 +611,7 @@ class NowBankViewTests(CommonTestCase):
         )
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('moneybook:login'))
-        self.assertEqual(BankBalance.get_price(1), 50000)
-        self.assertEqual(BankBalance.get_price(2), 10000)
-        self.assertEqual(CreditCheckedDate.get_price(1), 20000)
-        self.assertEqual(CreditCheckedDate.get_price(2), 3000)
+        self.assertEqual(BankBalance.get_price(1), 40000)
+        self.assertEqual(BankBalance.get_price(2), 20000)
+        self.assertEqual(CreditCheckedDate.get_price(1), 30000)
+        self.assertEqual(CreditCheckedDate.get_price(2), 2000)

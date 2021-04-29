@@ -4,6 +4,7 @@ from datetime import datetime
 from django.contrib.auth.models import User
 from django.urls import reverse
 from moneybook.tests.common import CommonTestCase
+from moneybook.models import Data
 
 
 class AddViewTestCase(CommonTestCase):
@@ -39,6 +40,7 @@ class AddViewTestCase(CommonTestCase):
 
     def test_post(self):
         self.client.force_login(User.objects.create_user(self.username))
+        before_count = Data.get_all_data().count()
         response = self.client.post(
             reverse('moneybook:add'),
             {
@@ -54,9 +56,12 @@ class AddViewTestCase(CommonTestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content.decode(), '')
+        after_count = Data.get_all_data().count()
+        self.assertEqual(after_count, before_count+1)
 
     def test_post_invalid(self):
         self.client.force_login(User.objects.create_user(self.username))
+        before_count = Data.get_all_data().count()
         response = self.client.post(
             reverse('moneybook:add'),
             {
@@ -69,10 +74,12 @@ class AddViewTestCase(CommonTestCase):
             }
         )
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.content.decode(),
-                         json.dumps({'ErrorList': ['date', 'price']}))
+        self.assertEqual(response.content.decode(), json.dumps({'ErrorList': ['date', 'price']}))
+        after_count = Data.get_all_data().count()
+        self.assertEqual(after_count, before_count)
 
     def test_post_guest(self):
+        before_count = Data.get_all_data().count()
         response = self.client.post(
             reverse('moneybook:add'),
             {
@@ -88,3 +95,5 @@ class AddViewTestCase(CommonTestCase):
         )
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('moneybook:login'))
+        after_count = Data.get_all_data().count()
+        self.assertEqual(after_count, before_count)

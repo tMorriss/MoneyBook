@@ -134,6 +134,16 @@ class EditViewTestCase(CommonTestCase):
         self.assertEqual(response.status_code, 400)
 
     def test_post_guest(self):
+        # 更新前の値を確認
+        data = Data.get(1)
+        self.assertEqual(data.date, date(1999, 12, 31))
+        self.assertEqual(data.item, '松屋')
+        self.assertEqual(data.price, 500)
+        self.assertEqual(data.direction.pk, 2)
+        self.assertEqual(data.method.pk, 1)
+        self.assertEqual(data.category.pk, 1)
+        self.assertEqual(data.temp, False)
+        self.assertEqual(data.checked, True)
         response = self.client.post(
             reverse('moneybook:edit', kwargs={'pk': 1}),
             {
@@ -149,6 +159,17 @@ class EditViewTestCase(CommonTestCase):
         )
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('moneybook:login'))
+
+        # 更新されていないことを確認
+        data = Data.get(1)
+        self.assertEqual(data.date, date(1999, 12, 31))
+        self.assertEqual(data.item, '松屋')
+        self.assertEqual(data.price, 500)
+        self.assertEqual(data.direction.pk, 2)
+        self.assertEqual(data.method.pk, 1)
+        self.assertEqual(data.category.pk, 1)
+        self.assertEqual(data.temp, False)
+        self.assertEqual(data.checked, True)
 
 
 class CheckViewTestCase(CommonTestCase):
@@ -181,6 +202,14 @@ class CheckViewTestCase(CommonTestCase):
         self.assertEqual(response.status_code, 400)
 
     def test_post_guest(self):
-        response = self.client.post(reverse('moneybook:edit_check'), {'id': 3})
+        # もともとfalseであることを確認
+        data = Data.get(4)
+        self.assertEqual(data.checked, False)
+
+        response = self.client.post(reverse('moneybook:edit_check'), {'id': 4})
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('moneybook:login'))
+
+        # 更新されていないことを確認
+        data = Data.get(4)
+        self.assertEqual(data.checked, False)
