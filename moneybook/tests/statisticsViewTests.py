@@ -8,9 +8,6 @@ from moneybook.views import StatisticsMonthView
 
 
 class StatisticsViewTestCase(CommonTestCase):
-    fixtures = ['data_test_case']
-    username = 'tester'
-
     @patch.object(StatisticsMonthView, 'get', return_value=True)
     def test_get(self, statistics_month):
         now = datetime.now()
@@ -25,9 +22,6 @@ class StatisticsViewTestCase(CommonTestCase):
 
 
 class StatisticsMonthViewTestCase(CommonTestCase):
-    fixtures = ['data_test_case']
-    username = 'tester'
-
     def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(

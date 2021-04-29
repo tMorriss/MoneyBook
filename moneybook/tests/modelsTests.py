@@ -5,12 +5,6 @@ from moneybook.tests.common import CommonTestCase
 
 
 class DirectionTestCase(CommonTestCase):
-    @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
-        Direction.objects.create(name="収入")
-        Direction.objects.create(name="支出")
-
     def test_get(self):
         self.assertEqual(str(Direction.get(1)), "収入")
         self.assertEqual(str(Direction.get(2)), "支出")
@@ -23,74 +17,48 @@ class DirectionTestCase(CommonTestCase):
 
 
 class MethodTestCase(CommonTestCase):
-    @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
-        Method.objects.create(show_order=1, name="1", chargeable=True)
-        Method.objects.create(show_order=2, name="2", chargeable=False)
-        Method.objects.create(show_order=0, name="0", chargeable=False)
-        Method.objects.create(show_order=-2, name="-2", chargeable=False)
-        Method.objects.create(show_order=-1, name="-1", chargeable=True)
-
     def test_get(self):
-        self.assertEqual(str(Method.get(1)), "1")
-        self.assertEqual(str(Method.get(4)), "-2")
+        self.assertEqual(str(Method.get(1)), "現金")
+        self.assertEqual(str(Method.get(4)), "nanaco")
 
     def test_list(self):
         ls = Method.list()
-        self.assertEqual(ls.count(), 2)
-        self.assertEqual(str(ls[0]), "1")
-        self.assertEqual(str(ls[1]), "2")
+        expects = ['銀行', '現金', 'PayPay']
+        self._assert_list(ls, expects)
 
     def test_unused_list(self):
         ls = Method.un_used_list()
-        self.assertEqual(ls.count(), 3)
-        self.assertEqual(str(ls[0]), "0")
-        self.assertEqual(str(ls[1]), "-1")
-        self.assertEqual(str(ls[2]), "-2")
+        expects = ['nanaco', 'Edy']
+        self._assert_list(ls, expects)
 
     def test_chargeable_list(self):
         ls = Method.chargeable_list()
-        self.assertEqual(ls.count(), 1)
-        self.assertEqual(str(ls[0]), "1")
+        expects = ['PayPay']
+        self._assert_list(ls, expects)
 
 
 class CategoryTestCase(CommonTestCase):
-    @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
-        Category.objects.create(show_order=1, name="1", is_living_cost=True, is_variable_cost=False)
-        Category.objects.create(show_order=2, name="2", is_living_cost=False, is_variable_cost=True)
-        Category.objects.create(show_order=0, name="0", is_living_cost=False, is_variable_cost=False)
-        Category.objects.create(show_order=-1, name="-1", is_living_cost=False, is_variable_cost=False)
-        Category.objects.create(show_order=-2, name="-2", is_living_cost=False, is_variable_cost=False)
-
     def test_get(self):
-        self.assertEqual(str(Category.get(1)), "1")
-        self.assertEqual(str(Category.get(4)), "-1")
+        self.assertEqual(str(Category.get(1)), "食費")
+        self.assertEqual(str(Category.get(4)), "内部移動")
 
     def test_list(self):
         ls = Category.list()
-        self.assertEqual(ls.count(), 5)
-        self.assertEqual(str(ls[0]), "-2")
-        self.assertEqual(str(ls[4]), "2")
+        expects = ['計算外', '貯金', '内部移動', 'その他', '食費', '必需品']
+        self._assert_list(ls, expects)
 
     def test_first_list(self):
         ls = Category.first_list()
-        self.assertEqual(ls.count(), 2)
-        self.assertEqual(str(ls[0]), "1")
-        self.assertEqual(str(ls[1]), "2")
+        expects = ['食費', '必需品']
+        self._assert_list(ls, expects)
 
     def test_latter_list(self):
         ls = Category.latter_list()
-        self.assertEqual(ls.count(), 3)
-        self.assertEqual(str(ls[0]), "0")
-        self.assertEqual(str(ls[2]), "-2")
+        expects = ['その他', '内部移動', '貯金', '計算外']
+        self._assert_list(ls, expects)
 
 
 class DataTestCase(CommonTestCase):
-    fixtures = ['data_test_case']
-
     def test_get_all_data(self):
         self.assertEqual(Data.get_all_data().count(), 23)
 
@@ -675,20 +643,10 @@ class DataTestCase(CommonTestCase):
 
 
 class CheckedDateTestCase(CommonTestCase):
-    @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
-        method1 = Method.objects.create(
-            show_order=1, name="1", chargeable=True)
-        method2 = Method.objects.create(
-            show_order=2, name="2", chargeable=False)
-
-        CheckedDate.objects.create(method=method1, date=date(2000, 1, 1))
-        CheckedDate.objects.create(method=method2, date=date(2000, 2, 1))
-
     def test_get(self):
-        self.assertEqual(CheckedDate.get(1).date, date(2000, 1, 1))
-        self.assertEqual(CheckedDate.get(2).date, date(2000, 2, 1))
+        self.assertEqual(CheckedDate.get(1).date, date(2000, 1, 2))
+        self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
+        self.assertEqual(CheckedDate.get(3).date, date(2000, 2, 2))
 
     def test_set(self):
         CheckedDate.set(1, date(2001, 1, 1))
@@ -696,98 +654,86 @@ class CheckedDateTestCase(CommonTestCase):
 
 
 class CreditCheckedDateTestCase(CommonTestCase):
-    def setUp(self):
-        super().setUp()
-        CreditCheckedDate.objects.create(
-            show_order=2, name="テスト2", date=date(2000, 2, 1), price=2000)
-        CreditCheckedDate.objects.create(
-            show_order=1, name="テスト1", date=date(2000, 1, 1), price=1000)
-
     def test_get_all(self):
         data = CreditCheckedDate.get_all()
-        self.assertEqual(data[0].name, "テスト1")
-        self.assertEqual(data[0].date, date(2000, 1, 1))
-        self.assertEqual(data[0].price, 1000)
-        self.assertEqual(data[1].name, "テスト2")
-        self.assertEqual(data[1].price, 2000)
+        self.assertEqual(data[0].name, "AmexGold")
+        self.assertEqual(data[0].date, date(2000, 2, 4))
+        self.assertEqual(data[0].price, 2000)
+        self.assertEqual(data[1].name, "センチュリオン")
+        self.assertEqual(data[1].date, date(3000, 1, 1))
+        self.assertEqual(data[1].price, 30000)
 
     def test_get_price(self):
-        self.assertEqual(CreditCheckedDate.get_price(1), 2000)
-        self.assertEqual(CreditCheckedDate.get_price(2), 1000)
+        self.assertEqual(CreditCheckedDate.get_price(1), 30000)
+        self.assertEqual(CreditCheckedDate.get_price(2), 2000)
 
     def test_get_price_invalid_pk(self):
         self.assertEqual(CreditCheckedDate.get_price(10000), 0)
 
     def test_set_date(self):
-        CreditCheckedDate.set_date(2, date(2000, 1, 2))
+        CreditCheckedDate.set_date(2, date(2001, 1, 2))
         data = CreditCheckedDate.get_all()
-        self.assertEqual(data[0].name, "テスト1")
-        self.assertEqual(data[0].date, date(2000, 1, 2))
+        self.assertEqual(data[0].name, "AmexGold")
+        self.assertEqual(data[0].date, date(2001, 1, 2))
 
     def test_set_price(self):
         CreditCheckedDate.set_price(2, 2001)
         data = CreditCheckedDate.get_all()
-        self.assertEqual(data[0].name, "テスト1")
+        self.assertEqual(data[0].name, "AmexGold")
         self.assertEqual(data[0].price, 2001)
 
 
 class BankBalanceTestCase(CommonTestCase):
-    @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
-        BankBalance.objects.create(show_order=2, name="テスト2", price=2000)
-        BankBalance.objects.create(show_order=1, name="テスト1", price=1000)
-
     def test_get_all(self):
         data = BankBalance.get_all()
-        self.assertEqual(data[0].name, "テスト1")
-        self.assertEqual(data[0].price, 1000)
-        self.assertEqual(data[1].name, "テスト2")
-        self.assertEqual(data[1].price, 2000)
+        self.assertEqual(data[0].name, "三井住友")
+        self.assertEqual(data[0].price, 20000)
+        self.assertEqual(data[1].name, "みずほ")
+        self.assertEqual(data[1].price, 40000)
 
     def test_get_price(self):
-        self.assertEqual(BankBalance.get_price(1), 2000)
-        self.assertEqual(BankBalance.get_price(2), 1000)
+        self.assertEqual(BankBalance.get_price(1), 40000)
+        self.assertEqual(BankBalance.get_price(2), 20000)
 
     def test_get_price_invalid_pk(self):
         self.assertEqual(BankBalance.get_price(10000), 0)
 
     def test_set(self):
-        BankBalance.set(2, 1001)
+        BankBalance.set(2, 10001)
         data = BankBalance.get_all()
-        self.assertEqual(data[0].name, "テスト1")
-        self.assertEqual(data[0].price, 1001)
+        self.assertEqual(data[0].name, "三井住友")
+        self.assertEqual(data[0].price, 10001)
 
 
 class SeveralCostsTestCase(CommonTestCase):
     def test_get_living_cost_mark(self):
-        SeveralCosts.objects.create(name="LivingCostMark", price=1000)
         self.assertEqual(SeveralCosts.get_living_cost_mark(), 1000)
 
     def test_get_living_cost_mark_nothing(self):
+        SeveralCosts.objects.get(name="LivingCostMark").delete()
         self.assertEqual(SeveralCosts.get_living_cost_mark(), 0)
 
     def test_set_living_cost_mark(self):
-        SeveralCosts.objects.create(name="LivingCostMark", price=1000)
         SeveralCosts.set_living_cost_mark(1001)
         self.assertEqual(SeveralCosts.get_living_cost_mark(), 1001)
 
     def test_set_living_cost_mark_nothing(self):
+        SeveralCosts.objects.get(name="LivingCostMark").delete()
         SeveralCosts.set_living_cost_mark(1001)
         self.assertEqual(SeveralCosts.get_living_cost_mark(), 1001)
 
     def test_get_actual_cash_balance(self):
-        SeveralCosts.objects.create(name="ActualCashBalance", price=2000)
         self.assertEqual(SeveralCosts.get_actual_cash_balance(), 2000)
 
     def test_get_actual_cash_balance_nothing(self):
+        SeveralCosts.objects.get(name="ActualCashBalance").delete()
         self.assertEqual(SeveralCosts.get_actual_cash_balance(), 0)
 
     def test_set_actual_cash_balance(self):
-        SeveralCosts.objects.create(name="ActualCashBalance", price=2000)
         SeveralCosts.set_actual_cash_balance(2001)
         self.assertEqual(SeveralCosts.get_actual_cash_balance(), 2001)
 
     def test_set_actual_cash_balance_nothing(self):
+        SeveralCosts.objects.get(name="ActualCashBalance").delete()
         SeveralCosts.set_actual_cash_balance(2001)
         self.assertEqual(SeveralCosts.get_actual_cash_balance(), 2001)

@@ -8,9 +8,6 @@ from moneybook.tests.common import CommonTestCase
 
 
 class ToolsViewTests(CommonTestCase):
-    fixtures = ['data_test_case']
-    username = 'tester'
-
     def test_get(self):
         now = datetime.now()
 
@@ -35,9 +32,6 @@ class ToolsViewTests(CommonTestCase):
 
 
 class ActualCashViewTests(CommonTestCase):
-    fixtures = ['data_test_case']
-    username = 'tester'
-
     def test_post(self):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(SeveralCosts.get_actual_cash_balance(), 2000)
@@ -66,9 +60,6 @@ class ActualCashViewTests(CommonTestCase):
 
 
 class CheckedDateViewTests(CommonTestCase):
-    fixtures = ['data_test_case']
-    username = 'tester'
-
     def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:checked_date'))
@@ -289,9 +280,6 @@ class CheckedDateViewTests(CommonTestCase):
 
 
 class SeveralCheckedDateViewTests(CommonTestCase):
-    fixtures = ['data_test_case']
-    username = 'tester'
-
     def test_get(self):
         now = datetime.now()
         self.client.force_login(User.objects.create_user(self.username))
@@ -331,9 +319,6 @@ class SeveralCheckedDateViewTests(CommonTestCase):
 
 
 class CreditCheckedDateViewTests(CommonTestCase):
-    fixtures = ['data_test_case']
-    username = 'tester'
-
     def test_post(self):
         self.client.force_login(User.objects.create_user(self.username))
         d = CreditCheckedDate.objects.get(pk=2)
@@ -454,9 +439,6 @@ class CreditCheckedDateViewTests(CommonTestCase):
 
 
 class LivingCostMarkViewTests(CommonTestCase):
-    fixtures = ['data_test_case']
-    username = 'tester'
-
     def test_post(self):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(SeveralCosts.get_living_cost_mark(), 1000)
@@ -494,9 +476,6 @@ class LivingCostMarkViewTests(CommonTestCase):
 
 
 class UncheckedDataViewTests(CommonTestCase):
-    fixtures = ['data_test_case']
-    username = 'tester'
-
     def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:unchecked_transaction'))
@@ -515,9 +494,6 @@ class UncheckedDataViewTests(CommonTestCase):
 
 
 class NowBankViewTests(CommonTestCase):
-    fixtures = ['data_test_case']
-    username = 'tester'
-
     def test_post(self):
         self.assertEqual(BankBalance.get_price(1), 40000)
         self.assertEqual(BankBalance.get_price(2), 20000)

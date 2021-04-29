@@ -6,9 +6,6 @@ from moneybook.tests.common import CommonTestCase
 
 
 class PeriodBalanceViewTestCase(CommonTestCase):
-    fixtures = ['data_test_case']
-    username = 'tester'
-
     def _assert_without_draw(self, response):
         self.assertEqual(response.status_code, 200)
         self.assertFalse('period_balances' in response.context)

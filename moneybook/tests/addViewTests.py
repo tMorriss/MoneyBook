@@ -7,9 +7,6 @@ from moneybook.tests.common import CommonTestCase
 
 
 class AddViewTestCase(CommonTestCase):
-    fixtures = ['data_test_case']
-    username = 'tester'
-
     def test_get(self):
         now = datetime.now()
         self.client.force_login(User.objects.create_user(self.username))

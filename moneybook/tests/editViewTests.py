@@ -8,9 +8,6 @@ from moneybook.tests.common import CommonTestCase
 
 
 class EditViewTestCase(CommonTestCase):
-    fixtures = ['data_test_case']
-    username = 'tester'
-
     def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:edit', kwargs={'pk': 1}))
@@ -155,9 +152,6 @@ class EditViewTestCase(CommonTestCase):
 
 
 class CheckViewTestCase(CommonTestCase):
-    fixtures = ['data_test_case']
-    username = 'tester'
-
     def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:edit_check'))

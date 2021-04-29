@@ -8,9 +8,6 @@ from moneybook.views import IndexMonthView
 
 
 class IndexViewTestCase(CommonTestCase):
-    fixtures = ['data_test_case']
-    username = 'tester'
-
     @patch.object(IndexMonthView, 'get', return_value=True)
     def test_get(self, index_month):
         now = datetime.now()
@@ -26,9 +23,6 @@ class IndexViewTestCase(CommonTestCase):
 
 
 class IndexMonthViewTestCase(CommonTestCase):
-    fixtures = ['data_test_case']
-    username = 'tester'
-
     def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
@@ -69,9 +63,6 @@ class IndexMonthViewTestCase(CommonTestCase):
 
 
 class IndexBalanceStatisticMiniViewTestCase(CommonTestCase):
-    fixtures = ['data_test_case']
-    username = 'tester'
-
     def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:balance_statistic_mini'), {'year': 2000, 'month': 1})
@@ -139,9 +130,6 @@ class IndexBalanceStatisticMiniViewTestCase(CommonTestCase):
 
 
 class IndexChartDataViewTestCase(CommonTestCase):
-    fixtures = ['data_test_case']
-    username = 'tester'
-
     def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:chart_container_data'), {'year': 2000, 'month': 1})
@@ -181,9 +169,6 @@ class IndexChartDataViewTestCase(CommonTestCase):
 
 
 class DataTableViewTestCase(CommonTestCase):
-    fixtures = ['data_test_case']
-    username = 'tester'
-
     def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:data_table'), {'year': 2000, 'month': 1})

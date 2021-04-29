@@ -4,9 +4,6 @@ from moneybook.tests.common import CommonTestCase
 
 
 class SearchViewTestCase(CommonTestCase):
-    fixtures = ['data_test_case']
-    username = 'tester'
-
     def _search_common(self, response):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['app_name'], 'test-MoneyBook')

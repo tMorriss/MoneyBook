@@ -2,6 +2,9 @@ from django.test import TestCase
 
 
 class CommonTestCase(TestCase):
+    fixtures = ['data_test_case']
+    username = 'tester'
+
     def _assert_list(self, data, expects):
         self.assertEqual(data.count(), len(expects))
         for i in range(len(expects)):

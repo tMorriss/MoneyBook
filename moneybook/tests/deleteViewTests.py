@@ -5,9 +5,6 @@ from moneybook.tests.common import CommonTestCase
 
 
 class DeleteViewTestCase(CommonTestCase):
-    fixtures = ['data_test_case']
-    username = 'tester'
-
     def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
         before_count = Data.get_all_data().count()
