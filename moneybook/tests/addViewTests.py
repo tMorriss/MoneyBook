@@ -13,10 +13,8 @@ class AddViewTestCase(CommonTestCase):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:add'))
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(
-            response.context['app_name'], 'test-MoneyBook')
-        self.assertEqual(
-            response.context['username'].username, self.username)
+        self.assertEqual(response.context['app_name'], 'test-MoneyBook')
+        self.assertEqual(response.context['username'].username, self.username)
         self.assertEqual(response.context['year'], now.year)
         self.assertEqual(response.context['month'], now.month)
         self._assert_all_directions(response)
