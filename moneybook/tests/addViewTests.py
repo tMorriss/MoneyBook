@@ -33,8 +33,7 @@ class AddViewTestCase(CommonTestCase):
 
     def test_get_guest(self):
         response = self.client.get(reverse('moneybook:add'))
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.url, reverse('moneybook:login'))
+        self.assertEqual(response.status_code, 403)
 
     def test_post(self):
         self.client.force_login(User.objects.create_user(self.username))
@@ -91,7 +90,6 @@ class AddViewTestCase(CommonTestCase):
                 'checked': False
             }
         )
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.url, reverse('moneybook:login'))
+        self.assertEqual(response.status_code, 403)
         after_count = Data.get_all_data().count()
         self.assertEqual(after_count, before_count)
