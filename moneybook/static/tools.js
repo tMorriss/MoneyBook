@@ -168,7 +168,7 @@ function check(id) {
 
 function getUncheckedTransaction() {
     $.get({
-        url: unchecked_transaction_url
+        url: unchecked_data_url
     }).done((data) => {
         $("#unchecked-transaction").html(data);
     })

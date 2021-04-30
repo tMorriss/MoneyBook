@@ -501,7 +501,7 @@ class LivingCostMarkViewTests(CommonTestCase):
 class UncheckedDataViewTests(CommonTestCase):
     def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
-        response = self.client.get(reverse('moneybook:unchecked_transaction'))
+        response = self.client.get(reverse('moneybook:unchecked_data'))
         self.assertEqual(response.status_code, 200)
         expects = ['必需品1', 'スーパー', '計算外', '貯金', 'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
         self._assert_list(response.context['unchecked_data'], expects)
@@ -511,7 +511,7 @@ class UncheckedDataViewTests(CommonTestCase):
         )
 
     def test_get_guest(self):
-        response = self.client.get(reverse('moneybook:unchecked_transaction'))
+        response = self.client.get(reverse('moneybook:unchecked_data'))
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('moneybook:login'))
 
