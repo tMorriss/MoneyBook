@@ -392,12 +392,3 @@ class LabelValue:
     def __init__(self, label, value):
         self.label = label
         self.value = value
-
-
-class InfraCost:
-    def __init__(self, label, total, electricity, gus, water):
-        self.label = label
-        self.total = total
-        self.electricity = electricity
-        self.gus = gus
-        self.water = water

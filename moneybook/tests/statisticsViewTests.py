@@ -33,139 +33,77 @@ class StatisticsMonthViewTestCase(CommonTestCase):
         self.assertEqual(response.context['app_name'], 'test-MoneyBook')
         self.assertEqual(response.context['username'].username, self.username)
         self.assertEqual(response.context['year'], 2000)
-        self.assertEqual(response.context['month_list'], list(range(1, 13)))
 
-        month_io_list = response.context['month_io_list']
-        self.assertEqual(len(month_io_list), 12)
-        january = month_io_list[0]
-        self.assertEqual(january.label, 1)
-        self.assertEqual(january.income, 32993)
-        self.assertEqual(january.outgo, 7920)
-        self.assertEqual(january.balance, 32993 - 7920)
-        february = month_io_list[1]
-        self.assertEqual(february.label, 2)
-        self.assertEqual(february.income, 24321)
-        self.assertEqual(february.outgo, 400)
-        self.assertEqual(february.balance, 24321 - 400)
-        march = month_io_list[2]
-        self.assertEqual(march.label, 3)
-        self.assertEqual(march.income, 0)
-        self.assertEqual(march.outgo, 500)
-        self.assertEqual(march.balance, -500)
+        monthly_context = response.context['monthly_context']
+        self.assertEqual(len(monthly_context), 12)
+
+        january = monthly_context[0]
+        self.assertEqual(january['label'], 1)
+        self.assertEqual(january['income'], 32993)
+        self.assertEqual(january['outgo'], 7920)
+        self.assertEqual(january['balance'], 32993 - 7920)
+        self.assertEqual(january['salary'], 25123)
+        self.assertEqual(january['living_cost'], 2500)
+        self.assertEqual(january['electricity_cost'], 630)
+        self.assertEqual(january['gus_cost'], 260)
+        self.assertEqual(january['water_cost'], 300)
+        self.assertEqual(january['infra_cost'], 1190)
+        self.assertEqual(january['food_cost'], 2500)
+        self.assertEqual(january['all_income'], 33123)
+        self.assertEqual(january['all_outgo'], 8550)
+        self.assertEqual(january['all_balance'], 33123 - 8550)
+        self.assertEqual(january['period_balance'], 24073)
+        february = monthly_context[1]
+        self.assertEqual(february['label'], 2)
+        self.assertEqual(february['income'], 24321)
+        self.assertEqual(february['outgo'], 400)
+        self.assertEqual(february['balance'], 24321 - 400)
+        self.assertEqual(february['salary'], 24321)
+        self.assertEqual(february['living_cost'], 0)
+        self.assertEqual(february['electricity_cost'], 0)
+        self.assertEqual(february['gus_cost'], 0)
+        self.assertEqual(february['water_cost'], 250)
+        self.assertEqual(february['infra_cost'], 250)
+        self.assertEqual(february['food_cost'], 0)
+        self.assertEqual(february['all_income'], 24321)
+        self.assertEqual(february['all_outgo'], 400)
+        self.assertEqual(february['all_balance'], 24321 - 400)
+        self.assertEqual(february['period_balance'], 47994)
+        march = monthly_context[2]
+        self.assertEqual(march['label'], 3)
+        self.assertEqual(march['income'], 0)
+        self.assertEqual(march['outgo'], 500)
+        self.assertEqual(march['balance'], -500)
+        self.assertEqual(march['salary'], 0)
+        self.assertEqual(march['living_cost'], 0)
+        self.assertEqual(march['electricity_cost'], 0)
+        self.assertEqual(march['gus_cost'], 0)
+        self.assertEqual(march['water_cost'], 250)
+        self.assertEqual(march['infra_cost'], 250)
+        self.assertEqual(march['food_cost'], 0)
+        self.assertEqual(march['all_income'], 0)
+        self.assertEqual(march['all_outgo'], 500)
+        self.assertEqual(march['all_balance'], -500)
+        self.assertEqual(march['period_balance'], 47094)
         zero_list = list(range(3, 12))
         for i in zero_list:
             with self.subTest(i=i):
-                m = month_io_list[i]
-                self.assertEqual(m.label, i + 1)
-                self.assertEqual(m.income, 0)
-                self.assertEqual(m.outgo, 0)
-                self.assertEqual(m.balance, 0)
-
-        month_all_io_list = response.context['month_all_io_list']
-        self.assertEqual(len(month_all_io_list), 12)
-        january = month_all_io_list[0]
-        self.assertEqual(january.label, 1)
-        self.assertEqual(january.income, 33123)
-        self.assertEqual(january.outgo, 8550)
-        self.assertEqual(january.balance, 33123 - 8550)
-        february = month_all_io_list[1]
-        self.assertEqual(february.label, 2)
-        self.assertEqual(february.income, 24321)
-        self.assertEqual(february.outgo, 400)
-        self.assertEqual(february.balance, 24321 - 400)
-        march = month_all_io_list[2]
-        self.assertEqual(march.label, 3)
-        self.assertEqual(march.income, 0)
-        self.assertEqual(march.outgo, 500)
-        self.assertEqual(march.balance, -500)
-        zero_list = list(range(3, 12))
-        for i in zero_list:
-            with self.subTest(i=i):
-                m = month_all_io_list[i]
-                self.assertEqual(m.label, i + 1)
-                self.assertEqual(m.income, 0)
-                self.assertEqual(m.outgo, 0)
-                self.assertEqual(m.balance, 0)
-
-        # 途中残高
-        period_balances = response.context['period_balances']
-        self.assertEqual(period_balances[0].label, 1)
-        self.assertEqual(period_balances[0].value, 24073)
-        self.assertEqual(period_balances[1].label, 2)
-        self.assertEqual(period_balances[1].value, 47994)
-        self.assertEqual(period_balances[2].label, 3)
-        self.assertEqual(period_balances[2].value, 47094)
-        zero_list = list(range(3, 12))
-        for i in zero_list:
-            with self.subTest(i=i):
-                m = period_balances[i]
-                self.assertEqual(m.label, i + 1)
-                self.assertEqual(m.value, 46694)
-
-        # インフラ代
-        infra_costs = response.context['infra_costs']
-        january = infra_costs[0]
-        self.assertEqual(january.label, 1)
-        self.assertEqual(january.total, 1190)
-        self.assertEqual(january.electricity, 630)
-        self.assertEqual(january.gus, 260)
-        self.assertEqual(january.water, 300)
-        february = infra_costs[1]
-        self.assertEqual(february.label, 2)
-        self.assertEqual(february.total, 250)
-        self.assertEqual(february.electricity, 0)
-        self.assertEqual(february.gus, 0)
-        self.assertEqual(february.water, 250)
-        march = infra_costs[2]
-        self.assertEqual(march.label, 3)
-        self.assertEqual(march.total, 250)
-        self.assertEqual(march.electricity, 0)
-        self.assertEqual(march.gus, 0)
-        self.assertEqual(march.water, 250)
-        zero_list = list(range(3, 12))
-        for i in zero_list:
-            with self.subTest(i=i):
-                m = infra_costs[i]
-                self.assertEqual(m.label, i + 1)
-                self.assertEqual(m.total, 0)
-                self.assertEqual(m.electricity, 0)
-                self.assertEqual(m.gus, 0)
-                self.assertEqual(m.water, 0)
-
-        # 食費
-        food_costs = response.context['food_costs']
-        self.assertEqual(food_costs[0].label, 1)
-        self.assertEqual(food_costs[0].value, 2500)
-        zero_list = list(range(1, 12))
-        for i in zero_list:
-            with self.subTest(i=i):
-                m = food_costs[i]
-                self.assertEqual(m.label, i + 1)
-                self.assertEqual(m.value, 0)
-
-        # 生活費
-        living_costs = response.context['living_costs']
-        self.assertEqual(living_costs[0].label, 1)
-        self.assertEqual(living_costs[0].value, 2500)
-        zero_list = list(range(1, 12))
-        for i in zero_list:
-            with self.subTest(i=i):
-                m = living_costs[i]
-                self.assertEqual(m.label, i + 1)
-                self.assertEqual(m.value, 0)
-
-        # 給与
-        salary = response.context['salary']
-        self.assertEqual(salary[0].label, 1)
-        self.assertEqual(salary[0].value, 25123)
-        self.assertEqual(salary[1].label, 2)
-        self.assertEqual(salary[1].value, 24321)
-        zero_list = list(range(2, 12))
-        for i in zero_list:
-            with self.subTest(i=i):
-                m = salary[i]
-                self.assertEqual(m.label, i + 1)
-                self.assertEqual(m.value, 0)
+                m = monthly_context[i]
+                self.assertEqual(m['label'], i + 1)
+                self.assertEqual(m['income'], 0)
+                self.assertEqual(m['outgo'], 0)
+                self.assertEqual(m['balance'], 0)
+                self.assertEqual(m['salary'], 0)
+                self.assertEqual(m['living_cost'], 0)
+                self.assertEqual(m['electricity_cost'], 0)
+                self.assertEqual(m['gus_cost'], 0)
+                self.assertEqual(m['water_cost'], 0)
+                self.assertEqual(m['infra_cost'], 0)
+                self.assertEqual(m['food_cost'], 0)
+                self.assertEqual(m['all_income'], 0)
+                self.assertEqual(m['all_outgo'], 0)
+                self.assertEqual(m['all_balance'], 0)
+                self.assertEqual(m['period_balance'], 46694)
 
         expects = [
             'statistics.html',
@@ -179,9 +117,9 @@ class StatisticsMonthViewTestCase(CommonTestCase):
         response = self.client.get(reverse('moneybook:statistics_month', kwargs={'year': 1999}))
         self.assertEqual(response.status_code, 200)
 
-        infra_costs = response.context['infra_costs']
-        self.assertEqual(len(infra_costs), 12)
-        self.assertEqual(infra_costs[11].water, 300)
+        monthly_context = response.context['monthly_context']
+        self.assertEqual(len(monthly_context), 12)
+        self.assertEqual(monthly_context[11]['water_cost'], 300)
 
     def test_get_guest(self):
         response = self.client.get(reverse('moneybook:statistics_month', kwargs={'year': 2000}))
