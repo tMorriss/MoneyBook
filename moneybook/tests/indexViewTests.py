@@ -127,8 +127,7 @@ class IndexBalanceStatisticMiniViewTestCase(CommonTestCase):
 
     def test_get_guest(self):
         response = self.client.get(reverse('moneybook:balance_statistic_mini'), {'year': 2000, 'month': 1})
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.url, reverse('moneybook:login'))
+        self.assertEqual(response.status_code, 403)
 
 
 class IndexChartDataViewTestCase(CommonTestCase):
@@ -168,6 +167,10 @@ class IndexChartDataViewTestCase(CommonTestCase):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:chart_container_data'), {'year': 2000, 'month': 13})
         self.assertEqual(response.status_code, 400)
+
+    def test_get_guest(self):
+        response = self.client.get(reverse('moneybook:chart_container_data'), {'year': 2000, 'month': 1})
+        self.assertEqual(response.status_code, 403)
 
 
 class DataTableViewTestCase(CommonTestCase):
@@ -216,3 +219,7 @@ class DataTableViewTestCase(CommonTestCase):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:data_table'), {'year': 2000, 'month': 13})
         self.assertEqual(response.status_code, 400)
+
+    def test_get_guest(self):
+        response = self.client.get(reverse('moneybook:data_table'), {'year': 2000, 'month': 1})
+        self.assertEqual(response.status_code, 403)

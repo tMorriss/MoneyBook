@@ -47,25 +47,25 @@
     <table class="tbl-per-month tbl-common">
         <tr>
             <th></th>
-            {% for m in month_io_list %}
+            {% for m in monthly_context %}
             <th>{{ m.label }}</th>
             {% endfor %}
         </tr>
         <tr>
             <th>収入</th>
-            {% for m in month_io_list %}
+            {% for m in monthly_context %}
             <td>{{ m.income| intcomma }}</td>
             {% endfor %}
         </tr>
         <tr>
             <th>支出</th>
-            {% for m in month_io_list %}
+            {% for m in monthly_context %}
             <td>{{ m.outgo| intcomma }}</td>
             {% endfor %}
         </tr>
         <tr>
             <th>収支</th>
-            {% for m in month_io_list %}
+            {% for m in monthly_context %}
             <td>{{ m.balance| intcomma }}</td>
             {% endfor %}
         </tr>
@@ -74,72 +74,73 @@
     <h3>収入・支出</h3>
     <div id="barplot_inout" class="graph-statistic"></div>
     <ul id="month_io_list" hidden>
-        {% for m in month_io_list %}<li>{{ m.label }}月,{{ m.income }},{{ m.outgo }}</li>
+        {% for m in monthly_context %}<li>{{ m.label }}月,{{ m.income }},{{ m.outgo }}</li>
         {% endfor %}
     </ul>
     <ul id="living_costs" hidden>
-        {% for fc in living_costs %}<li>{{ fc.label }}月,{{ fc.value }}</li>
+        {% for m in monthly_context %}<li>{{ m.label }}月,{{ m.living_cost }}</li>
         {% endfor %}
     </ul>
     <ul id="salary" hidden>
-        {% for s in salary %}<li>{{ s.label }}月,{{ s.value }}</li>
+        {% for m in monthly_context %}<li>{{ m.label }}月,{{ m.salary }}</li>
         {% endfor %}
     </ul>
     <h3>インフラ</h3>
     <div id="lineplot_infra" class="graph-statistic"></div>
     <ul id="infra_costs" hidden>
-        {% for i in infra_costs %}<li>{{ i.label }}月,{{ i.electricity }},{{ i.gus }},{{ i.water }},{{ i.total }}</li>
+        {% for m in monthly_context %}<li>
+            {{ m.label }}月,{{ m.electricity_cost }},{{ m.gus_cost }},{{ m.water_cost }},{{ m.infra_cost }}</li>
         {% endfor %}
     </ul>
     <h3>食費</h3>
     <div id="lineplot_food" class="graph-statistic"></div>
     <ul id="food_costs" hidden>
-        {% for f in food_costs %}<li>{{ f.label }}月,{{ f.value }}</li>
+        {% for m in monthly_context %}<li>{{ m.label }}月,{{ m.food_cost }}</li>
         {% endfor %}
     </ul>
     <h2>全収支</h2>
     <table class="tbl-per-month tbl-common">
         <tr>
             <th></th>
-            {% for m in month_all_io_list %}
+            {% for m in monthly_context %}
             <th>{{ m.label }}</th>
             {% endfor %}
         </tr>
         <tr>
             <th>収入</th>
-            {% for m in month_all_io_list %}
-            <td>{{ m.income| intcomma }}</td>
+            {% for m in monthly_context %}
+            <td>{{ m.all_income| intcomma }}</td>
             {% endfor %}
         </tr>
         <tr>
             <th>支出</th>
-            {% for m in month_all_io_list %}
-            <td>{{ m.outgo| intcomma }}</td>
+            {% for m in monthly_context %}
+            <td>{{ m.all_outgo| intcomma }}</td>
             {% endfor %}
         </tr>
         <tr>
             <th>収支</th>
-            {% for m in month_all_io_list %}
-            <td>{{ m.balance| intcomma }}</td>
+            {% for m in monthly_context %}
+            <td>{{ m.all_balance| intcomma }}</td>
             {% endfor %}
         </tr>
         <tr>
             <th>途中残高</th>
-            {% for b in period_balances %}
-            <td>{{ b.value |intcomma }}</td>
+            {% for b in monthly_context %}
+            <td>{{ b.period_balance |intcomma }}</td>
             {% endfor %}
         </tr>
     </table>
     <h3>全収入・支出</h3>
     <div id="barplot_inout_all" class="graph-statistic"></div>
     <ul id="month_all_io_list" hidden>
-        {% for m in month_all_io_list %}<li>{{ m.label }}月,{{ m.income }},{{ m.outgo }}</li>
+        {% for m in monthly_context %}<li>{{ m.label }}月,{{ m.all_income }},{{ m.all_outgo }}</li>
         {% endfor %}
     </ul>
     <h3>途中残高</h3>
     <div id="lineplot_monthly_balance" class="graph-statistic"></div>
     <ul id="monthly_balance" hidden>
-        {% for b in period_balances %}<li>{{ b.label }}月,{{ b.value }}</li>
+        {% for b in monthly_context %}<li>{{ b.label }}月,{{ b.period_balance }}</li>
         {% endfor %}
     </ul>
 </section>

@@ -207,8 +207,7 @@ class CheckViewTestCase(CommonTestCase):
         self.assertEqual(data.checked, False)
 
         response = self.client.post(reverse('moneybook:edit_check'), {'id': 4})
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.url, reverse('moneybook:login'))
+        self.assertEqual(response.status_code, 403)
 
         # 更新されていないことを確認
         data = Data.get(4)

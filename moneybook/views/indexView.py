@@ -87,6 +87,8 @@ class IndexBalanceStatisticMiniView(View):
         living_cost = Data.get_living_cost(monthly_data)
         # 変動費
         variable_cost = Data.get_variable_cost(monthly_data)
+        # 生活費目標額
+        living_cost_mark = SeveralCosts.get_living_cost_mark()
         # 内部移動以外
         monthly_data_without_inmove = Data.filter_without_intra_move(monthly_data)
 
@@ -96,8 +98,9 @@ class IndexBalanceStatisticMiniView(View):
             'monthly_income': monthly_income,
             'monthly_outgo': monthly_outgo,
             'monthly_inout': monthly_income - monthly_outgo,
-            'variable_cost': variable_cost,
             'living_cost': living_cost,
+            'variable_cost': variable_cost,
+            'living_remain': living_cost_mark - living_cost,
             'variable_remain': monthly_income - max(SeveralCosts.get_living_cost_mark(), living_cost) - variable_cost,
             'monthly_all_income': Data.get_income_sum(monthly_data_without_inmove),
             'monthly_all_outgo': Data.get_outgo_sum(monthly_data_without_inmove),
