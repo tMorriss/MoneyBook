@@ -36,6 +36,8 @@ class StatisticsMonthView(View):
             tomonth_context['salary'] = Data.get_income_sum(Data.get_keyword_data(monthly_data, "給与"))
             # 生活費
             tomonth_context['living_cost'] = Data.get_living_cost(monthly_data)
+            # 食費
+            tomonth_context['food_cost'] = Data.get_food_costs(monthly_data)
             # 電気代
             tomonth_context['electricity_cost'] = Data.get_outgo_sum(Data.get_keyword_data(monthly_data, "電気代"))
             # ガス代
@@ -48,8 +50,6 @@ class StatisticsMonthView(View):
             tomonth_context['water_cost'] = w
             tomonth_context['infra_cost'] = tomonth_context['electricity_cost'] + \
                 tomonth_context['gus_cost'] + tomonth_context['water_cost']
-            # 食費
-            tomonth_context['food_cost'] = Data.get_food_costs(monthly_data)
             # 全収支
             monthly_data_without_in_move = Data.filter_without_intra_move(monthly_data)
             t = Data.get_temp_sum(monthly_data)

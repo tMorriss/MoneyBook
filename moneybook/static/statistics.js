@@ -1,4 +1,5 @@
 function drawGraph() {
+    // 収入・支出・生活費・給与・食費
     am4core.ready(function () {
         // テーマ
         am4core.useTheme(am4themes_animated);
@@ -7,8 +8,8 @@ function drawGraph() {
         var chart = am4core.create("barplot_inout", am4charts.XYChart);
 
         // データ収集
-        let monthIoList = $("#month_io_list li");
         monthData = {};
+        let monthIoList = $("#month_io_list li");
         for (var i = 0; i < monthIoList.length; i++) {
             let data = monthIoList[i].textContent.split(',');
             monthData[data[0]] = { month: data[0], income: data[1], outgo: data[2] };
@@ -22,6 +23,11 @@ function drawGraph() {
         for (var i = 0; i < salaryList.length; i++) {
             let data = salaryList[i].textContent.split(',');
             monthData[data[0]]["salary"] = data[1];
+        }
+        let foodList = $("#food_costs li");
+        for (var i = 0; i < foodList.length; i++) {
+            let data = foodList[i].textContent.split(',');
+            monthData[data[0]]["food"] = data[1];
         }
         chart.data = [];
         for (let i in monthData) {
@@ -55,10 +61,24 @@ function drawGraph() {
         salaryCircle.radius = 5;
         salaryCircle.fill = salarySeries.stroke;
 
+        let foodSeries = chart.series.push(new am4charts.LineSeries());
+        foodSeries.stroke = am4core.color("#e70");
+        foodSeries.strokeWidth = 3;
+        foodSeries.dataFields.valueY = "food";
+        foodSeries.dataFields.categoryX = "month";
+        foodSeries.name = "食費";
+        let foodBullet = foodSeries.bullets.push(new am4charts.Bullet());
+        foodBullet.fill = foodSeries.stroke;
+        foodBullet.tooltipText = foodSeries.name + ": {valueY}円";
+        let foodCircle = foodBullet.createChild(am4core.Circle);
+        foodCircle.radius = 5;
+        foodCircle.fill = foodSeries.stroke;
+
         chart.legend = new am4charts.Legend();
         chart.legend.position = "bottom";
     });
 
+    // インフラ
     am4core.ready(function () {
         // テーマ
         am4core.useTheme(am4themes_animated);
@@ -115,12 +135,6 @@ function drawGraph() {
         var chart = am4core.create("lineplot_food", am4charts.XYChart);
 
         // データ収集
-        let foodList = $("#food_costs li");
-        chart.data = [];
-        for (var i = 0; i < foodList.length; i++) {
-            data = foodList[i].textContent.split(',');
-            chart.data.push({ month: data[0], food: data[1] });
-        }
 
         let categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
         categoryAxis.dataFields.category = "month";
@@ -140,6 +154,7 @@ function drawGraph() {
         series.name = "食費";
     });
 
+    // 全収入・支出
     am4core.ready(function () {
         // テーマ
         am4core.useTheme(am4themes_animated);
@@ -158,6 +173,7 @@ function drawGraph() {
         drawIOGraph(chart);
     });
 
+    // 途中残高
     am4core.ready(function () {
         // テーマ
         am4core.useTheme(am4themes_animated);

@@ -85,17 +85,15 @@
         {% for m in monthly_context %}<li>{{ m.label }}月,{{ m.salary }}</li>
         {% endfor %}
     </ul>
+    <ul id="food_costs" hidden>
+        {% for m in monthly_context %}<li>{{ m.label }}月,{{ m.food_cost }}</li>
+        {% endfor %}
+    </ul>
     <h3>インフラ</h3>
     <div id="lineplot_infra" class="graph-statistic"></div>
     <ul id="infra_costs" hidden>
         {% for m in monthly_context %}<li>
             {{ m.label }}月,{{ m.electricity_cost }},{{ m.gus_cost }},{{ m.water_cost }},{{ m.infra_cost }}</li>
-        {% endfor %}
-    </ul>
-    <h3>食費</h3>
-    <div id="lineplot_food" class="graph-statistic"></div>
-    <ul id="food_costs" hidden>
-        {% for m in monthly_context %}<li>{{ m.label }}月,{{ m.food_cost }}</li>
         {% endfor %}
     </ul>
     <h2>全収支</h2>
