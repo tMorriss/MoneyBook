@@ -12,6 +12,7 @@ class PeriodBalanceView(View):
         now = datetime.now()
         context = {
             'app_name': settings.APP_NAME,
+            'username': request.user,
             'draw_graph': False
         }
 
