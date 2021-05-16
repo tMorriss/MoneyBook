@@ -7,7 +7,7 @@ on: [pull_request]
 
 jobs:
   lint:
-    name: lint
+    name: Lint
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -23,7 +23,7 @@ jobs:
       run: |
         flake8 . --count --ignore=E722,W503 --max-line-length=140 --exclude moneybook/migrations,__init__.py --show-source --statistics --import-order-style smarkets
   unittest:
-    name: unit test
+    name: Unit Test
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -36,7 +36,7 @@ jobs:
         python -m pip install --upgrade pip
         if [ -f build/requirements.txt ]; then pip install -r build/requirements.txt; fi
         if [ -f build/requirements_test.txt ]; then pip install -r build/requirements_test.txt; fi
-    - name: Unit test
+    - name: Test
       run: |
         coverage run --source='moneybook.models,moneybook.views,moneybook.utils,moneybook.middleware,moneybook.forms' manage.py test moneybook.tests --settings config.settings.test
     - name: Report coverage
