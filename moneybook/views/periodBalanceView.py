@@ -18,8 +18,8 @@ class PeriodBalanceView(View):
         # パラメータ取得
         if 'start_year' not in request.GET or 'start_month' not in request.GET or \
                 'end_year' not in request.GET or 'end_month' not in request.GET:
-            # パラメータが無いときはデフォルト値で今年~今月を入れる
-            start_year = now.year
+            # パラメータが無いときはデフォルト値で去年~今月を入れる
+            start_year = now.year - 1
             start_month = 1
             end_year = now.year
             end_month = now.month
