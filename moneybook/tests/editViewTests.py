@@ -4,10 +4,10 @@ from datetime import date
 from django.contrib.auth.models import User
 from django.urls import reverse
 from moneybook.models import Data
-from moneybook.tests.common import CommonTestCase
+from moneybook.tests.base import BaseTestCase
 
 
-class EditViewTestCase(CommonTestCase):
+class EditViewTestCase(BaseTestCase):
     def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:edit', kwargs={'pk': 1}))
@@ -172,7 +172,7 @@ class EditViewTestCase(CommonTestCase):
         self.assertEqual(data.checked, True)
 
 
-class CheckViewTestCase(CommonTestCase):
+class CheckViewTestCase(BaseTestCase):
     def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:edit_check'))

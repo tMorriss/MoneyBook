@@ -2,10 +2,10 @@ from datetime import datetime
 
 from django.contrib.auth.models import User
 from django.urls import reverse
-from moneybook.tests.common import CommonTestCase
+from moneybook.tests.base import BaseTestCase
 
 
-class PeriodBalanceViewTestCase(CommonTestCase):
+class PeriodBalanceViewTestCase(BaseTestCase):
     def _assert_without_draw(self, response):
         self.assertEqual(response.status_code, 200)
         self.assertFalse('period_balances' in response.context)

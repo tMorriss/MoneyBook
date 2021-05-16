@@ -1,10 +1,10 @@
 from datetime import date
 
 from moneybook.models import BankBalance, Category, CheckedDate, CreditCheckedDate, Data, Direction, Method, SeveralCosts
-from moneybook.tests.common import CommonTestCase
+from moneybook.tests.base import BaseTestCase
 
 
-class DirectionTestCase(CommonTestCase):
+class DirectionTestCase(BaseTestCase):
     def test_get(self):
         self.assertEqual(str(Direction.get(1)), "収入")
         self.assertEqual(str(Direction.get(2)), "支出")
@@ -16,7 +16,7 @@ class DirectionTestCase(CommonTestCase):
         self.assertEqual(str(ls[1]), "支出")
 
 
-class MethodTestCase(CommonTestCase):
+class MethodTestCase(BaseTestCase):
     def test_get(self):
         self.assertEqual(str(Method.get(1)), "現金")
         self.assertEqual(str(Method.get(4)), "nanaco")
@@ -37,7 +37,7 @@ class MethodTestCase(CommonTestCase):
         self._assert_list(ls, expects)
 
 
-class CategoryTestCase(CommonTestCase):
+class CategoryTestCase(BaseTestCase):
     def test_get(self):
         self.assertEqual(str(Category.get(1)), "食費")
         self.assertEqual(str(Category.get(4)), "内部移動")
@@ -58,7 +58,7 @@ class CategoryTestCase(CommonTestCase):
         self._assert_list(ls, expects)
 
 
-class DataTestCase(CommonTestCase):
+class DataTestCase(BaseTestCase):
     def test_get_all_data(self):
         self.assertEqual(Data.get_all_data().count(), 23)
 
@@ -642,7 +642,7 @@ class DataTestCase(CommonTestCase):
         self.assertEqual(data.count(), 0)
 
 
-class CheckedDateTestCase(CommonTestCase):
+class CheckedDateTestCase(BaseTestCase):
     def test_get(self):
         self.assertEqual(CheckedDate.get(1).date, date(2000, 1, 2))
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
@@ -653,7 +653,7 @@ class CheckedDateTestCase(CommonTestCase):
         self.assertEqual(CheckedDate.get(1).date, date(2001, 1, 1))
 
 
-class CreditCheckedDateTestCase(CommonTestCase):
+class CreditCheckedDateTestCase(BaseTestCase):
     def test_get_all(self):
         data = CreditCheckedDate.get_all()
         self.assertEqual(data[0].name, "AmexGold")
@@ -683,7 +683,7 @@ class CreditCheckedDateTestCase(CommonTestCase):
         self.assertEqual(data[0].price, 2001)
 
 
-class BankBalanceTestCase(CommonTestCase):
+class BankBalanceTestCase(BaseTestCase):
     def test_get_all(self):
         data = BankBalance.get_all()
         self.assertEqual(data[0].name, "三井住友")
@@ -705,7 +705,7 @@ class BankBalanceTestCase(CommonTestCase):
         self.assertEqual(data[0].price, 10001)
 
 
-class SeveralCostsTestCase(CommonTestCase):
+class SeveralCostsTestCase(BaseTestCase):
     def test_get_living_cost_mark(self):
         self.assertEqual(SeveralCosts.get_living_cost_mark(), 1000)
 

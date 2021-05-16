@@ -1,6 +1,6 @@
 from .addIntraMoveViewTests import *
 from .addViewTests import *
-from .common import *
+from .base import *
 from .deleteViewTests import *
 from .editViewTests import *
 from .indexViewTests import *
