@@ -60,6 +60,14 @@ jobs:
         python -m pip install --upgrade pip
         if [ -f build/requirements.txt ]; then pip install -r build/requirements.txt; fi
         if [ -f build/requirements_selenium.txt ]; then pip install -r build/requirements_selenium.txt; fi
+        apt update
+        apt install -y wget gnupg2
+        echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list
+        wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+        apt update
+        export DEBIAN_FRONTEND=noninteractive
+        apt install -y tzdata
+        apt install -y google-chrome-stable
     - name: Test
       run: |
         python manage.py test moneybook.selenium --settings config.settings.test
