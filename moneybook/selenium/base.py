@@ -1,7 +1,6 @@
-import chromedriver_binary
+import chromedriver_binary  # noqa: F401
 from django.contrib.auth.models import User
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
-
 from selenium import webdriver
 
 
