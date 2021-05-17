@@ -1,10 +1,10 @@
 from django.contrib.auth.models import User
 from django.urls import reverse
 from moneybook.models import Data
-from moneybook.tests.common import CommonTestCase
+from moneybook.tests.base import BaseTestCase
 
 
-class AddIntraMoveViewTestCase(CommonTestCase):
+class AddIntraMoveViewTestCase(BaseTestCase):
     def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:add_intra_move'))

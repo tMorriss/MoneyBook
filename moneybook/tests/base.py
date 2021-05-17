@@ -1,7 +1,7 @@
 from django.test import TestCase
 
 
-class CommonTestCase(TestCase):
+class BaseTestCase(TestCase):
     fixtures = ['data_test_case']
     username = 'tester'
 

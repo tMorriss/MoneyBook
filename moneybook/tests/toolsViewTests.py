@@ -4,10 +4,10 @@ from datetime import date, datetime
 from django.contrib.auth.models import User
 from django.urls import reverse
 from moneybook.models import BankBalance, CheckedDate, CreditCheckedDate, Data, SeveralCosts
-from moneybook.tests.common import CommonTestCase
+from moneybook.tests.base import BaseTestCase
 
 
-class ToolsViewTests(CommonTestCase):
+class ToolsViewTests(BaseTestCase):
     def test_get(self):
         now = datetime.now()
 
@@ -31,7 +31,7 @@ class ToolsViewTests(CommonTestCase):
         self.assertEqual(response.url, reverse('moneybook:login'))
 
 
-class ActualCashViewTests(CommonTestCase):
+class ActualCashViewTests(BaseTestCase):
     def test_post(self):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(SeveralCosts.get_actual_cash_balance(), 2000)
@@ -60,7 +60,7 @@ class ActualCashViewTests(CommonTestCase):
         self.assertEqual(SeveralCosts.get_actual_cash_balance(), 2000)
 
 
-class CheckedDateViewTests(CommonTestCase):
+class CheckedDateViewTests(BaseTestCase):
     def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:checked_date'))
@@ -290,7 +290,7 @@ class CheckedDateViewTests(CommonTestCase):
         self._assert_list(unchecked_data, expects)
 
 
-class SeveralCheckedDateViewTests(CommonTestCase):
+class SeveralCheckedDateViewTests(BaseTestCase):
     def test_get(self):
         now = datetime.now()
         self.client.force_login(User.objects.create_user(self.username))
@@ -328,7 +328,7 @@ class SeveralCheckedDateViewTests(CommonTestCase):
         self.assertEqual(response.status_code, 403)
 
 
-class CreditCheckedDateViewTests(CommonTestCase):
+class CreditCheckedDateViewTests(BaseTestCase):
     def test_post(self):
         self.client.force_login(User.objects.create_user(self.username))
         d = CreditCheckedDate.objects.get(pk=2)
@@ -455,7 +455,7 @@ class CreditCheckedDateViewTests(CommonTestCase):
         self.assertEqual(d.price, 2000)
 
 
-class LivingCostMarkViewTests(CommonTestCase):
+class LivingCostMarkViewTests(BaseTestCase):
     def test_post(self):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(SeveralCosts.get_living_cost_mark(), 1000)
@@ -493,7 +493,7 @@ class LivingCostMarkViewTests(CommonTestCase):
         self.assertEqual(SeveralCosts.get_living_cost_mark(), 1000)
 
 
-class UncheckedDataViewTests(CommonTestCase):
+class UncheckedDataViewTests(BaseTestCase):
     def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:unchecked_data'))
@@ -510,7 +510,7 @@ class UncheckedDataViewTests(CommonTestCase):
         self.assertEqual(response.status_code, 403)
 
 
-class NowBankViewTests(CommonTestCase):
+class NowBankViewTests(BaseTestCase):
     def test_post(self):
         self.assertEqual(BankBalance.get_price(1), 40000)
         self.assertEqual(BankBalance.get_price(2), 20000)

@@ -4,11 +4,11 @@ from unittest.mock import patch
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.urls import reverse
-from moneybook.tests.common import CommonTestCase
+from moneybook.tests.base import BaseTestCase
 from moneybook.views import IndexMonthView
 
 
-class IndexViewTestCase(CommonTestCase):
+class IndexViewTestCase(BaseTestCase):
     @patch.object(IndexMonthView, 'get', return_value=HttpResponse())
     def test_get(self, index_month):
         now = datetime.now()
@@ -24,7 +24,7 @@ class IndexViewTestCase(CommonTestCase):
         self.assertEqual(response.url, reverse('moneybook:login'))
 
 
-class IndexMonthViewTestCase(CommonTestCase):
+class IndexMonthViewTestCase(BaseTestCase):
     def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
@@ -64,7 +64,7 @@ class IndexMonthViewTestCase(CommonTestCase):
         self.assertEqual(response.url, reverse('moneybook:login'))
 
 
-class IndexBalanceStatisticMiniViewTestCase(CommonTestCase):
+class IndexBalanceStatisticMiniViewTestCase(BaseTestCase):
     def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:balance_statistic_mini'), {'year': 2000, 'month': 1})
@@ -130,7 +130,7 @@ class IndexBalanceStatisticMiniViewTestCase(CommonTestCase):
         self.assertEqual(response.status_code, 403)
 
 
-class IndexChartDataViewTestCase(CommonTestCase):
+class IndexChartDataViewTestCase(BaseTestCase):
     def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:chart_container_data'), {'year': 2000, 'month': 1})
@@ -173,7 +173,7 @@ class IndexChartDataViewTestCase(CommonTestCase):
         self.assertEqual(response.status_code, 403)
 
 
-class DataTableViewTestCase(CommonTestCase):
+class DataTableViewTestCase(BaseTestCase):
     def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:data_table'), {'year': 2000, 'month': 1})

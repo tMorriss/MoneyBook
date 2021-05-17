@@ -4,11 +4,11 @@ from unittest.mock import patch
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.urls import reverse
-from moneybook.tests.common import CommonTestCase
+from moneybook.tests.base import BaseTestCase
 from moneybook.views import StatisticsMonthView
 
 
-class StatisticsViewTestCase(CommonTestCase):
+class StatisticsViewTestCase(BaseTestCase):
     @patch.object(StatisticsMonthView, 'get', return_value=HttpResponse())
     def test_get(self, statistics_month):
         now = datetime.now()
@@ -23,7 +23,7 @@ class StatisticsViewTestCase(CommonTestCase):
         self.assertEqual(response.url, reverse('moneybook:login'))
 
 
-class StatisticsMonthViewTestCase(CommonTestCase):
+class StatisticsMonthViewTestCase(BaseTestCase):
     def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(

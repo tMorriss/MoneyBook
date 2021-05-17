@@ -1,10 +1,10 @@
 from django.contrib.auth.models import User
 from django.urls import reverse
 from moneybook.models import Data
-from moneybook.tests.common import CommonTestCase
+from moneybook.tests.base import BaseTestCase
 
 
-class DeleteViewTestCase(CommonTestCase):
+class DeleteViewTestCase(BaseTestCase):
     def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
         before_count = Data.get_all_data().count()

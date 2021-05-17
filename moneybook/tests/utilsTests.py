@@ -1,8 +1,8 @@
-from moneybook.tests.common import CommonTestCase
+from moneybook.tests.base import BaseTestCase
 from moneybook.utils import is_valid_date
 
 
-class UtilsTestCase(CommonTestCase):
+class UtilsTestCase(BaseTestCase):
     def test_is_valid_date_january(self):
         self.assertTrue(is_valid_date(2000, 1))
 
