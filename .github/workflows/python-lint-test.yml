@@ -60,8 +60,8 @@ jobs:
         python -m pip install --upgrade pip
         if [ -f build/requirements.txt ]; then pip install -r build/requirements.txt; fi
         if [ -f build/requirements_selenium.txt ]; then pip install -r build/requirements_selenium.txt; fi
-        echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list
-        wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+        echo 'deb http://dl.google.com/linux/chrome/deb/ stable main' | tee /etc/apt/sources.list.d/google-chrome.list
+        wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add -
         apt update -y
         apt install -y google-chrome-stable
     - name: Test
