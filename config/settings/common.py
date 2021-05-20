@@ -112,3 +112,6 @@ NUMBER_GROUPING = 3
 LOGIN_REDIRECT_URL = 'moneybook:index'
 # ログアウト後はログインページにリダイレクト
 LOGOUT_REDIRECT_URL = 'moneybook:login'
+
+# modelのprimary_key設定方式
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'

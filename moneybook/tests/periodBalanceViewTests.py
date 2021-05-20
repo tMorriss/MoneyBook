@@ -27,15 +27,16 @@ class PeriodBalanceViewTestCase(BaseTestCase):
         self.assertEqual(response.status_code, 200)
         period_balances = response.context['period_balances']
         expects = []
+        for i in range(12):
+            expects.append({'label': str(now.year - 1) + '-' + str(i + 1).zfill(2), 'value': 46694})
         for i in range(now.month):
-            expects.append({'label': str(now.year) + '-'
-                            + str(i + 1).zfill(2), 'value': 46694})
+            expects.append({'label': str(now.year) + '-' + str(i + 1).zfill(2), 'value': 46694})
         self.assertEqual(len(period_balances), len(expects))
         for i in range(len(expects)):
             self.assertEqual(period_balances[i].label, expects[i]['label'])
             self.assertEqual(period_balances[i].value, expects[i]['value'])
         self.assertTrue(response.context['draw_graph'])
-        self.assertEqual(response.context['start_year'], now.year)
+        self.assertEqual(response.context['start_year'], now.year - 1)
         self.assertEqual(response.context['start_month'], 1)
         self.assertEqual(response.context['end_year'], now.year)
         self.assertEqual(response.context['end_month'], now.month)

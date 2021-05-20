@@ -66,7 +66,7 @@ function key_press_move(code) {
     }
 }
 
-function updateData() {
+function fetchData() {
     $.when(
         $.get({
             url: data_table_url,
@@ -182,7 +182,7 @@ function resetAddForm() {
 
 function updateSuccess() {
     // データ更新
-    updateData();
+    fetchData();
     // メッセージ表示
     showResultMsg("Success!", resetAddForm);
 }
