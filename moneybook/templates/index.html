@@ -10,7 +10,6 @@
 <script src="{% static 'amcharts4/charts.js' %}"></script>
 <script src="{% static 'amcharts4/animated.js' %}"></script>
 <script src="{% static 'amcharts4/kelly.js' %}"></script>
-<div id="js_draw_chart_container"></div>
 <script type="text/javascript">
     index_url = "{% url 'moneybook:index' %}";
     add_url = "{% url 'moneybook:add' %}";
@@ -41,6 +40,7 @@
         <div id="transactions"></div>
     </section>
     <div id="statistic-fixed" class="nav"></div>
+    <div id="chart_container_data"></div>
 </div>
 {% include "_result_message.html" %}
 {% endblock %}

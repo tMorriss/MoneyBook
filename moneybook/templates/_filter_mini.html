@@ -6,18 +6,18 @@
             <table class="tbl-common fcs-blue" style="margin: 1vw auto;">
                 <tr>
                     <td rowspan="2">
-                        <a href="{% url 'moneybook:index_month' last_year last_month %}"><img
-                                src="{% static 'images/left.png' %}" alt="←" width="30vw" valign="middle"></a>
+                        <a href="{% url 'moneybook:index_month' last_year last_month %}"><img src="{% static 'images/left.png' %}" alt="←"
+                                width="30vw" valign="middle"></a>
                     </td>
                     <td class="jump-date">
-                        <input type="text" name="year" id="jump_year" style="width:6ex" class="righter"
-                            value="{{ year }}" onkeypress="key_press_move(event.keyCode)">年
-                        <input type="text" name="month" id="jump_month" style="width:5ex" class="righter"
-                            value="{{ month }}" onkeypress="key_press_move(event.keyCode)">月
+                        <input type="text" name="year" id="jump_year" style="width:6ex" class="righter" value="{{ year }}"
+                            onkeypress="key_press_move(event.keyCode)">年
+                        <input type="text" name="month" id="jump_month" style="width:5ex" class="righter" value="{{ month }}"
+                            onkeypress="key_press_move(event.keyCode)">月
                     </td>
                     <td rowspan="2">
-                        <a href="{% url 'moneybook:index_month' next_year next_month %}"><img
-                                src="{% static 'images/right.png' %}" alt="→" width="30 vw" valign="middle"></a>
+                        <a href="{% url 'moneybook:index_month' next_year next_month %}"><img src="{% static 'images/right.png' %}" alt="→"
+                                width="30 vw" valign="middle"></a>
                     </td>
                 </tr>
                 <tr>
@@ -36,10 +36,9 @@
                     <td>
                         {% for d in directions %}
                         <input type="checkbox" class="check_filter" onChange="applyFilter()" name="filter-direction[]"
-                            id="direction-{{ d.pk }}" value="{{ d.pk }}"
-                            onfocus="addBlueFocus('#lbl_direction-{{ d.pk }}')"
-                            onblur="removeBlueFocus('#lbl_direction-{{ d.pk }}')" checked>
-                        <label for="direction-{{ d.pk }}" id="lbl_direction-{{ d.pk }}">{{ d.name }}</label>
+                            id="filter-direction-{{ d.pk }}" value="{{ d.pk }}" onfocus="addBlueFocus('#lbl-filter-direction-{{ d.pk }}')"
+                            onblur="removeBlueFocus('#lbl-filter-direction-{{ d.pk }}')" checked>
+                        <label for="filter-direction-{{ d.pk }}" id="lbl-filter-direction-{{ d.pk }}">{{ d.name}}</label>
                         {% endfor %}
                     </td>
                 </tr>
@@ -47,15 +46,15 @@
                     <td>
                         {% for m in methods %}
                         <input type="checkbox" class="check_filter" onChange="applyFilter()" name="filter-method[]"
-                            id="method-{{ m.pk }}" value="{{ m.pk }}" onfocus="addBlueFocus('#lbl_method-{{ m.pk }}')"
-                            onblur="removeBlueFocus('#lbl_method-{{ m.pk }}')" checked>
-                        <label for="method-{{ m.pk }}" id="lbl_method-{{ m.pk }}">{{ m.name }}</label>
+                            id="filter-method-{{ m.pk }}" value="{{ m.pk }}" onfocus="addBlueFocus('#lbl-filter-method-{{ m.pk }}')"
+                            onblur="removeBlueFocus('#lbl-filter-method-{{ m.pk }}')" checked>
+                        <label for="filter-method-{{ m.pk }}" id="lbl-filter-method-{{ m.pk }}">{{ m.name }}</label>
                         {% endfor %}
                         {% for m in unused_methods %}
                         <input type="checkbox" class="check_filter" onChange="applyFilter()" name="filter-method[]"
-                            id="method-{{ m.pk }}" value="{{ m.pk }}" onfocus="addBlueFocus('#lbl_method-{{ m.pk }}')"
-                            onblur="removeBlueFocus('#lbl_method-{{ m.pk }}')" checked>
-                        <label for="method-{{ m.pk }}" id="lbl_method-{{ m.pk }}">{{ m.name }}</label>
+                            id="filter-method-{{ m.pk }}" value="{{ m.pk }}" onfocus="addBlueFocus('#lbl-filter-method-{{ m.pk }}')"
+                            onblur="removeBlueFocus('#lbl-filter-method-{{ m.pk }}')" checked>
+                        <label for="filter-method-{{ m.pk }}" id="lbl-filter-method-{{ m.pk }}">{{ m.name }}</label>
                         {% endfor %}
                     </td>
                 </tr>
@@ -63,16 +62,16 @@
                     <td>
                         {% for g in first_categories %}
                         <input type="checkbox" class="check_filter" onChange="applyFilter()" name="filter-class[]"
-                            id="class-{{ g.pk }}" value="{{ g.pk }}" onfocus="addBlueFocus('#lbl_class-{{ g.pk }}')"
-                            onblur="removeBlueFocus('#lbl_class-{{ g.pk }}')" checked>
-                        <label for="class-{{ g.pk }}" id="lbl_class-{{ g.pk }}">{{ g.name }}</label>
+                            id="filter-class-{{ g.pk }}" value="{{ g.pk }}" onfocus="addBlueFocus('#lbl-filter-class-{{ g.pk }}')"
+                            onblur="removeBlueFocus('#lbl-filter-class-{{ g.pk }}')" checked>
+                        <label for="filter-class-{{ g.pk }}" id="lbl-filter-class-{{ g.pk }}">{{ g.name }}</label>
                         {% endfor %}
                         <br>
                         {% for g in latter_categories %}
                         <input type="checkbox" class="check_filter" onChange="applyFilter()" name="filter-class[]"
-                            id="class-{{ g.pk }}" value="{{ g.pk }}" onfocus="addBlueFocus('#lbl_class-{{ g.pk }}')"
-                            onblur="removeBlueFocus('#lbl_class-{{ g.pk }}')" checked>';
-                        <label for="class-{{ g.pk }}" id="lbl_class-{{ g.pk }}">{{ g.name }}</label>
+                            id="filter-class-{{ g.pk }}" value="{{ g.pk }}" onfocus="addBlueFocus('#lbl-filter-class-{{ g.pk }}')"
+                            onblur="removeBlueFocus('#lbl-filter-class-{{ g.pk }}')" checked>';
+                        <label for="filter-class-{{ g.pk }}" id="lbl-filter-class-{{ g.pk }}">{{ g.name }}</label>
                         {% endfor %}
                     </td>
                 </tr>
