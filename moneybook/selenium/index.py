@@ -18,7 +18,7 @@ class Index(SeleniumBase):
             '//*[@id="filter-fixed"]/form/table/tbody/tr[5]/td/table/tbody/tr[1]/td/input[1]').is_selected())
         self.assertFalse(self.driver.find_element_by_id('lbl_is-charge').is_selected())
 
-    def _test_add(self,  method, category):
+    def _test_add(self, item, method, category):
         now = datetime.now()
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index'))
@@ -27,7 +27,7 @@ class Index(SeleniumBase):
 
         # 1件追加
         self.driver.find_element_by_id('a_day').send_keys('3')
-        self.driver.find_element_by_id('a_item').send_keys('テスト1')
+        self.driver.find_element_by_id('a_item').send_keys(item)
         self.driver.find_element_by_id('a_price').send_keys('1000')
         labels = self.driver.find_elements_by_xpath('//*[@id="filter-fixed"]/form/table/tbody/tr[4]/td/label')
         for label in labels:
@@ -46,7 +46,7 @@ class Index(SeleniumBase):
         self.assertEqual(len(rows), 2)
         tds = rows[1].find_elements_by_tag_name('td')
         self.assertEqual(tds[0].text, str(now.year) + "/" + str.zfill(str(now.month), 2) + "/" + '03')
-        self.assertEqual(tds[1].text, 'テスト1')
+        self.assertEqual(tds[1].text, item)
         self.assertEqual(tds[2].text, '1,000')
         self.assertEqual(tds[3].text, method)
         self.assertEqual(tds[4].text, category)
@@ -208,22 +208,25 @@ class Index(SeleniumBase):
         self._assert_texts(actuals, expects)
 
     def test_add_bank_food(self):
-        self._test_add('銀行', '食費')
+        self._test_add('テスト1', '銀行', '食費')
 
     def test_add_cash_necessary(self):
-        self._test_add('現金', '必需品')
+        self._test_add('テスト', '現金', '必需品')
 
     def test_add_paypay_other(self):
-        self._test_add('PayPay', 'その他')
+        self._test_add('テスト1', 'PayPay', 'その他')
 
     def test_add_bank_intra(self):
-        self._test_add('銀行', '内部移動')
+        self._test_add('テスト1', '銀行', '内部移動')
 
     def test_add_cash_deposit(self):
-        self._test_add('現金', '貯金')
+        self._test_add('テスト1', '現金', '貯金')
 
     def test_add_paypay_out(self):
-        self._test_add('PayPay', '計算外')
+        self._test_add('テスト1', 'PayPay', '計算外')
+
+    def test_add_escape(self):
+        self._test_add('テ&ス<>ト', '銀行', '食費')
 
     def test_all_charge(self):
         now = datetime.now()
