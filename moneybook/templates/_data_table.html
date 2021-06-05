@@ -14,7 +14,7 @@
             {% if d.checked and d.direction.pk == 2 %} tr-outgo
             {% elif d.checked and d.direction.pk == 1 %} tr-income
             {% endif %}
-            direction-{{ d.direction.pk }} method-{{ d.method.pk }} class-{{ d.category.pk }}">
+            filter-direction-{{ d.direction.pk }} filter-method-{{ d.method.pk }} filter-class-{{ d.category.pk }}">
         <td>{{ d.date|date:"Y/m/d" }}</td>
         <td class="lefter data_item">{{ d.item }}</td>
         <td class="righter">{{ d.price|intcomma }}</td>

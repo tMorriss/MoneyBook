@@ -96,7 +96,7 @@ function fetchData() {
                 "month": month,
             }
         }).done((data) => {
-            $('#js_draw_chart_container').html(data);
+            $('#chart_container_data').html(data);
         })
     ).done(() => {
         // 円グラフ再描画

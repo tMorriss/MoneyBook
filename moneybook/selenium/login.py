@@ -5,12 +5,7 @@ from selenium.webdriver.common.keys import Keys
 
 class Login(SeleniumBase):
     def test_login_button(self):
-        self.driver.get(self.live_server_url + reverse('moneybook:login'))
-        username_input = self.driver.find_element_by_id('id_username')
-        username_input.send_keys(self.username)
-        password_input = self.driver.find_element_by_id('id_password')
-        password_input.send_keys(self.password)
-        self.driver.find_element_by_class_name('btn-apply').click()
+        self._login()
 
         # ログインできたらトップに移動
         self.assertEqual(self.driver.current_url, self.live_server_url + reverse('moneybook:index'))
