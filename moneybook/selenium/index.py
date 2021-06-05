@@ -4,6 +4,8 @@ from datetime import datetime
 from django.urls import reverse
 from moneybook.selenium.base import SeleniumBase
 
+from selenium.webdriver.common.keys import Keys
+
 
 class Index(SeleniumBase):
     def _test_initialzed_add_mini(self, year, month):
@@ -83,19 +85,23 @@ class Index(SeleniumBase):
         # 追加されていないことを確認
         self.assertEqual(len(self.driver.find_elements_by_xpath('//*[@id="transactions"]/table/tbody/tr')), 1)
 
+    def _test_index_date(self, year, month):
+        self._assert_common()
+
+        self.assertEqual(self.driver.find_element_by_id('a_year').get_attribute('value'), str(year))
+        self.assertEqual(self.driver.find_element_by_id('a_month').get_attribute('value'), str(month))
+        self.assertEqual(self.driver.find_element_by_id('a_day').get_attribute('value'), '')
+
+        self.assertEqual(self.driver.find_element_by_id('jump_year').get_attribute('value'), str(year))
+        self.assertEqual(self.driver.find_element_by_id('jump_month').get_attribute('value'), str(month))
+
     def test_index(self):
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index'))
-        self._assert_common()
 
         # 日付だけ確認
         now = datetime.now()
-        self.assertEqual(self.driver.find_element_by_id('a_year').get_attribute('value'), str(now.year))
-        self.assertEqual(self.driver.find_element_by_id('a_month').get_attribute('value'), str(now.month))
-        self.assertEqual(self.driver.find_element_by_id('a_day').get_attribute('value'), '')
-
-        self.assertEqual(self.driver.find_element_by_id('jump_year').get_attribute('value'), str(now.year))
-        self.assertEqual(self.driver.find_element_by_id('jump_month').get_attribute('value'), str(now.month))
+        self._test_index_date(now.year, now.month)
 
     def test_index_month(self):
         self._login()
@@ -301,3 +307,54 @@ class Index(SeleniumBase):
     def test_invalid_add_empty_price(self):
         now = datetime.now()
         self._test_invalid_add(now.year, now.month, now.day, 'テスト1', '')
+
+    def test_filter_button(self):
+        self._login()
+        self.driver.get(self.live_server_url + reverse('moneybook:index'))
+
+        self.driver.find_element_by_id('jump_year').clear()
+        self.driver.find_element_by_id('jump_year').send_keys('2000')
+        self.driver.find_element_by_id('jump_month').clear()
+        self.driver.find_element_by_id('jump_month').send_keys('1')
+        self.driver.find_element_by_xpath(
+            '//*[@id="filter-fixed"]/table[1]/tbody/tr[1]/td[1]/table/tbody/tr[2]/td[1]/input[@type="button"]'
+        ).click()
+        self._test_index_date(2000, 1)
+
+    def test_filter_year_enter(self):
+        self._login()
+        self.driver.get(self.live_server_url + reverse('moneybook:index'))
+
+        self.driver.find_element_by_id('jump_year').clear()
+        self.driver.find_element_by_id('jump_year').send_keys('2000')
+        self.driver.find_element_by_id('jump_month').clear()
+        self.driver.find_element_by_id('jump_month').send_keys('1')
+        self.driver.find_element_by_id('jump_year').send_keys(Keys.RETURN)
+        self._test_index_date(2000, 1)
+
+    def test_filter_month_enter(self):
+        self._login()
+        self.driver.get(self.live_server_url + reverse('moneybook:index'))
+
+        self.driver.find_element_by_id('jump_year').clear()
+        self.driver.find_element_by_id('jump_year').send_keys('2000')
+        self.driver.find_element_by_id('jump_month').clear()
+        self.driver.find_element_by_id('jump_month').send_keys('1')
+        self.driver.find_element_by_id('jump_month').send_keys(Keys.RETURN)
+        self._test_index_date(2000, 1)
+
+    def test_filter_jump_last(self):
+        self._login()
+        self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+        self.driver.find_element_by_xpath(
+            '//*[@id="filter-fixed"]/table[1]/tbody/tr[1]/td[1]/table/tbody/tr[1]/td[1]/a'
+        ).click()
+        self._test_index_date(1999, 12)
+
+    def test_filter_jump_next(self):
+        self._login()
+        self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 12}))
+        self.driver.find_element_by_xpath(
+            '//*[@id="filter-fixed"]/table[1]/tbody/tr[1]/td[1]/table/tbody/tr[1]/td[3]/a'
+        ).click()
+        self._test_index_date(2001, 1)
