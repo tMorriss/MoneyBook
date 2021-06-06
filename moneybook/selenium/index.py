@@ -4,10 +4,11 @@ from datetime import datetime
 from django.urls import reverse
 from moneybook.selenium.base import SeleniumBase
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.color import Color
 
 
 class Index(SeleniumBase):
-    def _test_initialzed_add_mini(self, year, month):
+    def _assert_initialized_add_mini(self, year, month):
         '''入力欄が初期値であることを確認'''
         self.assertEqual(self.driver.find_element_by_id('a_year').get_attribute('value'), str(year))
         self.assertEqual(self.driver.find_element_by_id('a_month').get_attribute('value'), str(month))
@@ -19,7 +20,7 @@ class Index(SeleniumBase):
             '//*[@id="filter-fixed"]/form/table/tbody/tr[5]/td/table/tbody/tr[1]/td/input[1]').is_selected())
         self.assertFalse(self.driver.find_element_by_id('lbl_is-charge').is_selected())
 
-    def _test_add(self, item, method, category):
+    def _assert_add(self, item, method, category):
         now = datetime.now()
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index'))
@@ -53,9 +54,9 @@ class Index(SeleniumBase):
         self.assertEqual(tds[4].text, category)
 
         # 入力欄が戻っていることを確認
-        self._test_initialzed_add_mini(now.year, now.month)
+        self._assert_initialized_add_mini(now.year, now.month)
 
-    def _test_invalid_add(self, year, month, day, item, price):
+    def _assert_invalid_add(self, year, month, day, item, price):
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index'))
 
@@ -84,7 +85,7 @@ class Index(SeleniumBase):
         # 追加されていないことを確認
         self.assertEqual(len(self.driver.find_elements_by_xpath('//*[@id="transactions"]/table/tbody/tr')), 1)
 
-    def _test_index_date(self, year, month):
+    def _assert_index_date(self, year, month):
         self._assert_common()
 
         self.assertEqual(self.driver.find_element_by_id('a_year').get_attribute('value'), str(year))
@@ -94,13 +95,19 @@ class Index(SeleniumBase):
         self.assertEqual(self.driver.find_element_by_id('jump_year').get_attribute('value'), str(year))
         self.assertEqual(self.driver.find_element_by_id('jump_month').get_attribute('value'), str(month))
 
+    def _assert_is_displayed(self, actuals, expects):
+        self.assertEqual(len(actuals), len(expects) + 1)
+        for i in range(len(expects)):
+            with self.subTest(i=i):
+                self.assertEqual(actuals[i + 1].is_displayed(), expects[i])
+
     def test_index(self):
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index'))
 
         # 日付だけ確認
         now = datetime.now()
-        self._test_index_date(now.year, now.month)
+        self._assert_index_date(now.year, now.month)
 
     def test_index_month(self):
         self._login()
@@ -108,7 +115,7 @@ class Index(SeleniumBase):
         self._assert_common()
 
         # 追加部分
-        self._test_initialzed_add_mini(2000, 1)
+        self._assert_initialized_add_mini(2000, 1)
 
         expects = ['銀行', '現金', 'PayPay']
         actuals = self.driver.find_elements_by_xpath('//*[@id="filter-fixed"]/form/table/tbody/tr[4]/td/label')
@@ -161,6 +168,18 @@ class Index(SeleniumBase):
                    "貯金", "計算外", "スーパー", "銀行収入", "現金収入", "必需品2", "必需品1", "その他1", "コンビニ", "給与"]
         actuals = self.driver.find_elements_by_class_name('data_item')
         self._assert_texts(actuals, expects)
+        # 背景色
+        expects = [1, 0, 2, 2, 2, 0, 1, 0, 0, 0, 1, 1, 2, 0, 2, 2, 1]
+        actuals = self.driver.find_elements_by_xpath('//*[@id="transactions"]/table/tbody/tr')
+        self.assertEqual(len(actuals), len(expects) + 1)
+        for i in range(len(expects)):
+            with self.subTest(i=i):
+                c = 'rgba(0, 0, 0, 0)'
+                if expects[i] == 1:
+                    c = '#9f9'
+                elif expects[i] == 2:
+                    c = '#f68'
+                self.assertEqual(Color.from_string(actuals[i + 1].value_of_css_property('background-color')), Color.from_string(c))
 
         # 残高
         self.assertEqual(self.driver.find_element_by_xpath('//*[@id="statistic-fixed"]/table[1]/tbody/tr/td[2]').text, '46,694円')
@@ -212,26 +231,32 @@ class Index(SeleniumBase):
         expects = ['3,120', '6,430', '1,000']
         self._assert_texts(actuals, expects)
 
+    def test_index_month_out_of_range(self):
+        '''存在しない日付に飛ぶとtopにリダイレクト'''
+        self._login()
+        self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 13}))
+        self.assertEqual(self.driver.current_url, self.live_server_url + reverse('moneybook:index'))
+
     def test_add_bank_food(self):
-        self._test_add('テスト1', '銀行', '食費')
+        self._assert_add('テスト1', '銀行', '食費')
 
     def test_add_cash_necessary(self):
-        self._test_add('テスト', '現金', '必需品')
+        self._assert_add('テスト', '現金', '必需品')
 
     def test_add_paypay_other(self):
-        self._test_add('テスト1', 'PayPay', 'その他')
+        self._assert_add('テスト1', 'PayPay', 'その他')
 
     def test_add_bank_intra(self):
-        self._test_add('テスト1', '銀行', '内部移動')
+        self._assert_add('テスト1', '銀行', '内部移動')
 
     def test_add_cash_deposit(self):
-        self._test_add('テスト1', '現金', '貯金')
+        self._assert_add('テスト1', '現金', '貯金')
 
     def test_add_paypay_out(self):
-        self._test_add('テスト1', 'PayPay', '計算外')
+        self._assert_add('テスト1', 'PayPay', '計算外')
 
     def test_add_escape(self):
-        self._test_add('テ&ス<>ト', '銀行', '食費')
+        self._assert_add('テ&ス<>ト', '銀行', '食費')
 
     def test_all_charge(self):
         now = datetime.now()
@@ -273,39 +298,39 @@ class Index(SeleniumBase):
 
     def test_invalid_add_str_year(self):
         now = datetime.now()
-        self._test_invalid_add('a', now.month, now.day, 'テスト1', 100)
+        self._assert_invalid_add('a', now.month, now.day, 'テスト1', 100)
 
     def test_invalid_add_empty_year(self):
         now = datetime.now()
-        self._test_invalid_add('', now.month, now.day, 'テスト1', 100)
+        self._assert_invalid_add('', now.month, now.day, 'テスト1', 100)
 
     def test_invalid_add_str_month(self):
         now = datetime.now()
-        self._test_invalid_add(now.year, 'a', now.day, 'テスト1', 100)
+        self._assert_invalid_add(now.year, 'a', now.day, 'テスト1', 100)
 
     def test_invalid_add_empty_month(self):
         now = datetime.now()
-        self._test_invalid_add(now.year, '', now.day, 'テスト1', 100)
+        self._assert_invalid_add(now.year, '', now.day, 'テスト1', 100)
 
     def test_invalid_add_str_day(self):
         now = datetime.now()
-        self._test_invalid_add(now.year, now.month, 'a', 'テスト1', 100)
+        self._assert_invalid_add(now.year, now.month, 'a', 'テスト1', 100)
 
     def test_invalid_add_empty_day(self):
         now = datetime.now()
-        self._test_invalid_add(now.year, now.month, '', 'テスト1', 100)
+        self._assert_invalid_add(now.year, now.month, '', 'テスト1', 100)
 
     def test_invalid_add_str_price(self):
         now = datetime.now()
-        self._test_invalid_add(now.year, now.month, now.day, 'テスト1', 'a')
+        self._assert_invalid_add(now.year, now.month, now.day, 'テスト1', 'a')
 
     def test_invalid_add_empty_item(self):
         now = datetime.now()
-        self._test_invalid_add(now.year, now.month, now.day, '', 100)
+        self._assert_invalid_add(now.year, now.month, now.day, '', 100)
 
     def test_invalid_add_empty_price(self):
         now = datetime.now()
-        self._test_invalid_add(now.year, now.month, now.day, 'テスト1', '')
+        self._assert_invalid_add(now.year, now.month, now.day, 'テスト1', '')
 
     def test_filter_button(self):
         self._login()
@@ -318,7 +343,7 @@ class Index(SeleniumBase):
         self.driver.find_element_by_xpath(
             '//*[@id="filter-fixed"]/table[1]/tbody/tr[1]/td[1]/table/tbody/tr[2]/td[1]/input[@type="button"]'
         ).click()
-        self._test_index_date(2000, 1)
+        self._assert_index_date(2000, 1)
 
     def test_filter_year_enter(self):
         self._login()
@@ -329,7 +354,7 @@ class Index(SeleniumBase):
         self.driver.find_element_by_id('jump_month').clear()
         self.driver.find_element_by_id('jump_month').send_keys('1')
         self.driver.find_element_by_id('jump_year').send_keys(Keys.RETURN)
-        self._test_index_date(2000, 1)
+        self._assert_index_date(2000, 1)
 
     def test_filter_month_enter(self):
         self._login()
@@ -340,7 +365,7 @@ class Index(SeleniumBase):
         self.driver.find_element_by_id('jump_month').clear()
         self.driver.find_element_by_id('jump_month').send_keys('1')
         self.driver.find_element_by_id('jump_month').send_keys(Keys.RETURN)
-        self._test_index_date(2000, 1)
+        self._assert_index_date(2000, 1)
 
     def test_filter_jump_last(self):
         self._login()
@@ -348,7 +373,7 @@ class Index(SeleniumBase):
         self.driver.find_element_by_xpath(
             '//*[@id="filter-fixed"]/table[1]/tbody/tr[1]/td[1]/table/tbody/tr[1]/td[1]/a'
         ).click()
-        self._test_index_date(1999, 12)
+        self._assert_index_date(1999, 12)
 
     def test_filter_jump_next(self):
         self._login()
@@ -356,4 +381,105 @@ class Index(SeleniumBase):
         self.driver.find_element_by_xpath(
             '//*[@id="filter-fixed"]/table[1]/tbody/tr[1]/td[1]/table/tbody/tr[1]/td[3]/a'
         ).click()
-        self._test_index_date(2001, 1)
+        self._assert_index_date(2001, 1)
+
+    def test_index_filter_inout(self):
+        self._login()
+        self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+        is_income = [True, True, False, False, False, False, True, False, False, False, True, True, False, False, False, False, True]
+
+        # 収入だけ表示
+        self.driver.find_element_by_xpath('//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[2]/td/label[2]').click()
+        actuals = self.driver.find_elements_by_xpath('//*[@id="transactions"]/table/tbody/tr')
+        self._assert_is_displayed(actuals, is_income)
+
+        # どちらも非表示
+        self.driver.find_element_by_xpath('//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[2]/td/label[1]').click()
+        actuals = self.driver.find_elements_by_xpath('//*[@id="transactions"]/table/tbody/tr')
+        self.assertEqual(len(actuals), len(is_income) + 1)
+        for i in range(len(is_income)):
+            with self.subTest(i=i):
+                self.assertEqual(actuals[i + 1].is_displayed(), False)
+
+        # 支出だけ表示
+        self.driver.find_element_by_xpath('//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[2]/td/label[2]').click()
+        actuals = self.driver.find_elements_by_xpath('//*[@id="transactions"]/table/tbody/tr')
+        self.assertEqual(len(actuals), len(is_income) + 1)
+        for i in range(len(is_income)):
+            with self.subTest(i=i):
+                self.assertEqual(actuals[i + 1].is_displayed(), not is_income[i])
+
+    def test_index_filter_method(self):
+        self._login()
+        self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+
+        # 全部非表示
+        self.driver.find_element_by_xpath('//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label[1]').click()
+        self.driver.find_element_by_xpath('//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label[2]').click()
+        self.driver.find_element_by_xpath('//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label[3]').click()
+        self.driver.find_element_by_xpath('//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label[4]').click()
+        self.driver.find_element_by_xpath('//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label[5]').click()
+        expects = [False] * 17
+        actuals = self.driver.find_elements_by_xpath('//*[@id="transactions"]/table/tbody/tr')
+        self._assert_is_displayed(actuals, expects)
+
+        # 銀行のみ表示
+        self.driver.find_element_by_xpath('//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label[1]').click()
+        expects = [True, False, True, True, True, False, True, True, True, False, True, False, False, True, False, False, True]
+        actuals = self.driver.find_elements_by_xpath('//*[@id="transactions"]/table/tbody/tr')
+        self._assert_is_displayed(actuals, expects)
+
+        # 銀行とPayPay
+        self.driver.find_element_by_xpath('//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label[3]').click()
+        expects = [True, True, True, True, True, True, True, True, True, False, True, False, False, True, False, False, True]
+        actuals = self.driver.find_elements_by_xpath('//*[@id="transactions"]/table/tbody/tr')
+        self._assert_is_displayed(actuals, expects)
+
+    def test_index_filter_category(self):
+        self._login()
+        self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+
+        # 全部非表示
+        self.driver.find_element_by_xpath('//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[1]').click()
+        self.driver.find_element_by_xpath('//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[2]').click()
+        self.driver.find_element_by_xpath('//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[3]').click()
+        self.driver.find_element_by_xpath('//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[4]').click()
+        self.driver.find_element_by_xpath('//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[5]').click()
+        self.driver.find_element_by_xpath('//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[6]').click()
+        expects = [False] * 17
+        actuals = self.driver.find_elements_by_xpath('//*[@id="transactions"]/table/tbody/tr')
+        self._assert_is_displayed(actuals, expects)
+
+        # 食費のみ表示
+        self.driver.find_element_by_xpath('//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[1]').click()
+        expects = [False, True, False, False, False, False, False, False, False, True, False, False, False, False, False, True, False]
+        actuals = self.driver.find_elements_by_xpath('//*[@id="transactions"]/table/tbody/tr')
+        self._assert_is_displayed(actuals, expects)
+
+        # 食費と必需品
+        self.driver.find_element_by_xpath('//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[2]').click()
+        expects = [True, True, True, True, True, False, False, False, False, True, True, True, True, True, False, True, False]
+        actuals = self.driver.find_elements_by_xpath('//*[@id="transactions"]/table/tbody/tr')
+        self._assert_is_displayed(actuals, expects)
+
+        # 食費と必需品と内部移動
+        self.driver.find_element_by_xpath('//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[4]').click()
+        expects = [True, True, True, True, True, True, True, False, False, True, True, True, True, True, False, True, False]
+        actuals = self.driver.find_elements_by_xpath('//*[@id="transactions"]/table/tbody/tr')
+        self._assert_is_displayed(actuals, expects)
+
+    def test_index_filter_all(self):
+        self._login()
+        self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+
+        # 全解除
+        self.driver.find_element_by_xpath('//*[@id="filter-fixed"]/table[1]/tbody/tr[3]/td[1]/input[@value="全解除"]').click()
+        expects = [False] * 17
+        actuals = self.driver.find_elements_by_xpath('//*[@id="transactions"]/table/tbody/tr')
+        self._assert_is_displayed(actuals, expects)
+
+        # 全選択
+        self.driver.find_element_by_xpath('//*[@id="filter-fixed"]/table[1]/tbody/tr[3]/td[1]/input[@value="全選択"]').click()
+        expects = [True] * 17
+        actuals = self.driver.find_elements_by_xpath('//*[@id="transactions"]/table/tbody/tr')
+        self._assert_is_displayed(actuals, expects)

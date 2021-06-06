@@ -3,7 +3,7 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.http import HttpResponseBadRequest
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.views import View
 from moneybook.models import Category, Data, Direction, InOutBalance, Method, SeveralCosts
 from moneybook.utils import is_valid_date
@@ -23,7 +23,7 @@ class IndexMonthView(View):
         month = kwargs["month"]
         # validation
         if not is_valid_date(year, month):
-            return HttpResponseBadRequest("parameter error")
+            return redirect('moneybook:index')
         # 前後の日付
         to_month = datetime(int(year), int(month), 1)
         next_month = to_month + relativedelta(months=1)

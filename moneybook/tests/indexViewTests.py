@@ -56,7 +56,8 @@ class IndexMonthViewTestCase(BaseTestCase):
     def test_get_out_of_range(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 13}))
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('moneybook:index'))
 
     def test_get_guest(self):
         response = self.client.get(reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
