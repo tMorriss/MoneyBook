@@ -216,7 +216,7 @@ class Index(SeleniumBase):
         '''存在しない日付に飛ぶとtopにリダイレクト'''
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 13}))
-        self.assertEqual(self.driver.status, self.live_server_url + reverse('moneybook:index'))
+        self.assertEqual(self.driver.current_url, self.live_server_url + reverse('moneybook:index'))
 
     def test_add_bank_food(self):
         self._assert_add('テスト1', '銀行', '食費')
