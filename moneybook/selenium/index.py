@@ -7,7 +7,7 @@ from selenium.webdriver.common.keys import Keys
 
 
 class Index(SeleniumBase):
-    def _test_initialzed_add_mini(self, year, month):
+    def _assert_initialized_add_mini(self, year, month):
         '''入力欄が初期値であることを確認'''
         self.assertEqual(self.driver.find_element_by_id('a_year').get_attribute('value'), str(year))
         self.assertEqual(self.driver.find_element_by_id('a_month').get_attribute('value'), str(month))
@@ -19,7 +19,7 @@ class Index(SeleniumBase):
             '//*[@id="filter-fixed"]/form/table/tbody/tr[5]/td/table/tbody/tr[1]/td/input[1]').is_selected())
         self.assertFalse(self.driver.find_element_by_id('lbl_is-charge').is_selected())
 
-    def _test_add(self, item, method, category):
+    def _assert_add(self, item, method, category):
         now = datetime.now()
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index'))
@@ -53,9 +53,9 @@ class Index(SeleniumBase):
         self.assertEqual(tds[4].text, category)
 
         # 入力欄が戻っていることを確認
-        self._test_initialzed_add_mini(now.year, now.month)
+        self._assert_initialized_add_mini(now.year, now.month)
 
-    def _test_invalid_add(self, year, month, day, item, price):
+    def _assert_invalid_add(self, year, month, day, item, price):
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index'))
 
@@ -84,7 +84,7 @@ class Index(SeleniumBase):
         # 追加されていないことを確認
         self.assertEqual(len(self.driver.find_elements_by_xpath('//*[@id="transactions"]/table/tbody/tr')), 1)
 
-    def _test_index_date(self, year, month):
+    def _assert_index_date(self, year, month):
         self._assert_common()
 
         self.assertEqual(self.driver.find_element_by_id('a_year').get_attribute('value'), str(year))
@@ -100,7 +100,7 @@ class Index(SeleniumBase):
 
         # 日付だけ確認
         now = datetime.now()
-        self._test_index_date(now.year, now.month)
+        self._assert_index_date(now.year, now.month)
 
     def test_index_month(self):
         self._login()
@@ -108,7 +108,7 @@ class Index(SeleniumBase):
         self._assert_common()
 
         # 追加部分
-        self._test_initialzed_add_mini(2000, 1)
+        self._assert_initialized_add_mini(2000, 1)
 
         expects = ['銀行', '現金', 'PayPay']
         actuals = self.driver.find_elements_by_xpath('//*[@id="filter-fixed"]/form/table/tbody/tr[4]/td/label')
@@ -219,25 +219,25 @@ class Index(SeleniumBase):
         self.assertEqual(self.driver.status, self.live_server_url + reverse('moneybook:index'))
 
     def test_add_bank_food(self):
-        self._test_add('テスト1', '銀行', '食費')
+        self._assert_add('テスト1', '銀行', '食費')
 
     def test_add_cash_necessary(self):
-        self._test_add('テスト', '現金', '必需品')
+        self._assert_add('テスト', '現金', '必需品')
 
     def test_add_paypay_other(self):
-        self._test_add('テスト1', 'PayPay', 'その他')
+        self._assert_add('テスト1', 'PayPay', 'その他')
 
     def test_add_bank_intra(self):
-        self._test_add('テスト1', '銀行', '内部移動')
+        self._assert_add('テスト1', '銀行', '内部移動')
 
     def test_add_cash_deposit(self):
-        self._test_add('テスト1', '現金', '貯金')
+        self._assert_add('テスト1', '現金', '貯金')
 
     def test_add_paypay_out(self):
-        self._test_add('テスト1', 'PayPay', '計算外')
+        self._assert_add('テスト1', 'PayPay', '計算外')
 
     def test_add_escape(self):
-        self._test_add('テ&ス<>ト', '銀行', '食費')
+        self._assert_add('テ&ス<>ト', '銀行', '食費')
 
     def test_all_charge(self):
         now = datetime.now()
@@ -279,39 +279,39 @@ class Index(SeleniumBase):
 
     def test_invalid_add_str_year(self):
         now = datetime.now()
-        self._test_invalid_add('a', now.month, now.day, 'テスト1', 100)
+        self._assert_invalid_add('a', now.month, now.day, 'テスト1', 100)
 
     def test_invalid_add_empty_year(self):
         now = datetime.now()
-        self._test_invalid_add('', now.month, now.day, 'テスト1', 100)
+        self._assert_invalid_add('', now.month, now.day, 'テスト1', 100)
 
     def test_invalid_add_str_month(self):
         now = datetime.now()
-        self._test_invalid_add(now.year, 'a', now.day, 'テスト1', 100)
+        self._assert_invalid_add(now.year, 'a', now.day, 'テスト1', 100)
 
     def test_invalid_add_empty_month(self):
         now = datetime.now()
-        self._test_invalid_add(now.year, '', now.day, 'テスト1', 100)
+        self._assert_invalid_add(now.year, '', now.day, 'テスト1', 100)
 
     def test_invalid_add_str_day(self):
         now = datetime.now()
-        self._test_invalid_add(now.year, now.month, 'a', 'テスト1', 100)
+        self._assert_invalid_add(now.year, now.month, 'a', 'テスト1', 100)
 
     def test_invalid_add_empty_day(self):
         now = datetime.now()
-        self._test_invalid_add(now.year, now.month, '', 'テスト1', 100)
+        self._assert_invalid_add(now.year, now.month, '', 'テスト1', 100)
 
     def test_invalid_add_str_price(self):
         now = datetime.now()
-        self._test_invalid_add(now.year, now.month, now.day, 'テスト1', 'a')
+        self._assert_invalid_add(now.year, now.month, now.day, 'テスト1', 'a')
 
     def test_invalid_add_empty_item(self):
         now = datetime.now()
-        self._test_invalid_add(now.year, now.month, now.day, '', 100)
+        self._assert_invalid_add(now.year, now.month, now.day, '', 100)
 
     def test_invalid_add_empty_price(self):
         now = datetime.now()
-        self._test_invalid_add(now.year, now.month, now.day, 'テスト1', '')
+        self._assert_invalid_add(now.year, now.month, now.day, 'テスト1', '')
 
     def test_filter_button(self):
         self._login()
@@ -324,7 +324,7 @@ class Index(SeleniumBase):
         self.driver.find_element_by_xpath(
             '//*[@id="filter-fixed"]/table[1]/tbody/tr[1]/td[1]/table/tbody/tr[2]/td[1]/input[@type="button"]'
         ).click()
-        self._test_index_date(2000, 1)
+        self._assert_index_date(2000, 1)
 
     def test_filter_year_enter(self):
         self._login()
@@ -335,7 +335,7 @@ class Index(SeleniumBase):
         self.driver.find_element_by_id('jump_month').clear()
         self.driver.find_element_by_id('jump_month').send_keys('1')
         self.driver.find_element_by_id('jump_year').send_keys(Keys.RETURN)
-        self._test_index_date(2000, 1)
+        self._assert_index_date(2000, 1)
 
     def test_filter_month_enter(self):
         self._login()
@@ -346,7 +346,7 @@ class Index(SeleniumBase):
         self.driver.find_element_by_id('jump_month').clear()
         self.driver.find_element_by_id('jump_month').send_keys('1')
         self.driver.find_element_by_id('jump_month').send_keys(Keys.RETURN)
-        self._test_index_date(2000, 1)
+        self._assert_index_date(2000, 1)
 
     def test_filter_jump_last(self):
         self._login()
@@ -354,7 +354,7 @@ class Index(SeleniumBase):
         self.driver.find_element_by_xpath(
             '//*[@id="filter-fixed"]/table[1]/tbody/tr[1]/td[1]/table/tbody/tr[1]/td[1]/a'
         ).click()
-        self._test_index_date(1999, 12)
+        self._assert_index_date(1999, 12)
 
     def test_filter_jump_next(self):
         self._login()
@@ -362,4 +362,4 @@ class Index(SeleniumBase):
         self.driver.find_element_by_xpath(
             '//*[@id="filter-fixed"]/table[1]/tbody/tr[1]/td[1]/table/tbody/tr[1]/td[3]/a'
         ).click()
-        self._test_index_date(2001, 1)
+        self._assert_index_date(2001, 1)
