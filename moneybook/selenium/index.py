@@ -483,3 +483,10 @@ class Index(SeleniumBase):
         expects = [True] * 17
         actuals = self.driver.find_elements_by_xpath('//*[@id="transactions"]/table/tbody/tr')
         self._assert_is_displayed(actuals, expects)
+
+    def test_move_edit(self):
+        self._login()
+        self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+        self.driver.find_element_by_xpath('//*[@id="transactions"]/table/tbody/tr[2]/td[6]/a').click()
+
+        self.assertEqual(self.driver.current_url, self.live_server_url + reverse('moneybook:edit', kwargs={'pk': 18}))
