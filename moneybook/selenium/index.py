@@ -212,6 +212,12 @@ class Index(SeleniumBase):
         expects = ['3,120', '6,430', '1,000']
         self._assert_texts(actuals, expects)
 
+    def test_index_month_out_of_range(self):
+        '''存在しない日付に飛ぶとtopにリダイレクト'''
+        self._login()
+        self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 13}))
+        self.assertEqual(self.driver.status, self.live_server_url + reverse('moneybook:index'))
+
     def test_add_bank_food(self):
         self._test_add('テスト1', '銀行', '食費')
 
