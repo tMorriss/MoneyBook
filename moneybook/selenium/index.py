@@ -4,6 +4,7 @@ from datetime import datetime
 from django.urls import reverse
 from moneybook.selenium.base import SeleniumBase
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.color import Color
 
 
 class Index(SeleniumBase):
@@ -161,6 +162,18 @@ class Index(SeleniumBase):
                    "貯金", "計算外", "スーパー", "銀行収入", "現金収入", "必需品2", "必需品1", "その他1", "コンビニ", "給与"]
         actuals = self.driver.find_elements_by_class_name('data_item')
         self._assert_texts(actuals, expects)
+        # 背景色
+        expects = [1, 0, 2, 2, 2, 0, 1, 0, 0, 0, 1, 1, 2, 0, 2, 2, 1]
+        actuals = self.driver.find_elements_by_xpath('//*[@id="transactions"]/table/tbody/tr')
+        self.assertEqual(len(actuals), len(expects) + 1)
+        for i in range(len(expects)):
+            with self.subTest(i=i):
+                c = 'rgba(0, 0, 0, 0)'
+                if expects[i] == 1:
+                    c = '#9f9'
+                elif expects[i] == 2:
+                    c = '#f68'
+                self.assertEqual(Color.from_string(actuals[i + 1].value_of_css_property('background-color')), Color.from_string(c))
 
         # 残高
         self.assertEqual(self.driver.find_element_by_xpath('//*[@id="statistic-fixed"]/table[1]/tbody/tr/td[2]').text, '46,694円')
