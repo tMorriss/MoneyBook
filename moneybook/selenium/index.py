@@ -95,6 +95,12 @@ class Index(SeleniumBase):
         self.assertEqual(self.driver.find_element_by_id('jump_year').get_attribute('value'), str(year))
         self.assertEqual(self.driver.find_element_by_id('jump_month').get_attribute('value'), str(month))
 
+    def _assert_is_displayed(self, actuals, expects):
+        self.assertEqual(len(actuals), len(expects) + 1)
+        for i in range(len(expects)):
+            with self.subTest(i=i):
+                self.assertEqual(actuals[i + 1].is_displayed(), expects[i])
+
     def test_index(self):
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index'))
@@ -376,3 +382,104 @@ class Index(SeleniumBase):
             '//*[@id="filter-fixed"]/table[1]/tbody/tr[1]/td[1]/table/tbody/tr[1]/td[3]/a'
         ).click()
         self._assert_index_date(2001, 1)
+
+    def test_index_filter_inout(self):
+        self._login()
+        self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+        is_income = [True, True, False, False, False, False, True, False, False, False, True, True, False, False, False, False, True]
+
+        # 収入だけ表示
+        self.driver.find_element_by_xpath('//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[2]/td/label[2]').click()
+        actuals = self.driver.find_elements_by_xpath('//*[@id="transactions"]/table/tbody/tr')
+        self._assert_is_displayed(actuals, is_income)
+
+        # どちらも非表示
+        self.driver.find_element_by_xpath('//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[2]/td/label[1]').click()
+        actuals = self.driver.find_elements_by_xpath('//*[@id="transactions"]/table/tbody/tr')
+        self.assertEqual(len(actuals), len(is_income) + 1)
+        for i in range(len(is_income)):
+            with self.subTest(i=i):
+                self.assertEqual(actuals[i + 1].is_displayed(), False)
+
+        # 支出だけ表示
+        self.driver.find_element_by_xpath('//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[2]/td/label[2]').click()
+        actuals = self.driver.find_elements_by_xpath('//*[@id="transactions"]/table/tbody/tr')
+        self.assertEqual(len(actuals), len(is_income) + 1)
+        for i in range(len(is_income)):
+            with self.subTest(i=i):
+                self.assertEqual(actuals[i + 1].is_displayed(), not is_income[i])
+
+    def test_index_filter_method(self):
+        self._login()
+        self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+
+        # 全部非表示
+        self.driver.find_element_by_xpath('//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label[1]').click()
+        self.driver.find_element_by_xpath('//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label[2]').click()
+        self.driver.find_element_by_xpath('//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label[3]').click()
+        self.driver.find_element_by_xpath('//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label[4]').click()
+        self.driver.find_element_by_xpath('//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label[5]').click()
+        expects = [False] * 17
+        actuals = self.driver.find_elements_by_xpath('//*[@id="transactions"]/table/tbody/tr')
+        self._assert_is_displayed(actuals, expects)
+
+        # 銀行のみ表示
+        self.driver.find_element_by_xpath('//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label[1]').click()
+        expects = [True, False, True, True, True, False, True, True, True, False, True, False, False, True, False, False, True]
+        actuals = self.driver.find_elements_by_xpath('//*[@id="transactions"]/table/tbody/tr')
+        self._assert_is_displayed(actuals, expects)
+
+        # 銀行とPayPay
+        self.driver.find_element_by_xpath('//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label[3]').click()
+        expects = [True, True, True, True, True, True, True, True, True, False, True, False, False, True, False, False, True]
+        actuals = self.driver.find_elements_by_xpath('//*[@id="transactions"]/table/tbody/tr')
+        self._assert_is_displayed(actuals, expects)
+
+    def test_index_filter_category(self):
+        self._login()
+        self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+
+        # 全部非表示
+        self.driver.find_element_by_xpath('//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[1]').click()
+        self.driver.find_element_by_xpath('//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[2]').click()
+        self.driver.find_element_by_xpath('//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[3]').click()
+        self.driver.find_element_by_xpath('//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[4]').click()
+        self.driver.find_element_by_xpath('//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[5]').click()
+        self.driver.find_element_by_xpath('//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[6]').click()
+        expects = [False] * 17
+        actuals = self.driver.find_elements_by_xpath('//*[@id="transactions"]/table/tbody/tr')
+        self._assert_is_displayed(actuals, expects)
+
+        # 食費のみ表示
+        self.driver.find_element_by_xpath('//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[1]').click()
+        expects = [False, True, False, False, False, False, False, False, False, True, False, False, False, False, False, True, False]
+        actuals = self.driver.find_elements_by_xpath('//*[@id="transactions"]/table/tbody/tr')
+        self._assert_is_displayed(actuals, expects)
+
+        # 食費と必需品
+        self.driver.find_element_by_xpath('//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[2]').click()
+        expects = [True, True, True, True, True, False, False, False, False, True, True, True, True, True, False, True, False]
+        actuals = self.driver.find_elements_by_xpath('//*[@id="transactions"]/table/tbody/tr')
+        self._assert_is_displayed(actuals, expects)
+
+        # 食費と必需品と内部移動
+        self.driver.find_element_by_xpath('//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[4]').click()
+        expects = [True, True, True, True, True, True, True, False, False, True, True, True, True, True, False, True, False]
+        actuals = self.driver.find_elements_by_xpath('//*[@id="transactions"]/table/tbody/tr')
+        self._assert_is_displayed(actuals, expects)
+
+    def test_index_filter_all(self):
+        self._login()
+        self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+
+        # 全解除
+        self.driver.find_element_by_xpath('//*[@id="filter-fixed"]/table[1]/tbody/tr[3]/td[1]/input[@value="全解除"]').click()
+        expects = [False] * 17
+        actuals = self.driver.find_elements_by_xpath('//*[@id="transactions"]/table/tbody/tr')
+        self._assert_is_displayed(actuals, expects)
+
+        # 全選択
+        self.driver.find_element_by_xpath('//*[@id="filter-fixed"]/table[1]/tbody/tr[3]/td[1]/input[@value="全選択"]').click()
+        expects = [True] * 17
+        actuals = self.driver.find_elements_by_xpath('//*[@id="transactions"]/table/tbody/tr')
+        self._assert_is_displayed(actuals, expects)
