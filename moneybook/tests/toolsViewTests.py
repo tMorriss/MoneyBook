@@ -82,6 +82,13 @@ class CheckedDateViewTests(BaseTestCase):
                 'day': 2
             },
             {
+                'name': 'Kyash',
+                'balance': 0,
+                'year': 2000,
+                'month': 2,
+                'day': 3
+            },
+            {
                 'name': 'PayPay',
                 'balance': -1800,
                 'year': 2000,

@@ -24,7 +24,7 @@ class BaseTestCase(TestCase):
 
     def _assert_all_methods(self, response):
         data = response.context['methods']
-        expects = ['銀行', "現金", "PayPay"]
+        expects = ['銀行', '現金', 'Kyash', 'PayPay']
         self._assert_list(data, expects)
 
     def _assert_all_unused_methods(self, response):
@@ -34,7 +34,7 @@ class BaseTestCase(TestCase):
 
     def _assert_all_chargeable_methods(self, response):
         data = response.context['chargeable_methods']
-        expects = ['PayPay']
+        expects = ['Kyash', 'PayPay']
         self._assert_list(data, expects)
 
     def _assert_all_first_categories(self, response):

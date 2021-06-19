@@ -22,7 +22,7 @@
 - model: moneybook.Method
   pk: 3
   fields:
-    show_order: 3
+    show_order: 4
     name: PayPay
     chargeable: 1
 - model: moneybook.Method
@@ -36,6 +36,12 @@
   fields:
     show_order: -1
     name: Edy
+    chargeable: 1
+- model: moneybook.Method
+  pk: 6
+  fields:
+    show_order: 3
+    name: Kyash
     chargeable: 1
 
 - model: moneybook.Category
@@ -387,3 +393,8 @@
   fields:
     method: 3
     date: 2000-02-02
+- model: moneybook.CheckedDate
+  pk: 6
+  fields:
+    method: 6
+    date: 2000-02-03

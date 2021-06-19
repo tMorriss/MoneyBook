@@ -83,6 +83,7 @@ class IndexBalanceStatisticMiniViewTestCase(BaseTestCase):
         expects = [
             {'label': '銀行', 'balance': 52424},
             {'label': '現金', 'balance': -3930},
+            {'label': 'Kyash', 'balance': 0},
             {'label': 'PayPay', 'balance': -1800}
         ]
         iobs = response.context['methods_iob']
@@ -94,6 +95,7 @@ class IndexBalanceStatisticMiniViewTestCase(BaseTestCase):
         expects = [
             {'label': '銀行', 'income': 31723, 'outgo': 3120},
             {'label': '現金', 'income': 3000, 'outgo': 6430},
+            {'label': 'Kyash', 'income': 0, 'outgo': 0},
             {'label': 'PayPay', 'income': 400, 'outgo': 1000}
         ]
         iobs = response.context['methods_monthly_iob']
