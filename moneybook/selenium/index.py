@@ -52,6 +52,8 @@ class Index(SeleniumBase):
         self.assertEqual(tds[2].text, '1,000')
         self.assertEqual(tds[3].text, method)
         self.assertEqual(tds[4].text, category)
+        # 未チェック確認
+        self.assertEqual(Color.from_string(rows[1].value_of_css_property('background-color')), Color.from_string('rgba(0, 0, 0, 0)'))
 
         # 入力欄が戻っていることを確認
         self._assert_initialized_add_mini(now.year, now.month)
