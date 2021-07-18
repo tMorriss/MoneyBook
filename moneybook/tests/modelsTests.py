@@ -23,7 +23,7 @@ class MethodTestCase(BaseTestCase):
 
     def test_list(self):
         ls = Method.list()
-        expects = ['銀行', '現金', 'PayPay']
+        expects = ['銀行', '現金', 'Kyash', 'PayPay']
         self._assert_list(ls, expects)
 
     def test_unused_list(self):
@@ -33,7 +33,7 @@ class MethodTestCase(BaseTestCase):
 
     def test_chargeable_list(self):
         ls = Method.chargeable_list()
-        expects = ['PayPay']
+        expects = ['Kyash', 'PayPay']
         self._assert_list(ls, expects)
 
 

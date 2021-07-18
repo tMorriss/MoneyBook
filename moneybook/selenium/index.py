@@ -52,6 +52,8 @@ class Index(SeleniumBase):
         self.assertEqual(tds[2].text, '1,000')
         self.assertEqual(tds[3].text, method)
         self.assertEqual(tds[4].text, category)
+        # 未チェック確認
+        self.assertEqual(Color.from_string(rows[1].value_of_css_property('background-color')), Color.from_string('rgba(0, 0, 0, 0)'))
 
         # 入力欄が戻っていることを確認
         self._assert_initialized_add_mini(now.year, now.month)
@@ -117,7 +119,7 @@ class Index(SeleniumBase):
         # 追加部分
         self._assert_initialized_add_mini(2000, 1)
 
-        expects = ['銀行', '現金', 'PayPay']
+        expects = ['銀行', '現金', 'Kyash', 'PayPay']
         actuals = self.driver.find_elements_by_xpath('//*[@id="filter-fixed"]/form/table/tbody/tr[4]/td/label')
         self._assert_texts(actuals, expects)
 
@@ -150,7 +152,7 @@ class Index(SeleniumBase):
         inputs = self.driver.find_elements_by_xpath('//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[2]/td/input')
         for i in inputs:
             self.assertTrue(i.is_selected())
-        expects = ['銀行', '現金', 'PayPay', 'nanaco', 'Edy']
+        expects = ['銀行', '現金', 'Kyash', 'PayPay', 'nanaco', 'Edy']
         actuals = self.driver.find_elements_by_xpath('//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label')
         self._assert_texts(actuals, expects)
         actuals = self.driver.find_elements_by_xpath('//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/input')
@@ -183,10 +185,10 @@ class Index(SeleniumBase):
 
         # 残高
         self.assertEqual(self.driver.find_element_by_xpath('//*[@id="statistic-fixed"]/table[1]/tbody/tr/td[2]').text, '46,694円')
-        expects = ['銀行', '現金', 'PayPay']
+        expects = ['銀行', '現金', 'Kyash', 'PayPay']
         actuals = self.driver.find_elements_by_xpath('//*[@id="statistic-fixed"]/table[2]/tbody/tr[1]/th')
         self._assert_texts(actuals, expects)
-        expects = ['52,424円', '-3,930円', '-1,800円']
+        expects = ['52,424円', '-3,930円', '0円', '-1,800円']
         actuals = self.driver.find_elements_by_xpath('//*[@id="statistic-fixed"]/table[2]/tbody/tr[2]/td')
         self._assert_texts(actuals, expects)
 
@@ -222,13 +224,13 @@ class Index(SeleniumBase):
                 self.assertEqual(actuals[i].find_element_by_tag_name('td').text, expects[i]['value'])
 
         actuals = self.driver.find_elements_by_xpath('//*[@id="statistic-fixed"]/table[4]/tbody/tr[1]/th')
-        expects = ['', '銀行', '現金', 'PayPay']
+        expects = ['', '銀行', '現金', 'Kyash', 'PayPay']
         self._assert_texts(actuals, expects)
         actuals = self.driver.find_elements_by_xpath('//*[@id="statistic-fixed"]/table[4]/tbody/tr[2]/td')
-        expects = ['31,723', '3,000', '400']
+        expects = ['31,723', '3,000', '0', '400']
         self._assert_texts(actuals, expects)
         actuals = self.driver.find_elements_by_xpath('//*[@id="statistic-fixed"]/table[4]/tbody/tr[3]/td')
-        expects = ['3,120', '6,430', '1,000']
+        expects = ['3,120', '6,430', '0', '1,000']
         self._assert_texts(actuals, expects)
 
     def test_index_month_out_of_range(self):
@@ -279,13 +281,13 @@ class Index(SeleniumBase):
         self.assertEqual(len(rows), 4)
         tds = rows[1].find_elements_by_tag_name('td')
         self.assertEqual(tds[0].text, str(now.year) + "/" + str.zfill(str(now.month), 2) + "/" + '03')
-        self.assertEqual(tds[1].text, 'PayPayチャージ')
+        self.assertEqual(tds[1].text, 'Kyashチャージ')
         self.assertEqual(tds[2].text, '2,000')
-        self.assertEqual(tds[3].text, 'PayPay')
+        self.assertEqual(tds[3].text, 'Kyash')
         self.assertEqual(tds[4].text, '内部移動')
         tds = rows[2].find_elements_by_tag_name('td')
         self.assertEqual(tds[0].text, str(now.year) + "/" + str.zfill(str(now.month), 2) + "/" + '03')
-        self.assertEqual(tds[1].text, 'PayPayチャージ')
+        self.assertEqual(tds[1].text, 'Kyashチャージ')
         self.assertEqual(tds[2].text, '2,000')
         self.assertEqual(tds[3].text, '銀行')
         self.assertEqual(tds[4].text, '内部移動')
@@ -293,7 +295,7 @@ class Index(SeleniumBase):
         self.assertEqual(tds[0].text, str(now.year) + "/" + str.zfill(str(now.month), 2) + "/" + '03')
         self.assertEqual(tds[1].text, 'テスト1')
         self.assertEqual(tds[2].text, '2,000')
-        self.assertEqual(tds[3].text, 'PayPay')
+        self.assertEqual(tds[3].text, 'Kyash')
         self.assertEqual(tds[4].text, '食費')
 
     def test_invalid_add_str_year(self):
@@ -430,7 +432,7 @@ class Index(SeleniumBase):
         self._assert_is_displayed(actuals, expects)
 
         # 銀行とPayPay
-        self.driver.find_element_by_xpath('//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label[3]').click()
+        self.driver.find_element_by_xpath('//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label[4]').click()
         expects = [True, True, True, True, True, True, True, True, True, False, True, False, False, True, False, False, True]
         actuals = self.driver.find_elements_by_xpath('//*[@id="transactions"]/table/tbody/tr')
         self._assert_is_displayed(actuals, expects)
@@ -483,3 +485,10 @@ class Index(SeleniumBase):
         expects = [True] * 17
         actuals = self.driver.find_elements_by_xpath('//*[@id="transactions"]/table/tbody/tr')
         self._assert_is_displayed(actuals, expects)
+
+    def test_move_edit(self):
+        self._login()
+        self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+        self.driver.find_element_by_xpath('//*[@id="transactions"]/table/tbody/tr[2]/td[6]/a').click()
+
+        self.assertEqual(self.driver.current_url, self.live_server_url + reverse('moneybook:edit', kwargs={'pk': 18}))

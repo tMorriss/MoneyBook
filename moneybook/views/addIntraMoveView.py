@@ -24,8 +24,7 @@ class AddIntraMoveView(View):
                 out_data.method = Method.get(request.POST.get("before_method"))
                 out_data.category = Category.get_intra_move()
                 out_data.temp = False
-                out_data.item = Method.get(
-                    request.POST.get("after_method")).name + "チャージ"
+                out_data.item = request.POST.get('item')
 
                 in_data = Data()
                 in_data.date = date(int(request.POST.get("year")), int(
@@ -35,7 +34,7 @@ class AddIntraMoveView(View):
                 in_data.method = Method.get(request.POST.get("after_method"))
                 in_data.category = Category.get_intra_move()
                 in_data.temp = False
-                in_data.item = in_data.method.name + "チャージ"
+                in_data.item = request.POST.get('item')
 
                 # 保存
                 out_data.save()

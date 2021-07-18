@@ -54,6 +54,9 @@ function keyPressIntra(code) {
 }
 
 function sendCharge() {
+    method_id = $('input[name="c_method"]:checked').attr('id');
+    label_id = $('#lbl_' + method_id).text();
+
     $.post({
         url: intra_move_url,
         data: {
@@ -61,6 +64,7 @@ function sendCharge() {
             "year": $('#c_year').val(),
             "month": $('#c_month').val(),
             "day": $('#c_day').val(),
+            "item": label_id + "チャージ",
             "price": removeComma($('#c_price').val()),
             "before_method": 2,
             "after_method": $('input[name="c_method"]:checked').val(),
