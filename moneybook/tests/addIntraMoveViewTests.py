@@ -36,7 +36,7 @@ class AddIntraMoveViewTestCase(BaseTestCase):
         self.assertEqual(response.content.decode(), '')
         after_count = Data.get_all_data().count()
         self.assertEqual(after_count, before_count + 2)
-        before = Data.get_all_data()[after_count-2]
+        before = Data.get_all_data()[after_count - 2]
         self.assertEqual(before.date, date(2000, 4, 1))
         self.assertEqual(before.item, '内部移動テスト')
         self.assertEqual(before.price, 20000)
@@ -45,7 +45,7 @@ class AddIntraMoveViewTestCase(BaseTestCase):
         self.assertEqual(before.category.pk, 4)
         self.assertEqual(before.temp, False)
         self.assertEqual(before.checked, False)
-        after = Data.get_all_data()[after_count-1]
+        after = Data.get_all_data()[after_count - 1]
         self.assertEqual(after.date, date(2000, 4, 1))
         self.assertEqual(after.item, '内部移動テスト')
         self.assertEqual(after.price, 20000)
