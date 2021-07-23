@@ -48,6 +48,10 @@ class Method(models.Model):
     def get_bank():
         return Method.objects.get(name="銀行")
 
+    @staticmethod
+    def get_paypay():
+        return Method.objects.get(name="PayPay")
+
 
 class Category(models.Model):
     show_order = models.IntegerField(default=-100)
@@ -77,6 +81,14 @@ class Category(models.Model):
     @staticmethod
     def get_intra_move():
         return Category.objects.get(name='内部移動')
+
+    @staticmethod
+    def get_deposit():
+        return Category.objects.get(name='貯金')
+
+    @staticmethod
+    def get_income():
+        return Category.objects.get(name='収入')
 
 
 class Data(models.Model):
