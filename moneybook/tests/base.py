@@ -44,7 +44,7 @@ class BaseTestCase(TestCase):
 
     def _assert_all_latter_categories(self, response):
         data = response.context['latter_categories']
-        expects = ['その他', '内部移動', '貯金', '計算外']
+        expects = ['その他', '内部移動', '貯金', '計算外', '収入']
         self._assert_list(data, expects)
 
     def _assert_all_temps(self, response):

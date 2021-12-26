@@ -86,6 +86,13 @@
     show_order: -3
     is_living_cost: 0
     is_variable_cost: 0
+- model: moneybook.Category
+  pk: 7
+  fields:
+    name: 収入
+    show_order: -4
+    is_living_cost: 0
+    is_variable_cost: 0
 
 - model: moneybook.Data
   pk: 1
