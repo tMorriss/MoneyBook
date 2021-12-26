@@ -128,7 +128,7 @@ class Index(SeleniumBase):
         expects = ['食費', '必需品']
         actuals = self.driver.find_elements(By.XPATH, '//*[@id="filter-fixed"]/form/table/tbody/tr[5]/td/table/tbody/tr[1]/td/label')
         self._assert_texts(actuals, expects)
-        expects = ['その他', '内部移動', '貯金', '計算外']
+        expects = ['その他', '内部移動', '貯金', '計算外', '収入']
         actuals = self.driver.find_elements(By.XPATH, '//*[@id="filter-fixed"]/form/table/tbody/tr[5]/td/table/tbody/tr[2]/td/label')
         self._assert_texts(actuals, expects)
 
@@ -160,7 +160,7 @@ class Index(SeleniumBase):
         actuals = self.driver.find_elements(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/input')
         for i in inputs:
             self.assertTrue(i.is_selected())
-        expects = ['食費', '必需品', 'その他', '内部移動', '貯金', '計算外']
+        expects = ['食費', '必需品', 'その他', '内部移動', '貯金', '計算外', '収入']
         actuals = self.driver.find_elements(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label')
         self._assert_texts(actuals, expects)
         actuals = self.driver.find_elements(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/input')
