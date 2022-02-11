@@ -92,8 +92,8 @@ function sendSuicaCharge() {
             "item": "Suicaチャージ",
             "price": removeComma($('#s_price').val()),
             "direction": 2,
-            "method": 2,
-            "category": 4,
+            "method": bank_pk,
+            "category": traffic_cost_pk,
             "temp": "False",
             "checked": "False",
         }
@@ -114,8 +114,8 @@ function sendPayPayCachebackBonus() {
             "item": "PayPayキャッシュバック",
             "price": removeComma($('#s_price').val()),
             "direction": 1,
-            "method": 5,
-            "category": 12,
+            "method": paypay_pk,
+            "category": income_pk,
             "temp": "False",
             "checked": "False",
         }
@@ -128,8 +128,8 @@ function sendPayPayCachebackBonus() {
                 "item": "ボーナス運用",
                 "price": removeComma($('#s_price').val()),
                 "direction": 2,
-                "method": 5,
-                "category": 11,
+                "method": paypay_pk,
+                "category": deposit_pk,
                 "temp": "False",
                 "checked": "False",
             }

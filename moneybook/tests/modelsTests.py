@@ -44,12 +44,12 @@ class CategoryTestCase(BaseTestCase):
 
     def test_list(self):
         ls = Category.list()
-        expects = ['収入', '計算外', '貯金', '内部移動', 'その他', '食費', '必需品']
+        expects = ['収入', '計算外', '貯金', '内部移動', 'その他', '食費', '必需品', '交通費']
         self._assert_list(ls, expects)
 
     def test_first_list(self):
         ls = Category.first_list()
-        expects = ['食費', '必需品']
+        expects = ['食費', '必需品', '交通費']
         self._assert_list(ls, expects)
 
     def test_latter_list(self):
