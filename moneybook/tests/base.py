@@ -39,7 +39,7 @@ class BaseTestCase(TestCase):
 
     def _assert_all_first_categories(self, response):
         data = response.context['first_categories']
-        expects = ['食費', '必需品']
+        expects = ['食費', '必需品', '交通費']
         self._assert_list(data, expects)
 
     def _assert_all_latter_categories(self, response):

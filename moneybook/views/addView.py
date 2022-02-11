@@ -23,6 +23,11 @@ class AddView(View):
             'first_categories': Category.first_list(),
             'latter_categories': Category.latter_list(),
             'temps': {0: "No", 1: "Yes"},
+            'paypay_pk': Method.get_paypay().pk,
+            'bank_pk': Method.get_bank().pk,
+            'traffic_cost_pk': Category.get_traffic_cost().pk,
+            'deposit_pk': Category.get_deposit().pk,
+            'income_pk': Category.get_income().pk,
         }
         return render(request, 'add.html', context)
 

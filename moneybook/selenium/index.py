@@ -125,7 +125,7 @@ class Index(SeleniumBase):
         actuals = self.driver.find_elements(By.XPATH, '//*[@id="filter-fixed"]/form/table/tbody/tr[4]/td/label')
         self._assert_texts(actuals, expects)
 
-        expects = ['食費', '必需品']
+        expects = ['食費', '必需品', '交通費']
         actuals = self.driver.find_elements(By.XPATH, '//*[@id="filter-fixed"]/form/table/tbody/tr[5]/td/table/tbody/tr[1]/td/label')
         self._assert_texts(actuals, expects)
         expects = ['その他', '内部移動', '貯金', '計算外', '収入']
@@ -160,7 +160,7 @@ class Index(SeleniumBase):
         actuals = self.driver.find_elements(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/input')
         for i in inputs:
             self.assertTrue(i.is_selected())
-        expects = ['食費', '必需品', 'その他', '内部移動', '貯金', '計算外', '収入']
+        expects = ['食費', '必需品', '交通費', 'その他', '内部移動', '貯金', '計算外', '収入']
         actuals = self.driver.find_elements(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label')
         self._assert_texts(actuals, expects)
         actuals = self.driver.find_elements(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/input')
@@ -199,7 +199,8 @@ class Index(SeleniumBase):
         expects = [
             {'name': 'その他', 'price': '30'},
             {'name': '食費', 'price': '2500'},
-            {'name': '必需品', 'price': '5390'}
+            {'name': '必需品', 'price': '5390'},
+            {'name': '交通費', 'price': '0'}
         ]
         self.assertEqual(len(actuals), len(expects))
         for i in range(len(actuals)):
@@ -413,7 +414,7 @@ class Index(SeleniumBase):
             with self.subTest(i=i):
                 self.assertEqual(actuals[i + 1].is_displayed(), not is_income[i])
 
-    def test_index_filter_method(self):
+    def test_index_filter_method_none(self):
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
 
@@ -427,19 +428,32 @@ class Index(SeleniumBase):
         actuals = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self._assert_is_displayed(actuals, expects)
 
+    def test_index_filter_bank(self):
+        self._login()
+        self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+
         # 銀行のみ表示
-        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label[1]').click()
+        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label[2]').click()
+        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label[3]').click()
+        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label[4]').click()
+        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label[5]').click()
         expects = [True, False, True, True, True, False, True, True, True, False, True, False, False, True, False, False, True]
         actuals = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self._assert_is_displayed(actuals, expects)
 
+    def test_index_filter_bank_paypay(self):
+        self._login()
+        self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+
         # 銀行とPayPay
-        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label[4]').click()
+        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label[2]').click()
+        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label[3]').click()
+        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label[5]').click()
         expects = [True, True, True, True, True, True, True, True, True, False, True, False, False, True, False, False, True]
         actuals = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self._assert_is_displayed(actuals, expects)
 
-    def test_index_filter_category(self):
+    def test_index_filter_category_none(self):
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
 
@@ -450,24 +464,52 @@ class Index(SeleniumBase):
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[4]').click()
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[5]').click()
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[6]').click()
+        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[7]').click()
         expects = [False] * 17
         actuals = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self._assert_is_displayed(actuals, expects)
 
+    def test_index_filter_category_food(self):
+        self._login()
+        self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+
         # 食費のみ表示
-        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[1]').click()
+        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[2]').click()
+        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[3]').click()
+        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[4]').click()
+        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[5]').click()
+        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[6]').click()
+        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[7]').click()
+        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[8]').click()
         expects = [False, True, False, False, False, False, False, False, False, True, False, False, False, False, False, True, False]
         actuals = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self._assert_is_displayed(actuals, expects)
 
+    def test_index_filter_category_food_necessary(self):
+        self._login()
+        self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+
         # 食費と必需品
-        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[2]').click()
+        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[3]').click()
+        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[4]').click()
+        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[5]').click()
+        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[6]').click()
+        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[7]').click()
+        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[8]').click()
         expects = [True, True, True, True, True, False, False, False, False, True, True, True, True, True, False, True, False]
         actuals = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self._assert_is_displayed(actuals, expects)
 
+    def test_index_filter_category_food_necessary_intra(self):
+        self._login()
+        self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+
         # 食費と必需品と内部移動
+        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[3]').click()
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[4]').click()
+        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[6]').click()
+        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[7]').click()
+        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[8]').click()
         expects = [True, True, True, True, True, True, True, False, False, True, True, True, True, True, False, True, False]
         actuals = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self._assert_is_displayed(actuals, expects)

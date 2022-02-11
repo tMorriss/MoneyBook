@@ -12,6 +12,12 @@
     direction_first = "{{ directions.first.pk }}"
     method_first = "{{ methods.first.pk }}";
     category_first = "{{ first_categories.first.pk }}";
+
+    paypay_pk = "{{ paypay_pk }}";
+    bank_pk = "{{ bank_pk }}";
+    traffic_cost_pk = "{{ traffic_cost_pk }}";
+    deposit_pk = "{{ deposit_pk }}";
+    income_pk = "{{ income_pk }}";
 </script>
 {% endblock %}
 
@@ -24,26 +30,23 @@
             <tr>
                 <th>日付</th>
                 <td>
-                    <input type="text" id="c_year" style="width:6ex" class="righter"
-                        onkeypress="keyPressCharge(event.keyCode)" value="{{ year }}">年
-                    <input type="text" id="c_month" style="width:5ex" class="righter"
-                        onkeypress="keyPressCharge(event.keyCode)" value="{{ month }}">月
-                    <input type="text" id="c_day" style="width:5ex" class="righter"
-                        onkeypress="keyPressCharge(event.keyCode)" autofocus>日
+                    <input type="text" id="c_year" style="width:6ex" class="righter" onkeypress="keyPressCharge(event.keyCode)"
+                        value="{{ year }}">年
+                    <input type="text" id="c_month" style="width:5ex" class="righter" onkeypress="keyPressCharge(event.keyCode)"
+                        value="{{ month }}">月
+                    <input type="text" id="c_day" style="width:5ex" class="righter" onkeypress="keyPressCharge(event.keyCode)" autofocus>日
                 </td>
             </tr>
             <tr>
                 <th>金額</th>
-                <td><input type="text" id="c_price" style="width:10ex" class="righter"
-                        onkeypress="keyPressCharge(event.keyCode)">円</td>
+                <td><input type="text" id="c_price" style="width:10ex" class="righter" onkeypress="keyPressCharge(event.keyCode)">円</td>
             </tr>
             <tr>
                 <th>移動先</th>
                 <td class="radio-green">
                     {% for m in chargeable_methods %}
-                    <input type="radio" name="c_method" value="{{ m.pk }}" id="c_method-{{ m.pk }}"
-                        {% if m == chargeable_methods.first %} checked{% endif %}
-                        onkeypress="keyPressCharge(event.keyCode)" onfocus="addBlueFocus('#lbl_c_method-{{ m.pk }}')"
+                    <input type="radio" name="c_method" value="{{ m.pk }}" id="c_method-{{ m.pk }}" {% if m == chargeable_methods.first %}
+                        checked{% endif %} onkeypress="keyPressCharge(event.keyCode)" onfocus="addBlueFocus('#lbl_c_method-{{ m.pk }}')"
                         onblur="removeBlueFocus('#lbl_c_method-{{ m.pk }}')">
                     <label for="c_method-{{ m.pk }}" id="lbl_c_method-{{ m.pk }}">{{ m.name }}</label>
                     {% endfor %}
@@ -58,12 +61,11 @@
             <tr>
                 <th>日付</th>
                 <td>
-                    <input type="text" id="m_year" style="width:6ex" class="righter"
-                        onkeypress="keyPressIntra(event.keyCode)" value="{{ year }}">年
-                    <input type="text" id="m_month" style="width:5ex" class="righter"
-                        onkeypress="keyPressIntra(event.keyCode)" value="{{ month }}">月
-                    <input type="text" id="m_day" style="width:5ex" class="righter"
-                        onkeypress="keyPressIntra(event.keyCode)" autofocus>日
+                    <input type="text" id="m_year" style="width:6ex" class="righter" onkeypress="keyPressIntra(event.keyCode)"
+                        value="{{ year }}">年
+                    <input type="text" id="m_month" style="width:5ex" class="righter" onkeypress="keyPressIntra(event.keyCode)"
+                        value="{{ month }}">月
+                    <input type="text" id="m_day" style="width:5ex" class="righter" onkeypress="keyPressIntra(event.keyCode)" autofocus>日
                 </td>
             </tr>
             <tr>
@@ -72,15 +74,14 @@
             </tr>
             <tr>
                 <th>金額</th>
-                <td><input type="text" id="m_price" style="width:10ex" class="righter"
-                        onkeypress="keyPressIntra(event.keyCode)">円</td>
+                <td><input type="text" id="m_price" style="width:10ex" class="righter" onkeypress="keyPressIntra(event.keyCode)">円</td>
             </tr>
             <tr>
                 <th>移動元</th>
                 <td class="radio-green">
                     {% for m in methods %}
-                    <input type="radio" name="m_before_method" value="{{ m.pk }}" id="m_before_method-{{ m.pk }}"
-                        {% if m == methods.first %} checked{% endif %} onkeypress="keyPressIntra(event.keyCode)"
+                    <input type="radio" name="m_before_method" value="{{ m.pk }}" id="m_before_method-{{ m.pk }}" {% if m == methods.first %}
+                        checked{% endif %} onkeypress="keyPressIntra(event.keyCode)"
                         onfocus="addBlueFocus('#lbl_m_before_method-{{ m.pk }}')"
                         onblur="removeBlueFocus('#lbl_m_before_method-{{ m.pk }}')">
                     <label for="m_before_method-{{ m.pk }}" id="lbl_m_before_method-{{ m.pk }}">{{ m.name }}</label>
@@ -91,10 +92,9 @@
                 <th>移動先</th>
                 <td class="radio-green">
                     {% for m in methods %}
-                    <input type="radio" name="m_after_method" value="{{ m.pk }}" id="m_after_method-{{ m.pk }}"
-                        {% if m == methods.first %} checked{% endif %} onkeypress="keyPressIntra(event.keyCode)"
-                        onfocus="addBlueFocus('#lbl_m_after_method-{{ m.pk }}')"
-                        onblur="removeBlueFocus('#lbl_m_after_method-{{ m.pk }}')">
+                    <input type="radio" name="m_after_method" value="{{ m.pk }}" id="m_after_method-{{ m.pk }}" {% if m == methods.first %}
+                        checked{% endif %} onkeypress="keyPressIntra(event.keyCode)"
+                        onfocus="addBlueFocus('#lbl_m_after_method-{{ m.pk }}')" onblur="removeBlueFocus('#lbl_m_after_method-{{ m.pk }}')">
                     <label for="m_after_method-{{ m.pk }}" id="lbl_m_after_method-{{ m.pk }}">{{ m.name }}</label>
                     {% endfor %}
                 </td>
@@ -120,8 +120,7 @@
             <tr>
                 <th>項目</th>
                 <td>
-                    <input type="button" class="btn-apply" onclick="sendPayPayCachebackBonus()"
-                        value="PayPayキャッシュバック&ボーナス">
+                    <input type="button" class="btn-apply" onclick="sendPayPayCachebackBonus()" value="PayPayキャッシュバック&ボーナス">
                     <input type="button" class="btn-apply" onclick="sendSuicaCharge()" value="Suicaチャージ">
                 </td>
             </tr>
@@ -133,12 +132,9 @@
             <tr>
                 <th>日付</th>
                 <td>
-                    <input type="text" id="a_year" style="width:6ex" class="righter"
-                        onkeypress="keyPressAdd(event.keyCode)" value={{ year }}>年
-                    <input type="text" id="a_month" style="width:5ex" class="righter"
-                        onkeypress="keyPressAdd(event.keyCode)" value={{ month }}>月
-                    <input type="text" id="a_day" style="width:5ex" class="righter"
-                        onkeypress="keyPressAdd(event.keyCode)">日
+                    <input type="text" id="a_year" style="width:6ex" class="righter" onkeypress="keyPressAdd(event.keyCode)" value={{ year }}>年
+                    <input type="text" id="a_month" style="width:5ex" class="righter" onkeypress="keyPressAdd(event.keyCode)" value={{ month }}>月
+                    <input type="text" id="a_day" style="width:5ex" class="righter" onkeypress="keyPressAdd(event.keyCode)">日
                 </td>
             </tr>
             <tr>
@@ -147,16 +143,14 @@
             </tr>
             <tr>
                 <th>金額</th>
-                <td><input type="text" id="a_price" style="width:10ex" class="righter"
-                        onkeypress="keyPressAdd(event.keyCode)">円</td>
+                <td><input type="text" id="a_price" style="width:10ex" class="righter" onkeypress="keyPressAdd(event.keyCode)">円</td>
             </tr>
             <tr>
                 <th>方向</th>
                 <td class="radio-green">
                     {% for d in directions %}
-                    <input type="radio" name="a_direction" value="{{ d.pk }}" id="a_direction-{{ d.pk }}"
-                        {% if d == directions.first %} checked{% endif %} onkeypress="keyPressAdd(event.keyCode)"
-                        onfocus="addBlueFocus('#lbl_a_direction-{{ d.pk }}')"
+                    <input type="radio" name="a_direction" value="{{ d.pk }}" id="a_direction-{{ d.pk }}" {% if d == directions.first %}
+                        checked{% endif %} onkeypress="keyPressAdd(event.keyCode)" onfocus="addBlueFocus('#lbl_a_direction-{{ d.pk }}')"
                         onblur="removeBlueFocus('#lbl_a_direction-{{ d.pk }}')">
                     <label for="a_direction-{{ d.pk }}" id="lbl_a_direction-{{ d.pk }}">{{ d.name }}</label>
                     {% endfor %}
@@ -166,9 +160,8 @@
                 <th>支払い方法</th>
                 <td class="radio-green">
                     {% for m in methods %}
-                    <input type="radio" name="a_method" value="{{ m.pk }}" id="a_method-{{ m.pk }}"
-                        {% if m == methods.first %} checked{% endif %} onkeypress="keyPressAdd(event.keyCode)"
-                        onfocus="addBlueFocus('#lbl_a_method-{{ m.pk }}')"
+                    <input type="radio" name="a_method" value="{{ m.pk }}" id="a_method-{{ m.pk }}" {% if m == methods.first %} checked{% endif %}
+                        onkeypress="keyPressAdd(event.keyCode)" onfocus="addBlueFocus('#lbl_a_method-{{ m.pk }}')"
                         onblur="removeBlueFocus('#lbl_a_method-{{ m.pk }}')">
                     <label for="a_method-{{ m.pk }}" id="lbl_a_method-{{ m.pk }}">{{ m.name }}</label>
                     {% endfor %}
@@ -178,9 +171,8 @@
                 <th>分類</th>
                 <td class="radio-green">
                     {% for g in first_categories %}
-                    <input type="radio" name="a_category" value="{{ g.pk }}" id="a_category-{{ g.pk }}"
-                        {% if g == first_categories.first %} checked{% endif %} onkeypress="keyPressAdd(event.keyCode)"
-                        onfocus="addBlueFocus('#lbl_a_category-{{ g.pk }}')"
+                    <input type="radio" name="a_category" value="{{ g.pk }}" id="a_category-{{ g.pk }}" {% if g == first_categories.first %}
+                        checked{% endif %} onkeypress="keyPressAdd(event.keyCode)" onfocus="addBlueFocus('#lbl_a_category-{{ g.pk }}')"
                         onblur="removeBlueFocus('#lbl_a_category-{{ g.pk }}')">
                     <label for="a_category-{{ g.pk }}" id="lbl_a_category-{{ g.pk }}">{{ g.name }}</label>
                     {% endfor %}
@@ -196,16 +188,15 @@
                 <th>立替</th>
                 <td class="radio-green">
                     {% for k,v in temps.items %}
-                    <input type="radio" name="a_temp" value="{% if k == 0 %}False{% else %}True{% endif %}"
-                        id="a_temp-{{ k }}" {% if k == 0 %} checked{% endif %} onkeypress="keyPressAdd(event.keyCode)"
-                        onfocus="addBlueFocus('#lbl_a_temp-{{ k }}')" onblur="removeBlueFocus('#lbl_a_temp-{{ k }}')">
+                    <input type="radio" name="a_temp" value="{% if k == 0 %}False{% else %}True{% endif %}" id="a_temp-{{ k }}" {% if k == 0 %} checked{% endif %}
+                        onkeypress="keyPressAdd(event.keyCode)" onfocus="addBlueFocus('#lbl_a_temp-{{ k }}')"
+                        onblur="removeBlueFocus('#lbl_a_temp-{{ k }}')">
                     <label for="a_temp-{{ k }}" id="lbl_a_temp-{{ k }}">{{ v }}</label>
                     {% endfor %}
                 </td>
             </tr>
         </table>
-        <input type="button" value="追加" class="btn-apply" onclick="sendAddRow()"
-            onkeypress="keyPressAdd(event.keyCode)">
+        <input type="button" value="追加" class="btn-apply" onclick="sendAddRow()" onkeypress="keyPressAdd(event.keyCode)">
     </form>
 </section>
 {% include "_result_message.html" %}
