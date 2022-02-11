@@ -142,7 +142,8 @@ class IndexChartDataViewTestCase(BaseTestCase):
         actials = [
             {'name': 'その他', 'value': 30},
             {'name': '食費', 'value': 2500},
-            {'name': '必需品', 'value': 5390}
+            {'name': '必需品', 'value': 5390},
+            {'name': '交通費', 'value': 0}
         ]
         keys = list(positive_categories_outgo.keys())
         for i in range(len(keys)):
