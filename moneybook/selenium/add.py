@@ -2,7 +2,6 @@ from datetime import datetime
 
 from django.urls import reverse
 from moneybook.selenium.base import SeleniumBase
-
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.color import Color
@@ -97,8 +96,8 @@ class Add(SeleniumBase):
         self.assertEqual(self.driver.find_element(By.ID, 's_month').get_attribute('value'), str(now.month))
         self.assertEqual(self.driver.find_element(By.ID, 's_day').get_attribute('value'), '')
         self.assertEqual(self.driver.find_element(By.ID, 's_price').get_attribute('value'), '')
-        self.assertEqual(self.driver.find_element(By.XPATH,
-                                                  '//section/form[3]/table/tbody/tr[3]/td/input[1]').get_attribute('value'), 'PayPayキャッシュバック&ボーナス')
+        self.assertEqual(self.driver.find_element(By.XPATH, '//section/form[3]/table/tbody/tr[3]/td/input[1]').get_attribute('value'),
+                         'PayPayキャッシュバック&ボーナス')
         self.assertEqual(self.driver.find_element(By.XPATH,
                                                   '//section/form[3]/table/tbody/tr[3]/td/input[2]').get_attribute('value'), 'Suicaチャージ')
 
