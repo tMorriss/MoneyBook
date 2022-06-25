@@ -185,10 +185,11 @@ function resetAddForm() {
 }
 
 function updateSuccess() {
+    resetAddForm();
     // データ更新
     fetchData();
     // メッセージ表示
-    showResultMsg("Success!", resetAddForm);
+    showResultMsg("Success!", empty);
 }
 
 function drawChartContainer() {
