@@ -13,7 +13,8 @@ function sendAddRow() {
             "checked": "False",
         }
     }).done(() => {
-        showResultMsg("Success!", resetAddForm);
+        resetAddForm();
+        showResultMsg("Success!", empty);
     }).fail(() => {
         // メッセージ表示
         showResultMsg("Error...", empty);
@@ -40,7 +41,8 @@ function sendIntraMove() {
             "after_method": $('input[name="m_after_method"]:checked').val(),
         }
     }).done(() => {
-        showResultMsg("Success!", resetAddForm);
+        resetAddForm();
+        showResultMsg("Success!", empty);
     }).fail(() => {
         // メッセージ表示
         showResultMsg("Error...", empty);
@@ -70,7 +72,8 @@ function sendCharge() {
             "after_method": $('input[name="c_method"]:checked').val(),
         }
     }).done(() => {
-        showResultMsg("Success!", resetForCharge);
+        resetForCharge();
+        showResultMsg("Success!", empty);
     }).fail(() => {
         // メッセージ表示
         showResultMsg("Error...", empty);
@@ -98,7 +101,8 @@ function sendSuicaCharge() {
             "checked": "False",
         }
     }).done(() => {
-        showResultMsg("Success!", resetForShortcut);
+        resetForShortcut();
+        showResultMsg("Success!", empty);
     }).fail(() => {
         // メッセージ表示
         showResultMsg("Error...", empty);
@@ -134,7 +138,8 @@ function sendPayPayCachebackBonus() {
                 "checked": "False",
             }
         }).done(() => {
-            showResultMsg("Success!", resetForShortcut);
+            resetForShortcut();
+            showResultMsg("Success!", empty);
         }).fail(() => {
             // メッセージ表示
             showResultMsg("Error...", empty);
