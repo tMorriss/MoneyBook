@@ -64,12 +64,8 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f build/requirements.txt ]; then pip install -r build/requirements.txt; fi
           if [ -f build/requirements_selenium.txt ]; then pip install -r build/requirements_selenium.txt; fi
-          num=`chrome --version |awk '{print $3}' |awk -F "[.]" '{print $1}'`
-          which chrome
-          chrome --version
-          google-chrome --version
+          num=`google-chrome --version |awk '{print $3}' |awk -F "[.]" '{print $1}'`
           pip3 install chromedriver-binary==${num}.*
-          pip3 list installed
       - name: Test
         run: |
           python manage.py test moneybook.selenium --settings config.settings.test
