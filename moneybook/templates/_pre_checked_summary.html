@@ -1,0 +1,10 @@
+{% load humanize %}
+
+<table class="tbl-summary">
+    <tr>
+        <td class="summary-count">{{ show_data| length }}件</td>
+        <td class="summary-income">収入: {{ income_sum| intcomma }}円</td>
+        <td class="summary-outgo">支出: {{ outgo_sum| intcomma }}円</td>
+        <td><input type="button" class="btn-apply" value="チェック確定" onclick="applyCheck()"></td>
+    </tr>
+</table><br>

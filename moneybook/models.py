@@ -104,6 +104,7 @@ class Data(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     temp = models.BooleanField()
     checked = models.BooleanField(default=False)
+    pre_checked = models.BooleanField(default=False)
 
     def __str__(self):
         return self.item
@@ -247,6 +248,11 @@ class Data(models.Model):
     def get_unchecked_data(data):
         """未チェックのデータを取得"""
         return Data.sort_ascending(data.filter(checked=False))
+
+    @staticmethod
+    def get_pre_checked_data(data):
+        """チェック済みのデータを取得"""
+        return Data.sort_ascending(data.filter(pre_checked=True))
 
     @staticmethod
     def get(pk):

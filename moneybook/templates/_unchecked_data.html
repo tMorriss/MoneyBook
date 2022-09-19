@@ -1,6 +1,5 @@
 {% load humanize %}
 
-<h1 id="unchecked-transaction">未承認トランザクション</h1>
 <table class="tbl-inout tbl-boarder">
     <tr>
         <th>日付</th>
@@ -19,7 +18,9 @@
         <td>{{ d.method }}</td>
         <td>{% if d.temp %}立替{% else %}{{ d.category }}{% endif %}</td>
         <td class='a-edit'><a href="{% url 'moneybook:edit' d.pk %}">編集</a></td>
-        <td class="a-edit"><input type="button" value="OK" onclick="check({{ d.pk }})" style="cursor:pointer"></td>
+        <td class="a-check{% if d.pre_checked %} a-checked{% endif %}" id="a-check-{{d.pk}}">
+            <input type="button" value="チェック" onclick="preCheck({{ d.pk }})" style="cursor:pointer">
+        </td>
     </tr>
     {% endfor %}
 </table>
