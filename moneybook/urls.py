@@ -6,7 +6,7 @@ from moneybook.views import (ActualCashView, AddIntraMoveView, AddView,
                              EditView, IndexBalanceStatisticMiniView,
                              IndexChartDataView, IndexMonthView, IndexView,
                              LivingCostMarkView, NowBankView,
-                             PeriodBalanceView, PreCheckView, PreCheckedSummaryView, SearchView,
+                             PeriodBalanceView, PreCheckedSummaryView, PreCheckView, SearchView,
                              SeveralCheckedDateView, StatisticsMonthView,
                              StatisticsView, ToolsView,
                              UncheckedDataView)
