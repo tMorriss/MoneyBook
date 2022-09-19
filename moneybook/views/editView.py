@@ -61,9 +61,25 @@ class EditView(View):
             return HttpResponseBadRequest(json.dumps(res_data))
 
 
-class CheckView(View):
+class ApplyCheckView(View):
+    def post(self, request, *args, **kwargs):
+
+        all_data = Data.get_all_data()
+        unchecked_data = Data.get_unchecked_data(all_data)
+        pre_checked_data = Data.get_pre_checked_data(unchecked_data)
+
+        for data in pre_checked_data:
+            data.pre_checked = False
+            data.checked = True
+            data.save()
+
+        return HttpResponse()
+
+
+class PreCheckView(View):
     def post(self, request, *args, **kwargs):
         pk = request.POST.get("id")
+        status = request.POST.get("status")
 
         try:
             data = Data.get(pk)
@@ -71,6 +87,9 @@ class CheckView(View):
             res = {"message": "Data does not exist"}
             return HttpResponseBadRequest(json.dumps(res))
 
-        data.checked = True
+        if status == "1":
+            data.pre_checked = True
+        else:
+            data.pre_checked = False
         data.save()
         return HttpResponse()

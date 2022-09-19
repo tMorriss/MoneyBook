@@ -5,15 +5,18 @@
 {% block title %}{{ app_name }} Tools{% endblock %}
 
 {% block header %}
+<link rel="stylesheet" type="text/css" href="{% static 'tools.css' %}">
 <script type="text/javascript" src="{% static 'tools.js' %}"></script>
 <script type="text/javascript">
     actual_cash_url = "{% url 'moneybook:actual_cash' %}";
     checked_date_url = "{% url 'moneybook:checked_date' %}";
     several_checked_date_url = "{% url 'moneybook:several_checked_date' %}";
     living_cost_mark_url = "{% url 'moneybook:living_cost_mark' %}";
-    edit_check_url = "{% url 'moneybook:edit_check' %}";
+    edit_apply_check_url = "{% url 'moneybook:edit_apply_check' %}";
+    edit_pre_check_url = "{% url 'moneybook:edit_pre_check' %}";
     now_bank_url = "{% url 'moneybook:now_bank' %}";
     unchecked_data_url = "{% url 'moneybook:unchecked_data' %}";
+    pre_checked_summary_url = "{% url 'moneybook:pre_checked_summary' %}";
     credit_checked_date_url = "{% url 'moneybook:credit_checked_date' %}";
 
     window.onload = function () {
@@ -21,6 +24,7 @@
         getCheckedDate();
         getSeveralCheckedDate();
         getUncheckedTransaction();
+        getPreCheckedSummary();
     }
 </script>
 {% endblock %}
@@ -36,9 +40,9 @@
         </tr>
         <tr>
             <th>実際</th>
-            <td><input type="text" class="righter" id="actual_balance" style="width:10ex"
-                    onfocus="selectValue('#actual_balance')" onblur="separateValue('#actual_balance')"
-                    onkeypress="KeyPressDiff(event.keyCode)" value="{{ actual_cash_balance| intcomma }}"></td>
+            <td><input type="text" class="righter" id="actual_balance" style="width:10ex" onfocus="selectValue('#actual_balance')"
+                    onblur="separateValue('#actual_balance')" onkeypress="KeyPressDiff(event.keyCode)"
+                    value="{{ actual_cash_balance| intcomma }}"></td>
         </tr>
         <tr>
             <th>差額</th>
@@ -63,14 +67,16 @@
     <h1>生活費目標額</h1>
     <table class="tbl-common fcs-blue">
         <tr>
-            <td><input type="text" class="righter" id="txt_living_cost" style="width:10ex"
-                    onfocus="unseparateValue('#txt_living_cost')" onblur="separateValue('#txt_living_cost')"
-                    onkeypress="keyPressLiving(event.keyCode)" value="{{ living_cost_mark| intcomma }}"></td>
+            <td><input type="text" class="righter" id="txt_living_cost" style="width:10ex" onfocus="unseparateValue('#txt_living_cost')"
+                    onblur="separateValue('#txt_living_cost')" onkeypress="keyPressLiving(event.keyCode)"
+                    value="{{ living_cost_mark| intcomma }}"></td>
             <td><input type="button" value="更新" class="btn-apply" onclick="updateLivingCostMark()"
                     onkeypress="keyPressLiving(event.keyCode)"></td>
         </tr>
     </table>
 
+    <h1>未承認トランザクション</h1>
+    <div id="pre-checked-summary"></div>
     <div id="unchecked-transaction"></div>
 </section>
 {% include "_result_message.html" %}

@@ -1,0 +1,17 @@
+.a-check:not(.a-checked),
+.a-check:not(.a-checked) input[type="button"] {
+    background: #dddddd;
+    margin: 0;
+}
+
+.a-checked,
+.a-checked input[type="button"] {
+    background: #00dd00;
+}
+
+.a-check input[type="button"] {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    border: black;
+}

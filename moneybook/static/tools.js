@@ -146,20 +146,51 @@ function keyPressLiving(code) {
     }
 }
 
-function check(id) {
+function applyCheck() {
     $.post({
-        url: edit_check_url,
+        url: edit_apply_check_url,
         data: {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
-            "id": id,
         }
     }).done(() => {
-        // チェックした行を削除
-        $("#unapproved-row-" + id).remove();
+        // 未チェック項目更新
+        getUncheckedTransaction();
+        // Summaryを更新
+        getPreCheckedSummary();
         // 確認済み日付も更新
-        getCheckedDate()
+        getCheckedDate();
         // 現在銀行も更新
         getSeveralCheckedDate();
+    }).fail(() => {
+        // メッセージ表示
+        showResultMsg("Error...", empty);
+    });
+}
+
+function preCheck(pk) {
+    id = "#a-check-" + pk;
+    className = "a-checked";
+    nextStatus = 1
+    if ($(id).hasClass(className)) {
+        nextStatus = 0
+    }
+
+    $.post({
+        url: edit_pre_check_url,
+        data: {
+            "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+            "id": pk,
+            "status": nextStatus
+        }
+    }).done(() => {
+        // チェックした項目の表示更新
+        if ($(id).hasClass(className)) {
+            $(id).removeClass(className);
+        } else {
+            $(id).addClass(className);
+        }
+        // Summaryを更新
+        getPreCheckedSummary();
     }).fail(() => {
         // メッセージ表示
         showResultMsg("Error...", empty);
@@ -171,6 +202,14 @@ function getUncheckedTransaction() {
         url: unchecked_data_url
     }).done((data) => {
         $("#unchecked-transaction").html(data);
+    })
+}
+
+function getPreCheckedSummary() {
+    $.get({
+        url: pre_checked_summary_url
+    }).done((data) => {
+        $("#pre-checked-summary").html(data);
     })
 }
 

@@ -1,12 +1,12 @@
 from django.contrib.auth.views import LogoutView
 from django.urls import path
 from moneybook.views import (ActualCashView, AddIntraMoveView, AddView,
-                             CheckedDateView, CheckView, CreditCheckedDateView,
+                             ApplyCheckView, CheckedDateView, CreditCheckedDateView,
                              CustomLoginView, DataTableView, DeleteView,
                              EditView, IndexBalanceStatisticMiniView,
                              IndexChartDataView, IndexMonthView, IndexView,
                              LivingCostMarkView, NowBankView,
-                             PeriodBalanceView, SearchView,
+                             PeriodBalanceView, PreCheckView, PreCheckedSummaryView, SearchView,
                              SeveralCheckedDateView, StatisticsMonthView,
                              StatisticsView, ToolsView,
                              UncheckedDataView)
@@ -32,8 +32,10 @@ urlpatterns = [
     path('tools/living_cost_mark', LivingCostMarkView.as_view(), name="living_cost_mark"),
     path('tools/now_bank', NowBankView.as_view(), name="now_bank"),
     path('tools/unchecked_data', UncheckedDataView.as_view(), name="unchecked_data"),
+    path('tools/pre_checked_summary', PreCheckedSummaryView.as_view(), name="pre_checked_summary"),
     path('edit/<int:pk>', EditView.as_view(), name='edit'),
-    path('edit/check', CheckView.as_view(), name="edit_check"),
+    path('edit/apply_check', ApplyCheckView.as_view(), name="edit_apply_check"),
+    path('edit/pre_check', PreCheckView.as_view(), name="edit_pre_check"),
     path('delete', DeleteView.as_view(), name='delete'),
     path('login', CustomLoginView.as_view(), name='login'),
     path('logout', LogoutView.as_view(), name='logout'),

@@ -171,6 +171,22 @@ class UncheckedDataView(View):
         return render(request, "_unchecked_data.html", context)
 
 
+class PreCheckedSummaryView(View):
+    def get(self, request, *args, **kwargs):
+        # 全データ
+        all_data = Data.get_all_data()
+        # 未承認トランザクション
+        unchecked_data = Data.get_unchecked_data(all_data)
+        pre_checked_data = Data.get_pre_checked_data(unchecked_data)
+
+        context = {
+            "show_data": pre_checked_data,
+            "income_sum": Data.get_income_sum(pre_checked_data),
+            "outgo_sum": Data.get_outgo_sum(pre_checked_data),
+        }
+        return render(request, "_pre_checked_summary.html", context)
+
+
 class NowBankView(View):
     def post(self, request, *args, **kwargs):
         written_bank_data = Data.get_checked_data(Data.get_bank_data(Data.get_all_data()))
