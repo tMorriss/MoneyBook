@@ -143,6 +143,16 @@ class Data(models.Model):
         return v
 
     @staticmethod
+    def get_income(data):
+        """収入データ"""
+        return data.filter(direction=1)
+
+    @staticmethod
+    def get_outgo(data):
+        """支出データ"""
+        return data.filter(direction=2)
+
+    @staticmethod
     def get_income_sum(data):
         """収入の合計"""
         return Data.get_sum(data, 1)

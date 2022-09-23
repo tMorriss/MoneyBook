@@ -1,10 +1,26 @@
 {% load humanize %}
+{% load mathfilters %}
 
-<table class="tbl-summary">
+<table class="tbl-common">
     <tr>
-        <td class="summary-count">{{ show_data| length }}件</td>
-        <td class="summary-income">収入: {{ income_sum| intcomma }}円</td>
-        <td class="summary-outgo">支出: {{ outgo_sum| intcomma }}円</td>
-        <td><input type="button" class="btn-apply" value="チェック確定" onclick="applyCheck()"></td>
+        <th></th>
+        <th>金額</th>
+        <th>件数</th>
     </tr>
-</table><br>
+    <tr>
+        <th>収入</th>
+        <td>{{ income_sum| intcomma }}円</td>
+        <td>{{ income_count }}件</td>
+    </tr>
+    <tr>
+        <th>支出</th>
+        <td>{{ outgo_sum| intcomma }}円</td>
+        <td>{{ outgo_count }}件</td>
+    </tr>
+    <tr>
+        <th>収支</th>
+        <td>{{ income_sum | sub:outgo_sum| intcomma }}円</td>
+        <td>{{ income_count | add:outgo_count }}件</td>
+    </tr>
+</table>
+<td><input type="button" class="btn-apply" value="チェック確定" onclick="applyCheck()"></td>

@@ -180,9 +180,10 @@ class PreCheckedSummaryView(View):
         pre_checked_data = Data.get_pre_checked_data(unchecked_data)
 
         context = {
-            "show_data": pre_checked_data,
             "income_sum": Data.get_income_sum(pre_checked_data),
             "outgo_sum": Data.get_outgo_sum(pre_checked_data),
+            "income_count": len(Data.get_income(pre_checked_data)),
+            "outgo_count": len(Data.get_outgo(pre_checked_data)),
         }
         return render(request, "_pre_checked_summary.html", context)
 
