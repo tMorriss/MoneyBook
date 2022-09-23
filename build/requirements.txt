@@ -2,3 +2,4 @@ Django <= 3.9.9
 mysqlclient <= 1.9.9
 python-dateutil <= 2.9.9
 gunicorn <= 20.9.9
+django-mathfilters <= 1.9.9
