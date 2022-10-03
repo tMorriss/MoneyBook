@@ -1,4 +1,4 @@
-FROM centos:8
+FROM quay.io/centos/centos:stream8
 RUN dnf -y update && dnf -y upgrade
 RUN dnf -y install python38 git mysql-devel gcc python38-devel nginx
 

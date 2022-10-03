@@ -1,6 +1,5 @@
 # pull docker images
-sudo podman pull docker.io/library/python:3
-sudo podman pull docker.io/library/nginx:latest
+sudo podman pull quay.io/centos/centos:stream8
 
 # build docker image
 sudo podman build -t tmorriss/moneybook -f ./build/Dockerfile ./
