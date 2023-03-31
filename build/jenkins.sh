@@ -38,7 +38,7 @@ sudo podman run \
 -e DB_USER=$DB_USER \
 -e DB_PASS=$DB_PASS \
 -e DB_HOST=$DB_HOST \
--e ALLOWD_HOSTS=$ALLOWD_HOSTS \
+-e ALLOWED_HOSTS=$ALLOWED_HOSTS \
 -e SECRET_KEY=$SECRET_KEY \
 -h moneybook \
 --name moneybook \
