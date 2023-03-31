@@ -1,2 +1,2 @@
 nginx
-gunicorn --bind 0.0.0.0:8081 config.wsgi
+gunicorn --bind 0.0.0.0:8081 --access-logfile - config.wsgi
