@@ -29,11 +29,16 @@ class IndexMonthView(View):
         next_month = to_month + relativedelta(months=1)
         last_month = to_month - relativedelta(months=1)
 
+        # 今月の場合だけ日付を入れる
+        now = datetime.now()
+        day = day = now.day if year == now.year and month == now.month else ""
+
         context = {
             'app_name': settings.APP_NAME,
             'username': request.user,
             'year': year,
             'month': month,
+            'day': day,
             'next_year': next_month.year,
             'next_month': next_month.month,
             'last_year': last_month.year,
@@ -44,6 +49,7 @@ class IndexMonthView(View):
             'first_categories': Category.first_list(),
             'latter_categories': Category.latter_list(),
         }
+
         return render(request, 'index.html', context)
 
 
