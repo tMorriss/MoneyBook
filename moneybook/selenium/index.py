@@ -115,7 +115,7 @@ class Index(SeleniumBase):
 
         # あとplaceholder
         now = datetime.now()
-        self.assertEqual(self.driver.find_element(By.ID, 'a_day').get_attribute('placeholder'), now.day)
+        self.assertEqual(self.driver.find_element(By.ID, 'a_day').get_attribute('placeholder'), str(now.day))
 
     def test_index_month(self):
         self._login()
@@ -310,12 +310,12 @@ class Index(SeleniumBase):
         now = datetime.now()
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index'))
-        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/input[@value="追加"]').click()
 
         self.driver.find_element(By.ID, 'a_item').send_keys('テスト2')
         self.driver.find_element(By.ID, 'a_price').send_keys('3000')
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/table/tbody/tr[4]/td/label[3]').click()
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/table/tbody/tr[5]/td/table/tbody/tr/td/label[1]').click()
+        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/input[@value="追加"]').click()
 
         rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
