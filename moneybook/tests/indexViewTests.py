@@ -34,6 +34,7 @@ class IndexMonthViewTestCase(BaseTestCase):
             response.context['username'].username, self.username)
         self.assertEqual(response.context['year'], 2000)
         self.assertEqual(response.context['month'], 1)
+        self.assertEqual(response.context['day'], '')
         self.assertEqual(response.context['next_year'], 2000)
         self.assertEqual(response.context['next_month'], 2)
         self.assertEqual(response.context['last_year'], 1999)
@@ -52,6 +53,13 @@ class IndexMonthViewTestCase(BaseTestCase):
             '_result_message.html'
         ]
         self._assert_templates(response.templates, expects)
+
+    def test_get_today(self):
+        now = datetime.now()
+        self.client.force_login(User.objects.create_user(self.username))
+        response = self.client.get(reverse('moneybook:index_month', kwargs={'year': now.year, 'month': now.month}))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['day'], now.day)
 
     def test_get_out_of_range(self):
         self.client.force_login(User.objects.create_user(self.username))

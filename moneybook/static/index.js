@@ -4,13 +4,16 @@ function sendAddRow() {
     if (category == 12) {
         direction = 1;
     }
-    day = $('#a_day').val();
+    yearValue = $('#a_year').val();
+    monthValue = $('#a_month').val();
+    dayValue = $('#a_day').val();
     now = new Date();
+    day = (yearValue == now.getFullYear() && monthValue == (now.getMonth() + 1) && dayValue.length == 0) ? now.getDate() : dayValue;
     $.post({
         url: add_url,
         data: {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
-            "date": `${$('#a_year').val()}-${$('#a_month').val()}-${day.length > 0 ? day : now.getDate()}`,
+            "date": `${yearValue}-${monthValue}-${day}`,
             "item": $('#a_item').val(),
             "price": removeComma($('#a_price').val()),
             "direction": direction,
