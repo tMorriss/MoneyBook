@@ -316,6 +316,7 @@ class Index(SeleniumBase):
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/table/tbody/tr[4]/td/label[3]').click()
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/table/tbody/tr[5]/td/table/tbody/tr/td/label[1]').click()
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/input[@value="追加"]').click()
+        time.sleep(2)
 
         rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
