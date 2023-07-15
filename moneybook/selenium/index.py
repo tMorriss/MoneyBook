@@ -115,7 +115,7 @@ class Index(SeleniumBase):
 
         # あとplaceholder
         now = datetime.now()
-        self.assertEqual(self.driver.find_element(By.ID, 'a_day').get_attribute('value'), now.day)
+        self.assertEqual(self.driver.find_element(By.ID, 'a_day').get_attribute('placeholder'), now.day)
 
     def test_index_month(self):
         self._login()
@@ -318,7 +318,7 @@ class Index(SeleniumBase):
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/table/tbody/tr[5]/td/table/tbody/tr/td/label[1]').click()
 
         rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
-        tds = rows[3].find_elements(By.TAG_NAME, 'td')
+        tds = rows[1].find_elements(By.TAG_NAME, 'td')
         self.assertEqual(tds[0].text, str(now.year) + "/" + str.zfill(str(now.month), 2) + "/" + str(now.day))
         self.assertEqual(tds[1].text, 'テスト2')
         self.assertEqual(tds[2].text, '3,000')
