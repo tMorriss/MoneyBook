@@ -113,6 +113,10 @@ class Index(SeleniumBase):
         now = datetime.now()
         self._assert_index_date(now.year, now.month)
 
+        # あとplaceholder
+        now = datetime.now()
+        self.assertEqual(self.driver.find_element(By.ID, 'a_day').get_attribute('value'), now.day)
+
     def test_index_month(self):
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
@@ -302,6 +306,25 @@ class Index(SeleniumBase):
         self.assertEqual(tds[3].text, 'Kyash')
         self.assertEqual(tds[4].text, '食費')
 
+    def test_add_empty_day_today(self):
+        now = datetime.now()
+        self._login()
+        self.driver.get(self.live_server_url + reverse('moneybook:index'))
+        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/input[@value="追加"]').click()
+
+        self.driver.find_element(By.ID, 'a_item').send_keys('テスト2')
+        self.driver.find_element(By.ID, 'a_price').send_keys('3000')
+        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/table/tbody/tr[4]/td/label[3]').click()
+        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/table/tbody/tr[5]/td/table/tbody/tr/td/label[1]').click()
+
+        rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
+        tds = rows[3].find_elements(By.TAG_NAME, 'td')
+        self.assertEqual(tds[0].text, str(now.year) + "/" + str.zfill(str(now.month), 2) + "/" + str(now.day))
+        self.assertEqual(tds[1].text, 'テスト2')
+        self.assertEqual(tds[2].text, '3,000')
+        self.assertEqual(tds[3].text, 'Kyash')
+        self.assertEqual(tds[4].text, '食費')
+
     def test_invalid_add_str_year(self):
         now = datetime.now()
         self._assert_invalid_add('a', now.month, now.day, 'テスト1', 100)
@@ -323,8 +346,7 @@ class Index(SeleniumBase):
         self._assert_invalid_add(now.year, now.month, 'a', 'テスト1', 100)
 
     def test_invalid_add_empty_day(self):
-        now = datetime.now()
-        self._assert_invalid_add(now.year, now.month, '', 'テスト1', 100)
+        self._assert_invalid_add(2000, 1, '', 'テスト1', 100)
 
     def test_invalid_add_str_price(self):
         now = datetime.now()
