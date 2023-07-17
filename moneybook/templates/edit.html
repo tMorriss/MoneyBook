@@ -58,6 +58,11 @@
                         {% if m == data.method %} checked{% endif %} onkeypress="keyPressUpdate(event.keyCode)">
                     <label for="method-{{ m.pk }}">{{ m.name }}</label>
                     {% endfor %}
+                    {% for m in unused_methods %}
+                    <input type="radio" name="method" value="{{ m.pk }}" id="method-{{ m.pk }}"
+                        {% if m == data.method %} checked{% endif %} onkeypress="keyPressUpdate(event.keyCode)">
+                    <label for="method-{{ m.pk }}">{{ m.name }}</label>
+                    {% endfor %}
                 </td>
             </tr>
             <tr>
