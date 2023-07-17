@@ -23,6 +23,7 @@ class EditView(View):
             'data': data,
             'directions': Direction.list(),
             'methods': Method.list(),
+            'unused_methods': Method.un_used_list(),
             'first_categories': Category.first_list(),
             'latter_categories': Category.latter_list(),
             'temps': {0: "No", 1: "Yes"},
