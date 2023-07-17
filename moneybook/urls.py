@@ -7,7 +7,7 @@ from moneybook.views import (ActualCashView, AddIntraMoveView, AddView,
                              IndexChartDataView, IndexMonthView, IndexView,
                              LivingCostMarkView, NowBankView,
                              PeriodBalanceView, PreCheckedSummaryView, PreCheckView, SearchView,
-                             SeveralCheckedDateView, StatisticsMonthView,
+                             SeveralCheckedDateView, SuggestView, StatisticsMonthView,
                              StatisticsView, ToolsView,
                              UncheckedDataView)
 
@@ -20,6 +20,7 @@ urlpatterns = [
     path('_data_table', DataTableView.as_view(), name='data_table'),
     path('add', AddView.as_view(), name='add'),
     path('add/intra-move', AddIntraMoveView.as_view(), name='add_intra_move'),
+    path('suggest', SuggestView.as_view(), name='suggest'),
     path('statistics', StatisticsView.as_view(), name='statistics'),
     path('statistics/<int:year>', StatisticsMonthView.as_view(), name='statistics_month'),
     path('period_balances', PeriodBalanceView.as_view(), name='period_balances'),

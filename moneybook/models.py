@@ -238,6 +238,11 @@ class Data(models.Model):
         return Data.sort_ascending(data.filter(item__contains=keyword))
 
     @staticmethod
+    def get_startswith_keyword_data(data, keyword):
+        """キーワード検索(前方一致)"""
+        return Data.sort_ascending(data.filter(item__startswith=keyword))
+
+    @staticmethod
     def get_cash_data(data):
         """現金のデータを取得"""
         method = Method.objects.get(name="現金")

@@ -1,3 +1,19 @@
+$(() => {
+    $('#a_item').autocomplete({
+        source: (request, response) => {
+            $.get({
+                url: suggest_url,
+                data: {
+                    "item": request.term,
+                }
+            }).done((data) => {
+                const dataJson = JSON.parse(data);
+                response(dataJson.suggests);
+            })
+        },
+    })
+});
+
 function sendAddRow() {
     category = $('input[name="a_category"]:checked').val();
     direction = 2;

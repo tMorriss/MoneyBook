@@ -6,7 +6,7 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render
 from django.views import View
 from moneybook.forms import DataForm
-from moneybook.models import Category, Direction, Method
+from moneybook.models import Category, Data, Direction, Method
 
 
 class AddView(View):
@@ -47,3 +47,20 @@ class AddView(View):
                 "ErrorList": error_list,
             }
             return HttpResponseBadRequest(json.dumps(res_data))
+
+
+class SuggestView(View):
+    def get(self, request, *args, **kwargs):
+        if 'item' not in request.GET:
+            res = {"message": "missing item"}
+            return HttpResponseBadRequest(json.dumps(res))
+
+        item = request.GET.get('item')
+        if item == '':
+            res = {"message": "empty item"}
+            return HttpResponseBadRequest(json.dumps(res))
+
+        data = Data.get_startswith_keyword_data(Data.get_all_data(), item)
+        suggests = list(dict.fromkeys([v.item for v in data]))
+
+        return HttpResponse(json.dumps({'suggests': suggests}))
