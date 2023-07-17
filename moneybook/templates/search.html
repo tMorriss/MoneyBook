@@ -6,6 +6,8 @@
 
 {% block header %}
 <script type="text/javascript">
+    suggest_url = "{% url 'moneybook:suggest' %}";
+
     function reset_page() {
         window.location.href = "{% url 'moneybook:search' %}";
     }
@@ -32,7 +34,7 @@
             </tr>
             <tr>
                 <th>品目</th>
-                <td><input type="text" name="item" size="25" value="{{ item }}"></td>
+                <td><input type="text" name="item" class="add_item" size="25" value="{{ item }}"></td>
             </tr>
             <tr>
                 <th>金額</th>

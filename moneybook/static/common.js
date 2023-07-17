@@ -61,3 +61,19 @@ function addBlueFocus(id) {
 function removeBlueFocus(id) {
     $(id).removeClass('on-fcs-blue');
 }
+
+$(() => {
+    $('.add_item').autocomplete({
+        source: (request, response) => {
+            $.get({
+                url: suggest_url,
+                data: {
+                    "item": request.term,
+                }
+            }).done((data) => {
+                const dataJson = JSON.parse(data);
+                response(dataJson.suggests);
+            })
+        },
+    })
+});
