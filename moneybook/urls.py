@@ -7,8 +7,8 @@ from moneybook.views import (ActualCashView, AddIntraMoveView, AddView,
                              IndexChartDataView, IndexMonthView, IndexView,
                              LivingCostMarkView, NowBankView,
                              PeriodBalanceView, PreCheckedSummaryView, PreCheckView, SearchView,
-                             SeveralCheckedDateView, SuggestView, StatisticsMonthView,
-                             StatisticsView, ToolsView,
+                             SeveralCheckedDateView, StatisticsMonthView,
+                             StatisticsView, SuggestView, ToolsView,
                              UncheckedDataView)
 
 app_name = 'moneybook'
