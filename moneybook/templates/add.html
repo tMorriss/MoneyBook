@@ -8,6 +8,7 @@
 <script type="text/javascript">
     add_url = "{% url 'moneybook:add' %}";
     intra_move_url = "{% url 'moneybook:add_intra_move' %}";
+    suggest_url = "{% url 'moneybook:suggest' %}";
 
     direction_first = "{{ directions.first.pk }}"
     method_first = "{{ methods.first.pk }}";
@@ -70,7 +71,7 @@
             </tr>
             <tr>
                 <th>品目</th>
-                <td><input type="text" id="m_item" style="width:30ex" onkeypress="keyPressIntra(event.keyCode)"></td>
+                <td><input type="text" id="m_item" class="add_item" style="width:30ex" onkeypress="keyPressIntra(event.keyCode)"></td>
             </tr>
             <tr>
                 <th>金額</th>
@@ -139,7 +140,7 @@
             </tr>
             <tr>
                 <th>品目</th>
-                <td><input type="text" id="a_item" style="width:30ex" onkeypress="keyPressAdd(event.keyCode)"></td>
+                <td><input type="text" id="a_item" class="add_item" style="width:30ex" onkeypress="keyPressAdd(event.keyCode)"></td>
             </tr>
             <tr>
                 <th>金額</th>

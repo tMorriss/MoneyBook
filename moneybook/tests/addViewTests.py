@@ -93,3 +93,41 @@ class AddViewTestCase(BaseTestCase):
         self.assertEqual(response.status_code, 403)
         after_count = Data.get_all_data().count()
         self.assertEqual(after_count, before_count)
+
+
+class SuggestViewTestCase(BaseTestCase):
+    def test_get(self):
+        self.client.force_login(User.objects.create_user(self.username))
+        response = self.client.get(reverse('moneybook:suggest'), {'item': '必需品'})
+
+        self.assertEqual(response.status_code, 200, response.content)
+        body = json.loads(response.content.decode())
+
+        expect = {'suggests': ['必需品1', '必需品2', '必需品3']}
+        self.assertEqual(body, expect)
+
+    def test_get_distinct(self):
+        self.client.force_login(User.objects.create_user(self.username))
+        response = self.client.get(reverse('moneybook:suggest'), {'item': 'PayPayチャージ'})
+
+        self.assertEqual(response.status_code, 200, response.content)
+        body = json.loads(response.content.decode())
+
+        expect = {'suggests': ['PayPayチャージ']}
+        self.assertEqual(body, expect)
+
+    def test_get_missing_item(self):
+        self.client.force_login(User.objects.create_user(self.username))
+        response = self.client.get(reverse('moneybook:suggest'))
+
+        self.assertEqual(response.status_code, 400, response.content)
+        body = json.loads(response.content.decode())
+        self.assertEqual(body, {"message": "missing item"})
+
+    def test_get_empty_item(self):
+        self.client.force_login(User.objects.create_user(self.username))
+        response = self.client.get(reverse('moneybook:suggest'), {'item': ''})
+
+        self.assertEqual(response.status_code, 400, response.content)
+        body = json.loads(response.content.decode())
+        self.assertEqual(body, {"message": "empty item"})
