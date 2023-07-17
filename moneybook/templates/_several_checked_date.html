@@ -21,12 +21,12 @@
     </tr>{% endfor %}
     {% for c in credit_checked_date %}
     <tr>
-        <td><input type="button" class="btn-apply" value="{{ c.name }}" onclick="updateSeveralCheckedDate({{ c.pk }})">
+        <td><input type="button" class="btn-apply" value="{{ c.name }}" onclick="updateSeveralCheckedDate('{{ c.pk }}')">
         </td>
         <td>最新確定引き落とし日: {{ c.date|date:"Y"}}年{{ c.date|date:"m" }}月{{ c.date|date:"d" }}日</td>
         <td><input type="text" class="righter now_bank_credit" id="credit-{{ c.pk }}" style="width:9ex"
                 onfocus="unseparateValue('#credit-{{ c.pk }}')" onblur="separateValue('#credit-{{ c.pk }}')"
-                onkeypress="keyPressNowBank(event.keyCode)" value="{{ c.price| intcomma }}"></td>
+                onkeypress="keyPressUpdateSeveralCheckedDate(event.keyCode, '{{ c.pk }}')" value="{{ c.price| intcomma }}"></td>
     </tr>{% endfor %}
     <tr>
         <th colspan="2">未記録分</th>

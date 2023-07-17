@@ -125,6 +125,13 @@ function updateSeveralCheckedDate(id) {
     });
 }
 
+function keyPressUpdateSeveralCheckedDate(code, id) {
+    // エンターキーなら
+    if (code === 13) {
+        updateSeveralCheckedDate(id);
+    }
+}
+
 function updateLivingCostMark() {
     $.post({
         url: living_cost_mark_url,
