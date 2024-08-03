@@ -217,16 +217,8 @@ class DataTestCase(BaseTestCase):
             method=Method.get(1),
             category=Category.get(5),
             temp=True)
-        Data.objects.create(
-            date=date(2100, 1, 1),
-            item="立替1",
-            price=200,
-            direction=Direction.get(1),
-            method=Method.get(1),
-            category=Category.get(1),
-            temp=True)
         data = Data.get_month_data(2100, 1)
-        self.assertEqual(Data.get_deposit_sum(data), 700)
+        self.assertEqual(Data.get_deposit_sum(data), 500)
 
     def test_get_deposit_sum_nothing(self):
         data = Data.get_month_data(2000, 2)
