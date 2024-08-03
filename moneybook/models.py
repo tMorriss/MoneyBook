@@ -176,19 +176,19 @@ class Data(models.Model):
     def get_temp_sum(data):
         """立替合計"""
         temp = data.filter(temp=1).aggregate(Sum('price'))['price__sum']
-        if temp is None:
-            temp = 0
-        return temp
+        return temp if temp is not None else 0
 
     @staticmethod
     def get_temp_and_deposit_sum(data):
         """立替と貯金をフィルタ"""
         category = Category.objects.get(name="貯金")
-        deposit = data.filter(Q(category=category) | Q(temp=1)).aggregate(Sum('price'))['price__sum']
+        deposit_out = data.filter(category=category, direction=2).aggregate(Sum('price'))['price__sum']
         deposit_temp = data.filter(category=category, temp=1).aggregate(Sum('price'))['price__sum']
+        temp = data.filter(temp=1).exclude(category=category).aggregate(Sum('price'))['price__sum']
 
-        return (deposit if deposit is not None else 0) - \
-            (deposit_temp if deposit_temp is not None else 0)
+        return (deposit_out if deposit_out is not None else 0) \
+            - (deposit_temp if deposit_temp is not None else 0) \
+            + (temp if temp is not None else 0)
 
     @staticmethod
     def filter_without_intra_move(data):
@@ -198,8 +198,10 @@ class Data(models.Model):
 
     @staticmethod
     def get_normal_data(data):
-        """計算外と内部移動を排除"""
-        return data.exclude(category=Category.objects.get(name="計算外")).exclude(category=Category.objects.get(name="内部移動"))
+        """計算外と内部移動と立替を排除"""
+        return data.exclude(category=Category.objects.get(name="計算外")) \
+            .exclude(category=Category.objects.get(name="内部移動")) \
+            .exclude(temp=1)
 
     @staticmethod
     def get_living_cost(data):
