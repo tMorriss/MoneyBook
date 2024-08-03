@@ -2,7 +2,7 @@ import calendar
 from datetime import date
 
 from django.db import models
-from django.db.models import Sum
+from django.db.models import Q, Sum
 
 
 class Direction(models.Model):
@@ -184,13 +184,11 @@ class Data(models.Model):
     def get_temp_and_deposit_sum(data):
         """立替と貯金をフィルタ"""
         category = Category.objects.get(name="貯金")
-        deposit_out = data.filter(category=category).filter(direction=2).aggregate(Sum('price'))['price__sum']
+        deposit = data.filter(Q(category=category) | Q(temp=1)).aggregate(Sum('price'))['price__sum']
         deposit_temp = data.filter(category=category, temp=1).aggregate(Sum('price'))['price__sum']
-        temp = data.filter(temp=1).exclude(category=category).aggregate(Sum('price'))['price__sum']
 
-        return (deposit_out if deposit_out is not None else 0) \
-            - (deposit_temp if deposit_temp is not None else 0) \
-            + (temp if temp is not None else 0)
+        return (deposit if deposit is not None else 0) - \
+            (deposit_temp if deposit_temp is not None else 0)
 
     @staticmethod
     def filter_without_intra_move(data):
