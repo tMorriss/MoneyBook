@@ -82,7 +82,7 @@ class IndexBalanceStatisticMiniView(View):
             methods_monthly_iob.append(InOutBalance(m.name, i, o, None))
 
         # 立替と貯金
-        monthly_temp_and_deposit = Data.get_temp_and_deposit_sum(monthly_data)
+        monthly_temp_and_deposit = Data.get_deposit_sum(monthly_data)
         # 通常データ
         monthly_normal_data = Data.get_normal_data(monthly_data)
         # 今月の収入
