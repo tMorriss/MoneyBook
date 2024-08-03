@@ -2,7 +2,7 @@ import calendar
 from datetime import date
 
 from django.db import models
-from django.db.models import Q, Sum
+from django.db.models import Sum
 
 
 class Direction(models.Model):
@@ -188,7 +188,9 @@ class Data(models.Model):
         deposit_temp = data.filter(category=category, temp=1).aggregate(Sum('price'))['price__sum']
         temp = data.filter(temp=1).exclude(category=category).aggregate(Sum('price'))['price__sum']
 
-        return (deposit_out if deposit_out is not None else 0) - (deposit_temp if deposit_temp is not None else 0) + (temp if temp is not None else 0)
+        return (deposit_out if deposit_out is not None else 0)
+        - (deposit_temp if deposit_temp is not None else 0)
+        + (temp if temp is not None else 0)
 
     @staticmethod
     def filter_without_intra_move(data):
