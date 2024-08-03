@@ -2,7 +2,7 @@ import calendar
 from datetime import date
 
 from django.db import models
-from django.db.models import Q, Sum
+from django.db.models import Sum
 
 
 class Direction(models.Model):
