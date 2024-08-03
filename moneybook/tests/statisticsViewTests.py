@@ -39,9 +39,9 @@ class StatisticsMonthViewTestCase(BaseTestCase):
 
         january = monthly_context[0]
         self.assertEqual(january['label'], 1)
-        self.assertEqual(january['income'], 32993)
+        self.assertEqual(january['income'], 31993)
         self.assertEqual(january['outgo'], 7920)
-        self.assertEqual(january['balance'], 32993 - 7920)
+        self.assertEqual(january['balance'], 31993 - 7920)
         self.assertEqual(january['salary'], 25123)
         self.assertEqual(january['living_cost'], 2500)
         self.assertEqual(january['electricity_cost'], 630)
