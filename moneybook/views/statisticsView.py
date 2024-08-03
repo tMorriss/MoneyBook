@@ -28,7 +28,7 @@ class StatisticsMonthView(View):
             next_month_first = date(year, i_month, 1) + relativedelta(months=1)
 
             # 収支
-            td = Data.get_temp_and_deposit_sum(monthly_data)
+            td = Data.get_deposit_sum(monthly_data)
             tomonth_context['income'] = Data.get_income_sum(monthly_normal_data) - td
             tomonth_context['outgo'] = Data.get_outgo_sum(monthly_normal_data) - td
             tomonth_context['balance'] = tomonth_context['income'] - tomonth_context['outgo']

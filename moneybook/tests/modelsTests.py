@@ -200,7 +200,7 @@ class DataTestCase(BaseTestCase):
         data = Data.get_month_data(1999, 1)
         self.assertEqual(Data.get_temp_sum(data), 0)
 
-    def test_get_temp_and_deposit_sum(self):
+    def test_get_deposit_sum(self):
         Data.objects.create(
             date=date(2100, 1, 1),
             item="貯金",
@@ -226,15 +226,15 @@ class DataTestCase(BaseTestCase):
             category=Category.get(1),
             temp=True)
         data = Data.get_month_data(2100, 1)
-        self.assertEqual(Data.get_temp_and_deposit_sum(data), 700)
+        self.assertEqual(Data.get_deposit_sum(data), 700)
 
-    def test_get_temp_and_deposit_sum_nothing(self):
+    def test_get_deposit_sum_nothing(self):
         data = Data.get_month_data(2000, 2)
-        self.assertEqual(Data.get_temp_and_deposit_sum(data), 0)
+        self.assertEqual(Data.get_deposit_sum(data), 0)
 
-    def test_get_temp_and_deposit_sum_empty(self):
+    def test_get_deposit_sum_empty(self):
         data = Data.get_month_data(1999, 1)
-        self.assertEqual(Data.get_temp_and_deposit_sum(data), 0)
+        self.assertEqual(Data.get_deposit_sum(data), 0)
 
     def test_filter_without_intra_move(self):
         base_data = Data.get_month_data(2000, 1)
