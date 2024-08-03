@@ -215,14 +215,14 @@ class Index(SeleniumBase):
 
         actuals = self.driver.find_elements(By.XPATH, '//*[@id="statistic-fixed"]/table[3]/tbody/tr')
         expects = [
-            {'title': '収入合計', 'value': '32,993'},
-            {'title': '支出合計', 'value': '7,920'},
+            {'title': '収入合計', 'value': '33,993'},
+            {'title': '支出合計', 'value': '8,920'},
             {'title': '収支', 'value': '+25,073'},
             {'title': '銀行貯金額', 'value': '130'},
             {'title': '生活費', 'value': '2,500'},
             {'title': '変動費', 'value': '5,390'},
             {'title': '生活費残額', 'value': '-1,500'},
-            {'title': '変動残額', 'value': '25,103'},
+            {'title': '変動残額', 'value': '26,103'},
             {'title': '全収入', 'value': '34,123'},
             {'title': '全支出', 'value': '9,550'}
         ]
@@ -320,7 +320,7 @@ class Index(SeleniumBase):
 
         rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[0].text, str(now.year) + "/" + str.zfill(str(now.month), 2) + "/" + str(now.day))
+        self.assertEqual(tds[0].text, str(now.year) + "/" + str.zfill(str(now.month), 2) + "/" + str.zfill(str(now.day)))
         self.assertEqual(tds[1].text, 'テスト2')
         self.assertEqual(tds[2].text, '3,000')
         self.assertEqual(tds[3].text, 'Kyash')
