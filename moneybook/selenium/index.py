@@ -320,7 +320,7 @@ class Index(SeleniumBase):
 
         rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[0].text, str(now.year) + "/" + str.zfill(str(now.month), 2) + "/" + str(now.day))
+        self.assertEqual(tds[0].text, str(now.year) + "/" + str.zfill(str(now.month), 2) + "/" + str.zfill(str(now.day), 2))
         self.assertEqual(tds[1].text, 'テスト2')
         self.assertEqual(tds[2].text, '3,000')
         self.assertEqual(tds[3].text, 'Kyash')
