@@ -179,6 +179,14 @@ class Data(models.Model):
         return temp if temp is not None else 0
 
     @staticmethod
+    def get_deposit_outgo_sum(data):
+        """貯金の支出分をフィルタ"""
+        category = Category.get_deposit()
+        deposit_out = data.filter(category=category, direction=2).aggregate(Sum('price'))['price__sum']
+
+        return deposit_out if deposit_out is not None else 0
+
+    @staticmethod
     def get_deposit_sum(data):
         """貯金をフィルタ"""
         category = Category.get_deposit()
