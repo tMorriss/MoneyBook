@@ -218,7 +218,7 @@ class Index(SeleniumBase):
             {'title': '収入合計', 'value': '32,993'},
             {'title': '支出合計', 'value': '8,920'},
             {'title': '収支', 'value': '+24,073'},
-            {'title': '銀行貯金額', 'value': '130'},
+            {'title': '貯金額', 'value': '130'},
             {'title': '生活費', 'value': '2,500'},
             {'title': '変動費', 'value': '5,390'},
             {'title': '生活費残額', 'value': '-1,500'},
