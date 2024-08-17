@@ -82,16 +82,13 @@ class IndexBalanceStatisticMiniView(View):
             methods_monthly_iob.append(InOutBalance(m.name, i, o, None))
 
         # 立替と貯金
-        monthly_temp_and_deposit = Data.get_deposit_sum(monthly_data)
+        monthly_deposit_sum = Data.get_deposit_sum(monthly_data)
         # 通常データ
         monthly_normal_data = Data.get_normal_data(monthly_data)
         # 今月の収入
-        monthly_income = Data.get_income_sum(monthly_normal_data) - monthly_temp_and_deposit
+        monthly_income = Data.get_income_sum(monthly_normal_data) - monthly_deposit_sum
         # 今月の支出
-        monthly_outgo = Data.get_outgo_sum(monthly_normal_data) - monthly_temp_and_deposit
-        # 貯金額
-        bank_deposit = Data.get_outgo_sum(Data.get_method_data(
-            Data.get_category_data(monthly_data, Category.get_deposit()), Method.get_bank()))
+        monthly_outgo = Data.get_outgo_sum(monthly_normal_data) - monthly_deposit_sum
         # 生活費
         living_cost = Data.get_living_cost(monthly_data)
         # 変動費
@@ -107,7 +104,7 @@ class IndexBalanceStatisticMiniView(View):
             'monthly_income': monthly_income,
             'monthly_outgo': monthly_outgo,
             'monthly_inout': monthly_income - monthly_outgo,
-            'bank_deposit': bank_deposit,
+            'bank_deposit': monthly_deposit_sum,
             'living_cost': living_cost,
             'variable_cost': variable_cost,
             'living_remain': living_cost_mark - living_cost,

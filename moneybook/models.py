@@ -181,7 +181,7 @@ class Data(models.Model):
     @staticmethod
     def get_deposit_sum(data):
         """貯金をフィルタ"""
-        category = Category.objects.get(name="貯金")
+        category = Category.get_deposit()
         deposit_out = data.filter(category=category, direction=2).aggregate(Sum('price'))['price__sum']
         deposit_temp = data.filter(category=category, temp=1).aggregate(Sum('price'))['price__sum']
 
