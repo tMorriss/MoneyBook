@@ -106,7 +106,7 @@ class IndexBalanceStatisticMiniView(View):
             'monthly_income': monthly_income,
             'monthly_outgo': monthly_outgo,
             'monthly_inout': monthly_income - monthly_outgo,
-            'bank_deposit': monthly_deposit_sum,
+            'deposit': monthly_deposit_sum,
             'living_cost': living_cost,
             'variable_cost': variable_cost,
             'living_remain': living_cost_mark - living_cost,
