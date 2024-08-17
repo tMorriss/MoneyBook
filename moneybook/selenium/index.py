@@ -216,8 +216,8 @@ class Index(SeleniumBase):
         actuals = self.driver.find_elements(By.XPATH, '//*[@id="statistic-fixed"]/table[3]/tbody/tr')
         expects = [
             {'title': '収入合計', 'value': '32,993'},
-            {'title': '支出合計', 'value': '8,920'},
-            {'title': '収支', 'value': '+24,073'},
+            {'title': '支出合計', 'value': '7,920'},
+            {'title': '収支', 'value': '+25,073'},
             {'title': '貯金額', 'value': '130'},
             {'title': '生活費', 'value': '2,500'},
             {'title': '変動費', 'value': '5,390'},
