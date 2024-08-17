@@ -261,7 +261,7 @@ class DataTestCase(BaseTestCase):
         self.assertEqual(data.count(), 0)
 
     def test_get_normal_data(self):
-        '''計算外と内部移動と立替を除く'''
+        '''計算外と内部移動を除く'''
         base_data = Data.get_month_data(2000, 1)
         data = Data.get_normal_data(base_data)
         expects = [
@@ -276,7 +276,9 @@ class DataTestCase(BaseTestCase):
             "貯金",
             "電気代",
             "ガス代",
-            "水道代"
+            "水道代",
+            "立替分1",
+            "立替分2"
         ]
         self._assert_list(data, expects)
 
