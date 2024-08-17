@@ -87,10 +87,12 @@ class IndexBalanceStatisticMiniView(View):
         monthly_deposit_outgo_sum = Data.get_deposit_outgo_sum(monthly_data)
         # 通常データ
         monthly_normal_data = Data.get_normal_data(monthly_data)
+        # 立替合計
+        tmp_sum = Data.get_temp_sum(monthly_normal_data)
         # 今月の収入
-        monthly_income = Data.get_income_sum(monthly_normal_data) - monthly_deposit_sum
+        monthly_income = Data.get_income_sum(monthly_normal_data) - monthly_deposit_outgo_sum - tmp_sum
         # 今月の支出
-        monthly_outgo = Data.get_outgo_sum(monthly_normal_data) - monthly_deposit_outgo_sum
+        monthly_outgo = Data.get_outgo_sum(monthly_normal_data) - monthly_deposit_outgo_sum - tmp_sum
         # 生活費
         living_cost = Data.get_living_cost(monthly_data)
         # 変動費

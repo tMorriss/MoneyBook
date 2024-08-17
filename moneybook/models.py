@@ -174,8 +174,11 @@ class Data(models.Model):
 
     @staticmethod
     def get_temp_sum(data):
-        """立替合計"""
-        temp = data.filter(temp=1).aggregate(Sum('price'))['price__sum']
+        """貯金以外の立替合計"""
+        deposit = Category.get_deposit()
+        temp = data.filter(temp=1) \
+            .exclude(category=deposit) \
+            .aggregate(Sum('price'))['price__sum']
         return temp if temp is not None else 0
 
     @staticmethod
@@ -206,8 +209,7 @@ class Data(models.Model):
     def get_normal_data(data):
         """計算外と内部移動と立替を排除"""
         return data.exclude(category=Category.objects.get(name="計算外")) \
-            .exclude(category=Category.objects.get(name="内部移動")) \
-            .exclude(temp=1)
+            .exclude(category=Category.objects.get(name="内部移動"))
 
     @staticmethod
     def get_living_cost(data):
