@@ -96,10 +96,8 @@ class Add(SeleniumBase):
         self.assertEqual(self.driver.find_element(By.ID, 's_month').get_attribute('value'), str(now.month))
         self.assertEqual(self.driver.find_element(By.ID, 's_day').get_attribute('value'), '')
         self.assertEqual(self.driver.find_element(By.ID, 's_price').get_attribute('value'), '')
-        self.assertEqual(self.driver.find_element(By.XPATH, '//section/form[3]/table/tbody/tr[3]/td/input[1]').get_attribute('value'),
-                         'PayPayキャッシュバック&ボーナス')
         self.assertEqual(self.driver.find_element(By.XPATH,
-                                                  '//section/form[3]/table/tbody/tr[3]/td/input[2]').get_attribute('value'), 'Suicaチャージ')
+                                                  '//section/form[3]/table/tbody/tr[3]/td/input[1]').get_attribute('value'), 'Suicaチャージ')
 
         self.assertEqual(self.driver.find_element(By.ID, 'a_year').get_attribute('value'), str(now.year))
         self.assertEqual(self.driver.find_element(By.ID, 'a_month').get_attribute('value'), str(now.month))
@@ -338,44 +336,6 @@ class Add(SeleniumBase):
 
         # 検証
         self._assert_intra_move()
-
-    def test_paypay_cb(self):
-        now = datetime.now()
-        # 前処理
-        self._login()
-        self.driver.get(self.live_server_url + reverse('moneybook:add'))
-
-        # テスト
-        self.driver.find_element(By.ID, 's_day').send_keys('3')
-        self.driver.find_element(By.ID, 's_price').send_keys('300')
-        self.driver.find_element(By.XPATH, '//form[3]/table/tbody/tr[3]/td/input[@type="button"][1]').click()
-
-        self.driver.get(self.live_server_url + reverse('moneybook:index'))
-        rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
-        self.assertEqual(len(rows), 3)
-        tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[0].text, str(now.year) + "/" + str.zfill(str(now.month), 2) + "/" + '03')
-        self.assertEqual(tds[1].text, 'ボーナス運用')
-        self.assertEqual(tds[2].text, '300')
-        self.assertEqual(tds[3].text, 'PayPay')
-        self.assertEqual(tds[4].text, '貯金')
-        self.assertEqual(Color.from_string(rows[1].value_of_css_property('background-color')), Color.from_string('rgba(0, 0, 0, 0)'))
-        # direction確認
-        tds[5].find_element(By.TAG_NAME, 'a').click()
-        self.assertEqual(self.driver.find_element(By.XPATH, '//form/table[1]/tbody/tr[4]/td[1]/input[2]').is_selected(), True)
-
-        self.driver.get(self.live_server_url + reverse('moneybook:index'))
-        rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
-        tds = rows[2].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[0].text, str(now.year) + "/" + str.zfill(str(now.month), 2) + "/" + '03')
-        self.assertEqual(tds[1].text, 'PayPayキャッシュバック')
-        self.assertEqual(tds[2].text, '300')
-        self.assertEqual(tds[3].text, 'PayPay')
-        self.assertEqual(tds[4].text, '収入')
-        self.assertEqual(Color.from_string(rows[2].value_of_css_property('background-color')), Color.from_string('rgba(0, 0, 0, 0)'))
-        # direction確認
-        tds[5].find_element(By.TAG_NAME, 'a').click()
-        self.assertEqual(self.driver.find_element(By.XPATH, '//form/table[1]/tbody/tr[4]/td[1]/input[1]').is_selected(), True)
 
     def test_suica_charge(self):
         now = datetime.now()
