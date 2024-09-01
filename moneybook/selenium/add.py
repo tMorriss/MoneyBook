@@ -346,7 +346,7 @@ class Add(SeleniumBase):
         # テスト
         self.driver.find_element(By.ID, 's_day').send_keys('4')
         self.driver.find_element(By.ID, 's_price').send_keys('400')
-        self.driver.find_element(By.XPATH, '//form[3]/table/tbody/tr[3]/td/input[@type="button"][2]').click()
+        self.driver.find_element(By.XPATH, '//form[3]/table/tbody/tr[3]/td/input[@type="button"][1]').click()
 
         self.driver.get(self.live_server_url + reverse('moneybook:index'))
         rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
