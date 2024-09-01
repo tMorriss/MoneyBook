@@ -69,7 +69,7 @@ function getCheckedDate() {
             rowText += '<td>';
             rowText += '<input type="button" class="btn-apply" value="' + dataJson[i].name + '" onclick="updateCheckedDate(' + dataJson[i].pk + ', ' + checkAll + ')">'
             rowText += '</td>';
-            rowText += '<td>現在: ' + dataJson[i].year + '年' + dataJson[i].month + '月' + dataJson[i].day + '日</td>';
+            rowText += '<td>現在: ' + zeroPadding(dataJson[i].year, 4) + '年' + zeroPadding(dataJson[i].month, 2) + '月' + zeroPadding(dataJson[i].day, 2) + '日</td>';
             rowText += '<td class="righter">' + separate(dataJson[i].balance) + '円</td>';
             rowText += '</tr>';
             $("#checked-date").append(rowText);

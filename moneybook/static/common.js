@@ -77,3 +77,7 @@ $(() => {
         },
     })
 });
+
+function zeroPadding(num, length) {
+    return ('0'.repeat(length) + num).slice(-length);
+}
