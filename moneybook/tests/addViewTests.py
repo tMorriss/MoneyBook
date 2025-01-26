@@ -103,7 +103,9 @@ class SuggestViewTestCase(BaseTestCase):
         self.assertEqual(response.status_code, 200, response.content)
         body = json.loads(response.content.decode())
 
-        expect = {'suggests': ['必需品1', '必需品2', '必需品3']}
+        expect = [{'date': '2000-02-01', 'item': '必需品3', 'price': 400},
+                  {'date': '2000-01-08', 'item': '必需品2', 'price': 3500},
+                  {'date': '2000-01-05', 'item': '必需品1', 'price': 1000}]
         self.assertEqual(body, expect)
 
     def test_get_distinct(self):
@@ -113,7 +115,8 @@ class SuggestViewTestCase(BaseTestCase):
         self.assertEqual(response.status_code, 200, response.content)
         body = json.loads(response.content.decode())
 
-        expect = {'suggests': ['PayPayチャージ']}
+        expect = [{'date': '2000-01-25', 'item': 'PayPayチャージ', 'price': 1000},
+                  {'date': '2000-01-25', 'item': 'PayPayチャージ', 'price': 1000}]
         self.assertEqual(body, expect)
 
     def test_get_missing_item(self):
