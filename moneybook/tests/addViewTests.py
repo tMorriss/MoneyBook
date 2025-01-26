@@ -103,13 +103,12 @@ class SuggestViewTestCase(BaseTestCase):
         self.assertEqual(response.status_code, 200, response.content)
         body = json.loads(response.content.decode())
 
-        expects = [{'date': '2000-02-01', 'item': '必需品3', 'price': 400},
-                   {'date': '2000-01-08', 'item': '必需品2', 'price': 3500},
-                   {'date': '2000-01-05', 'item': '必需品1', 'price': 1000}]
-        self.assertEqual(body.count(), len(expects))
-        for i in range(len(expects)):
-            with self.subTest(i=i):
-                self.assertEqual(body[i], expects[i])
+        expects = {'suggests': [
+            {'date': '2000-02-01', 'item': '必需品3', 'price': 400},
+            {'date': '2000-01-08', 'item': '必需品2', 'price': 3500},
+            {'date': '2000-01-05', 'item': '必需品1', 'price': 1000}
+        ]}
+        self.assertEqual(body, expects)
 
     def test_get_distinct(self):
         self.client.force_login(User.objects.create_user(self.username))
@@ -118,12 +117,11 @@ class SuggestViewTestCase(BaseTestCase):
         self.assertEqual(response.status_code, 200, response.content)
         body = json.loads(response.content.decode())
 
-        expects = [{'date': '2000-01-25', 'item': 'PayPayチャージ', 'price': 1000},
-                   {'date': '2000-01-25', 'item': 'PayPayチャージ', 'price': 1000}]
-        self.assertEqual(body.count(), len(expects))
-        for i in range(len(expects)):
-            with self.subTest(i=i):
-                self.assertEqual(body[i], expects[i])
+        expects = {'suggests': [
+            {'date': '2000-01-25', 'item': 'PayPayチャージ', 'price': 1000},
+            {'date': '2000-01-25', 'item': 'PayPayチャージ', 'price': 1000}
+        ]}
+        self.assertEqual(body, expects)
 
     def test_get_missing_item(self):
         self.client.force_login(User.objects.create_user(self.username))
