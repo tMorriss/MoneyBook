@@ -72,9 +72,34 @@ $(() => {
                 }
             }).done((data) => {
                 const dataJson = JSON.parse(data);
-                response(dataJson.suggests);
+                const items = dataJson.suggests.map(suggest => suggest.item);
+                response([...new Set(items)]);
             })
         },
+    })
+});
+
+$(() => {
+    $('.add_price').autocomplete({
+        source: (request, response) => {
+            $.get({
+                url: suggest_url,
+                data: {
+                    "item": $(".add_item").val(),
+                }
+            }).done((data) => {
+                const dataJson = JSON.parse(data);
+                const prices = dataJson.suggests.map(suggest => suggest.price);
+                const recentPrice = prices.slice(0, 10);
+                response([...new Set(recentPrice)].map(String));
+            })
+        },
+        focus: (event, ui) => {
+            $(this).val(ui.item.label);
+            return false;
+        },
+        minLength: 0,
+        delay: 0,
     })
 });
 

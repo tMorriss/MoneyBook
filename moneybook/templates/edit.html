@@ -9,6 +9,7 @@
 <script type="text/javascript">
     edit_url = "{% url 'moneybook:edit' data.pk %}";
     delete_url = "{% url 'moneybook:delete' %}";
+    suggest_url = "{% url 'moneybook:suggest' %}";
 
     data_pk = "{{ data.pk }}";
 </script>
@@ -32,12 +33,12 @@
             </tr>
             <tr>
                 <th>品目</th>
-                <td><input type="text" id="item" size="25" value="{{ data.item }}"
+                <td><input type="text" id="item" class="add_item" size="25" value="{{ data.item }}"
                         onkeypress="keyPressUpdate(event.keyCode)"></td>
             </tr>
             <tr>
                 <th>金額</th>
-                <td><input type="text" id="price" size="10" class="righter" value="{{ data.price }}"
+                <td><input type="text" id="price" size="10" class="add_price righter" value="{{ data.price }}"
                         onkeypress="keyPressUpdate(event.keyCode)">円</td>
             </tr>
             <tr>
