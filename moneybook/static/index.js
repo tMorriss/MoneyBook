@@ -19,7 +19,7 @@ function sendAddRow() {
             "direction": direction,
             "method": $('input[name="a_method"]:checked').val(),
             "category": category,
-            "temp": "False",
+            "temp": $('input[name="a_temp"]:checked').val(),
             "checked": "False",
         }
     }).done(() => {
@@ -156,6 +156,7 @@ function resetAddForm() {
     $('#a_price').val('');
     $('input[name=a_method]').val([method_first]);
     $('input[name=a_category]').val([category_first]);
+    $('input[name=a_temp]').val(["False"]);
 
     // フォーカス
     $('#a_day').focus();

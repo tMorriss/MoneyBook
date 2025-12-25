@@ -65,6 +65,17 @@
                 </table>
             </td>
         </tr>
+        <tr>
+            <th>立替</th>
+            <td class="radio-green">
+                {% for k,v in temps.items %}
+                <input type="radio" name="a_temp" value="{% if k == 0 %}False{% else %}True{% endif %}" id="a_temp-{{ k }}" {% if k == 0 %} checked{% endif %}
+                    onkeypress="keyPressAdd(event.keyCode)" onfocus="addBlueFocus('#lbl_a_temp-{{ k }}')"
+                    onblur="removeBlueFocus('#lbl_a_temp-{{ k }}')">
+                <label for="a_temp-{{ k }}" id="lbl_a_temp-{{ k }}">{{ v }}</label>
+                {% endfor %}
+            </td>
+        </tr>
     </table>
     <input type="button" value="追加" class="btn-apply" onclick="sendAddRow()">
 </form>
