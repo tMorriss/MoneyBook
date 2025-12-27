@@ -1,9 +1,11 @@
-import chromedriver_binary  # noqa: F401
 from django.contrib.auth.models import User
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.urls import reverse
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 
 class SeleniumBase(StaticLiveServerTestCase):
@@ -17,10 +19,16 @@ class SeleniumBase(StaticLiveServerTestCase):
         User.objects.create_user(self.username, self.username + '@hoge.com', self.password)
 
         options = webdriver.ChromeOptions()
-        options.add_argument('--headless')
+        options.add_argument('--headless=new')
         options.add_argument('--window-size=1920,1080')
         options.add_argument('--no-sandbox')
-        self.driver = webdriver.Chrome(options=options)
+        options.add_argument('--disable-dev-shm-usage')
+        options.add_argument('--disable-gpu')
+        options.add_argument('--disable-software-rasterizer')
+        options.add_argument('--disable-extensions')
+        # Use system-installed chromedriver
+        service = Service('/usr/bin/chromedriver')
+        self.driver = webdriver.Chrome(service=service, options=options)
         self.driver.implicitly_wait(10)
 
     def tearDown(self):
@@ -29,11 +37,19 @@ class SeleniumBase(StaticLiveServerTestCase):
 
     def _login(self):
         self.driver.get(self.live_server_url + reverse('moneybook:login'))
+        # Wait for the login form to be ready
+        WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located((By.ID, 'id_username'))
+        )
         username_input = self.driver.find_element(By.ID, 'id_username')
         username_input.send_keys(self.username)
         password_input = self.driver.find_element(By.ID, 'id_password')
         password_input.send_keys(self.password)
         self.driver.find_element(By.CLASS_NAME, 'btn-apply').click()
+        # Wait for the redirect to complete
+        WebDriverWait(self.driver, 10).until(
+            EC.url_changes(self.live_server_url + reverse('moneybook:login'))
+        )
 
     def _assert_common(self):
         # アプリ名
