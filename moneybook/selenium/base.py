@@ -4,8 +4,8 @@ from django.urls import reverse
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 
 
 class SeleniumBase(StaticLiveServerTestCase):
@@ -39,7 +39,7 @@ class SeleniumBase(StaticLiveServerTestCase):
         self.driver.get(self.live_server_url + reverse('moneybook:login'))
         # Wait for the login form to be ready
         WebDriverWait(self.driver, 10).until(
-            EC.presence_of_element_located((By.ID, 'id_username'))
+            expected_conditions.presence_of_element_located((By.ID, 'id_username'))
         )
         username_input = self.driver.find_element(By.ID, 'id_username')
         username_input.send_keys(self.username)
@@ -48,7 +48,7 @@ class SeleniumBase(StaticLiveServerTestCase):
         self.driver.find_element(By.CLASS_NAME, 'btn-apply').click()
         # Wait for the redirect to complete
         WebDriverWait(self.driver, 10).until(
-            EC.url_changes(self.live_server_url + reverse('moneybook:login'))
+            expected_conditions.url_changes(self.live_server_url + reverse('moneybook:login'))
         )
 
     def _assert_common(self):
