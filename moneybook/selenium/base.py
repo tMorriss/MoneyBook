@@ -1,3 +1,6 @@
+import os
+import shutil
+
 from django.contrib.auth.models import User
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.urls import reverse
@@ -24,10 +27,38 @@ class SeleniumBase(StaticLiveServerTestCase):
         options.add_argument('--no-sandbox')
         options.add_argument('--disable-dev-shm-usage')
         options.add_argument('--disable-extensions')
-        # Use system-installed chromedriver (e.g., in GitHub Actions CI)
-        service = Service('/usr/bin/chromedriver')
-        self.driver = webdriver.Chrome(service=service, options=options)
+
+        # Find ChromeDriver - works on both Windows and Linux
+        chromedriver_path = self._find_chromedriver()
+        if chromedriver_path:
+            service = Service(chromedriver_path)
+            self.driver = webdriver.Chrome(service=service, options=options)
+        else:
+            # Let Selenium's built-in driver management handle it
+            self.driver = webdriver.Chrome(options=options)
+
         self.driver.implicitly_wait(10)
+
+    def _find_chromedriver(self):
+        """Find ChromeDriver in common locations for Windows and Linux."""
+        # Check if chromedriver is in PATH
+        chromedriver_in_path = shutil.which('chromedriver')
+        if chromedriver_in_path:
+            return chromedriver_in_path
+
+        # Common locations to check
+        common_paths = [
+            '/usr/bin/chromedriver',  # Linux (CI)
+            '/usr/local/bin/chromedriver',  # Linux
+            'C:\\chromedriver.exe',  # Windows (root)
+            os.path.expanduser('~\\chromedriver.exe'),  # Windows (user home)
+        ]
+
+        for path in common_paths:
+            if os.path.isfile(path):
+                return path
+
+        return None
 
     def tearDown(self):
         self.driver.quit()
