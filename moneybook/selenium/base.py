@@ -23,10 +23,8 @@ class SeleniumBase(StaticLiveServerTestCase):
         options.add_argument('--window-size=1920,1080')
         options.add_argument('--no-sandbox')
         options.add_argument('--disable-dev-shm-usage')
-        options.add_argument('--disable-gpu')
-        options.add_argument('--disable-software-rasterizer')
         options.add_argument('--disable-extensions')
-        # Use system-installed chromedriver
+        # Use system-installed chromedriver (e.g., in GitHub Actions CI)
         service = Service('/usr/bin/chromedriver')
         self.driver = webdriver.Chrome(service=service, options=options)
         self.driver.implicitly_wait(10)
