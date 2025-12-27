@@ -34,14 +34,27 @@ class SeleniumBase(StaticLiveServerTestCase):
             service = Service(chromedriver_path)
             self.driver = webdriver.Chrome(service=service, options=options)
         else:
-            # Let Selenium's built-in driver management handle it
-            self.driver = webdriver.Chrome(options=options)
+            # Try Selenium's built-in driver management as fallback
+            try:
+                self.driver = webdriver.Chrome(options=options)
+            except Exception as e:
+                error_msg = (
+                    "ChromeDriver not found. Please install ChromeDriver and either:\n"
+                    "1. Add it to your system PATH, or\n"
+                    "2. Place chromedriver.exe in one of these locations:\n"
+                    "   - C:\\chromedriver.exe\n"
+                    "   - C:\\Program Files\\chromedriver.exe\n"
+                    f"   - {os.path.expanduser('~\\chromedriver.exe')}\n"
+                    f"   - {os.path.expanduser('~/AppData/Local/Programs/chromedriver.exe')}\n"
+                    "Download from: https://chromedriver.chromium.org/downloads"
+                )
+                raise RuntimeError(error_msg) from e
 
         self.driver.implicitly_wait(10)
 
     def _find_chromedriver(self):
         """Find ChromeDriver in common locations for Windows and Linux."""
-        # Check if chromedriver is in PATH
+        # Check if chromedriver is in PATH (handles .exe extension on Windows automatically)
         chromedriver_in_path = shutil.which('chromedriver')
         if chromedriver_in_path:
             return chromedriver_in_path
@@ -51,7 +64,10 @@ class SeleniumBase(StaticLiveServerTestCase):
             '/usr/bin/chromedriver',  # Linux (CI)
             '/usr/local/bin/chromedriver',  # Linux
             'C:\\chromedriver.exe',  # Windows (root)
+            'C:\\Program Files\\chromedriver.exe',  # Windows Program Files
+            'C:\\Program Files (x86)\\chromedriver.exe',  # Windows Program Files (x86)
             os.path.expanduser('~\\chromedriver.exe'),  # Windows (user home)
+            os.path.expanduser('~/AppData/Local/Programs/chromedriver.exe'),  # Windows AppData
         ]
 
         for path in common_paths:
