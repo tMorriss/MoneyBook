@@ -25,7 +25,7 @@ class Index(SeleniumBase):
     def _assert_add(self, item, method, category):
         now = datetime.now()
         self._login()
-        self.driver.get(self.live_server_url + reverse('moneybook:index'))
+        self._location(self.live_server_url + reverse('moneybook:index'))
 
         self.assertEqual(len(self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')), 1)
 
@@ -62,7 +62,7 @@ class Index(SeleniumBase):
 
     def _assert_invalid_add(self, year, month, day, item, price):
         self._login()
-        self.driver.get(self.live_server_url + reverse('moneybook:index'))
+        self._location(self.live_server_url + reverse('moneybook:index'))
 
         self.assertEqual(len(self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')), 1)
 
@@ -107,7 +107,7 @@ class Index(SeleniumBase):
 
     def test_index(self):
         self._login()
-        self.driver.get(self.live_server_url + reverse('moneybook:index'))
+        self._location(self.live_server_url + reverse('moneybook:index'))
 
         # 日付だけ確認
         now = datetime.now()
@@ -119,7 +119,7 @@ class Index(SeleniumBase):
 
     def test_index_month(self):
         self._login()
-        self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+        self._location(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
         self._assert_common()
 
         # 追加部分
@@ -244,7 +244,7 @@ class Index(SeleniumBase):
     def test_index_month_out_of_range(self):
         '''存在しない日付に飛ぶとtopにリダイレクト'''
         self._login()
-        self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 13}))
+        self._location(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 13}))
         self.assertEqual(self.driver.current_url, self.live_server_url + reverse('moneybook:index'))
 
     def test_add_bank_food(self):
@@ -271,7 +271,7 @@ class Index(SeleniumBase):
     def test_all_charge(self):
         now = datetime.now()
         self._login()
-        self.driver.get(self.live_server_url + reverse('moneybook:index'))
+        self._location(self.live_server_url + reverse('moneybook:index'))
 
         self.assertEqual(len(self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')), 1)
 
@@ -309,7 +309,7 @@ class Index(SeleniumBase):
     def test_add_empty_day_today(self):
         now = datetime.now()
         self._login()
-        self.driver.get(self.live_server_url + reverse('moneybook:index'))
+        self._location(self.live_server_url + reverse('moneybook:index'))
 
         self.driver.find_element(By.ID, 'a_item').send_keys('テスト2')
         self.driver.find_element(By.ID, 'a_price').send_keys('3000')
@@ -363,7 +363,7 @@ class Index(SeleniumBase):
 
     def test_filter_button(self):
         self._login()
-        self.driver.get(self.live_server_url + reverse('moneybook:index'))
+        self._location(self.live_server_url + reverse('moneybook:index'))
 
         self.driver.find_element(By.ID, 'jump_year').clear()
         self.driver.find_element(By.ID, 'jump_year').send_keys('2000')
@@ -376,7 +376,7 @@ class Index(SeleniumBase):
 
     def test_filter_year_enter(self):
         self._login()
-        self.driver.get(self.live_server_url + reverse('moneybook:index'))
+        self._location(self.live_server_url + reverse('moneybook:index'))
 
         self.driver.find_element(By.ID, 'jump_year').clear()
         self.driver.find_element(By.ID, 'jump_year').send_keys('2000')
@@ -387,7 +387,7 @@ class Index(SeleniumBase):
 
     def test_filter_month_enter(self):
         self._login()
-        self.driver.get(self.live_server_url + reverse('moneybook:index'))
+        self._location(self.live_server_url + reverse('moneybook:index'))
 
         self.driver.find_element(By.ID, 'jump_year').clear()
         self.driver.find_element(By.ID, 'jump_year').send_keys('2000')
@@ -398,7 +398,7 @@ class Index(SeleniumBase):
 
     def test_filter_jump_last(self):
         self._login()
-        self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+        self._location(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
         self.driver.find_element(By.XPATH,
                                  '//*[@id="filter-fixed"]/table[1]/tbody/tr[1]/td[1]/table/tbody/tr[1]/td[1]/a'
                                  ).click()
@@ -406,7 +406,7 @@ class Index(SeleniumBase):
 
     def test_filter_jump_next(self):
         self._login()
-        self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 12}))
+        self._location(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 12}))
         self.driver.find_element(By.XPATH,
                                  '//*[@id="filter-fixed"]/table[1]/tbody/tr[1]/td[1]/table/tbody/tr[1]/td[3]/a'
                                  ).click()
@@ -414,7 +414,7 @@ class Index(SeleniumBase):
 
     def test_index_filter_inout(self):
         self._login()
-        self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+        self._location(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
         is_income = [True, True, False, False, False, False, True, False, False, False, True, True, False, False, False, False, True]
 
         # 収入だけ表示
@@ -440,7 +440,7 @@ class Index(SeleniumBase):
 
     def test_index_filter_method_none(self):
         self._login()
-        self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+        self._location(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
 
         # 全部非表示
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label[1]').click()
@@ -454,7 +454,7 @@ class Index(SeleniumBase):
 
     def test_index_filter_bank(self):
         self._login()
-        self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+        self._location(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
 
         # 銀行のみ表示
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label[2]').click()
@@ -467,7 +467,7 @@ class Index(SeleniumBase):
 
     def test_index_filter_bank_paypay(self):
         self._login()
-        self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+        self._location(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
 
         # 銀行とPayPay
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label[2]').click()
@@ -479,7 +479,7 @@ class Index(SeleniumBase):
 
     def test_index_filter_category_none(self):
         self._login()
-        self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+        self._location(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
 
         # 全部非表示
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[1]').click()
@@ -495,7 +495,7 @@ class Index(SeleniumBase):
 
     def test_index_filter_category_food(self):
         self._login()
-        self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+        self._location(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
 
         # 食費のみ表示
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[2]').click()
@@ -511,7 +511,7 @@ class Index(SeleniumBase):
 
     def test_index_filter_category_food_necessary(self):
         self._login()
-        self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+        self._location(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
 
         # 食費と必需品
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[3]').click()
@@ -526,7 +526,7 @@ class Index(SeleniumBase):
 
     def test_index_filter_category_food_necessary_intra(self):
         self._login()
-        self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+        self._location(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
 
         # 食費と必需品と内部移動
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[3]').click()
@@ -540,7 +540,7 @@ class Index(SeleniumBase):
 
     def test_index_filter_all(self):
         self._login()
-        self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+        self._location(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
 
         # 全解除
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[3]/td[1]/input[@value="全解除"]').click()
@@ -556,7 +556,7 @@ class Index(SeleniumBase):
 
     def test_move_edit(self):
         self._login()
-        self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+        self._location(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
         self.driver.find_element(By.XPATH, '//*[@id="transactions"]/table/tbody/tr[2]/td[6]/a').click()
 
         self.assertEqual(self.driver.current_url, self.live_server_url + reverse('moneybook:edit', kwargs={'pk': 18}))

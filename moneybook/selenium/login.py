@@ -15,7 +15,7 @@ class Login(SeleniumBase):
                         self.driver.find_element(By.CLASS_NAME, "header-cont2").text)
 
     def test_login_enter_username(self):
-        self.driver.get(self.live_server_url + reverse('moneybook:login'))
+        self._location(self.live_server_url + reverse('moneybook:login'))
         username_input = self.driver.find_element(By.ID, 'id_username')
         username_input.send_keys(self.username)
         password_input = self.driver.find_element(By.ID, 'id_password')
@@ -29,7 +29,7 @@ class Login(SeleniumBase):
                         self.driver.find_element(By.CLASS_NAME, "header-cont2").text)
 
     def test_login_enter_password(self):
-        self.driver.get(self.live_server_url + reverse('moneybook:login'))
+        self._location(self.live_server_url + reverse('moneybook:login'))
         username_input = self.driver.find_element(By.ID, 'id_username')
         username_input.send_keys(self.username)
         password_input = self.driver.find_element(By.ID, 'id_password')
