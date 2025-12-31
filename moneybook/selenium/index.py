@@ -5,9 +5,9 @@ from django.urls import reverse
 from moneybook.selenium.base import SeleniumBase
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.color import Color
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 
 
 class Index(SeleniumBase):
@@ -17,7 +17,7 @@ class Index(SeleniumBase):
         WebDriverWait(self.driver, timeout).until(
             EC.presence_of_element_located((By.XPATH, '//*[@id="transactions"]/table'))
         )
-        
+
         # Wait for data rows to be present
         if expected_count:
             WebDriverWait(self.driver, timeout).until(
@@ -28,7 +28,7 @@ class Index(SeleniumBase):
             WebDriverWait(self.driver, timeout).until(
                 lambda d: len(d.find_elements(By.CLASS_NAME, 'data-row')) > 0
             )
-        
+
         # Small additional wait for JavaScript to stabilize
         time.sleep(0.5)
 
@@ -53,7 +53,7 @@ class Index(SeleniumBase):
         now = datetime.now()
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index'))
-        
+
         # Wait for page to be fully loaded
         WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.ID, 'a_year'))
@@ -96,7 +96,7 @@ class Index(SeleniumBase):
     def _assert_invalid_add(self, year, month, day, item, price):
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index'))
-        
+
         # Wait for page to be fully loaded
         WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.ID, 'a_year'))
@@ -147,7 +147,7 @@ class Index(SeleniumBase):
     def test_index(self):
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index'))
-        
+
         # Wait for page to be fully loaded
         WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.ID, 'a_year'))
@@ -165,10 +165,10 @@ class Index(SeleniumBase):
     def test_index_month(self):
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
-        
+
         # WAIT FOR AJAX DATA TO LOAD
         self._wait_for_transactions_loaded(expected_count=17)
-        
+
         self._assert_common()
 
         # 追加部分
@@ -321,7 +321,7 @@ class Index(SeleniumBase):
         now = datetime.now()
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index'))
-        
+
         # Wait for page to be fully loaded
         WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.ID, 'a_year'))
@@ -365,7 +365,7 @@ class Index(SeleniumBase):
         now = datetime.now()
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index'))
-        
+
         # Wait for page to be fully loaded
         WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.ID, 'a_year'))
@@ -425,7 +425,7 @@ class Index(SeleniumBase):
     def test_filter_button(self):
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index'))
-        
+
         # Wait for page to be fully loaded
         WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.ID, 'jump_year'))
@@ -444,7 +444,7 @@ class Index(SeleniumBase):
     def test_filter_year_enter(self):
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index'))
-        
+
         # Wait for page to be fully loaded
         WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.ID, 'jump_year'))
@@ -461,7 +461,7 @@ class Index(SeleniumBase):
     def test_filter_month_enter(self):
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index'))
-        
+
         # Wait for page to be fully loaded
         WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.ID, 'jump_year'))
@@ -478,10 +478,10 @@ class Index(SeleniumBase):
     def test_filter_jump_last(self):
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
-        
+
         # WAIT FOR AJAX DATA TO LOAD
         self._wait_for_transactions_loaded(expected_count=17)
-        
+
         self.driver.find_element(By.XPATH,
                                  '//*[@id="filter-fixed"]/table[1]/tbody/tr[1]/td[1]/table/tbody/tr[1]/td[1]/a'
                                  ).click()
@@ -490,13 +490,13 @@ class Index(SeleniumBase):
     def test_filter_jump_next(self):
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 12}))
-        
+
         # Wait for page to be fully loaded (no transactions expected for this month)
         WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.XPATH, '//*[@id="transactions"]/table'))
         )
         time.sleep(0.5)  # Let JavaScript initialize
-        
+
         self.driver.find_element(By.XPATH,
                                  '//*[@id="filter-fixed"]/table[1]/tbody/tr[1]/td[1]/table/tbody/tr[1]/td[3]/a'
                                  ).click()
@@ -505,10 +505,10 @@ class Index(SeleniumBase):
     def test_index_filter_inout(self):
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
-        
+
         # WAIT FOR AJAX DATA TO LOAD
         self._wait_for_transactions_loaded(expected_count=17)
-        
+
         is_income = [True, True, False, False, False, False, True, False, False, False, True, True, False, False, False, False, True]
 
         # 収入だけ表示
@@ -538,7 +538,7 @@ class Index(SeleniumBase):
     def test_index_filter_method_none(self):
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
-        
+
         # WAIT FOR AJAX DATA TO LOAD
         self._wait_for_transactions_loaded(expected_count=17)
 
@@ -556,7 +556,7 @@ class Index(SeleniumBase):
     def test_index_filter_bank(self):
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
-        
+
         # WAIT FOR AJAX DATA TO LOAD
         self._wait_for_transactions_loaded(expected_count=17)
 
@@ -573,7 +573,7 @@ class Index(SeleniumBase):
     def test_index_filter_bank_paypay(self):
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
-        
+
         # WAIT FOR AJAX DATA TO LOAD
         self._wait_for_transactions_loaded(expected_count=17)
 
@@ -589,7 +589,7 @@ class Index(SeleniumBase):
     def test_index_filter_category_none(self):
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
-        
+
         # WAIT FOR AJAX DATA TO LOAD
         self._wait_for_transactions_loaded(expected_count=17)
 
@@ -609,7 +609,7 @@ class Index(SeleniumBase):
     def test_index_filter_category_food(self):
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
-        
+
         # WAIT FOR AJAX DATA TO LOAD
         self._wait_for_transactions_loaded(expected_count=17)
 
@@ -629,7 +629,7 @@ class Index(SeleniumBase):
     def test_index_filter_category_food_necessary(self):
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
-        
+
         # WAIT FOR AJAX DATA TO LOAD
         self._wait_for_transactions_loaded(expected_count=17)
 
@@ -648,7 +648,7 @@ class Index(SeleniumBase):
     def test_index_filter_category_food_necessary_intra(self):
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
-        
+
         # WAIT FOR AJAX DATA TO LOAD
         self._wait_for_transactions_loaded(expected_count=17)
 
@@ -666,7 +666,7 @@ class Index(SeleniumBase):
     def test_index_filter_all(self):
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
-        
+
         # WAIT FOR AJAX DATA TO LOAD
         self._wait_for_transactions_loaded(expected_count=17)
 
@@ -687,10 +687,10 @@ class Index(SeleniumBase):
     def test_move_edit(self):
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
-        
+
         # WAIT FOR AJAX DATA TO LOAD
         self._wait_for_transactions_loaded(expected_count=17)
-        
+
         self.driver.find_element(By.XPATH, '//*[@id="transactions"]/table/tbody/tr[2]/td[6]/a').click()
 
         self.assertEqual(self.driver.current_url, self.live_server_url + reverse('moneybook:edit', kwargs={'pk': 18}))
