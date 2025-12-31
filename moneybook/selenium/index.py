@@ -20,7 +20,7 @@ class Index(SeleniumBase):
         self.assertTrue(
             self.driver.find_element(By.XPATH,
                                      '//*[@id="filter-fixed"]/form/table/tbody/tr[5]/td/table/tbody/tr[1]/td/input[1]').is_selected())
-        self.assertFalse(self.driver.find_element(By.ID, 'lbl_is-charge').is_selected())
+        self.assertTrue(self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/table/tbody/tr[6]/td/input[1]').is_selected())
 
     def _assert_add(self, item, method, category):
         now = datetime.now()
@@ -268,43 +268,31 @@ class Index(SeleniumBase):
     def test_add_escape(self):
         self._assert_add('テ&ス<>ト', '銀行', '食費')
 
-    def test_all_charge(self):
+    def test_add_temp(self):
         now = datetime.now()
         self._login()
         self._location(self.live_server_url + reverse('moneybook:index'))
 
         self.assertEqual(len(self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')), 1)
 
-        # 1件追加
-        self.driver.find_element(By.ID, 'a_day').send_keys('3')
-        self.driver.find_element(By.ID, 'a_item').send_keys('テスト1')
-        self.driver.find_element(By.ID, 'a_price').send_keys('2000')
-        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/table/tbody/tr[4]/td/label[3]').click()
+        # 1件追加 (立替=Yes)
+        self.driver.find_element(By.ID, 'a_day').send_keys('5')
+        self.driver.find_element(By.ID, 'a_item').send_keys('立替テスト')
+        self.driver.find_element(By.ID, 'a_price').send_keys('1500')
+        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/table/tbody/tr[4]/td/label[1]').click()
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/table/tbody/tr[5]/td/table/tbody/tr/td/label[1]').click()
-        self.driver.find_element(By.ID, 'lbl_is-charge').click()
+        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/table/tbody/tr[6]/td/label[2]').click()
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/input[@value="追加"]').click()
         time.sleep(2)
 
         rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
-        self.assertEqual(len(rows), 4)
+        self.assertEqual(len(rows), 2)
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[0].text, str(now.year) + "/" + str.zfill(str(now.month), 2) + "/" + '03')
-        self.assertEqual(tds[1].text, 'Kyashチャージ')
-        self.assertEqual(tds[2].text, '2,000')
-        self.assertEqual(tds[3].text, 'Kyash')
-        self.assertEqual(tds[4].text, '内部移動')
-        tds = rows[2].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[0].text, str(now.year) + "/" + str.zfill(str(now.month), 2) + "/" + '03')
-        self.assertEqual(tds[1].text, 'Kyashチャージ')
-        self.assertEqual(tds[2].text, '2,000')
+        self.assertEqual(tds[0].text, str(now.year) + "/" + str.zfill(str(now.month), 2) + "/" + '05')
+        self.assertEqual(tds[1].text, '立替テスト')
+        self.assertEqual(tds[2].text, '1,500')
         self.assertEqual(tds[3].text, '銀行')
-        self.assertEqual(tds[4].text, '内部移動')
-        tds = rows[3].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[0].text, str(now.year) + "/" + str.zfill(str(now.month), 2) + "/" + '03')
-        self.assertEqual(tds[1].text, 'テスト1')
-        self.assertEqual(tds[2].text, '2,000')
-        self.assertEqual(tds[3].text, 'Kyash')
-        self.assertEqual(tds[4].text, '食費')
+        self.assertEqual(tds[4].text, '立替')
 
     def test_add_empty_day_today(self):
         now = datetime.now()

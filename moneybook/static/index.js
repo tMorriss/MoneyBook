@@ -19,38 +19,11 @@ function sendAddRow() {
             "direction": direction,
             "method": $('input[name="a_method"]:checked').val(),
             "category": category,
-            "temp": "False",
+            "temp": $('input[name="a_temp"]:checked').val(),
             "checked": "False",
         }
     }).done(() => {
-        method_id = $('input[name="a_method"]:checked').attr('id');
-        label_id = $('#lbl_' + method_id).text();
-
-        if ($('#is-charge').prop('checked')) {
-            $.post({
-                url: add_intra_move_url,
-                data: {
-                    "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
-                    "year": $('#a_year').val(),
-                    "month": $('#a_month').val(),
-                    "day": $('#a_day').val(),
-                    "item": label_id + "チャージ",
-                    "price": removeComma($('#a_price').val()),
-                    "before_method": 2,
-                    "after_method": $('input[name="a_method"]:checked').val(),
-                }
-            }).done(() => {
-                updateSuccess();
-            }).fail(() => {
-                // メッセージ表示
-                showResultMsg("Error...", empty);
-                // 抜ける
-                return;
-            });
-        }
-        else {
-            updateSuccess();
-        }
+        updateSuccess();
     }).fail(() => {
         // メッセージ表示
         showResultMsg("Error...", empty);
@@ -183,7 +156,7 @@ function resetAddForm() {
     $('#a_price').val('');
     $('input[name=a_method]').val([method_first]);
     $('input[name=a_category]').val([category_first]);
-    $('#is-charge').prop('checked', false).change();
+    $('input[name=a_temp]').val(["False"]);
 
     // フォーカス
     $('#a_day').focus();

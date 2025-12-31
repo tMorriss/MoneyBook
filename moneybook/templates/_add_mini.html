@@ -66,11 +66,14 @@
             </td>
         </tr>
         <tr>
-            <th>全額チャージ</th>
+            <th>立替</th>
             <td class="radio-green">
-                <input type="checkbox" value="1" id="is-charge" onkeypress="keyPressAdd(event.keyCode)"
-                    onfocus="addBlueFocus('#lbl_is-charge')" onblur="removeBlueFocus('#lbl_is-charge')">
-                <label for="is-charge" id="lbl_is-charge">Yes</label>
+                {% for k,v in temps.items %}
+                <input type="radio" name="a_temp" value="{% if k == 0 %}False{% else %}True{% endif %}" id="a_temp-{{ k }}" {% if k == 0 %} checked{% endif %}
+                    onkeypress="keyPressAdd(event.keyCode)" onfocus="addBlueFocus('#lbl_a_temp-{{ k }}')"
+                    onblur="removeBlueFocus('#lbl_a_temp-{{ k }}')">
+                <label for="a_temp-{{ k }}" id="lbl_a_temp-{{ k }}">{{ v }}</label>
+                {% endfor %}
             </td>
         </tr>
     </table>
