@@ -1,4 +1,7 @@
-import chromedriver_binary  # noqa: F401
+try:
+    import chromedriver_binary  # noqa: F401
+except ImportError:
+    pass  # Use system chromedriver
 from django.contrib.auth.models import User
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.urls import reverse

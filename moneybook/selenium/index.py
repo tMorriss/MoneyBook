@@ -53,6 +53,12 @@ class Index(SeleniumBase):
         now = datetime.now()
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index'))
+        
+        # Wait for page to be fully loaded
+        WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located((By.ID, 'a_year'))
+        )
+        time.sleep(0.5)  # Let JavaScript initialize
 
         self.assertEqual(len(self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')), 1)
 
@@ -141,6 +147,12 @@ class Index(SeleniumBase):
     def test_index(self):
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index'))
+        
+        # Wait for page to be fully loaded
+        WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located((By.ID, 'a_year'))
+        )
+        time.sleep(0.5)  # Let JavaScript initialize
 
         # 日付だけ確認
         now = datetime.now()
@@ -309,6 +321,12 @@ class Index(SeleniumBase):
         now = datetime.now()
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index'))
+        
+        # Wait for page to be fully loaded
+        WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located((By.ID, 'a_year'))
+        )
+        time.sleep(0.5)  # Let JavaScript initialize
 
         self.assertEqual(len(self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')), 1)
 
@@ -347,6 +365,12 @@ class Index(SeleniumBase):
         now = datetime.now()
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index'))
+        
+        # Wait for page to be fully loaded
+        WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located((By.ID, 'a_year'))
+        )
+        time.sleep(0.5)  # Let JavaScript initialize
 
         self.driver.find_element(By.ID, 'a_item').send_keys('テスト2')
         self.driver.find_element(By.ID, 'a_price').send_keys('3000')
@@ -401,6 +425,12 @@ class Index(SeleniumBase):
     def test_filter_button(self):
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index'))
+        
+        # Wait for page to be fully loaded
+        WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located((By.ID, 'jump_year'))
+        )
+        time.sleep(0.5)  # Let JavaScript initialize
 
         self.driver.find_element(By.ID, 'jump_year').clear()
         self.driver.find_element(By.ID, 'jump_year').send_keys('2000')
@@ -414,6 +444,12 @@ class Index(SeleniumBase):
     def test_filter_year_enter(self):
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index'))
+        
+        # Wait for page to be fully loaded
+        WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located((By.ID, 'jump_year'))
+        )
+        time.sleep(0.5)  # Let JavaScript initialize
 
         self.driver.find_element(By.ID, 'jump_year').clear()
         self.driver.find_element(By.ID, 'jump_year').send_keys('2000')
@@ -425,6 +461,12 @@ class Index(SeleniumBase):
     def test_filter_month_enter(self):
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index'))
+        
+        # Wait for page to be fully loaded
+        WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located((By.ID, 'jump_year'))
+        )
+        time.sleep(0.5)  # Let JavaScript initialize
 
         self.driver.find_element(By.ID, 'jump_year').clear()
         self.driver.find_element(By.ID, 'jump_year').send_keys('2000')
@@ -436,6 +478,10 @@ class Index(SeleniumBase):
     def test_filter_jump_last(self):
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+        
+        # WAIT FOR AJAX DATA TO LOAD
+        self._wait_for_transactions_loaded(expected_count=17)
+        
         self.driver.find_element(By.XPATH,
                                  '//*[@id="filter-fixed"]/table[1]/tbody/tr[1]/td[1]/table/tbody/tr[1]/td[1]/a'
                                  ).click()
@@ -444,6 +490,13 @@ class Index(SeleniumBase):
     def test_filter_jump_next(self):
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 12}))
+        
+        # Wait for page to be fully loaded (no transactions expected for this month)
+        WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, '//*[@id="transactions"]/table'))
+        )
+        time.sleep(0.5)  # Let JavaScript initialize
+        
         self.driver.find_element(By.XPATH,
                                  '//*[@id="filter-fixed"]/table[1]/tbody/tr[1]/td[1]/table/tbody/tr[1]/td[3]/a'
                                  ).click()
