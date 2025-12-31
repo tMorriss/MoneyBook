@@ -4,3 +4,4 @@ chrome*
 /fixture/
 .coverage
 coverage.*
+.venv/
