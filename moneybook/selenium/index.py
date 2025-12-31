@@ -6,9 +6,36 @@ from moneybook.selenium.base import SeleniumBase
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.color import Color
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 
 class Index(SeleniumBase):
+    def _wait_for_transactions_loaded(self, expected_count=None, timeout=10):
+        """Wait for AJAX to load transaction data into #transactions table"""
+        # Wait for table to exist
+        WebDriverWait(self.driver, timeout).until(
+            EC.presence_of_element_located((By.XPATH, '//*[@id="transactions"]/table'))
+        )
+        
+        # Wait for data rows to be present
+        if expected_count:
+            WebDriverWait(self.driver, timeout).until(
+                lambda d: len(d.find_elements(By.CLASS_NAME, 'data-row')) == expected_count
+            )
+        else:
+            # At least wait for data-row elements to exist (even if hidden)
+            WebDriverWait(self.driver, timeout).until(
+                lambda d: len(d.find_elements(By.CLASS_NAME, 'data-row')) > 0
+            )
+        
+        # Small additional wait for JavaScript to stabilize
+        time.sleep(0.5)
+
+    def _wait_for_filter_applied(self, timeout=2):
+        """Wait for JavaScript applyFilter() to add/remove hidden-row classes"""
+        time.sleep(1)  # Allow JavaScript to execute
+
     def _assert_initialized_add_mini(self, year, month):
         '''入力欄が初期値であることを確認'''
         self.assertEqual(self.driver.find_element(By.ID, 'a_year').get_attribute('value'), str(year))
@@ -63,6 +90,12 @@ class Index(SeleniumBase):
     def _assert_invalid_add(self, year, month, day, item, price):
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index'))
+        
+        # Wait for page to be fully loaded
+        WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located((By.ID, 'a_year'))
+        )
+        time.sleep(0.5)  # Let JavaScript initialize
 
         self.assertEqual(len(self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')), 1)
 
@@ -120,6 +153,10 @@ class Index(SeleniumBase):
     def test_index_month(self):
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+        
+        # WAIT FOR AJAX DATA TO LOAD
+        self._wait_for_transactions_loaded(expected_count=17)
+        
         self._assert_common()
 
         # 追加部分
@@ -415,15 +452,21 @@ class Index(SeleniumBase):
     def test_index_filter_inout(self):
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+        
+        # WAIT FOR AJAX DATA TO LOAD
+        self._wait_for_transactions_loaded(expected_count=17)
+        
         is_income = [True, True, False, False, False, False, True, False, False, False, True, True, False, False, False, False, True]
 
         # 収入だけ表示
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[2]/td/label[2]').click()
+        self._wait_for_filter_applied()  # WAIT FOR FILTER
         actuals = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self._assert_is_displayed(actuals, is_income)
 
         # どちらも非表示
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[2]/td/label[1]').click()
+        self._wait_for_filter_applied()  # WAIT FOR FILTER
         actuals = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self.assertEqual(len(actuals), len(is_income) + 1)
         for i in range(len(is_income)):
@@ -432,6 +475,7 @@ class Index(SeleniumBase):
 
         # 支出だけ表示
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[2]/td/label[2]').click()
+        self._wait_for_filter_applied()  # WAIT FOR FILTER
         actuals = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self.assertEqual(len(actuals), len(is_income) + 1)
         for i in range(len(is_income)):
@@ -441,6 +485,9 @@ class Index(SeleniumBase):
     def test_index_filter_method_none(self):
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+        
+        # WAIT FOR AJAX DATA TO LOAD
+        self._wait_for_transactions_loaded(expected_count=17)
 
         # 全部非表示
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label[1]').click()
@@ -448,6 +495,7 @@ class Index(SeleniumBase):
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label[3]').click()
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label[4]').click()
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label[5]').click()
+        self._wait_for_filter_applied()  # WAIT FOR FILTER
         expects = [False] * 17
         actuals = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self._assert_is_displayed(actuals, expects)
@@ -455,12 +503,16 @@ class Index(SeleniumBase):
     def test_index_filter_bank(self):
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+        
+        # WAIT FOR AJAX DATA TO LOAD
+        self._wait_for_transactions_loaded(expected_count=17)
 
         # 銀行のみ表示
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label[2]').click()
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label[3]').click()
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label[4]').click()
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label[5]').click()
+        self._wait_for_filter_applied()  # WAIT FOR FILTER
         expects = [True, False, True, True, True, False, True, True, True, False, True, False, False, True, False, False, True]
         actuals = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self._assert_is_displayed(actuals, expects)
@@ -468,11 +520,15 @@ class Index(SeleniumBase):
     def test_index_filter_bank_paypay(self):
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+        
+        # WAIT FOR AJAX DATA TO LOAD
+        self._wait_for_transactions_loaded(expected_count=17)
 
         # 銀行とPayPay
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label[2]').click()
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label[3]').click()
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label[5]').click()
+        self._wait_for_filter_applied()  # WAIT FOR FILTER
         expects = [True, True, True, True, True, True, True, True, True, False, True, False, False, True, False, False, True]
         actuals = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self._assert_is_displayed(actuals, expects)
@@ -480,6 +536,9 @@ class Index(SeleniumBase):
     def test_index_filter_category_none(self):
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+        
+        # WAIT FOR AJAX DATA TO LOAD
+        self._wait_for_transactions_loaded(expected_count=17)
 
         # 全部非表示
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[1]').click()
@@ -489,6 +548,7 @@ class Index(SeleniumBase):
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[5]').click()
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[6]').click()
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[7]').click()
+        self._wait_for_filter_applied()  # WAIT FOR FILTER
         expects = [False] * 17
         actuals = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self._assert_is_displayed(actuals, expects)
@@ -496,6 +556,9 @@ class Index(SeleniumBase):
     def test_index_filter_category_food(self):
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+        
+        # WAIT FOR AJAX DATA TO LOAD
+        self._wait_for_transactions_loaded(expected_count=17)
 
         # 食費のみ表示
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[2]').click()
@@ -505,6 +568,7 @@ class Index(SeleniumBase):
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[6]').click()
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[7]').click()
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[8]').click()
+        self._wait_for_filter_applied()  # WAIT FOR FILTER
         expects = [False, True, False, False, False, False, False, False, False, True, False, False, False, False, False, True, False]
         actuals = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self._assert_is_displayed(actuals, expects)
@@ -512,6 +576,9 @@ class Index(SeleniumBase):
     def test_index_filter_category_food_necessary(self):
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+        
+        # WAIT FOR AJAX DATA TO LOAD
+        self._wait_for_transactions_loaded(expected_count=17)
 
         # 食費と必需品
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[3]').click()
@@ -520,6 +587,7 @@ class Index(SeleniumBase):
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[6]').click()
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[7]').click()
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[8]').click()
+        self._wait_for_filter_applied()  # WAIT FOR FILTER
         expects = [True, True, True, True, True, False, False, False, False, True, True, True, True, True, False, True, False]
         actuals = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self._assert_is_displayed(actuals, expects)
@@ -527,6 +595,9 @@ class Index(SeleniumBase):
     def test_index_filter_category_food_necessary_intra(self):
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+        
+        # WAIT FOR AJAX DATA TO LOAD
+        self._wait_for_transactions_loaded(expected_count=17)
 
         # 食費と必需品と内部移動
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[3]').click()
@@ -534,6 +605,7 @@ class Index(SeleniumBase):
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[6]').click()
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[7]').click()
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[8]').click()
+        self._wait_for_filter_applied()  # WAIT FOR FILTER
         expects = [True, True, True, True, True, True, True, False, False, True, True, True, True, True, False, True, False]
         actuals = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self._assert_is_displayed(actuals, expects)
@@ -541,15 +613,20 @@ class Index(SeleniumBase):
     def test_index_filter_all(self):
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+        
+        # WAIT FOR AJAX DATA TO LOAD
+        self._wait_for_transactions_loaded(expected_count=17)
 
         # 全解除
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[3]/td[1]/input[@value="全解除"]').click()
+        self._wait_for_filter_applied()  # WAIT FOR FILTER
         expects = [False] * 17
         actuals = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self._assert_is_displayed(actuals, expects)
 
         # 全選択
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[3]/td[1]/input[@value="全選択"]').click()
+        self._wait_for_filter_applied()  # WAIT FOR FILTER
         expects = [True] * 17
         actuals = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self._assert_is_displayed(actuals, expects)
@@ -557,6 +634,10 @@ class Index(SeleniumBase):
     def test_move_edit(self):
         self._login()
         self.driver.get(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+        
+        # WAIT FOR AJAX DATA TO LOAD
+        self._wait_for_transactions_loaded(expected_count=17)
+        
         self.driver.find_element(By.XPATH, '//*[@id="transactions"]/table/tbody/tr[2]/td[6]/a').click()
 
         self.assertEqual(self.driver.current_url, self.live_server_url + reverse('moneybook:edit', kwargs={'pk': 18}))
