@@ -1,5 +1,6 @@
-import chromedriver_binary  # noqa: F401
 import time
+
+import chromedriver_binary  # noqa: F401
 from django.contrib.auth.models import User
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.urls import reverse
@@ -10,7 +11,7 @@ from selenium.webdriver.common.by import By
 class SeleniumBase(StaticLiveServerTestCase):
     fixtures = ['data_test_case']
     username = 'tester'
-    password = 'GZK-kva_yfj1ahr0tcr' # Chromeで警告が出ちゃうので複雑なパスワードを使う
+    password = 'GZK-kva_yfj1ahr0tcr'  # Chromeで警告が出ちゃうので複雑なパスワードを使う
 
     def setUp(self):
         super().setUp()
