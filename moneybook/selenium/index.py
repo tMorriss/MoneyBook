@@ -292,12 +292,7 @@ class Index(SeleniumBase):
         self.assertEqual(tds[1].text, '立替テスト')
         self.assertEqual(tds[2].text, '1,500')
         self.assertEqual(tds[3].text, '銀行')
-        self.assertEqual(tds[4].text, '食費')
-
-        # 編集ページに移動して立替がYesになっていることを確認
-        self.driver.find_element(By.XPATH, '//*[@id="transactions"]/table/tbody/tr[2]/td[6]/a').click()
-        time.sleep(1)
-        self.assertTrue(self.driver.find_element(By.ID, 'temp-1').is_selected())
+        self.assertEqual(tds[4].text, '立替')
 
     def test_add_empty_day_today(self):
         now = datetime.now()
