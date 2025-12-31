@@ -6,6 +6,8 @@ from moneybook.selenium.base import SeleniumBase
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.color import Color
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 
 class Index(SeleniumBase):
@@ -104,6 +106,10 @@ class Index(SeleniumBase):
         for i in range(len(expects)):
             with self.subTest(i=i):
                 self.assertEqual(actuals[i + 1].is_displayed(), expects[i])
+
+    def _wait_for_filter(self, timeout=1):
+        '''Wait for JavaScript filter to apply'''
+        time.sleep(timeout)
 
     def test_index(self):
         self._login()
@@ -419,11 +425,13 @@ class Index(SeleniumBase):
 
         # 収入だけ表示
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[2]/td/label[2]').click()
+        self._wait_for_filter()
         actuals = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self._assert_is_displayed(actuals, is_income)
 
         # どちらも非表示
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[2]/td/label[1]').click()
+        self._wait_for_filter()
         actuals = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self.assertEqual(len(actuals), len(is_income) + 1)
         for i in range(len(is_income)):
@@ -432,6 +440,7 @@ class Index(SeleniumBase):
 
         # 支出だけ表示
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[2]/td/label[2]').click()
+        self._wait_for_filter()
         actuals = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self.assertEqual(len(actuals), len(is_income) + 1)
         for i in range(len(is_income)):
@@ -448,6 +457,7 @@ class Index(SeleniumBase):
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label[3]').click()
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label[4]').click()
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label[5]').click()
+        self._wait_for_filter()
         expects = [False] * 17
         actuals = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self._assert_is_displayed(actuals, expects)
@@ -461,6 +471,7 @@ class Index(SeleniumBase):
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label[3]').click()
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label[4]').click()
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label[5]').click()
+        self._wait_for_filter()
         expects = [True, False, True, True, True, False, True, True, True, False, True, False, False, True, False, False, True]
         actuals = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self._assert_is_displayed(actuals, expects)
@@ -473,6 +484,7 @@ class Index(SeleniumBase):
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label[2]').click()
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label[3]').click()
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[3]/td/label[5]').click()
+        self._wait_for_filter()
         expects = [True, True, True, True, True, True, True, True, True, False, True, False, False, True, False, False, True]
         actuals = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self._assert_is_displayed(actuals, expects)
@@ -489,6 +501,7 @@ class Index(SeleniumBase):
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[5]').click()
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[6]').click()
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[7]').click()
+        self._wait_for_filter()
         expects = [False] * 17
         actuals = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self._assert_is_displayed(actuals, expects)
@@ -505,6 +518,7 @@ class Index(SeleniumBase):
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[6]').click()
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[7]').click()
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[8]').click()
+        self._wait_for_filter()
         expects = [False, True, False, False, False, False, False, False, False, True, False, False, False, False, False, True, False]
         actuals = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self._assert_is_displayed(actuals, expects)
@@ -520,6 +534,7 @@ class Index(SeleniumBase):
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[6]').click()
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[7]').click()
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[8]').click()
+        self._wait_for_filter()
         expects = [True, True, True, True, True, False, False, False, False, True, True, True, True, True, False, True, False]
         actuals = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self._assert_is_displayed(actuals, expects)
@@ -534,6 +549,7 @@ class Index(SeleniumBase):
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[6]').click()
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[7]').click()
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[2]/td[1]/table/tbody/tr[4]/td/label[8]').click()
+        self._wait_for_filter()
         expects = [True, True, True, True, True, True, True, False, False, True, True, True, True, True, False, True, False]
         actuals = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self._assert_is_displayed(actuals, expects)
@@ -544,12 +560,14 @@ class Index(SeleniumBase):
 
         # 全解除
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[3]/td[1]/input[@value="全解除"]').click()
+        self._wait_for_filter()
         expects = [False] * 17
         actuals = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self._assert_is_displayed(actuals, expects)
 
         # 全選択
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/table[1]/tbody/tr[3]/td[1]/input[@value="全選択"]').click()
+        self._wait_for_filter()
         expects = [True] * 17
         actuals = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self._assert_is_displayed(actuals, expects)
