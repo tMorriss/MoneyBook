@@ -10,7 +10,7 @@ from selenium.webdriver.support.color import Color
 class Add(SeleniumBase):
     def _assert_bank_charge_kyash(self, method):
         now = datetime.now()
-        self.driver.get(self.live_server_url + reverse('moneybook:index'))
+        self._location(self.live_server_url + reverse('moneybook:index'))
         rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self.assertEqual(len(rows), 3)
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
@@ -24,7 +24,7 @@ class Add(SeleniumBase):
         tds[5].find_element(By.TAG_NAME, 'a').click()
         self.assertEqual(self.driver.find_element(By.XPATH, '//form/table[1]/tbody/tr[4]/td[1]/input[1]').is_selected(), True)
 
-        self.driver.get(self.live_server_url + reverse('moneybook:index'))
+        self._location(self.live_server_url + reverse('moneybook:index'))
         rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         tds = rows[2].find_elements(By.TAG_NAME, 'td')
         self.assertEqual(tds[0].text, str(now.year) + "/" + str.zfill(str(now.month), 2) + "/" + '01')
@@ -39,7 +39,7 @@ class Add(SeleniumBase):
 
     def _assert_intra_move(self):
         now = datetime.now()
-        self.driver.get(self.live_server_url + reverse('moneybook:index'))
+        self._location(self.live_server_url + reverse('moneybook:index'))
         rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self.assertEqual(len(rows), 3)
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
@@ -53,7 +53,7 @@ class Add(SeleniumBase):
         tds[5].find_element(By.TAG_NAME, 'a').click()
         self.assertEqual(self.driver.find_element(By.XPATH, '//form/table[1]/tbody/tr[4]/td[1]/input[1]').is_selected(), True)
 
-        self.driver.get(self.live_server_url + reverse('moneybook:index'))
+        self._location(self.live_server_url + reverse('moneybook:index'))
         rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         tds = rows[2].find_elements(By.TAG_NAME, 'td')
         self.assertEqual(tds[0].text, str(now.year) + "/" + str.zfill(str(now.month), 2) + "/" + '02')
@@ -69,7 +69,7 @@ class Add(SeleniumBase):
     def test_get(self):
         now = datetime.now()
         self._login()
-        self.driver.get(self.live_server_url + reverse('moneybook:add'))
+        self._location(self.live_server_url + reverse('moneybook:add'))
 
         self._assert_common()
 
@@ -120,7 +120,7 @@ class Add(SeleniumBase):
     def test_bank_charge_click(self):
         # 前処理
         self._login()
-        self.driver.get(self.live_server_url + reverse('moneybook:add'))
+        self._location(self.live_server_url + reverse('moneybook:add'))
 
         # テスト
         self.driver.find_element(By.ID, 'c_day').send_keys('1')
@@ -133,7 +133,7 @@ class Add(SeleniumBase):
     def test_bank_charge_year_enter(self):
         # 前処理
         self._login()
-        self.driver.get(self.live_server_url + reverse('moneybook:add'))
+        self._location(self.live_server_url + reverse('moneybook:add'))
 
         # テスト
         self.driver.find_element(By.ID, 'c_day').send_keys('1')
@@ -146,7 +146,7 @@ class Add(SeleniumBase):
     def test_bank_charge_month_enter(self):
         # 前処理
         self._login()
-        self.driver.get(self.live_server_url + reverse('moneybook:add'))
+        self._location(self.live_server_url + reverse('moneybook:add'))
 
         # テスト
         self.driver.find_element(By.ID, 'c_day').send_keys('1')
@@ -159,7 +159,7 @@ class Add(SeleniumBase):
     def test_bank_charge_day_enter(self):
         # 前処理
         self._login()
-        self.driver.get(self.live_server_url + reverse('moneybook:add'))
+        self._location(self.live_server_url + reverse('moneybook:add'))
 
         # テスト
         self.driver.find_element(By.ID, 'c_day').send_keys('1')
@@ -172,7 +172,7 @@ class Add(SeleniumBase):
     def test_bank_charge_price_enter(self):
         # 前処理
         self._login()
-        self.driver.get(self.live_server_url + reverse('moneybook:add'))
+        self._location(self.live_server_url + reverse('moneybook:add'))
 
         # テスト
         self.driver.find_element(By.ID, 'c_day').send_keys('1')
@@ -185,7 +185,7 @@ class Add(SeleniumBase):
     def test_bank_charge_method_enter(self):
         # 前処理
         self._login()
-        self.driver.get(self.live_server_url + reverse('moneybook:add'))
+        self._location(self.live_server_url + reverse('moneybook:add'))
 
         # テスト
         self.driver.find_element(By.ID, 'c_day').send_keys('1')
@@ -198,7 +198,7 @@ class Add(SeleniumBase):
     def test_bank_charge_select(self):
         # 前処理
         self._login()
-        self.driver.get(self.live_server_url + reverse('moneybook:add'))
+        self._location(self.live_server_url + reverse('moneybook:add'))
 
         # テスト
         self.driver.find_element(By.ID, 'c_day').send_keys('1')
@@ -212,7 +212,7 @@ class Add(SeleniumBase):
     def test_intra_move_click(self):
         # 前処理
         self._login()
-        self.driver.get(self.live_server_url + reverse('moneybook:add'))
+        self._location(self.live_server_url + reverse('moneybook:add'))
 
         # テスト
         self.driver.find_element(By.ID, 'm_day').send_keys('2')
@@ -228,7 +228,7 @@ class Add(SeleniumBase):
     def test_intra_move_year(self):
         # 前処理
         self._login()
-        self.driver.get(self.live_server_url + reverse('moneybook:add'))
+        self._location(self.live_server_url + reverse('moneybook:add'))
 
         # テスト
         self.driver.find_element(By.ID, 'm_day').send_keys('2')
@@ -244,7 +244,7 @@ class Add(SeleniumBase):
     def test_intra_move_month(self):
         # 前処理
         self._login()
-        self.driver.get(self.live_server_url + reverse('moneybook:add'))
+        self._location(self.live_server_url + reverse('moneybook:add'))
 
         # テスト
         self.driver.find_element(By.ID, 'm_day').send_keys('2')
@@ -260,7 +260,7 @@ class Add(SeleniumBase):
     def test_intra_move_day(self):
         # 前処理
         self._login()
-        self.driver.get(self.live_server_url + reverse('moneybook:add'))
+        self._location(self.live_server_url + reverse('moneybook:add'))
 
         # テスト
         self.driver.find_element(By.ID, 'm_day').send_keys('2')
@@ -276,7 +276,7 @@ class Add(SeleniumBase):
     def test_intra_move_item(self):
         # 前処理
         self._login()
-        self.driver.get(self.live_server_url + reverse('moneybook:add'))
+        self._location(self.live_server_url + reverse('moneybook:add'))
 
         # テスト
         self.driver.find_element(By.ID, 'm_day').send_keys('2')
@@ -292,7 +292,7 @@ class Add(SeleniumBase):
     def test_intra_move_price(self):
         # 前処理
         self._login()
-        self.driver.get(self.live_server_url + reverse('moneybook:add'))
+        self._location(self.live_server_url + reverse('moneybook:add'))
 
         # テスト
         self.driver.find_element(By.ID, 'm_day').send_keys('2')
@@ -308,7 +308,7 @@ class Add(SeleniumBase):
     def test_intra_move_before(self):
         # 前処理
         self._login()
-        self.driver.get(self.live_server_url + reverse('moneybook:add'))
+        self._location(self.live_server_url + reverse('moneybook:add'))
 
         # テスト
         self.driver.find_element(By.ID, 'm_day').send_keys('2')
@@ -324,7 +324,7 @@ class Add(SeleniumBase):
     def test_intra_move_after(self):
         # 前処理
         self._login()
-        self.driver.get(self.live_server_url + reverse('moneybook:add'))
+        self._location(self.live_server_url + reverse('moneybook:add'))
 
         # テスト
         self.driver.find_element(By.ID, 'm_day').send_keys('2')
@@ -341,14 +341,14 @@ class Add(SeleniumBase):
         now = datetime.now()
         # 前処理
         self._login()
-        self.driver.get(self.live_server_url + reverse('moneybook:add'))
+        self._location(self.live_server_url + reverse('moneybook:add'))
 
         # テスト
         self.driver.find_element(By.ID, 's_day').send_keys('4')
         self.driver.find_element(By.ID, 's_price').send_keys('400')
         self.driver.find_element(By.XPATH, '//form[3]/table/tbody/tr[3]/td/input[@type="button"][1]').click()
 
-        self.driver.get(self.live_server_url + reverse('moneybook:index'))
+        self._location(self.live_server_url + reverse('moneybook:index'))
         rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self.assertEqual(len(rows), 2)
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
@@ -366,7 +366,7 @@ class Add(SeleniumBase):
         now = datetime.now()
         # 前処理
         self._login()
-        self.driver.get(self.live_server_url + reverse('moneybook:add'))
+        self._location(self.live_server_url + reverse('moneybook:add'))
 
         # テスト
         self.driver.find_element(By.ID, 'a_day').send_keys('5')
@@ -377,7 +377,7 @@ class Add(SeleniumBase):
         self.driver.find_element(By.XPATH, '//form[4]/table/tbody/tr[6]/td/label[2]').click()
         self.driver.find_element(By.XPATH, '//form[4]/input[@type="button"]').click()
 
-        self.driver.get(self.live_server_url + reverse('moneybook:index'))
+        self._location(self.live_server_url + reverse('moneybook:index'))
         rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self.assertEqual(len(rows), 2)
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
@@ -395,7 +395,7 @@ class Add(SeleniumBase):
         now = datetime.now()
         # 前処理
         self._login()
-        self.driver.get(self.live_server_url + reverse('moneybook:add'))
+        self._location(self.live_server_url + reverse('moneybook:add'))
 
         # テスト
         self.driver.find_element(By.ID, 'a_day').send_keys('5')
@@ -403,7 +403,7 @@ class Add(SeleniumBase):
         self.driver.find_element(By.ID, 'a_price').send_keys('500')
         self.driver.find_element(By.ID, 'a_year').send_keys(Keys.RETURN)
 
-        self.driver.get(self.live_server_url + reverse('moneybook:index'))
+        self._location(self.live_server_url + reverse('moneybook:index'))
         rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self.assertEqual(len(rows), 2)
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
@@ -421,7 +421,7 @@ class Add(SeleniumBase):
         now = datetime.now()
         # 前処理
         self._login()
-        self.driver.get(self.live_server_url + reverse('moneybook:add'))
+        self._location(self.live_server_url + reverse('moneybook:add'))
 
         # テスト
         self.driver.find_element(By.ID, 'a_day').send_keys('5')
@@ -429,7 +429,7 @@ class Add(SeleniumBase):
         self.driver.find_element(By.ID, 'a_price').send_keys('500')
         self.driver.find_element(By.ID, 'a_month').send_keys(Keys.RETURN)
 
-        self.driver.get(self.live_server_url + reverse('moneybook:index'))
+        self._location(self.live_server_url + reverse('moneybook:index'))
         rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self.assertEqual(len(rows), 2)
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
@@ -447,7 +447,7 @@ class Add(SeleniumBase):
         now = datetime.now()
         # 前処理
         self._login()
-        self.driver.get(self.live_server_url + reverse('moneybook:add'))
+        self._location(self.live_server_url + reverse('moneybook:add'))
 
         # テスト
         self.driver.find_element(By.ID, 'a_day').send_keys('5')
@@ -455,7 +455,7 @@ class Add(SeleniumBase):
         self.driver.find_element(By.ID, 'a_price').send_keys('500')
         self.driver.find_element(By.ID, 'a_day').send_keys(Keys.RETURN)
 
-        self.driver.get(self.live_server_url + reverse('moneybook:index'))
+        self._location(self.live_server_url + reverse('moneybook:index'))
         rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self.assertEqual(len(rows), 2)
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
@@ -473,7 +473,7 @@ class Add(SeleniumBase):
         now = datetime.now()
         # 前処理
         self._login()
-        self.driver.get(self.live_server_url + reverse('moneybook:add'))
+        self._location(self.live_server_url + reverse('moneybook:add'))
 
         # テスト
         self.driver.find_element(By.ID, 'a_day').send_keys('5')
@@ -481,7 +481,7 @@ class Add(SeleniumBase):
         self.driver.find_element(By.ID, 'a_price').send_keys('500')
         self.driver.find_element(By.ID, 'a_item').send_keys(Keys.RETURN)
 
-        self.driver.get(self.live_server_url + reverse('moneybook:index'))
+        self._location(self.live_server_url + reverse('moneybook:index'))
         rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self.assertEqual(len(rows), 2)
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
@@ -499,7 +499,7 @@ class Add(SeleniumBase):
         now = datetime.now()
         # 前処理
         self._login()
-        self.driver.get(self.live_server_url + reverse('moneybook:add'))
+        self._location(self.live_server_url + reverse('moneybook:add'))
 
         # テスト
         self.driver.find_element(By.ID, 'a_day').send_keys('5')
@@ -507,7 +507,7 @@ class Add(SeleniumBase):
         self.driver.find_element(By.ID, 'a_price').send_keys('500')
         self.driver.find_element(By.ID, 'a_price').send_keys(Keys.RETURN)
 
-        self.driver.get(self.live_server_url + reverse('moneybook:index'))
+        self._location(self.live_server_url + reverse('moneybook:index'))
         rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self.assertEqual(len(rows), 2)
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
@@ -525,7 +525,7 @@ class Add(SeleniumBase):
         now = datetime.now()
         # 前処理
         self._login()
-        self.driver.get(self.live_server_url + reverse('moneybook:add'))
+        self._location(self.live_server_url + reverse('moneybook:add'))
 
         # テスト
         self.driver.find_element(By.ID, 'a_day').send_keys('5')
@@ -534,7 +534,7 @@ class Add(SeleniumBase):
         self.driver.find_element(By.XPATH, '//form[4]/table/tbody/tr[7]/td/label[2]').click()
         self.driver.find_element(By.XPATH, '//form[4]/input[@type="button"]').click()
 
-        self.driver.get(self.live_server_url + reverse('moneybook:index'))
+        self._location(self.live_server_url + reverse('moneybook:index'))
         rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self.assertEqual(len(rows), 2)
         tds = rows[1].find_elements(By.TAG_NAME, 'td')

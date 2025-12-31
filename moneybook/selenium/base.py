@@ -1,3 +1,5 @@
+import time
+
 import chromedriver_binary  # noqa: F401
 from django.contrib.auth.models import User
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
@@ -9,7 +11,7 @@ from selenium.webdriver.common.by import By
 class SeleniumBase(StaticLiveServerTestCase):
     fixtures = ['data_test_case']
     username = 'tester'
-    password = 'password'
+    password = 'GZK-kva_yfj1ahr0tcr'  # Chromeで警告が出ちゃうので複雑なパスワードを使う
 
     def setUp(self):
         super().setUp()
@@ -27,13 +29,19 @@ class SeleniumBase(StaticLiveServerTestCase):
         self.driver.quit()
         super().tearDown()
 
+    def _location(self, url):
+        self.driver.get(url)
+        time.sleep(0.5)
+
     def _login(self):
-        self.driver.get(self.live_server_url + reverse('moneybook:login'))
+        self._location(self.live_server_url + reverse('moneybook:login'))
         username_input = self.driver.find_element(By.ID, 'id_username')
         username_input.send_keys(self.username)
         password_input = self.driver.find_element(By.ID, 'id_password')
         password_input.send_keys(self.password)
+        time.sleep(0.5)
         self.driver.find_element(By.CLASS_NAME, 'btn-apply').click()
+        time.sleep(0.5)
 
     def _assert_common(self):
         # アプリ名
