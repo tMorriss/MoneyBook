@@ -275,7 +275,7 @@ class Index(SeleniumBase):
 
         self.assertEqual(len(self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')), 1)
 
-        # 1件追加 (立替=Yes)
+        # 1件追加 (立替=Yes, 食費=支出)
         self.driver.find_element(By.ID, 'a_day').send_keys('5')
         self.driver.find_element(By.ID, 'a_item').send_keys('立替テスト')
         self.driver.find_element(By.ID, 'a_price').send_keys('1500')
@@ -293,6 +293,66 @@ class Index(SeleniumBase):
         self.assertEqual(tds[2].text, '1,500')
         self.assertEqual(tds[3].text, '銀行')
         self.assertEqual(tds[4].text, '立替')
+
+        # 編集ボタンをクリックして編集ページに遷移
+        edit_link = tds[5].find_element(By.TAG_NAME, 'a')
+        edit_link.click()
+        time.sleep(1)
+
+        # editページのURLであることを確認
+        self.assertTrue('/edit/' in self.driver.current_url)
+
+        # 立替フラグがYesで、方向が収入に逆転していることを確認
+        # 立替=Yesがチェックされていることを確認
+        temp_yes = self.driver.find_element(By.ID, 'temp-1')
+        self.assertTrue(temp_yes.is_selected())
+
+        # 方向が収入(direction.pk=1)になっていることを確認
+        direction_income = self.driver.find_element(By.ID, 'direction-1')
+        self.assertTrue(direction_income.is_selected())
+
+    def test_add_temp_income(self):
+        now = datetime.now()
+        self._login()
+        self._location(self.live_server_url + reverse('moneybook:index'))
+
+        self.assertEqual(len(self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')), 1)
+
+        # 1件追加 (立替=Yes, 収入カテゴリ=収入)
+        self.driver.find_element(By.ID, 'a_day').send_keys('6')
+        self.driver.find_element(By.ID, 'a_item').send_keys('立替収入テスト')
+        self.driver.find_element(By.ID, 'a_price').send_keys('2000')
+        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/table/tbody/tr[4]/td/label[1]').click()
+        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/table/tbody/tr[5]/td/table/tbody/tr[2]/td/label[5]').click()
+        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/table/tbody/tr[6]/td/label[2]').click()
+        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/input[@value="追加"]').click()
+        time.sleep(2)
+
+        rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
+        self.assertEqual(len(rows), 2)
+        tds = rows[1].find_elements(By.TAG_NAME, 'td')
+        self.assertEqual(tds[0].text, str(now.year) + "/" + str.zfill(str(now.month), 2) + "/" + '06')
+        self.assertEqual(tds[1].text, '立替収入テスト')
+        self.assertEqual(tds[2].text, '2,000')
+        self.assertEqual(tds[3].text, '銀行')
+        self.assertEqual(tds[4].text, '立替')
+
+        # 編集ボタンをクリックして編集ページに遷移
+        edit_link = tds[5].find_element(By.TAG_NAME, 'a')
+        edit_link.click()
+        time.sleep(1)
+
+        # editページのURLであることを確認
+        self.assertTrue('/edit/' in self.driver.current_url)
+
+        # 立替フラグがYesで、方向が支出に逆転していることを確認
+        # 立替=Yesがチェックされていることを確認
+        temp_yes = self.driver.find_element(By.ID, 'temp-1')
+        self.assertTrue(temp_yes.is_selected())
+
+        # 方向が支出(direction.pk=2)になっていることを確認
+        direction_outgo = self.driver.find_element(By.ID, 'direction-2')
+        self.assertTrue(direction_outgo.is_selected())
 
     def test_add_empty_day_today(self):
         now = datetime.now()
