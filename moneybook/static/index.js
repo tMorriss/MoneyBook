@@ -6,7 +6,7 @@ function sendAddRow() {
     }
 
     // 立替フラグの値を取得
-    var tempValue = $('input[name="a_temp"]:checked').val();
+    const tempValue = $('input[name="a_temp"]:checked').val();
     // 立替の場合、収支を逆転させる
     if (tempValue === 'True') {
         direction = 3 - direction;
