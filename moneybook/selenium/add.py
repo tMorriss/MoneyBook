@@ -402,7 +402,7 @@ class Add(SeleniumBase):
         self.assertEqual(tds[0].text, str(now.year) + "/" + str.zfill(str(now.month), 2) + "/" + '05')
         self.assertEqual(tds[1].text, 'Suicaチャージ')
         # デフォルトの5000円が使われていることを確認
-        self.assertEqual(tds[2].text, '5000')
+        self.assertEqual(tds[2].text, '5,000')
         self.assertEqual(tds[3].text, '銀行')
         self.assertEqual(tds[4].text, '交通費')
 
@@ -422,7 +422,7 @@ class Add(SeleniumBase):
         # 今日の日付とデフォルトの5000円が使われていることを確認
         self.assertEqual(tds[0].text, str(now.year) + "/" + str.zfill(str(now.month), 2) + "/" + str.zfill(str(now.day), 2))
         self.assertEqual(tds[1].text, 'Suicaチャージ')
-        self.assertEqual(tds[2].text, '5000')
+        self.assertEqual(tds[2].text, '5,000')
         self.assertEqual(tds[3].text, '銀行')
         self.assertEqual(tds[4].text, '交通費')
 
