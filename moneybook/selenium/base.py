@@ -1,3 +1,4 @@
+import os
 import time
 
 import chromedriver_binary  # noqa: F401
@@ -19,7 +20,8 @@ class SeleniumBase(StaticLiveServerTestCase):
         User.objects.create_user(self.username, self.username + '@hoge.com', self.password)
 
         options = webdriver.ChromeOptions()
-        options.add_argument('--headless')
+        if os.environ.get('HEADLESS') != '0':
+            options.add_argument('--headless')
         options.add_argument('--window-size=1920,1080')
         options.add_argument('--no-sandbox')
         self.driver = webdriver.Chrome(options=options)
