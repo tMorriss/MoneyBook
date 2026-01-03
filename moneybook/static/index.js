@@ -4,6 +4,14 @@ function sendAddRow() {
     if (category == 12) {
         direction = 1;
     }
+
+    // 立替フラグの値を取得
+    const tempValue = $('input[name="a_temp"]:checked').val();
+    // 立替の場合、収支を逆転させる
+    if (tempValue === 'True') {
+        direction = 3 - direction;
+    }
+
     yearValue = $('#a_year').val();
     monthValue = $('#a_month').val();
     dayValue = $('#a_day').val();
@@ -19,7 +27,7 @@ function sendAddRow() {
             "direction": direction,
             "method": $('input[name="a_method"]:checked').val(),
             "category": category,
-            "temp": $('input[name="a_temp"]:checked').val(),
+            "temp": tempValue,
             "checked": "False",
         }
     }).done(() => {

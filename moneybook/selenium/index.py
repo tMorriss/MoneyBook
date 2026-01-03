@@ -275,7 +275,7 @@ class Index(SeleniumBase):
 
         self.assertEqual(len(self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')), 1)
 
-        # 1件追加 (立替=Yes)
+        # 1件追加 (立替=Yes, 食費=支出)
         self.driver.find_element(By.ID, 'a_day').send_keys('5')
         self.driver.find_element(By.ID, 'a_item').send_keys('立替テスト')
         self.driver.find_element(By.ID, 'a_price').send_keys('1500')
@@ -293,6 +293,11 @@ class Index(SeleniumBase):
         self.assertEqual(tds[2].text, '1,500')
         self.assertEqual(tds[3].text, '銀行')
         self.assertEqual(tds[4].text, '立替')
+
+        # 立替フラグがYesで、方向が収入に逆転していることを確認
+        # tr要素のクラスにfilter-direction-1が含まれていることを確認
+        tr_class = rows[1].get_attribute('class')
+        self.assertIn('filter-direction-1', tr_class)
 
     def test_add_empty_day_today(self):
         now = datetime.now()
