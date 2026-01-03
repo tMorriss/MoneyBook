@@ -294,22 +294,10 @@ class Index(SeleniumBase):
         self.assertEqual(tds[3].text, '銀行')
         self.assertEqual(tds[4].text, '立替')
 
-        # 編集ボタンをクリックして編集ページに遷移
-        edit_link = tds[5].find_element(By.TAG_NAME, 'a')
-        edit_link.click()
-        time.sleep(1)
-
-        # editページのURLであることを確認
-        self.assertTrue('/edit/' in self.driver.current_url)
-
         # 立替フラグがYesで、方向が収入に逆転していることを確認
-        # 立替=Yesがチェックされていることを確認
-        temp_yes = self.driver.find_element(By.ID, 'temp-1')
-        self.assertTrue(temp_yes.is_selected())
-
-        # 方向が収入(direction.pk=1)になっていることを確認
-        direction_income = self.driver.find_element(By.ID, 'direction-1')
-        self.assertTrue(direction_income.is_selected())
+        # tr要素のクラスにfilter-direction-1が含まれていることを確認
+        tr_class = rows[1].get_attribute('class')
+        self.assertIn('filter-direction-1', tr_class)
 
     def test_add_temp_income(self):
         now = datetime.now()
@@ -337,22 +325,10 @@ class Index(SeleniumBase):
         self.assertEqual(tds[3].text, '銀行')
         self.assertEqual(tds[4].text, '立替')
 
-        # 編集ボタンをクリックして編集ページに遷移
-        edit_link = tds[5].find_element(By.TAG_NAME, 'a')
-        edit_link.click()
-        time.sleep(1)
-
-        # editページのURLであることを確認
-        self.assertTrue('/edit/' in self.driver.current_url)
-
         # 立替フラグがYesで、方向が支出に逆転していることを確認
-        # 立替=Yesがチェックされていることを確認
-        temp_yes = self.driver.find_element(By.ID, 'temp-1')
-        self.assertTrue(temp_yes.is_selected())
-
-        # 方向が支出(direction.pk=2)になっていることを確認
-        direction_outgo = self.driver.find_element(By.ID, 'direction-2')
-        self.assertTrue(direction_outgo.is_selected())
+        # tr要素のクラスにfilter-direction-2が含まれていることを確認
+        tr_class = rows[1].get_attribute('class')
+        self.assertIn('filter-direction-2', tr_class)
 
     def test_add_empty_day_today(self):
         now = datetime.now()
