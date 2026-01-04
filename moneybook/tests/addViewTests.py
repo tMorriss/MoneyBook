@@ -17,6 +17,7 @@ class AddViewTestCase(BaseTestCase):
         self.assertEqual(response.context['username'].username, self.username)
         self.assertEqual(response.context['year'], now.year)
         self.assertEqual(response.context['month'], now.month)
+        self.assertEqual(response.context['day'], now.day)
         self._assert_all_directions(response)
         self._assert_all_methods(response)
         self._assert_all_chargeable_methods(response)

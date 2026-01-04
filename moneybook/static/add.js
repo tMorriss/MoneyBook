@@ -87,13 +87,20 @@ function keyPressCharge(code) {
 }
 
 function sendSuicaCharge() {
+    yearValue = $('#s_year').val();
+    monthValue = $('#s_month').val();
+    dayValue = $('#s_day').val();
+    priceValue = $('#s_price').val();
+    now = new Date();
+    day = (yearValue == now.getFullYear() && monthValue == (now.getMonth() + 1) && dayValue.length == 0) ? now.getDate() : dayValue;
+    price = (priceValue.length == 0) ? 5000 : removeComma(priceValue);
     $.post({
         url: add_url,
         data: {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
-            "date": $('#s_year').val() + "-" + $('#s_month').val() + "-" + $('#s_day').val(),
+            "date": `${yearValue}-${monthValue}-${day}`,
             "item": "Suicaチャージ",
-            "price": removeComma($('#s_price').val()),
+            "price": price,
             "direction": 2,
             "method": bank_pk,
             "category": traffic_cost_pk,

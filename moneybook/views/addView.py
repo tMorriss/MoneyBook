@@ -17,6 +17,7 @@ class AddView(View):
             'username': request.user,
             'year': now.year,
             'month': now.month,
+            'day': now.day,
             'directions': Direction.list(),
             'methods': Method.list(),
             'chargeable_methods': Method.chargeable_list(),
