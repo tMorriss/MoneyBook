@@ -295,6 +295,13 @@ section h2 {
     background: #ff0033;
 }
 
+/* Login form input fields */
+#id_username,
+#id_password {
+    width: 400px;
+    max-width: 90%;
+}
+
 /* スマホ */
 @media screen and (max-width: 980px) {
 
