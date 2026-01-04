@@ -298,7 +298,7 @@ section h2 {
 /* Login form input fields */
 #id_username,
 #id_password {
-    width: 400px;
+    width: 700px;
     max-width: 90%;
 }
 
