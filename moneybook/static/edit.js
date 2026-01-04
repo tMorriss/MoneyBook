@@ -5,7 +5,7 @@ function sendUpdateRow() {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
             "date": $('#year').val() + "-" + $('#month').val() + "-" + $('#day').val(),
             "item": $('#item').val(),
-            "price": removeComma($('#price').val()),
+            "price": evaluateFormula($('#price').val()),
             "direction": $('input[name="direction"]:checked').val(),
             "method": $('input[name="method"]:checked').val(),
             "category": $('input[name="category"]:checked').val(),

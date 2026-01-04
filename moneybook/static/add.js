@@ -5,7 +5,7 @@ function sendAddRow() {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
             "date": $('#a_year').val() + "-" + $('#a_month').val() + "-" + $('#a_day').val(),
             "item": $('#a_item').val(),
-            "price": removeComma($('#a_price').val()),
+            "price": evaluateFormula($('#a_price').val()),
             "direction": $('input[name="a_direction"]:checked').val(),
             "method": $('input[name="a_method"]:checked').val(),
             "category": $('input[name="a_category"]:checked').val(),
@@ -36,7 +36,7 @@ function sendIntraMove() {
             "month": $('#m_month').val(),
             "day": $('#m_day').val(),
             "item": $("#m_item").val(),
-            "price": removeComma($('#m_price').val()),
+            "price": evaluateFormula($('#m_price').val()),
             "before_method": $('input[name="m_before_method"]:checked').val(),
             "after_method": $('input[name="m_after_method"]:checked').val(),
         }
@@ -67,7 +67,7 @@ function sendCharge() {
             "month": $('#c_month').val(),
             "day": $('#c_day').val(),
             "item": label_id + "チャージ",
-            "price": removeComma($('#c_price').val()),
+            "price": evaluateFormula($('#c_price').val()),
             "before_method": 2,
             "after_method": $('input[name="c_method"]:checked').val(),
         }
@@ -93,7 +93,7 @@ function sendSuicaCharge() {
     priceValue = $('#s_price').val();
     now = new Date();
     day = (yearValue == now.getFullYear() && monthValue == (now.getMonth() + 1) && dayValue.length == 0) ? now.getDate() : dayValue;
-    price = (priceValue.length == 0) ? 5000 : removeComma(priceValue);
+    price = (priceValue.length == 0) ? 5000 : evaluateFormula(priceValue);
     $.post({
         url: add_url,
         data: {

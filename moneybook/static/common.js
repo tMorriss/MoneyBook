@@ -5,6 +5,55 @@ function removeComma(num) {
     return num.replace(/,/g, '');
 }
 
+function evaluateFormula(input) {
+    // If input is empty or not a string, return as is
+    if (!input || typeof input !== 'string') {
+        return input;
+    }
+    
+    // Trim the input
+    input = input.trim();
+    
+    // If it doesn't start with '=', just remove commas and return
+    if (!input.startsWith('=')) {
+        return removeComma(input);
+    }
+    
+    // Remove the '=' prefix
+    let formula = input.substring(1).trim();
+    
+    // Remove commas from the formula
+    formula = removeComma(formula);
+    
+    // Validate that formula only contains allowed characters: digits, operators, parentheses, dots, and whitespace
+    // Allowed operators: + - * / ^
+    if (!/^[\d+\-*/^().\s]+$/.test(formula)) {
+        // Invalid characters found, return original input without '='
+        return removeComma(input.substring(1));
+    }
+    
+    try {
+        // Replace ^ with ** for JavaScript power operator
+        formula = formula.replace(/\^/g, '**');
+        
+        // Evaluate the formula using Function constructor for safety
+        // This is safer than eval() as it doesn't have access to local scope
+        const result = Function('"use strict"; return (' + formula + ')')();
+        
+        // Check if result is a valid number
+        if (isNaN(result) || !isFinite(result)) {
+            // If result is not a valid number, return original input without '='
+            return removeComma(input.substring(1));
+        }
+        
+        // Return the rounded integer result
+        return Math.round(result).toString();
+    } catch (e) {
+        // If evaluation fails, return original input without '='
+        return removeComma(input.substring(1));
+    }
+}
+
 function showResultMsg(msg, callback) {
     elm = document.getElementById("result_message");
     elm.innerHTML = msg;
