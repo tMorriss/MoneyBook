@@ -1,5 +1,5 @@
-Django < 5.0.0
-mysqlclient < 3.0.0
-python-dateutil < 3.0.0
-gunicorn < 22.0.0
-django-mathfilters < 2.0.0
+Django >= 6.0.1
+mysqlclient >= 2.2.7
+python-dateutil >= 2.9.0.post0
+gunicorn >= 23.0.0
+django-mathfilters >= 1.0.0
