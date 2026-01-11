@@ -1,3 +1,4 @@
+import time
 from datetime import datetime
 
 from django.urls import reverse
@@ -614,9 +615,6 @@ class Add(SeleniumBase):
 
     def test_add_formula_normal_form(self):
         '''通常追加フォームで数式を入力できることを確認（addページ）'''
-        import time
-        from selenium.webdriver.common.by import By
-
         self._login()
         self._location(self.live_server_url + reverse('moneybook:add'))
 
@@ -641,9 +639,6 @@ class Add(SeleniumBase):
 
     def test_add_formula_internal_transfer(self):
         '''内部移動フォームで数式を入力できることを確認（addページ）'''
-        import time
-        from selenium.webdriver.common.by import By
-
         self._login()
         self._location(self.live_server_url + reverse('moneybook:add'))
 
@@ -669,9 +664,6 @@ class Add(SeleniumBase):
 
     def test_add_formula_charge(self):
         '''チャージフォームで数式を入力できることを確認（addページ）'''
-        import time
-        from selenium.webdriver.common.by import By
-
         self._login()
         self._location(self.live_server_url + reverse('moneybook:add'))
 
