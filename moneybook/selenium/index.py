@@ -554,17 +554,17 @@ class Index(SeleniumBase):
 
         self.assertEqual(self.driver.current_url, self.live_server_url + reverse('moneybook:edit', kwargs={'pk': 18}))
 
-    def test_add_formula_mini(self):
-        '''金額入力欄に数式を入力できることを確認（_add_mini）'''
+    def test_add_formula_mini_addition(self):
+        '''金額入力欄に足し算の数式を入力できることを確認（_add_mini）'''
         self._login()
         self._location(self.live_server_url + reverse('moneybook:index'))
 
         # 初期状態: 1件のみ
         self.assertEqual(len(self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')), 1)
 
-        # テストケース1: 簡単な足し算 =100+200 → 300
+        # 簡単な足し算 =100+200 → 300
         self.driver.find_element(By.ID, 'a_day').send_keys('10')
-        self.driver.find_element(By.ID, 'a_item').send_keys('数式テスト1')
+        self.driver.find_element(By.ID, 'a_item').send_keys('数式テスト')
         self.driver.find_element(By.ID, 'a_price').send_keys('=100+200')
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/input[@value="追加"]').click()
         time.sleep(2)
@@ -572,44 +572,68 @@ class Index(SeleniumBase):
         rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self.assertEqual(len(rows), 2)
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[1].text, '数式テスト1')
+        self.assertEqual(tds[1].text, '数式テスト')
         self.assertEqual(tds[2].text, '300')
 
-        # テストケース2: 掛け算と括弧 =(100+200)*3 → 900
+    def test_add_formula_mini_multiplication_with_parentheses(self):
+        '''金額入力欄に掛け算と括弧の数式を入力できることを確認（_add_mini）'''
+        self._login()
+        self._location(self.live_server_url + reverse('moneybook:index'))
+
+        # 初期状態: 1件のみ
+        self.assertEqual(len(self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')), 1)
+
+        # 掛け算と括弧 =(100+200)*3 → 900
         self.driver.find_element(By.ID, 'a_day').send_keys('11')
-        self.driver.find_element(By.ID, 'a_item').send_keys('数式テスト2')
+        self.driver.find_element(By.ID, 'a_item').send_keys('数式テスト')
         self.driver.find_element(By.ID, 'a_price').send_keys('=(100+200)*3')
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/input[@value="追加"]').click()
         time.sleep(2)
 
         rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
-        self.assertEqual(len(rows), 3)
+        self.assertEqual(len(rows), 2)
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[1].text, '数式テスト2')
+        self.assertEqual(tds[1].text, '数式テスト')
         self.assertEqual(tds[2].text, '900')
 
-        # テストケース3: 割り算 =1000/4 → 250
+    def test_add_formula_mini_division(self):
+        '''金額入力欄に割り算の数式を入力できることを確認（_add_mini）'''
+        self._login()
+        self._location(self.live_server_url + reverse('moneybook:index'))
+
+        # 初期状態: 1件のみ
+        self.assertEqual(len(self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')), 1)
+
+        # 割り算 =1000/4 → 250
         self.driver.find_element(By.ID, 'a_day').send_keys('12')
-        self.driver.find_element(By.ID, 'a_item').send_keys('数式テスト3')
+        self.driver.find_element(By.ID, 'a_item').send_keys('数式テスト')
         self.driver.find_element(By.ID, 'a_price').send_keys('=1000/4')
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/input[@value="追加"]').click()
         time.sleep(2)
 
         rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
-        self.assertEqual(len(rows), 4)
+        self.assertEqual(len(rows), 2)
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[1].text, '数式テスト3')
+        self.assertEqual(tds[1].text, '数式テスト')
         self.assertEqual(tds[2].text, '250')
 
-        # テストケース4: カンマ付き数値 =1,000+2,000 → 3000
+    def test_add_formula_mini_with_commas(self):
+        '''金額入力欄にカンマ付き数値の数式を入力できることを確認（_add_mini）'''
+        self._login()
+        self._location(self.live_server_url + reverse('moneybook:index'))
+
+        # 初期状態: 1件のみ
+        self.assertEqual(len(self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')), 1)
+
+        # カンマ付き数値 =1,000+2,000 → 3000
         self.driver.find_element(By.ID, 'a_day').send_keys('13')
-        self.driver.find_element(By.ID, 'a_item').send_keys('数式テスト4')
+        self.driver.find_element(By.ID, 'a_item').send_keys('数式テスト')
         self.driver.find_element(By.ID, 'a_price').send_keys('=1,000+2,000')
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/input[@value="追加"]').click()
         time.sleep(2)
 
         rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
-        self.assertEqual(len(rows), 5)
+        self.assertEqual(len(rows), 2)
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[1].text, '数式テスト4')
+        self.assertEqual(tds[1].text, '数式テスト')
         self.assertEqual(tds[2].text, '3,000')

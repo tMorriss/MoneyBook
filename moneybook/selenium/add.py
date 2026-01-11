@@ -612,8 +612,8 @@ class Add(SeleniumBase):
         tds[5].find_element(By.TAG_NAME, 'a').click()
         self.assertEqual(self.driver.find_element(By.XPATH, '//form/table[1]/tbody/tr[4]/td[1]/input[2]').is_selected(), False)
 
-    def test_add_formula(self):
-        '''金額入力欄に数式を入力できることを確認（addページ）'''
+    def test_add_formula_normal_form(self):
+        '''通常追加フォームで数式を入力できることを確認（addページ）'''
         import time
         from selenium.webdriver.common.by import By
 
@@ -624,10 +624,10 @@ class Add(SeleniumBase):
         self._location(self.live_server_url + reverse('moneybook:index'))
         initial_count = len(self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr'))
 
-        # テストケース1: 通常追加フォームで数式 =50*3 → 150
+        # 通常追加フォームで数式 =50*3 → 150
         self._location(self.live_server_url + reverse('moneybook:add'))
         self.driver.find_element(By.ID, 'a_day').send_keys('15')
-        self.driver.find_element(By.ID, 'a_item').send_keys('add数式1')
+        self.driver.find_element(By.ID, 'a_item').send_keys('add数式')
         self.driver.find_element(By.ID, 'a_price').send_keys('=50*3')
         self.driver.find_element(By.XPATH, '//section/form[4]/input[@value="追加"]').click()
         time.sleep(2)
@@ -636,13 +636,25 @@ class Add(SeleniumBase):
         rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self.assertEqual(len(rows), initial_count + 1)
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[1].text, 'add数式1')
+        self.assertEqual(tds[1].text, 'add数式')
         self.assertEqual(tds[2].text, '150')
 
-        # テストケース2: 内部移動で数式 =100+200 → 300
+    def test_add_formula_internal_transfer(self):
+        '''内部移動フォームで数式を入力できることを確認（addページ）'''
+        import time
+        from selenium.webdriver.common.by import By
+
+        self._login()
+        self._location(self.live_server_url + reverse('moneybook:add'))
+
+        # 初期確認
+        self._location(self.live_server_url + reverse('moneybook:index'))
+        initial_count = len(self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr'))
+
+        # 内部移動で数式 =100+200 → 300
         self._location(self.live_server_url + reverse('moneybook:add'))
         self.driver.find_element(By.ID, 'm_day').send_keys('16')
-        self.driver.find_element(By.ID, 'm_item').send_keys('add数式2')
+        self.driver.find_element(By.ID, 'm_item').send_keys('add数式')
         self.driver.find_element(By.ID, 'm_price').send_keys('=100+200')
         self.driver.find_element(By.XPATH, '//section/form[2]/input[@value="追加"]').click()
         time.sleep(2)
@@ -650,12 +662,24 @@ class Add(SeleniumBase):
         self._location(self.live_server_url + reverse('moneybook:index'))
         rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         # 内部移動は2件追加される
-        self.assertEqual(len(rows), initial_count + 3)
+        self.assertEqual(len(rows), initial_count + 2)
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[1].text, 'add数式2')
+        self.assertEqual(tds[1].text, 'add数式')
         self.assertEqual(tds[2].text, '300')
 
-        # テストケース3: チャージで数式 =1000/4 → 250
+    def test_add_formula_charge(self):
+        '''チャージフォームで数式を入力できることを確認（addページ）'''
+        import time
+        from selenium.webdriver.common.by import By
+
+        self._login()
+        self._location(self.live_server_url + reverse('moneybook:add'))
+
+        # 初期確認
+        self._location(self.live_server_url + reverse('moneybook:index'))
+        initial_count = len(self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr'))
+
+        # チャージで数式 =1000/4 → 250
         self._location(self.live_server_url + reverse('moneybook:add'))
         self.driver.find_element(By.ID, 'c_day').send_keys('17')
         self.driver.find_element(By.ID, 'c_price').send_keys('=1000/4')
@@ -665,6 +689,6 @@ class Add(SeleniumBase):
         self._location(self.live_server_url + reverse('moneybook:index'))
         rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         # チャージも2件追加される
-        self.assertEqual(len(rows), initial_count + 5)
+        self.assertEqual(len(rows), initial_count + 2)
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
         self.assertEqual(tds[2].text, '250')
