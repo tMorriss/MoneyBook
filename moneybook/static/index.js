@@ -23,7 +23,7 @@ function sendAddRow() {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
             "date": `${yearValue}-${monthValue}-${day}`,
             "item": $('#a_item').val(),
-            "price": removeComma($('#a_price').val()),
+            "price": evaluateFormula($('#a_price').val()),
             "direction": direction,
             "method": $('input[name="a_method"]:checked').val(),
             "category": category,

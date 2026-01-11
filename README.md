@@ -34,5 +34,26 @@ $ python manage.py test moneybook.selenium --settings config.settings.test
 E2E テストはデフォルトでヘッドレスモードで実行されます。ブラウザを表示して実行する場合は、環境変数`HEADLESS=0`を設定してください。
 
 ```
+# mac
 $ HEADLESS=0 python manage.py test moneybook.selenium --settings config.settings.test
+# winodows
+$ $env:HEADLESS="0"; python manage.py test moneybook.selenium --settings config.settings.test
+```
+
+## メモ
+
+### venv
+
+```
+## windows
+# 作成
+python -m venv .venv
+
+# activate
+Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
+.\.venv\Scripts\activate
+
+# deactivate
+deactivate
+
 ```

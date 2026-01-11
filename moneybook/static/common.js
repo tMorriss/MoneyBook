@@ -5,6 +5,53 @@ function removeComma(num) {
     return num.replace(/,/g, '');
 }
 
+function evaluateFormula(input) {
+    // 入力が空または文字列でない場合はそのまま返す
+    if (!input || typeof input !== 'string') {
+        return input;
+    }
+
+    // 前後の空白を削除
+    input = input.trim();
+
+    // '='で始まらない場合は、カンマを削除して返す
+    if (!input.startsWith('=')) {
+        return removeComma(input);
+    }
+
+    // '='プレフィックスを削除
+    let formula = input.substring(1).trim();
+
+    // 数式からカンマを削除
+    formula = removeComma(formula);
+
+    // 数式が許可された文字のみを含むか検証: 数字、演算子、括弧、空白
+    // 許可される演算子: + - * /（べき乗は非対応）
+    // ドット(小数点)は許可しない（整数のみ）
+    // ハイフンは文字クラスの最後に配置してリテラルのマイナス記号にマッチさせる
+    if (!/^[\d+*/()\s-]+$/.test(formula)) {
+        // 無効な文字が見つかった場合、'='を除いた元の入力を返す
+        return removeComma(input.substring(1));
+    }
+
+    try {
+        // math.js を使用して数式を安全に評価
+        const result = math.evaluate(formula);
+
+        // 結果が有効な数値かチェック
+        if (isNaN(result) || !isFinite(result)) {
+            // 有効な数値でない場合、'='を除いた元の入力を返す
+            return removeComma(input.substring(1));
+        }
+
+        // 丸めた整数の結果を返す
+        return Math.round(result).toString();
+    } catch (e) {
+        // 評価が失敗した場合、'='を除いた元の入力を返す
+        return removeComma(input.substring(1));
+    }
+}
+
 function showResultMsg(msg, callback) {
     elm = document.getElementById("result_message");
     elm.innerHTML = msg;
