@@ -6,62 +6,62 @@ function removeComma(num) {
 }
 
 function evaluateFormula(input) {
-    // If input is empty or not a string, return as is
+    // 入力が空または文字列でない場合はそのまま返す
     if (!input || typeof input !== 'string') {
         return input;
     }
 
-    // Trim the input
+    // 前後の空白を削除
     input = input.trim();
 
-    // If it doesn't start with '=', just remove commas and return
+    // '='で始まらない場合は、カンマを削除して返す
     if (!input.startsWith('=')) {
         return removeComma(input);
     }
 
-    // Remove the '=' prefix
+    // '='プレフィックスを削除
     let formula = input.substring(1).trim();
 
-    // Remove commas from the formula
+    // 数式からカンマを削除
     formula = removeComma(formula);
 
-    // Validate that formula only contains allowed characters: digits, operators, parentheses, dots, and whitespace
-    // Allowed operators: + - * / ^
-    // Hyphen placed at end of character class to match literal minus sign
+    // 数式が許可された文字のみを含むか検証: 数字、演算子、括弧、ドット、空白
+    // 許可される演算子: + - * / ^
+    // ハイフンは文字クラスの最後に配置してリテラルのマイナス記号にマッチさせる
     if (!/^[\d+*/^().\s-]+$/.test(formula)) {
-        // Invalid characters found, return original input without '='
+        // 無効な文字が見つかった場合、'='を除いた元の入力を返す
         return removeComma(input.substring(1));
     }
 
     try {
-        // Use a safe math evaluator instead of Function constructor
+        // Function コンストラクタの代わりに安全な数式評価器を使用
         const result = evaluateMathExpression(formula);
 
-        // Check if result is a valid number
+        // 結果が有効な数値かチェック
         if (isNaN(result) || !isFinite(result)) {
-            // If result is not a valid number, return original input without '='
+            // 有効な数値でない場合、'='を除いた元の入力を返す
             return removeComma(input.substring(1));
         }
 
-        // Return the rounded integer result
+        // 丸めた整数の結果を返す
         return Math.round(result).toString();
     } catch (e) {
-        // If evaluation fails, return original input without '='
+        // 評価が失敗した場合、'='を除いた元の入力を返す
         return removeComma(input.substring(1));
     }
 }
 
 function evaluateMathExpression(expr) {
-    // Replace ^ with ** for power operator
+    // べき乗演算子のために ^ を ** に置換
     expr = expr.replace(/\^/g, '**');
 
-    // Tokenize the expression
+    // 式をトークン化
     const tokens = expr.match(/(\d+\.?\d*|\*\*|[+\-*/()])/g);
     if (!tokens) {
         throw new Error('Invalid expression');
     }
 
-    // Convert to postfix notation (Reverse Polish Notation) using Shunting Yard algorithm
+    // Shunting Yard アルゴリズムを使用して後置記法（逆ポーランド記法）に変換
     const output = [];
     const operators = [];
     const precedence = { '+': 1, '-': 1, '*': 2, '/': 2, '**': 3 };
@@ -71,10 +71,10 @@ function evaluateMathExpression(expr) {
         const token = tokens[i];
 
         if (/^\d+\.?\d*$/.test(token)) {
-            // Number
+            // 数値
             output.push(parseFloat(token));
         } else if (token in precedence) {
-            // Operator
+            // 演算子
             while (operators.length > 0) {
                 const top = operators[operators.length - 1];
                 if (top === '(') break;
@@ -92,7 +92,7 @@ function evaluateMathExpression(expr) {
             while (operators.length > 0 && operators[operators.length - 1] !== '(') {
                 output.push(operators.pop());
             }
-            operators.pop(); // Remove '('
+            operators.pop(); // '(' を削除
         }
     }
 
@@ -100,7 +100,7 @@ function evaluateMathExpression(expr) {
         output.push(operators.pop());
     }
 
-    // Evaluate postfix expression
+    // 後置式を評価
     const stack = [];
     for (let i = 0; i < output.length; i++) {
         const item = output[i];
