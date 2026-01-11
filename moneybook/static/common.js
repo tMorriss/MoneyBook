@@ -122,28 +122,23 @@ function evaluateMathExpression(expr) {
     return stack[0];
 }
 
-// Module-level timer variables
-let timerId;
-let fadein_timer;
-let fadeout_timer;
-
 function showResultMsg(msg, callback) {
-    let elm = document.getElementById("result_message");
+    elm = document.getElementById("result_message");
     elm.innerHTML = msg;
     elm.style.display = "block"; //表示
     fadeInTimer(elm, 0);
     timerId = setTimeout(closeResultMsg, 1000, callback);
 }
 function closeResultMsg(callback) {
-    let elm = document.getElementById("result_message");
+    elm = document.getElementById("result_message");
     fadeOutTimer(elm, 1, callback);
     clearTimeout(timerId);
 }
 
 // フェードイン(要素，現在の値)
 function fadeInTimer(elm, opaValue) {
-    let maxMilliSec = 100;
-    let split = 100;
+    maxMilliSec = 100;
+    split = 100;
     if (opaValue < 1) {
         elm.style.opacity = opaValue;
         opaValue = opaValue + (1 / split);
@@ -155,8 +150,8 @@ function fadeInTimer(elm, opaValue) {
 }
 // フェードアウト(要素，現在の値)
 function fadeOutTimer(elm, opaValue, callback) {
-    let maxMilliSec = 100;
-    let split = 100;
+    maxMilliSec = 100;
+    split = 100;
     if (opaValue > 0) {
         elm.style.opacity = opaValue;
         opaValue = opaValue - (1 / split);
