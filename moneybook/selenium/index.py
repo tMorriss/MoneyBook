@@ -588,10 +588,10 @@ class Index(SeleniumBase):
         self.assertEqual(tds[1].text, '数式テスト2')
         self.assertEqual(tds[2].text, '900')
 
-        # テストケース3: べき乗 =2^3*5 → 40
+        # テストケース3: 割り算 =1000/4 → 250
         self.driver.find_element(By.ID, 'a_day').send_keys('12')
         self.driver.find_element(By.ID, 'a_item').send_keys('数式テスト3')
-        self.driver.find_element(By.ID, 'a_price').send_keys('=2^3*5')
+        self.driver.find_element(By.ID, 'a_price').send_keys('=1000/4')
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/input[@value="追加"]').click()
         time.sleep(2)
 
@@ -599,7 +599,7 @@ class Index(SeleniumBase):
         self.assertEqual(len(rows), 4)
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
         self.assertEqual(tds[1].text, '数式テスト3')
-        self.assertEqual(tds[2].text, '40')
+        self.assertEqual(tds[2].text, '250')
 
         # テストケース4: カンマ付き数値 =1,000+2,000 → 3000
         self.driver.find_element(By.ID, 'a_day').send_keys('13')

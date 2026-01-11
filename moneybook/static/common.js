@@ -26,16 +26,16 @@ function evaluateFormula(input) {
     formula = removeComma(formula);
 
     // 数式が許可された文字のみを含むか検証: 数字、演算子、括弧、ドット、空白
-    // 許可される演算子: + - * / ^
+    // 許可される演算子: + - * /（べき乗は非対応）
     // ハイフンは文字クラスの最後に配置してリテラルのマイナス記号にマッチさせる
-    if (!/^[\d+*/^().\s-]+$/.test(formula)) {
+    if (!/^[\d+*/().\s-]+$/.test(formula)) {
         // 無効な文字が見つかった場合、'='を除いた元の入力を返す
         return removeComma(input.substring(1));
     }
 
     try {
-        // Function コンストラクタの代わりに安全な数式評価器を使用
-        const result = evaluateMathExpression(formula);
+        // math.js を使用して数式を安全に評価
+        const result = math.evaluate(formula);
 
         // 結果が有効な数値かチェック
         if (isNaN(result) || !isFinite(result)) {
@@ -49,77 +49,6 @@ function evaluateFormula(input) {
         // 評価が失敗した場合、'='を除いた元の入力を返す
         return removeComma(input.substring(1));
     }
-}
-
-function evaluateMathExpression(expr) {
-    // べき乗演算子のために ^ を ** に置換
-    expr = expr.replace(/\^/g, '**');
-
-    // 式をトークン化
-    const tokens = expr.match(/(\d+\.?\d*|\*\*|[+\-*/()])/g);
-    if (!tokens) {
-        throw new Error('Invalid expression');
-    }
-
-    // Shunting Yard アルゴリズムを使用して後置記法（逆ポーランド記法）に変換
-    const output = [];
-    const operators = [];
-    const precedence = { '+': 1, '-': 1, '*': 2, '/': 2, '**': 3 };
-    const rightAssociative = { '**': true };
-
-    for (let i = 0; i < tokens.length; i++) {
-        const token = tokens[i];
-
-        if (/^\d+\.?\d*$/.test(token)) {
-            // 数値
-            output.push(parseFloat(token));
-        } else if (token in precedence) {
-            // 演算子
-            while (operators.length > 0) {
-                const top = operators[operators.length - 1];
-                if (top === '(') break;
-                if (precedence[top] > precedence[token] ||
-                    (precedence[top] === precedence[token] && !rightAssociative[token])) {
-                    output.push(operators.pop());
-                } else {
-                    break;
-                }
-            }
-            operators.push(token);
-        } else if (token === '(') {
-            operators.push(token);
-        } else if (token === ')') {
-            while (operators.length > 0 && operators[operators.length - 1] !== '(') {
-                output.push(operators.pop());
-            }
-            operators.pop(); // '(' を削除
-        }
-    }
-
-    while (operators.length > 0) {
-        output.push(operators.pop());
-    }
-
-    // 後置式を評価
-    const stack = [];
-    for (let i = 0; i < output.length; i++) {
-        const item = output[i];
-        if (typeof item === 'number') {
-            stack.push(item);
-        } else {
-            const b = stack.pop();
-            const a = stack.pop();
-            switch (item) {
-                case '+': stack.push(a + b); break;
-                case '-': stack.push(a - b); break;
-                case '*': stack.push(a * b); break;
-                case '/': stack.push(a / b); break;
-                case '**': stack.push(Math.pow(a, b)); break;
-            }
-        }
-    }
-
-    return stack[0];
 }
 
 function showResultMsg(msg, callback) {
