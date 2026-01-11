@@ -27,18 +27,15 @@ function evaluateFormula(input) {
     
     // Validate that formula only contains allowed characters: digits, operators, parentheses, dots, and whitespace
     // Allowed operators: + - * / ^
-    if (!/^[\d+\-*/^().\s]+$/.test(formula)) {
+    // Hyphen placed at end of character class to match literal minus sign
+    if (!/^[\d+*/^().\s-]+$/.test(formula)) {
         // Invalid characters found, return original input without '='
         return removeComma(input.substring(1));
     }
     
     try {
-        // Replace ^ with ** for JavaScript power operator
-        formula = formula.replace(/\^/g, '**');
-        
-        // Evaluate the formula using Function constructor for safety
-        // This is safer than eval() as it doesn't have access to local scope
-        const result = Function('"use strict"; return (' + formula + ')')();
+        // Use a safe math evaluator instead of Function constructor
+        const result = evaluateMathExpression(formula);
         
         // Check if result is a valid number
         if (isNaN(result) || !isFinite(result)) {
@@ -54,42 +51,110 @@ function evaluateFormula(input) {
     }
 }
 
+function evaluateMathExpression(expr) {
+    // Replace ^ with ** for power operator
+    expr = expr.replace(/\^/g, '**');
+    
+    // Tokenize the expression
+    const tokens = expr.match(/(\d+\.?\d*|\*\*|[+\-*/()])/g);
+    if (!tokens) {
+        throw new Error('Invalid expression');
+    }
+    
+    // Convert to postfix notation (Reverse Polish Notation) using Shunting Yard algorithm
+    const output = [];
+    const operators = [];
+    const precedence = { '+': 1, '-': 1, '*': 2, '/': 2, '**': 3 };
+    const rightAssociative = { '**': true };
+    
+    for (let i = 0; i < tokens.length; i++) {
+        const token = tokens[i];
+        
+        if (/^\d+\.?\d*$/.test(token)) {
+            // Number
+            output.push(parseFloat(token));
+        } else if (token in precedence) {
+            // Operator
+            while (operators.length > 0) {
+                const top = operators[operators.length - 1];
+                if (top === '(') break;
+                if (precedence[top] > precedence[token] ||
+                    (precedence[top] === precedence[token] && !rightAssociative[token])) {
+                    output.push(operators.pop());
+                } else {
+                    break;
+                }
+            }
+            operators.push(token);
+        } else if (token === '(') {
+            operators.push(token);
+        } else if (token === ')') {
+            while (operators.length > 0 && operators[operators.length - 1] !== '(') {
+                output.push(operators.pop());
+            }
+            operators.pop(); // Remove '('
+        }
+    }
+    
+    while (operators.length > 0) {
+        output.push(operators.pop());
+    }
+    
+    // Evaluate postfix expression
+    const stack = [];
+    for (let i = 0; i < output.length; i++) {
+        const item = output[i];
+        if (typeof item === 'number') {
+            stack.push(item);
+        } else {
+            const b = stack.pop();
+            const a = stack.pop();
+            switch (item) {
+                case '+': stack.push(a + b); break;
+                case '-': stack.push(a - b); break;
+                case '*': stack.push(a * b); break;
+                case '/': stack.push(a / b); break;
+                case '**': stack.push(Math.pow(a, b)); break;
+            }
+        }
+    }
+    
+    return stack[0];
+}
+
 function showResultMsg(msg, callback) {
-    elm = document.getElementById("result_message");
+    let elm = document.getElementById("result_message");
     elm.innerHTML = msg;
     elm.style.display = "block"; //表示
     fadeInTimer(elm, 0);
-    timerId = setTimeout(closeResultMsg, 1000, callback);
+    let timerId = setTimeout(closeResultMsg, 1000, callback);
 }
 function closeResultMsg(callback) {
-    elm = document.getElementById("result_message");
+    let elm = document.getElementById("result_message");
     fadeOutTimer(elm, 1, callback);
-    clearTimeout(timerId);
 }
 
 // フェードイン(要素，現在の値)
 function fadeInTimer(elm, opaValue) {
-    maxMilliSec = 100;
-    split = 100;
+    let maxMilliSec = 100;
+    let split = 100;
     if (opaValue < 1) {
         elm.style.opacity = opaValue;
         opaValue = opaValue + (1 / split);
-        fadein_timer = setTimeout(function () { fadeInTimer(elm, opaValue); }, (maxMilliSec / split));
+        let fadein_timer = setTimeout(function () { fadeInTimer(elm, opaValue); }, (maxMilliSec / split));
     } else {
-        clearTimeout(fadein_timer);
         elm.style.opacity = 1;
     }
 }
 // フェードアウト(要素，現在の値)
 function fadeOutTimer(elm, opaValue, callback) {
-    maxMilliSec = 100;
-    split = 100;
+    let maxMilliSec = 100;
+    let split = 100;
     if (opaValue > 0) {
         elm.style.opacity = opaValue;
         opaValue = opaValue - (1 / split);
-        fadeout_timer = setTimeout(function () { fadeOutTimer(elm, opaValue, callback); }, (maxMilliSec / split));
+        let fadeout_timer = setTimeout(function () { fadeOutTimer(elm, opaValue, callback); }, (maxMilliSec / split));
     } else {
-        clearTimeout(fadeout_timer);
         elm.style.opacity = 0;
         elm.style.display = "none";
         // リセット処理
