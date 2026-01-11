@@ -615,11 +615,8 @@ class Add(SeleniumBase):
     def test_add_formula(self):
         '''金額入力欄に数式を入力できることを確認（addページ）'''
         import time
-        from datetime import datetime
         from selenium.webdriver.common.by import By
-        from selenium.webdriver.support.color import Color
-        
-        now = datetime.now()
+
         self._login()
         self._location(self.live_server_url + reverse('moneybook:add'))
 

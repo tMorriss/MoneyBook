@@ -556,7 +556,6 @@ class Index(SeleniumBase):
 
     def test_add_formula_mini(self):
         '''金額入力欄に数式を入力できることを確認（_add_mini）'''
-        now = datetime.now()
         self._login()
         self._location(self.live_server_url + reverse('moneybook:index'))
 
