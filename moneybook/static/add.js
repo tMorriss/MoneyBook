@@ -1,11 +1,17 @@
 function sendAddRow() {
+    const price = evaluatePrice($('#a_price').val());
+    if (isNaN(price)) {
+        showResultMsg("Error... Invalid formula in amount field", empty);
+        return;
+    }
+
     $.post({
         url: add_url,
         data: {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
             "date": $('#a_year').val() + "-" + $('#a_month').val() + "-" + $('#a_day').val(),
             "item": $('#a_item').val(),
-            "price": removeComma($('#a_price').val()),
+            "price": price,
             "direction": $('input[name="a_direction"]:checked').val(),
             "method": $('input[name="a_method"]:checked').val(),
             "category": $('input[name="a_category"]:checked').val(),
@@ -28,6 +34,12 @@ function keyPressAdd(code) {
 }
 
 function sendIntraMove() {
+    const price = evaluatePrice($('#m_price').val());
+    if (isNaN(price)) {
+        showResultMsg("Error... Invalid formula in amount field", empty);
+        return;
+    }
+
     $.post({
         url: intra_move_url,
         data: {
@@ -36,7 +48,7 @@ function sendIntraMove() {
             "month": $('#m_month').val(),
             "day": $('#m_day').val(),
             "item": $("#m_item").val(),
-            "price": removeComma($('#m_price').val()),
+            "price": price,
             "before_method": $('input[name="m_before_method"]:checked').val(),
             "after_method": $('input[name="m_after_method"]:checked').val(),
         }

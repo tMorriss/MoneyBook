@@ -5,6 +5,30 @@ function removeComma(num) {
     return num.replace(/,/g, '');
 }
 
+function evaluatePrice(priceStr) {
+    // remove commas
+    let cleanPriceStr = priceStr.replace(/,/g, '');
+
+    // check for expression
+    if (cleanPriceStr.startsWith('=')) {
+        try {
+            // remove '=' and evaluate
+            let expression = cleanPriceStr.substring(1);
+            // Let's do a basic sanity check on the expression to allow only numbers and simple operators
+            if (/^[\d\s()+\-*/.]+$/.test(expression)) {
+                return new Function('return ' + expression)();
+            } else {
+                return NaN; // Or some error indicator
+            }
+        } catch (e) {
+            return NaN; // Error during evaluation
+        }
+    } else {
+        // No expression, just return the cleaned number string
+        return cleanPriceStr;
+    }
+}
+
 function showResultMsg(msg, callback) {
     elm = document.getElementById("result_message");
     elm.innerHTML = msg;
