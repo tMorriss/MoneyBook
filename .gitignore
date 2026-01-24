@@ -5,3 +5,4 @@ chrome*
 .coverage
 coverage.*
 .venv/
+venv/

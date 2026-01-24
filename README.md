@@ -45,11 +45,14 @@ $ $env:HEADLESS="0"; python manage.py test moneybook.selenium --settings config.
 ### venv
 
 ```
-## windows
 # 作成
 python -m venv .venv
 
 # activate
+## Linux/macOS
+source .venv/bin/activate
+
+## Windows
 Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
 .\.venv\Scripts\activate
 
