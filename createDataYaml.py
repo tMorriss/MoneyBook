@@ -1,6 +1,7 @@
+import sys
+
 import pandas as pd
 from mysql.connector import connect
-import sys
 
 if len(sys.argv) < 6:
     print("Error: Missing required arguments", file=sys.stderr)
