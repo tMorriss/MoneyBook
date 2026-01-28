@@ -8,6 +8,6 @@ name: tMorriss-agent
 description: tMorriss用
 ---
 
-# My Agent
+# tMorriss-agent
 
 対話は日本語で行うこと。
