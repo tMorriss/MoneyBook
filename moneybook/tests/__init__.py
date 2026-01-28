@@ -1,12 +1,12 @@
-from .addIntraMoveViewTests import *
-from .addViewTests import *
-from .base import *
-from .deleteViewTests import *
-from .editViewTests import *
-from .indexViewTests import *
-from .modelsTests import *
-from .periodBalanceViewTests import *
-from .searchViewTests import *
-from .statisticsViewTests import *
-from .toolsViewTests import *
-from .utilsTests import *
+from .addIntraMoveViewTests import *  # noqa: F401,F403
+from .addViewTests import *  # noqa: F401,F403
+from .base import *  # noqa: F401,F403
+from .deleteViewTests import *  # noqa: F401,F403
+from .editViewTests import *  # noqa: F401,F403
+from .indexViewTests import *  # noqa: F401,F403
+from .modelsTests import *  # noqa: F401,F403
+from .periodBalanceViewTests import *  # noqa: F401,F403
+from .searchViewTests import *  # noqa: F401,F403
+from .statisticsViewTests import *  # noqa: F401,F403
+from .toolsViewTests import *  # noqa: F401,F403
+from .utilsTests import *  # noqa: F401,F403
