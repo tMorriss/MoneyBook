@@ -6,7 +6,7 @@ cd `dirname $0`
 # python3 manage.py makemigrations
 # python3 manage.py migrate
 
-scp createDataYaml.py createOtherYaml.py mars:~/
+scp createDataYaml.py createOtherYaml.py yaml_utils.py mars:~/
 
 mkdir -p fixture
 
