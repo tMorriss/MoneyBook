@@ -5,27 +5,37 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
 echo "[INFO] repo_root: ${REPO_ROOT}"
-echo "[INFO] deploy_dir: ${DEPLOY_DIR}"
 
-# 誤爆防止
-if [[ -z "${DEPLOY_DIR}" || "${DEPLOY_DIR}" == "/" ]]; then
-  echo "[ERROR] DEPLOY_DIR is invalid: '${DEPLOY_DIR}'"
-  exit 1
-fi
+cd "${REPO_ROOT}"
 
-sudo mkdir -p "${DEPLOY_DIR}"
+# Pull base images
+echo "[INFO] Pulling base images..."
+sudo docker pull python:3.8-slim
+sudo docker pull nginx:alpine
 
-# 配布先をリポジトリと完全一致にする（不要ファイルも削除）
-sudo rsync -a --delete \
-  --exclude ".git/" \
-  --exclude ".github/" \
-  --exclude ".gitignore" \
-  "${REPO_ROOT}/" "${DEPLOY_DIR}/"
+# Build docker images
+echo "[INFO] Building docker images..."
+sudo docker-compose build
 
-echo "[INFO] restarting service: ${SERVICE_NAME}"
-sudo systemctl restart "${SERVICE_NAME}"
+# Run DB migration
+echo "[INFO] Running DB migration..."
+sudo docker-compose run --rm gunicorn \
+  python /MoneyBook/manage.py migrate --settings config.settings.prod
 
-echo "[INFO] service status:"
-sudo systemctl --no-pager --full status "${SERVICE_NAME}" || true
+# Stop and remove existing containers
+echo "[INFO] Stopping existing containers..."
+sudo docker-compose down
+
+# Start containers
+echo "[INFO] Starting containers..."
+sudo docker-compose up -d
+
+# Show container status
+echo "[INFO] Container status:"
+sudo docker-compose ps
+
+# Delete old images
+echo "[INFO] Cleaning up old images..."
+sudo docker image prune -f
 
 echo "[INFO] done."

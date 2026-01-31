@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  gunicorn:
+    build:
+      context: .
+      dockerfile: build/docker/Dockerfile.gunicorn
+    container_name: moneybook_gunicorn
+    restart: always
+    environment:
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - DB_HOST=${DB_HOST}
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS}
+      - SECRET_KEY=${SECRET_KEY}
+    networks:
+      - moneybook_network
+    command: gunicorn --bind 0.0.0.0:8081 --access-logfile - config.wsgi
+
+  nginx:
+    build:
+      context: .
+      dockerfile: build/docker/Dockerfile.nginx
+    container_name: moneybook_nginx
+    restart: always
+    ports:
+      - "8080:80"
+    depends_on:
+      - gunicorn
+    networks:
+      - moneybook_network
+
+networks:
+  moneybook_network:
+    driver: bridge
