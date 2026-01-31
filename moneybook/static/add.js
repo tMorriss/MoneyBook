@@ -93,7 +93,7 @@ function sendSuicaCharge() {
     priceValue = $('#s_price').val();
     now = new Date();
     day = (yearValue == now.getFullYear() && monthValue == (now.getMonth() + 1) && dayValue.length == 0) ? now.getDate() : dayValue;
-    price = (priceValue.length == 0) ? 5000 : evaluateFormula(priceValue);
+    price = (priceValue.length == 0) ? 3000 : evaluateFormula(priceValue);
     $.post({
         url: add_url,
         data: {

@@ -98,7 +98,7 @@ class Add(SeleniumBase):
         self.assertEqual(self.driver.find_element(By.ID, 's_day').get_attribute('value'), '')
         self.assertEqual(self.driver.find_element(By.ID, 's_day').get_attribute('placeholder'), str(now.day))
         self.assertEqual(self.driver.find_element(By.ID, 's_price').get_attribute('value'), '')
-        self.assertEqual(self.driver.find_element(By.ID, 's_price').get_attribute('placeholder'), '5000')
+        self.assertEqual(self.driver.find_element(By.ID, 's_price').get_attribute('placeholder'), '3000')
         self.assertEqual(self.driver.find_element(By.XPATH,
                                                   '//section/form[3]/table/tbody/tr[3]/td/input[1]').get_attribute('value'), 'Suicaチャージ')
 
@@ -402,8 +402,8 @@ class Add(SeleniumBase):
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
         self.assertEqual(tds[0].text, str(now.year) + "/" + str.zfill(str(now.month), 2) + "/" + '05')
         self.assertEqual(tds[1].text, 'Suicaチャージ')
-        # デフォルトの5000円が使われていることを確認
-        self.assertEqual(tds[2].text, '5,000')
+        # デフォルトの3000円が使われていることを確認
+        self.assertEqual(tds[2].text, '3,000')
         self.assertEqual(tds[3].text, '銀行')
         self.assertEqual(tds[4].text, '交通費')
 
@@ -420,10 +420,10 @@ class Add(SeleniumBase):
         rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self.assertEqual(len(rows), 2)
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        # 今日の日付とデフォルトの5000円が使われていることを確認
+        # 今日の日付とデフォルトの3000円が使われていることを確認
         self.assertEqual(tds[0].text, str(now.year) + "/" + str.zfill(str(now.month), 2) + "/" + str.zfill(str(now.day), 2))
         self.assertEqual(tds[1].text, 'Suicaチャージ')
-        self.assertEqual(tds[2].text, '5,000')
+        self.assertEqual(tds[2].text, '3,000')
         self.assertEqual(tds[3].text, '銀行')
         self.assertEqual(tds[4].text, '交通費')
 
