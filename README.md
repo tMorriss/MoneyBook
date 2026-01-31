@@ -2,6 +2,49 @@
 
 自分用家計簿 Web アプリケーション
 
+## デプロイ
+
+このアプリケーションはDockerコンテナで実行されます。nginxとgunicornは別々のコンテナで実行されるサイドカーパターンを採用しています。
+
+### 環境変数の設定
+
+以下の環境変数を設定する必要があります：
+- `DB_NAME`: データベース名
+- `DB_USER`: データベースユーザー
+- `DB_PASS`: データベースパスワード
+- `DB_HOST`: データベースホスト
+- `ALLOWED_HOSTS`: 許可するホスト名
+- `SECRET_KEY`: Djangoのシークレットキー
+
+### デプロイ方法
+
+```bash
+cd /path/to/MoneyBook
+./build/jenkins.sh
+```
+
+このスクリプトは以下を実行します：
+- ベースイメージのpull
+- Dockerイメージのビルド
+- データベースマイグレーション
+- コンテナの起動（自動再起動設定付き）
+
+### 手動でのコンテナ操作
+
+```bash
+# コンテナの起動
+sudo docker-compose up -d
+
+# コンテナの停止
+sudo docker-compose down
+
+# ログの確認
+sudo docker-compose logs -f
+
+# コンテナの状態確認
+sudo docker-compose ps
+```
+
 ## lint 確認
 
 ```
