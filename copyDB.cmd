@@ -2,7 +2,7 @@
 
 cd %~dp0
 
-scp createDataYaml.py createOtherYaml.py mars:~/
+scp createDataYaml.py createOtherYaml.py yaml_utils.py mars:~/
 
 mkdir fixture
 

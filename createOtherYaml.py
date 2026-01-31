@@ -1,22 +1,8 @@
-import sys
-
 import pandas as pd
-from mysql.connector import connect
+from yaml_utils import create_db_connection, parse_db_arguments
 
-if len(sys.argv) < 6:
-    print("Error: Missing required arguments", file=sys.stderr)
-    print("Usage: python3 createOtherYaml.py <hostname> <port> <user> <password> <database>", file=sys.stderr)
-    sys.exit(1)
-
-db_host = sys.argv[1]
-db_port = int(sys.argv[2])
-db_user = sys.argv[3]
-db_password = sys.argv[4]
-db_database = sys.argv[5]
-
-con = connect(host=db_host, port=db_port, user=db_user,
-              password=db_password,
-              database=db_database)
+db_host, db_port, db_user, db_password, db_database = parse_db_arguments()
+con = create_db_connection(db_host, db_port, db_user, db_password, db_database)
 result_str = ""
 
 # 現在銀行
