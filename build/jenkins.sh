@@ -10,7 +10,7 @@ cd "${REPO_ROOT}"
 
 # Pull base images
 echo "[INFO] Pulling base images..."
-sudo docker pull python:3.13.11-slim
+sudo docker pull python:3.13-slim
 sudo docker pull nginx:alpine
 
 # Build docker images
