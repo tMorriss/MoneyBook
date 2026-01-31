@@ -1,48 +1,31 @@
-# pull docker images
-sudo podman pull quay.io/centos/centos:stream8
+#!/usr/bin/env bash
+set -euo pipefail
 
-# build docker image
-sudo podman build -t tmorriss/moneybook -f ./build/Dockerfile ./
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
-# stop container
-count=`sudo podman ps |grep moneybook |wc -l`
-if [ $count -gt 0 ]; then
-  sudo podman stop moneybook
-fi
-# remove container
-count=`sudo podman ps -a |grep moneybook |wc -l`
-if [ $count -gt 0 ]; then
-  sudo podman rm moneybook
+echo "[INFO] repo_root: ${REPO_ROOT}"
+echo "[INFO] deploy_dir: ${DEPLOY_DIR}"
+
+# 誤爆防止
+if [[ -z "${DEPLOY_DIR}" || "${DEPLOY_DIR}" == "/" ]]; then
+  echo "[ERROR] DEPLOY_DIR is invalid: '${DEPLOY_DIR}'"
+  exit 1
 fi
 
-# DB migration
-sudo podman run \
--e DB_NAME=$DB_NAME \
--e DB_USER=$DB_USER \
--e DB_PASS=$DB_PASS \
--e DB_HOST=$DB_HOST \
--e SECRET_KEY=$SECRET_KEY \
--h moneybook_migration \
---name moneybook_migration \
---rm \
-tmorriss/moneybook \
-/bin/bash -c \
-"/usr/bin/python3 /MoneyBook/manage.py migrate --settings config.settings.prod"
+sudo mkdir -p "${DEPLOY_DIR}"
 
-# deploy container
-sudo podman run \
--d \
---restart=always \
--p 8080:80 \
--e DB_NAME=$DB_NAME \
--e DB_USER=$DB_USER \
--e DB_PASS=$DB_PASS \
--e DB_HOST=$DB_HOST \
--e ALLOWED_HOSTS=$ALLOWED_HOSTS \
--e SECRET_KEY=$SECRET_KEY \
--h moneybook \
---name moneybook \
-tmorriss/moneybook
+# 配布先をリポジトリと完全一致にする（不要ファイルも削除）
+sudo rsync -a --delete \
+  --exclude ".git/" \
+  --exclude ".github/" \
+  --exclude ".gitignore" \
+  "${REPO_ROOT}/" "${DEPLOY_DIR}/"
 
-# delete old images
-sudo podman image prune -f
+echo "[INFO] restarting service: ${SERVICE_NAME}"
+sudo systemctl restart "${SERVICE_NAME}"
+
+echo "[INFO] service status:"
+sudo systemctl --no-pager --full status "${SERVICE_NAME}" || true
+
+echo "[INFO] done."
