@@ -17,4 +17,4 @@ RUN pip install --no-cache-dir -r /MoneyBook/build/requirements.txt
 WORKDIR /MoneyBook
 
 # Run gunicorn
-CMD ["gunicorn", "--bind", "0.0.0.0:8081", "--access-logfile", "-", "config.wsgi"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8081", "--workers", "4", "--access-logfile", "-", "config.wsgi"]

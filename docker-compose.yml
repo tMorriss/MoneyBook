@@ -16,7 +16,13 @@ services:
       - SECRET_KEY=${SECRET_KEY}
     networks:
       - moneybook_network
-    command: gunicorn --bind 0.0.0.0:8081 --access-logfile - config.wsgi
+    healthcheck:
+      test: ["CMD", "python", "-c", "import socket; s = socket.socket(socket.AF_INET, socket.SOCK_STREAM); s.connect(('localhost', 8081)); s.close()"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 40s
+    command: gunicorn --bind 0.0.0.0:8081 --workers 4 --access-logfile - config.wsgi
 
   nginx:
     build:
@@ -27,7 +33,8 @@ services:
     ports:
       - "8080:80"
     depends_on:
-      - gunicorn
+      gunicorn:
+        condition: service_healthy
     networks:
       - moneybook_network
 
