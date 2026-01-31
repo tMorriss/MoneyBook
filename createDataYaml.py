@@ -4,21 +4,21 @@ import pandas as pd
 from mysql.connector import connect
 
 # Read database credentials from stdin (one per line)
-try:
-    lines = sys.stdin.read().strip().split('\n')
-    if len(lines) < 5:
-        print("Error: Missing required credentials from stdin", file=sys.stderr)
-        print("Expected 5 lines: hostname, port, username, password, database", file=sys.stderr)
-        sys.exit(1)
-
-    db_host = lines[0].strip()
-    db_port = int(lines[1].strip())
-    db_user = lines[2].strip()
-    db_password = lines[3].strip()
-    db_database = lines[4].strip()
-except Exception as e:
-    print(f"Error reading credentials from stdin: {e}", file=sys.stderr)
+lines = sys.stdin.read().strip().split('\n')
+if len(lines) < 5:
+    print("Error: Missing required credentials from stdin", file=sys.stderr)
+    print("Expected 5 lines: hostname, port, username, password, database", file=sys.stderr)
     sys.exit(1)
+
+db_host = lines[0].strip()
+try:
+    db_port = int(lines[1].strip())
+except ValueError:
+    print("Error: Port must be a valid integer", file=sys.stderr)
+    sys.exit(1)
+db_user = lines[2].strip()
+db_password = lines[3].strip()
+db_database = lines[4].strip()
 
 con = connect(host=db_host, port=db_port, user=db_user,
               password=db_password,
