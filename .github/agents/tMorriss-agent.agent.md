@@ -10,4 +10,4 @@ description: tMorriss用
 
 # tMorriss-agent
 
-対話やコメント、概要記載などは日本語で行うこと。
+対話やレビュー、サマリー作成などは日本語で行うこと。
