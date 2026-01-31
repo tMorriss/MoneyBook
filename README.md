@@ -2,6 +2,48 @@
 
 自分用家計簿 Web アプリケーション
 
+## デプロイ
+
+このアプリケーションはDockerコンテナで実行されます。nginxとgunicornは別々のコンテナで実行されるサイドカーパターンを採用しています。
+
+### 環境変数の設定
+
+`.env.example`をコピーして`.env`ファイルを作成し、必要な環境変数を設定してください。
+
+```bash
+cp .env.example .env
+# .envファイルを編集して適切な値を設定
+```
+
+### デプロイ方法
+
+```bash
+cd /path/to/MoneyBook
+./build/jenkins.sh
+```
+
+このスクリプトは以下を実行します：
+- ベースイメージのpull
+- Dockerイメージのビルド
+- データベースマイグレーション
+- コンテナの起動（自動再起動設定付き）
+
+### 手動でのコンテナ操作
+
+```bash
+# コンテナの起動
+sudo docker-compose up -d
+
+# コンテナの停止
+sudo docker-compose down
+
+# ログの確認
+sudo docker-compose logs -f
+
+# コンテナの状態確認
+sudo docker-compose ps
+```
+
 ## lint 確認
 
 ```
