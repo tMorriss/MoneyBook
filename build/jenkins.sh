@@ -1,46 +1,37 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Jenkins deployment script for MoneyBook
-# This script deploys the repository contents to the target directory and restarts the service
+# MoneyBookデプロイスクリプト
 
-# Determine the repository root directory (one level up from the script location)
+# リポジトリルートの取得
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
-# Target deployment directory
+# デプロイ先ディレクトリ
 DEPLOY_DIR="/home/pluto/programs/Moneybook"
 
-echo "[INFO] Starting deployment process"
-echo "[INFO] Repository root: ${REPO_ROOT}"
-echo "[INFO] Deploy directory: ${DEPLOY_DIR}"
+echo "デプロイ開始"
 
-# Safety guard: Fail if DEPLOY_DIR is empty or root
+# 安全性チェック
 if [ -z "${DEPLOY_DIR}" ] || [ "${DEPLOY_DIR}" = "/" ]; then
-    echo "[ERROR] DEPLOY_DIR is empty or set to root directory. Refusing to continue."
+    echo "エラー: デプロイ先が不正です"
     exit 1
 fi
 
-# Create deployment directory if it doesn't exist
-echo "[INFO] Creating deployment directory (if needed)"
+# デプロイ先ディレクトリを作成
 sudo mkdir -p "${DEPLOY_DIR}"
 
-# Sync repository contents to deployment directory
-echo "[INFO] Syncing files to deployment directory"
-rsync -av --delete \
+# ファイルを同期
+rsync -a --delete \
     --exclude='.git/' \
     --exclude='.github/' \
     --exclude='.gitignore' \
     "${REPO_ROOT}/" "${DEPLOY_DIR}/"
 
-echo "[INFO] Deployment sync completed successfully"
-
-# Restart the systemd service
-echo "[INFO] Restarting moneybook.service"
+# サービスを再起動
 sudo systemctl restart moneybook.service
 
-# Print service status
-echo "[INFO] Service status:"
+# ステータスを表示
 sudo systemctl --no-pager --full status moneybook.service || true
 
-echo "[INFO] Deployment completed successfully"
+echo "デプロイ完了"
