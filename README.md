@@ -16,7 +16,7 @@ Pod定義はKubernetes互換のYAML形式（`build/pod.yaml`）で管理され�
 - `DB_USER`: データベースユーザー
 - `DB_PASS`: データベースパスワード
 - `DB_HOST`: データベースホスト
-- `ALLOWED_HOSTS`: 許可するホスト名
+- `HOST_NAME`: ホスト名（nginxのserver_nameとDjangoのALLOWED_HOSTSで使用）
 - `SECRET_KEY`: Djangoのシークレットキー
 
 ## lint 確認
