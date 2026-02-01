@@ -88,7 +88,6 @@ MoneyBook/
 │   ├── admin.py               # Django管理画面設定
 │   └── apps.py                # アプリケーション設定
 ├── build/                       # ビルド・デプロイ設定
-│   ├── requirements*.txt      # 依存関係ファイル（廃止: requirements/に移動）
 │   ├── docker/                # Docker設定
 │   └── jenkins.sh             # CI/CDスクリプト
 ├── requirements/               # Pythonパッケージ依存関係
