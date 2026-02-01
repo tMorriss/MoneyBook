@@ -17,6 +17,10 @@ APP_NAME = "MoneyBook"
 
 ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOSTS')]
 
+# CSRF protection for HTTPS
+# Django 4.0+ requires CSRF_TRUSTED_ORIGINS for cross-origin requests over HTTPS
+CSRF_TRUSTED_ORIGINS = ['https://moneybook.tmorriss.com']
+
 DEBUG = False
 
 SECRET_KEY = os.environ.get('SECRET_KEY')
