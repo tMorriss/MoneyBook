@@ -19,29 +19,6 @@ Pod定義はKubernetes互換のYAML形式（`build/pod.yaml`）で管理され�
 - `ALLOWED_HOSTS`: 許可するホスト名
 - `SECRET_KEY`: Djangoのシークレットキー
 
-### デプロイ方法
-
-環境変数を設定してからスクリプトを実行します：
-
-```bash
-export PODMAN_USER=myuser
-export DB_NAME=moneybook
-export DB_USER=dbuser
-export DB_PASS=dbpassword
-export DB_HOST=localhost
-export ALLOWED_HOSTS=localhost,127.0.0.1
-export SECRET_KEY=your-secret-key
-
-cd /path/to/MoneyBook
-./build/jenkins.sh
-```
-
-このスクリプトは以下を実行します：
-- ベースイメージのpull
-- コンテナイメージのビルド
-- データベースマイグレーション
-- Kubernetes YAML形式のPod定義からPodを作成・起動（自動再起動設定付き）
-
 ## lint 確認
 
 ```
