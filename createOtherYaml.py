@@ -3,7 +3,7 @@ import sys
 import pandas as pd
 from mysql.connector import connect
 
-# Read database credentials from stdin (one per line)
+# 標準入力からデータベース認証情報を読み込む（1行ずつ）
 lines = sys.stdin.read().strip().split('\n')
 if len(lines) < 5:
     print("Error: Missing required credentials from stdin", file=sys.stderr)

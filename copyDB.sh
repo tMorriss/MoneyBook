@@ -10,8 +10,8 @@ scp createDataYaml.py createOtherYaml.py mars:~/
 
 mkdir -p fixture
 
-# Function to read database credentials from 1Password
-# This prevents credentials from being visible in process listings
+# 1Passwordからデータベース認証情報を読み込む関数
+# プロセスリストに認証情報が表示されることを防ぐ
 get_db_credentials() {
   op read "op://Personal/Mariadb_MoneyBook/hostname"
   op read "op://Personal/Mariadb_MoneyBook/port"
@@ -20,7 +20,7 @@ get_db_credentials() {
   op read "op://Personal/Mariadb_MoneyBook/database"
 }
 
-# Pass database credentials via stdin instead of command-line arguments
+# コマンドライン引数ではなく標準入力経由でデータベース認証情報を渡す
 get_db_credentials | ssh mars python3 /home/tmorriss/createDataYaml.py > fixture/data_all.yaml
 get_db_credentials | ssh mars python3 /home/tmorriss/createOtherYaml.py > fixture/initial_data.yaml
 
