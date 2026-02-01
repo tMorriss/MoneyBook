@@ -15,7 +15,7 @@ DATABASES = {
 
 APP_NAME = "MoneyBook"
 
-ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOSTS')]
+ALLOWED_HOSTS = [os.environ.get('HOST_NAME')]
 
 DEBUG = False
 

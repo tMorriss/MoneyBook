@@ -4,10 +4,10 @@ set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
 
 # 必須環境変数のチェック
-for VAR in PODMAN_USER DB_NAME DB_USER DB_PASS DB_HOST ALLOWED_HOSTS SECRET_KEY; do
+for VAR in PODMAN_USER DB_NAME DB_USER DB_PASS DB_HOST HOST_NAME SECRET_KEY; do
   if [ -z "${!VAR:-}" ]; then
     echo "[ERROR] Required environment variables are not set."
-    echo "Please set: PODMAN_USER, DB_NAME, DB_USER, DB_PASS, DB_HOST, ALLOWED_HOSTS, SECRET_KEY"
+    echo "Please set: PODMAN_USER, DB_NAME, DB_USER, DB_PASS, DB_HOST, HOST_NAME, SECRET_KEY"
     exit 1
   fi
 done
