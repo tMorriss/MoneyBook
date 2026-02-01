@@ -16,7 +16,7 @@ echo "[INFO] Running podman as user: $PODMAN_USER"
 
 # ベースイメージのpull
 echo "[INFO] Pulling base images..."
-sudo -u "$PODMAN_USER" podman pull python:3.10-slim
+sudo -u "$PODMAN_USER" podman pull python:3.11-slim
 sudo -u "$PODMAN_USER" podman pull nginx:alpine
 
 # イメージのビルド
