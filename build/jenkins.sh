@@ -15,19 +15,11 @@ sudo podman build -t moneybook_nginx:latest -f build/Dockerfile.nginx .
 
 # Stop and remove existing pod if it exists
 echo "[INFO] Stopping existing pod..."
-if sudo podman pod exists moneybook-pod; then
-  sudo podman pod stop moneybook-pod
-  sudo podman pod rm moneybook-pod
-fi
-
-# Create pod with shared network
-echo "[INFO] Creating pod..."
-sudo podman pod create --name moneybook-pod -p 8080:80
+sudo podman play kube --down build/pod.yaml 2>/dev/null || true
 
 # Run DB migration
 echo "[INFO] Running DB migration..."
 sudo podman run --rm \
-  --pod moneybook-pod \
   -e DB_NAME=$DB_NAME \
   -e DB_USER=$DB_USER \
   -e DB_PASS=$DB_PASS \
@@ -36,31 +28,19 @@ sudo podman run --rm \
   moneybook_gunicorn:latest \
   python /MoneyBook/manage.py migrate --settings config.settings.prod
 
-# Start gunicorn container in the pod
-echo "[INFO] Starting gunicorn container..."
-sudo podman run -d \
-  --name moneybook_gunicorn \
-  --pod moneybook-pod \
-  --restart=always \
-  -e DB_NAME=$DB_NAME \
-  -e DB_USER=$DB_USER \
-  -e DB_PASS=$DB_PASS \
-  -e DB_HOST=$DB_HOST \
-  -e ALLOWED_HOSTS=$ALLOWED_HOSTS \
-  -e SECRET_KEY=$SECRET_KEY \
-  moneybook_gunicorn:latest
+# Create and start pod from YAML
+echo "[INFO] Starting pod from YAML..."
+DB_NAME=$DB_NAME \
+DB_USER=$DB_USER \
+DB_PASS=$DB_PASS \
+DB_HOST=$DB_HOST \
+ALLOWED_HOSTS=$ALLOWED_HOSTS \
+SECRET_KEY=$SECRET_KEY \
+sudo -E podman play kube build/pod.yaml
 
 # Wait for gunicorn to be ready
-echo "[INFO] Waiting for gunicorn to be ready..."
+echo "[INFO] Waiting for services to be ready..."
 sleep 5
-
-# Start nginx container in the pod
-echo "[INFO] Starting nginx container..."
-sudo podman run -d \
-  --name moneybook_nginx \
-  --pod moneybook-pod \
-  --restart=always \
-  moneybook_nginx:latest
 
 # Show pod and container status
 echo "[INFO] Pod status:"
