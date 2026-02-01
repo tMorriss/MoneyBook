@@ -15,7 +15,7 @@ sudo podman build -t moneybook_nginx:latest -f build/Dockerfile.nginx .
 
 # 既存のPodが存在する場合は停止・削除
 echo "[INFO] Stopping existing pod..."
-sudo podman play kube --down build/pod.yaml 2>/dev/null || true
+sudo podman play kube --down build/pod.yaml || true
 
 # DBマイグレーション実行
 echo "[INFO] Running DB migration..."
