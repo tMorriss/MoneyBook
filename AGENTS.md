@@ -92,8 +92,6 @@ MoneyBook/
 ├── .github/                    # GitHub関連
 │   ├── agents/                # エージェント設定
 │   └── workflows/             # GitHub Actionsワークフロー
-├── .gemini/                    # Gemini AI設定
-│   └── styleguide.md          # レビュー規則
 ├── createDataYaml.py           # データYAML生成スクリプト
 ├── createOtherYaml.py          # その他YAML生成スクリプト
 ├── generate_secretkey_setting.py # シークレットキー生成
@@ -273,7 +271,7 @@ $env:HEADLESS="0"; python manage.py test moneybook.selenium --settings config.se
 
 ### レビュー規則
 
-- **言語**: レビューやサマリーは日本語で記載（`.gemini/styleguide.md`参照）
+- **言語**: レビューやサマリーは日本語で記載
 - **変更範囲**: 最小限の変更を心がける
 - **テストカバレッジ**: 新機能には必ずテストを追加
 
@@ -342,14 +340,6 @@ docker run -p 8000:8000 moneybook:latest
 ## 関連ドキュメント
 
 - [README.md](./README.md) - プロジェクト概要とクイックスタート
-- [.gemini/styleguide.md](./.gemini/styleguide.md) - レビュー規則
-- [.github/agents/tMorriss-agent.agent.md](./.github/agents/tMorriss-agent.agent.md) - カスタムエージェント設定
-
----
-
-## 更新履歴
-
-- 2026-02-01: 初版作成（リポジトリ走査に基づく雛形）
 
 ---
 
