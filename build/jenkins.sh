@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-cd "$(dirname "${BASH_SOURCE[0]}")/.."
-
 # 必須環境変数のチェック
 for VAR in PODMAN_USER DB_NAME DB_USER DB_PASS DB_HOST ALLOWED_HOSTS SECRET_KEY; do
   if [ -z "${!VAR:-}" ]; then
@@ -11,8 +9,6 @@ for VAR in PODMAN_USER DB_NAME DB_USER DB_PASS DB_HOST ALLOWED_HOSTS SECRET_KEY;
     exit 1
   fi
 done
-
-echo "[INFO] Running podman as user: $PODMAN_USER"
 
 # ベースイメージのpull
 echo "[INFO] Pulling base images..."
