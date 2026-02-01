@@ -88,9 +88,14 @@ MoneyBook/
 │   ├── admin.py               # Django管理画面設定
 │   └── apps.py                # アプリケーション設定
 ├── build/                       # ビルド・デプロイ設定
-│   ├── requirements*.txt      # 依存関係ファイル
+│   ├── requirements*.txt      # 依存関係ファイル（廃止: requirements/に移動）
 │   ├── docker/                # Docker設定
 │   └── jenkins.sh             # CI/CDスクリプト
+├── requirements/               # Pythonパッケージ依存関係
+│   ├── requirements.txt       # 本番環境の依存関係
+│   ├── requirements_test.txt  # テストツール
+│   ├── requirements_lint.txt  # コード品質チェック
+│   └── requirements_selenium.txt # E2Eテスト（Selenium、ChromeDriver）
 ├── .github/                    # GitHub関連
 │   ├── agents/                # エージェント設定
 │   └── workflows/             # GitHub Actionsワークフロー
@@ -115,6 +120,7 @@ MoneyBook/
 | `moneybook/selenium/` | E2Eブラウザ自動化テスト |
 | `moneybook/middleware/` | カスタム認証ミドルウェア |
 | `build/` | 依存関係、Docker、デプロイ設定 |
+| `requirements/` | Pythonパッケージの依存関係ファイル |
 
 ---
 
@@ -177,9 +183,9 @@ Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
 .\.venv\Scripts\activate
 
 # 依存関係のインストール
-pip install -r build/requirements.txt
-pip install -r build/requirements_test.txt
-pip install -r build/requirements_lint.txt
+pip install -r requirements/requirements.txt
+pip install -r requirements/requirements_test.txt
+pip install -r requirements/requirements_lint.txt
 
 # データベースマイグレーション
 python manage.py migrate
@@ -295,10 +301,10 @@ docker run -p 8000:8000 moneybook:latest
 
 | ファイル | 用途 |
 |---------|------|
-| `build/requirements.txt` | 本番環境の依存関係 |
-| `build/requirements_test.txt` | テストツール |
-| `build/requirements_selenium.txt` | E2Eテスト（Selenium、ChromeDriver） |
-| `build/requirements_lint.txt` | コード品質チェック |
+| `requirements/requirements.txt` | 本番環境の依存関係 |
+| `requirements/requirements_test.txt` | テストツール |
+| `requirements/requirements_selenium.txt` | E2Eテスト（Selenium、ChromeDriver） |
+| `requirements/requirements_lint.txt` | コード品質チェック |
 
 ### CI/CD
 
