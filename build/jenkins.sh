@@ -1,12 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
-
-echo "[INFO] repo_root: ${REPO_ROOT}"
-
-cd "${REPO_ROOT}"
+cd "$(dirname "${BASH_SOURCE[0]}")/.."
 
 # Pull base images
 echo "[INFO] Pulling base images..."
