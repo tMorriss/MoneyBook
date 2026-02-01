@@ -4,41 +4,13 @@ set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
 
 # 必須環境変数のチェック
-echo "[INFO] Checking required environment variables..."
-REQUIRED_VARS=(
-  "PODMAN_USER"
-  "DB_NAME"
-  "DB_USER"
-  "DB_PASS"
-  "DB_HOST"
-  "ALLOWED_HOSTS"
-  "SECRET_KEY"
-)
-
-MISSING_VARS=()
-for VAR in "${REQUIRED_VARS[@]}"; do
+for VAR in PODMAN_USER DB_NAME DB_USER DB_PASS DB_HOST ALLOWED_HOSTS SECRET_KEY; do
   if [ -z "${!VAR:-}" ]; then
-    MISSING_VARS+=("$VAR")
+    echo "[ERROR] Required environment variables are not set."
+    echo "Please set: PODMAN_USER, DB_NAME, DB_USER, DB_PASS, DB_HOST, ALLOWED_HOSTS, SECRET_KEY"
+    exit 1
   fi
 done
-
-if [ ${#MISSING_VARS[@]} -gt 0 ]; then
-  echo "[ERROR] The following required environment variables are not set:"
-  for VAR in "${MISSING_VARS[@]}"; do
-    echo "  - $VAR"
-  done
-  echo ""
-  echo "Please set these environment variables before running this script."
-  echo "Example:"
-  echo "  export PODMAN_USER=myuser"
-  echo "  export DB_NAME=moneybook"
-  echo "  export DB_USER=dbuser"
-  echo "  export DB_PASS=dbpassword"
-  echo "  export DB_HOST=localhost"
-  echo "  export ALLOWED_HOSTS=localhost,127.0.0.1"
-  echo "  export SECRET_KEY=your-secret-key"
-  exit 1
-fi
 
 echo "[INFO] Running podman as user: $PODMAN_USER"
 
