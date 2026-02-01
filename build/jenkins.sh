@@ -28,17 +28,11 @@ sudo podman run --rm \
   moneybook_gunicorn:latest \
   python /MoneyBook/manage.py migrate --settings config.settings.prod
 
-# Create and start pod from YAML
-echo "[INFO] Starting pod from YAML..."
-DB_NAME=$DB_NAME \
-DB_USER=$DB_USER \
-DB_PASS=$DB_PASS \
-DB_HOST=$DB_HOST \
-ALLOWED_HOSTS=$ALLOWED_HOSTS \
-SECRET_KEY=$SECRET_KEY \
-sudo -E podman play kube build/pod.yaml
+# Create pod YAML with environment variables substituted
+echo "[INFO] Generating pod configuration with environment variables..."
+envsubst < build/pod.yaml | sudo podman play kube -
 
-# Wait for gunicorn to be ready
+# Wait for services to be ready
 echo "[INFO] Waiting for services to be ready..."
 sleep 5
 

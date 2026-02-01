@@ -9,17 +9,17 @@ spec:
     image: localhost/moneybook_gunicorn:latest
     env:
     - name: DB_NAME
-      value: ""
+      value: "${DB_NAME}"
     - name: DB_USER
-      value: ""
+      value: "${DB_USER}"
     - name: DB_PASS
-      value: ""
+      value: "${DB_PASS}"
     - name: DB_HOST
-      value: ""
+      value: "${DB_HOST}"
     - name: ALLOWED_HOSTS
-      value: ""
+      value: "${ALLOWED_HOSTS}"
     - name: SECRET_KEY
-      value: ""
+      value: "${SECRET_KEY}"
     ports:
     - containerPort: 8081
       protocol: TCP
