@@ -26,9 +26,6 @@ spec:
     
   - name: nginx
     image: localhost/moneybook_nginx:latest
-    env:
-    - name: HOST_NAME
-      value: "${HOST_NAME}"
     ports:
     - containerPort: 80
       hostPort: 8081
