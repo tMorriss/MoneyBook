@@ -1,4 +1,4 @@
-Django >= 4.2.27, < 5.0.0
+Django >= 5.2, < 6.0.0
 mysqlclient >= 2.2.7, < 3.0.0
 python-dateutil >= 2.9.0.post0, < 3.0.0
 gunicorn >= 24.0.0, < 25.0.0
