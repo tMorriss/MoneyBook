@@ -19,7 +19,9 @@ ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOSTS')]
 
 # CSRF protection for HTTPS
 # Django 4.0+ requires CSRF_TRUSTED_ORIGINS for cross-origin requests over HTTPS
-CSRF_TRUSTED_ORIGINS = ['https://moneybook.tmorriss.com']
+# Construct from ALLOWED_HOSTS with https:// scheme
+_allowed_host = os.environ.get('ALLOWED_HOSTS', 'moneybook.tmorriss.com')
+CSRF_TRUSTED_ORIGINS = [f'https://{_allowed_host}']
 
 DEBUG = False
 
