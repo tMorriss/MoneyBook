@@ -5,7 +5,7 @@ cd "$(dirname "${BASH_SOURCE[0]}")/.."
 
 # ベースイメージのpull
 echo "[INFO] Pulling base images..."
-sudo podman pull python:3.9-slim
+sudo podman pull python:3.10-slim
 sudo podman pull nginx:alpine
 
 # イメージのビルド
