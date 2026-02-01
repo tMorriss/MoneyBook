@@ -3,21 +3,21 @@ set -euo pipefail
 
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
 
-# Pull base images
+# ベースイメージのpull
 echo "[INFO] Pulling base images..."
 sudo podman pull python:3.13-slim
 sudo podman pull nginx:alpine
 
-# Build images
+# イメージのビルド
 echo "[INFO] Building images..."
 sudo podman build -t moneybook_gunicorn:latest -f build/Dockerfile.gunicorn .
 sudo podman build -t moneybook_nginx:latest -f build/Dockerfile.nginx .
 
-# Stop and remove existing pod if it exists
+# 既存のPodが存在する場合は停止・削除
 echo "[INFO] Stopping existing pod..."
 sudo podman play kube --down build/pod.yaml 2>/dev/null || true
 
-# Run DB migration
+# DBマイグレーション実行
 echo "[INFO] Running DB migration..."
 sudo podman run --rm \
   -e DB_NAME=$DB_NAME \
@@ -28,22 +28,22 @@ sudo podman run --rm \
   moneybook_gunicorn:latest \
   python /MoneyBook/manage.py migrate --settings config.settings.prod
 
-# Create pod YAML with environment variables substituted
+# 環境変数を置換してPod定義YAMLを生成・起動
 echo "[INFO] Generating pod configuration with environment variables..."
 envsubst < build/pod.yaml | sudo podman play kube -
 
-# Wait for services to be ready
+# サービスの起動を待機
 echo "[INFO] Waiting for services to be ready..."
 sleep 5
 
-# Show pod and container status
+# PodとコンテナのステータスをCLI表示
 echo "[INFO] Pod status:"
 sudo podman pod ps
 
 echo "[INFO] Container status:"
 sudo podman ps --filter pod=moneybook-pod
 
-# Delete old images
+# 古いイメージの削除
 echo "[INFO] Cleaning up old images..."
 sudo podman image prune -f
 
