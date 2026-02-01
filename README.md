@@ -11,24 +11,28 @@ Pod定義はKubernetes互換のYAML形式（`build/pod.yaml`）で管理され�
 ### 環境変数の設定
 
 以下の環境変数を設定する必要があります：
+- `PODMAN_USER`: Podmanを実行するユーザー名（必須）
 - `DB_NAME`: データベース名
 - `DB_USER`: データベースユーザー
 - `DB_PASS`: データベースパスワード
 - `DB_HOST`: データベースホスト
 - `ALLOWED_HOSTS`: 許可するホスト名
 - `SECRET_KEY`: Djangoのシークレットキー
-- `PODMAN_USER` (オプション): Podmanを実行するユーザー名（デフォルト: root）
 
 ### デプロイ方法
 
-```bash
-cd /path/to/MoneyBook
-./build/jenkins.sh
-```
+環境変数を設定してからスクリプトを実行します：
 
-特定のユーザーでPodmanを実行する場合：
 ```bash
 export PODMAN_USER=myuser
+export DB_NAME=moneybook
+export DB_USER=dbuser
+export DB_PASS=dbpassword
+export DB_HOST=localhost
+export ALLOWED_HOSTS=localhost,127.0.0.1
+export SECRET_KEY=your-secret-key
+
+cd /path/to/MoneyBook
 ./build/jenkins.sh
 ```
 
