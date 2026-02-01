@@ -2,6 +2,23 @@
 
 自分用家計簿 Web アプリケーション
 
+## デプロイ
+
+このアプリケーションはPodmanコンテナで実行されます。nginxとgunicornは同じPod内の別々のコンテナで実行されるサイドカーパターンを採用しています。
+
+Pod定義はKubernetes互換のYAML形式（`build/pod.yaml`）で管理されており、`podman play kube`コマンドで起動します。
+
+### 環境変数の設定
+
+以下の環境変数を設定する必要があります：
+- `PODMAN_USER`: Podmanを実行するユーザー名（必須）
+- `DB_NAME`: データベース名
+- `DB_USER`: データベースユーザー
+- `DB_PASS`: データベースパスワード
+- `DB_HOST`: データベースホスト
+- `ALLOWED_HOSTS`: 許可するホスト名
+- `SECRET_KEY`: Djangoのシークレットキー
+
 ## lint 確認
 
 ```
