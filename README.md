@@ -17,11 +17,18 @@ Pod定義はKubernetes互換のYAML形式（`build/pod.yaml`）で管理され�
 - `DB_HOST`: データベースホスト
 - `ALLOWED_HOSTS`: 許可するホスト名
 - `SECRET_KEY`: Djangoのシークレットキー
+- `PODMAN_USER` (オプション): Podmanを実行するユーザー名（デフォルト: root）
 
 ### デプロイ方法
 
 ```bash
 cd /path/to/MoneyBook
+./build/jenkins.sh
+```
+
+特定のユーザーでPodmanを実行する場合：
+```bash
+export PODMAN_USER=myuser
 ./build/jenkins.sh
 ```
 
