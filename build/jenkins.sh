@@ -12,7 +12,7 @@ done
 
 # ベースイメージのpull
 echo "[INFO] Pulling base images..."
-sudo -u "$PODMAN_USER" podman pull python:3.11-slim
+sudo -u "$PODMAN_USER" podman pull python:3.12-slim
 sudo -u "$PODMAN_USER" podman pull nginx:alpine
 
 # イメージのビルド
