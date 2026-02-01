@@ -30,29 +30,6 @@ cd /path/to/MoneyBook
 - データベースマイグレーション
 - コンテナの起動（自動再起動設定付き）
 
-### 手動でのコンテナ操作
-
-```bash
-# Podとコンテナの起動（初回）
-sudo podman pod create --name moneybook-pod -p 8080:80
-sudo podman run -d --name moneybook_gunicorn --pod moneybook-pod --restart=always -e DB_NAME=$DB_NAME -e DB_USER=$DB_USER -e DB_PASS=$DB_PASS -e DB_HOST=$DB_HOST -e ALLOWED_HOSTS=$ALLOWED_HOSTS -e SECRET_KEY=$SECRET_KEY moneybook_gunicorn:latest
-sudo podman run -d --name moneybook_nginx --pod moneybook-pod --restart=always moneybook_nginx:latest
-
-# Podの停止
-sudo podman pod stop moneybook-pod
-
-# Podの起動
-sudo podman pod start moneybook-pod
-
-# ログの確認
-sudo podman logs -f moneybook_gunicorn
-sudo podman logs -f moneybook_nginx
-
-# Pod/コンテナの状態確認
-sudo podman pod ps
-sudo podman ps --filter pod=moneybook-pod
-```
-
 ## lint 確認
 
 ```

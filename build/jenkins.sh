@@ -15,8 +15,8 @@ sudo podman pull nginx:alpine
 
 # Build images
 echo "[INFO] Building images..."
-sudo podman build -t moneybook_gunicorn:latest -f build/docker/Dockerfile.gunicorn .
-sudo podman build -t moneybook_nginx:latest -f build/docker/Dockerfile.nginx .
+sudo podman build -t moneybook_gunicorn:latest -f build/Dockerfile.gunicorn .
+sudo podman build -t moneybook_nginx:latest -f build/Dockerfile.nginx .
 
 # Stop and remove existing pod if it exists
 echo "[INFO] Stopping existing pod..."
