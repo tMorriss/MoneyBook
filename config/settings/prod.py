@@ -2,7 +2,6 @@ import os
 from copy import deepcopy
 
 from .common import *  # NOQA F403
-from .common import LOGS_DIR
 
 DATABASES = {
     'default': {
@@ -30,10 +29,7 @@ DEBUG = False
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # 本番環境でも詳細なログを出力するための設定
-# ファイルログを強化し、より多くの情報をキャプチャする
 LOGGING = deepcopy(LOGGING)  # NOQA F405
-LOGGING['handlers']['file']['filename'] = os.path.join(LOGS_DIR, 'moneybook_prod.log')
-LOGGING['handlers']['file']['level'] = 'DEBUG'
 
 # 本番環境では django.db.backends のログレベルを WARNING に設定して SQL クエリの出力を抑制
 LOGGING['loggers']['django.db.backends']['level'] = 'WARNING'

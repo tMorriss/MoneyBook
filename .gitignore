@@ -5,4 +5,3 @@ chrome*
 .coverage
 coverage.*
 .venv/
-logs/*.log
