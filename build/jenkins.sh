@@ -14,6 +14,7 @@ done
 echo "[INFO] Pulling base images..."
 sudo -u "$PODMAN_USER" podman pull python:3.11-slim
 sudo -u "$PODMAN_USER" podman pull nginx:alpine
+
 # sed -i 's/DEBUG = False/DEBUG = True/' config/settings/prod.py
 
 # イメージのビルド
