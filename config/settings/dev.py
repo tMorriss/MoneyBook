@@ -23,7 +23,6 @@ DEBUG = True
 SECRET_KEY = '=8+4o-ub_b%m_rd4j+bgflxf48ucl-w6uoxr%ru50^m(*xm$5e'
 
 # 開発環境のログ設定
-# コンソールのみに出力し、ファイル出力は無効化
 LOGGING = deepcopy(LOGGING)  # NOQA F405
 LOGGING['handlers']['file']['filename'] = os.path.join(LOGS_DIR, 'moneybook_dev.log')
 LOGGING['loggers']['django.db.backends']['level'] = 'DEBUG'
