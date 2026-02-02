@@ -117,6 +117,10 @@ LOGOUT_REDIRECT_URL = 'moneybook:login'
 # modelのprimary_key設定方式
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
+# ログディレクトリの作成
+LOGS_DIR = os.path.join(BASE_DIR, 'logs')
+os.makedirs(LOGS_DIR, exist_ok=True)
+
 # ロギング設定
 LOGGING = {
     'version': 1,
@@ -140,7 +144,7 @@ LOGGING = {
         'file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs', 'moneybook.log'),
+            'filename': os.path.join(LOGS_DIR, 'moneybook.log'),
             'formatter': 'verbose',
         },
     },
