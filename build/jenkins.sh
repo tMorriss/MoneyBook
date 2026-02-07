@@ -26,7 +26,9 @@ sudo -u "$PODMAN_USER" podman play kube --down build/pod.yaml || true
 
 # DBマイグレーション実行
 echo "[INFO] Running DB migration..."
-sudo -u "$PODMAN_USER" podman run --rm \
+sudo -u "$PODMAN_USER" podman run \
+  --rm \
+  --name moneybook_migration \
   -e DB_NAME=$DB_NAME \
   -e DB_USER=$DB_USER \
   -e DB_PASS=$DB_PASS \
