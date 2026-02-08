@@ -31,16 +31,6 @@ python manage.py test moneybook.selenium --settings config.settings.test
 2. **データベース分離**: 各プロセスが独自のテストデータベースを使用します
 3. **ブラウザインスタンス**: 各テストで独立したChromeインスタンスが起動します
 
-### パフォーマンス最適化
-
-以下のChrome起動オプションにより、並列実行時のパフォーマンスと安定性が向上しています：
-
-- `--disable-dev-shm-usage`: /dev/shmの容量不足を回避
-- `--disable-gpu`: GPU使用を無効化（安定性向上）
-- `--disable-extensions`: 拡張機能を無効化
-- `--disable-software-rasterizer`: ソフトウェアラスタライザを無効化
-- `--headless`: デフォルトでヘッドレスモード
-
 ### GitHub Actions での実行
 
 GitHub Actionsでは自動的に並列実行が有効になっています：
