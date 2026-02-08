@@ -49,7 +49,7 @@ class IndexMonthView(View):
             'first_categories': Category.first_list(),
             'latter_categories': Category.latter_list(),
             'temps': {0: "No", 1: "Yes"},
-            'category_directions': {c.pk: c.default_direction.pk if c.default_direction else 2 for c in Category.list()},
+            'category_directions': {c.pk: c.default_direction.pk if c.default_direction else 2 for c in Category.list().select_related('default_direction')},
         }
 
         return render(request, 'index.html', context)
