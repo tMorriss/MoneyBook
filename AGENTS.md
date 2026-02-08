@@ -243,16 +243,34 @@ coverage xml
 
 ### E2Eテスト
 
+E2Eテストは並列実行に対応しており、テスト時間を大幅に短縮できます。
+
 ```bash
-# ヘッドレスモード（デフォルト）
+# 並列実行（推奨）
+python manage.py test moneybook.selenium --settings config.settings.test --parallel auto
+
+# 並列数を指定
+python manage.py test moneybook.selenium --settings config.settings.test --parallel 4
+
+# シングルプロセス実行（デバッグ用）
 python manage.py test moneybook.selenium --settings config.settings.test
 
 # ブラウザ表示モード（Mac）
-HEADLESS=0 python manage.py test moneybook.selenium --settings config.settings.test
+HEADLESS=0 python manage.py test moneybook.selenium --settings config.settings.test --parallel auto
 
 # ブラウザ表示モード（Windows）
-$env:HEADLESS="0"; python manage.py test moneybook.selenium --settings config.settings.test
+$env:HEADLESS="0"; python manage.py test moneybook.selenium --settings config.settings.test --parallel auto
 ```
+
+**並列実行の利点**:
+- テスト時間を大幅に短縮（CPUコア数に応じて高速化）
+- GitHub Actionsでのテスト実行時間を削減
+- ローカル開発での素早いフィードバック
+
+**注意事項**:
+- 並列実行時にブラウザを表示すると、複数のウィンドウが同時に開きます
+- デバッグ時は`--parallel 1`または並列実行を無効化することを推奨
+- 詳細は`TESTING.md`を参照してください
 
 ---
 

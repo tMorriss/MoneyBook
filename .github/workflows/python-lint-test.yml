@@ -66,4 +66,4 @@ jobs:
           if [ -f requirements/requirements_selenium.txt ]; then pip install -r requirements/requirements_selenium.txt; fi
       - name: Test
         run: |
-          python manage.py test moneybook.selenium --settings config.settings.test
+          python manage.py test moneybook.selenium --settings config.settings.test --parallel auto

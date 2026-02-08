@@ -24,6 +24,11 @@ class SeleniumBase(StaticLiveServerTestCase):
             options.add_argument('--headless')
         options.add_argument('--window-size=1920,1080')
         options.add_argument('--no-sandbox')
+        # 並列実行のための最適化
+        options.add_argument('--disable-dev-shm-usage')  # /dev/shmの容量不足を回避
+        options.add_argument('--disable-gpu')  # GPU使用を無効化（安定性向上）
+        options.add_argument('--disable-extensions')  # 拡張機能を無効化
+        options.add_argument('--disable-software-rasterizer')  # ソフトウェアラスタライザを無効化
         self.driver = webdriver.Chrome(options=options)
         self.driver.implicitly_wait(10)
 
