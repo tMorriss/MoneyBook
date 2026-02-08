@@ -3,6 +3,8 @@ import time
 from django.urls import reverse
 from moneybook.selenium.base import SeleniumBase
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
 
 class Delete(SeleniumBase):
@@ -28,9 +30,9 @@ class Delete(SeleniumBase):
 
         # 削除ボタンをクリック
         self.driver.find_element(By.XPATH, '//input[@value="削除"]').click()
-        time.sleep(1)
 
-        # アラートを承認
+        # アラートが表示されるまで待機
+        WebDriverWait(self.driver, 10).until(EC.alert_is_present())
         alert = self.driver.switch_to.alert
         alert.accept()
         time.sleep(2)
@@ -61,9 +63,9 @@ class Delete(SeleniumBase):
 
         # 削除ボタンをクリック
         self.driver.find_element(By.XPATH, '//input[@value="削除"]').click()
-        time.sleep(1)
 
-        # アラートをキャンセル
+        # アラートが表示されるまで待機
+        WebDriverWait(self.driver, 10).until(EC.alert_is_present())
         alert = self.driver.switch_to.alert
         alert.dismiss()
         time.sleep(1)
@@ -105,9 +107,9 @@ class Delete(SeleniumBase):
 
         # 削除ボタンをクリック
         self.driver.find_element(By.XPATH, '//input[@value="削除"]').click()
-        time.sleep(1)
 
-        # アラートを承認
+        # アラートが表示されるまで待機
+        WebDriverWait(self.driver, 10).until(EC.alert_is_present())
         alert = self.driver.switch_to.alert
         alert.accept()
         time.sleep(2)
