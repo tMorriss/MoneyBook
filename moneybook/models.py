@@ -58,6 +58,7 @@ class Category(models.Model):
     name = models.CharField(max_length=10)
     is_living_cost = models.BooleanField(default=False)
     is_variable_cost = models.BooleanField(default=False)
+    default_direction = models.ForeignKey(Direction, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.name

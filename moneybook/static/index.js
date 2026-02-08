@@ -1,9 +1,7 @@
 function sendAddRow() {
     category = $('input[name="a_category"]:checked').val();
-    direction = 2;
-    if (category == 12) {
-        direction = 1;
-    }
+    // カテゴリのデフォルト方向を取得（デフォルトは支出:2）
+    direction = category_directions[category] || 2;
 
     // 立替フラグの値を取得
     const tempValue = $('input[name="a_temp"]:checked').val();
