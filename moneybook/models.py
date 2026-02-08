@@ -58,6 +58,7 @@ class Category(models.Model):
     name = models.CharField(max_length=10)
     is_living_cost = models.BooleanField(default=False)
     is_variable_cost = models.BooleanField(default=False)
+    default_direction = models.ForeignKey(Direction, on_delete=models.RESTRICT, null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -99,9 +100,9 @@ class Data(models.Model):
     date = models.DateField()
     item = models.CharField(max_length=100)
     price = models.IntegerField()
-    direction = models.ForeignKey(Direction, on_delete=models.CASCADE)
-    method = models.ForeignKey(Method, on_delete=models.CASCADE)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    direction = models.ForeignKey(Direction, on_delete=models.RESTRICT)
+    method = models.ForeignKey(Method, on_delete=models.RESTRICT)
+    category = models.ForeignKey(Category, on_delete=models.RESTRICT)
     temp = models.BooleanField()
     checked = models.BooleanField(default=False)
     pre_checked = models.BooleanField(default=False)
@@ -321,7 +322,7 @@ class Data(models.Model):
 
 
 class CheckedDate(models.Model):
-    method = models.OneToOneField(Method, on_delete=models.CASCADE)
+    method = models.OneToOneField(Method, on_delete=models.RESTRICT)
     date = models.DateField()
 
     @staticmethod

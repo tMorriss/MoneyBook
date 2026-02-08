@@ -299,6 +299,73 @@ class Index(SeleniumBase):
         tr_class = rows[1].get_attribute('class')
         self.assertIn('filter-direction-1', tr_class)
 
+    def test_add_temp_income(self):
+        """収入カテゴリで立替フラグをYesにすると、方向が支出に逆転することを確認"""
+        now = datetime.now()
+        self._login()
+        self._location(self.live_server_url + reverse('moneybook:index'))
+
+        self.assertEqual(len(self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')), 1)
+
+        # 1件追加 (立替=Yes, 収入=収入)
+        self.driver.find_element(By.ID, 'a_day').send_keys('6')
+        self.driver.find_element(By.ID, 'a_item').send_keys('収入立替テスト')
+        self.driver.find_element(By.ID, 'a_price').send_keys('2000')
+        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/table/tbody/tr[4]/td/label[1]').click()
+        # 収入カテゴリを選択（第2行の5番目のラベル）
+        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/table/tbody/tr[5]/td/table/tbody/tr[2]/td/label[5]').click()
+        # 立替フラグをYesに設定
+        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/table/tbody/tr[6]/td/label[2]').click()
+        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/input[@value="追加"]').click()
+        time.sleep(2)
+
+        rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
+        self.assertEqual(len(rows), 2)
+        tds = rows[1].find_elements(By.TAG_NAME, 'td')
+        self.assertEqual(tds[0].text, str(now.year) + "/" + str.zfill(str(now.month), 2) + "/" + '06')
+        self.assertEqual(tds[1].text, '収入立替テスト')
+        self.assertEqual(tds[2].text, '2,000')
+        self.assertEqual(tds[3].text, '銀行')
+        self.assertEqual(tds[4].text, '立替')
+
+        # 立替フラグがYesで、収入カテゴリの方向が支出に逆転していることを確認
+        # tr要素のクラスにfilter-direction-2が含まれていることを確認
+        tr_class = rows[1].get_attribute('class')
+        self.assertIn('filter-direction-2', tr_class)
+
+    def test_add_income_no_temp(self):
+        """収入カテゴリで立替フラグをNoのままにすると、方向が収入になることを確認"""
+        now = datetime.now()
+        self._login()
+        self._location(self.live_server_url + reverse('moneybook:index'))
+
+        self.assertEqual(len(self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')), 1)
+
+        # 1件追加 (立替=No, 収入=収入)
+        self.driver.find_element(By.ID, 'a_day').send_keys('7')
+        self.driver.find_element(By.ID, 'a_item').send_keys('収入テスト')
+        self.driver.find_element(By.ID, 'a_price').send_keys('3000')
+        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/table/tbody/tr[4]/td/label[1]').click()
+        # 収入カテゴリを選択（第2行の5番目のラベル）
+        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/table/tbody/tr[5]/td/table/tbody/tr[2]/td/label[5]').click()
+        # 立替フラグはデフォルトのNo (label[1])のまま変更しない
+        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/input[@value="追加"]').click()
+        time.sleep(2)
+
+        rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
+        self.assertEqual(len(rows), 2)
+        tds = rows[1].find_elements(By.TAG_NAME, 'td')
+        self.assertEqual(tds[0].text, str(now.year) + "/" + str.zfill(str(now.month), 2) + "/" + '07')
+        self.assertEqual(tds[1].text, '収入テスト')
+        self.assertEqual(tds[2].text, '3,000')
+        self.assertEqual(tds[3].text, '銀行')
+        self.assertEqual(tds[4].text, '収入')
+
+        # 立替フラグがNoで、収入カテゴリの方向が収入のままであることを確認
+        # tr要素のクラスにfilter-direction-1が含まれていることを確認
+        tr_class = rows[1].get_attribute('class')
+        self.assertIn('filter-direction-1', tr_class)
+
     def test_add_empty_day_today(self):
         now = datetime.now()
         self._login()
