@@ -332,7 +332,13 @@ docker run -p 8000:8000 moneybook:latest
    - モデル変更時は`makemigrations`を実行
    - マイグレーションファイルをレビュー
 
-5. **コミット**
+5. **ブランチの最新化（必須）**
+   - **git pushする前に、必ずPRのマージ先ブランチを取り込んで最新化すること**
+   - マージ先ブランチ（通常は`master`または`main`）の最新変更を取り込む
+   - コンフリクトがある場合は解決してからpushする
+   - 例: `git fetch origin && git merge origin/master` または `git pull origin master`
+
+6. **コミット**
    - 小さな単位でコミット
    - 日本語のコミットメッセージ
 
