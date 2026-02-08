@@ -149,6 +149,26 @@ class DataTestCase(BaseTestCase):
         data = Data.get_month_data(1999, 1)
         self.assertEqual(Data.get_outgo_sum(data), 0)
 
+    def test_get_income(self):
+        data = Data.get_month_data(2000, 1)
+        income_data = Data.get_income(data)
+        # January 2000 has 6 income items
+        expects = ['給与', '現金収入', '銀行収入', 'PayPayチャージ', '立替分1', '立替分2']
+        self._assert_list(income_data, expects)
+
+    def test_get_outgo(self):
+        data = Data.get_month_data(2000, 1)
+        outgo_data = Data.get_outgo(data)
+        # January 2000 has 11 outgo items (sorted by date, then by pk)
+        expects = ['コンビニ', 'その他1', '必需品1', '必需品2', 'スーパー', '計算外', '貯金', 'PayPayチャージ', '電気代', 'ガス代', '水道代']
+        self._assert_list(outgo_data, expects)
+
+    def test_get_pre_checked_data(self):
+        all_data = Data.get_all_data()
+        unchecked_data = Data.get_unchecked_data(all_data)
+        pre_checked_data = Data.get_pre_checked_data(unchecked_data)
+        self.assertEqual(len(pre_checked_data), 0)
+
     def test_get_method_data(self):
         month_data = Data.get_month_data(2000, 1)
         data = Data.get_method_data(month_data, 3)
