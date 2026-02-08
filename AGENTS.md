@@ -82,13 +82,17 @@ MoneyBook/
 │   ├── middleware/            # カスタムミドルウェア
 │   ├── templates/             # HTMLテンプレート
 │   ├── static/                # CSS、JS、画像
-│   ├── migrations/            # DBスキーママイグレーション（22バージョン）
+│   ├── migrations/            # DBスキーママイグレーション
 │   ├── tests/                 # テストスイート
+│   ├── selenium/              # E2Eテスト（Selenium）
 │   ├── fixtures/              # テストデータ
 │   ├── admin.py               # Django管理画面設定
 │   └── apps.py                # アプリケーション設定
 ├── build/                       # ビルド・デプロイ設定
-│   ├── docker/                # Docker設定
+│   ├── Dockerfile.gunicorn    # GunicornコンテナのDockerfile
+│   ├── Dockerfile.nginx       # NginxコンテナのDockerfile
+│   ├── nginx.conf             # Nginx設定ファイル
+│   ├── pod.yaml               # Kubernetes Pod定義
 │   └── jenkins.sh             # CI/CDスクリプト
 ├── requirements/               # Pythonパッケージ依存関係
 │   ├── requirements.txt       # 本番環境の依存関係
@@ -96,12 +100,20 @@ MoneyBook/
 │   ├── requirements_lint.txt  # コード品質チェック
 │   └── requirements_selenium.txt # E2Eテスト（Selenium、ChromeDriver）
 ├── .github/                    # GitHub関連
-│   ├── agents/                # エージェント設定
 │   └── workflows/             # GitHub Actionsワークフロー
+├── .vscode/                    # VSCode設定
+│   └── settings.json          # エディタ設定
+├── .dockerignore               # Dockerビルド除外設定
+├── .flake8                     # Flake8リンター設定
+├── .gitignore                  # Git除外設定
 ├── createDataYaml.py           # データYAML生成スクリプト
 ├── createOtherYaml.py          # その他YAML生成スクリプト
 ├── generate_secretkey_setting.py # シークレットキー生成
-├── copyDB.cmd / copyDB.sh      # データベースコピースクリプト
+├── yaml_utils.py               # YAML処理ユーティリティ
+├── copyDB.cmd                  # データベースコピースクリプト（Windows）
+├── copyDB.sh                   # データベースコピースクリプト（Unix）
+├── AGENTS.md                   # エージェント向けガイド
+├── CLAUDE.md                   # AGENTS.mdへのシンボリックリンク
 └── README.md                   # プロジェクトREADME
 ```
 
