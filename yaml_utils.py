@@ -4,29 +4,30 @@ import sys
 from mysql.connector import connect
 
 
-def parse_db_arguments():
-    """Parse database connection arguments from command line.
+def parse_db_credentials_from_stdin():
+    """標準入力からデータベース認証情報を読み込む（1行ずつ）
 
     Returns:
         tuple: (db_host, db_port, db_user, db_password, db_database)
 
     Raises:
-        SystemExit: If required arguments are missing or invalid.
+        SystemExit: If required credentials are missing or invalid.
     """
-    if len(sys.argv) < 6:
-        print("Error: Missing required arguments", file=sys.stderr)
-        print("Usage: python3 script.py <hostname> <port> <user> <password> <database>", file=sys.stderr)
+    lines = sys.stdin.read().strip().split('\n')
+    if len(lines) < 5:
+        print("Error: Missing required credentials from stdin", file=sys.stderr)
+        print("Expected 5 lines: hostname, port, username, password, database", file=sys.stderr)
         sys.exit(1)
 
-    db_host = sys.argv[1]
+    db_host = lines[0].strip()
     try:
-        db_port = int(sys.argv[2])
+        db_port = int(lines[1].strip())
     except ValueError:
-        print(f"Error: Invalid port number '{sys.argv[2]}'. Port must be a number.", file=sys.stderr)
+        print("Error: Port must be a valid integer", file=sys.stderr)
         sys.exit(1)
-    db_user = sys.argv[3]
-    db_password = sys.argv[4]
-    db_database = sys.argv[5]
+    db_user = lines[2].strip()
+    db_password = lines[3].strip()
+    db_database = lines[4].strip()
 
     return db_host, db_port, db_user, db_password, db_database
 

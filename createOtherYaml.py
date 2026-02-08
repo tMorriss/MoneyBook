@@ -1,7 +1,7 @@
 import pandas as pd
-from yaml_utils import create_db_connection, parse_db_arguments
+from yaml_utils import create_db_connection, parse_db_credentials_from_stdin
 
-db_host, db_port, db_user, db_password, db_database = parse_db_arguments()
+db_host, db_port, db_user, db_password, db_database = parse_db_credentials_from_stdin()
 con = create_db_connection(db_host, db_port, db_user, db_password, db_database)
 result_str = ""
 
