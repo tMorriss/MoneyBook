@@ -44,31 +44,7 @@ $ coverage xml
 
 E2E テストは並列実行に対応しており、テスト時間を大幅に短縮できます。
 
-### 基本的な実行
-
-```
-# 並列実行（推奨）
-$ python manage.py test moneybook.selenium --settings config.settings.test --parallel auto
-
-# 並列数を指定（例：4並列）
-$ python manage.py test moneybook.selenium --settings config.settings.test --parallel 4
-
-# シングルプロセスで実行
-$ python manage.py test moneybook.selenium --settings config.settings.test
-```
-
-### ヘッドレスモード
-
-E2E テストはデフォルトでヘッドレスモードで実行されます。ブラウザを表示して実行する場合は、環境変数`HEADLESS=0`を設定してください。
-
-```
-# mac
-$ HEADLESS=0 python manage.py test moneybook.selenium --settings config.settings.test --parallel auto
-# winodows
-$ $env:HEADLESS="0"; python manage.py test moneybook.selenium --settings config.settings.test --parallel auto
-```
-
-**注意**: 並列実行時にブラウザを表示すると、複数のブラウザウィンドウが同時に開きます。デバッグ目的の場合は、並列数を1に制限するか、`--parallel`オプションを外すことをお勧めします。
+詳細は[TESTING.md](./TESTING.md)を参照してください。
 
 ## メモ
 
