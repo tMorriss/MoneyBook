@@ -116,3 +116,33 @@ LOGOUT_REDIRECT_URL = 'moneybook:login'
 
 # modelのprimary_key設定方式
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
+# ログ設定
+# DEBUGの値に関係なく、同じログレベルを維持する
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,  # デフォルト設定を継承
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}
