@@ -82,13 +82,17 @@ MoneyBook/
 │   ├── middleware/            # カスタムミドルウェア
 │   ├── templates/             # HTMLテンプレート
 │   ├── static/                # CSS、JS、画像
-│   ├── migrations/            # DBスキーママイグレーション（22バージョン）
+│   ├── migrations/            # DBスキーママイグレーション
 │   ├── tests/                 # テストスイート
+│   ├── selenium/              # E2Eテスト（Selenium）
 │   ├── fixtures/              # テストデータ
 │   ├── admin.py               # Django管理画面設定
 │   └── apps.py                # アプリケーション設定
 ├── build/                       # ビルド・デプロイ設定
-│   ├── docker/                # Docker設定
+│   ├── Dockerfile.gunicorn    # GunicornコンテナのDockerfile
+│   ├── Dockerfile.nginx       # NginxコンテナのDockerfile
+│   ├── nginx.conf             # Nginx設定ファイル
+│   ├── pod.yaml               # Kubernetes Pod定義
 │   └── jenkins.sh             # CI/CDスクリプト
 ├── requirements/               # Pythonパッケージ依存関係
 │   ├── requirements.txt       # 本番環境の依存関係
@@ -96,12 +100,20 @@ MoneyBook/
 │   ├── requirements_lint.txt  # コード品質チェック
 │   └── requirements_selenium.txt # E2Eテスト（Selenium、ChromeDriver）
 ├── .github/                    # GitHub関連
-│   ├── agents/                # エージェント設定
 │   └── workflows/             # GitHub Actionsワークフロー
+├── .vscode/                    # VSCode設定
+│   └── settings.json          # エディタ設定
+├── .dockerignore               # Dockerビルド除外設定
+├── .flake8                     # Flake8リンター設定
+├── .gitignore                  # Git除外設定
 ├── createDataYaml.py           # データYAML生成スクリプト
 ├── createOtherYaml.py          # その他YAML生成スクリプト
 ├── generate_secretkey_setting.py # シークレットキー生成
-├── copyDB.cmd / copyDB.sh      # データベースコピースクリプト
+├── yaml_utils.py               # YAML処理ユーティリティ
+├── copyDB.cmd                  # データベースコピースクリプト（Windows）
+├── copyDB.sh                   # データベースコピースクリプト（Unix）
+├── AGENTS.md                   # エージェント向けガイド
+├── CLAUDE.md                   # AGENTS.mdへのシンボリックリンク
 └── README.md                   # プロジェクトREADME
 ```
 
@@ -341,6 +353,17 @@ docker run -p 8000:8000 moneybook:latest
 6. **コミット**
    - 小さな単位でコミット
    - 日本語のコミットメッセージ
+
+7. **PRのタイトルと説明**
+   - PRのタイトルやコメント（説明）は、直近の修正のみではなく、このPRでの修正すべてを含んだものにする
+   - PR全体の目的と変更内容を網羅的に記載する
+   - 個別のコミットメッセージは各変更の詳細を記載し、PRの説明は全体のサマリーとする
+   - アプリケーション本体の本番環境に影響がないとき（ドキュメント更新、テストのみの変更など）はPRタイトルに`[skip ci]`を付ける
+
+8. **AGENTS.mdの更新**
+   - 修正結果に応じて、このAGENTS.mdドキュメント自体の更新が必要か確認する
+   - 新しいディレクトリ、ファイル、技術スタック、開発手順などを追加した場合は、AGENTS.mdに反映する
+   - ドキュメントがリポジトリの実態と常に同期するよう維持する
 
 ### 既知の問題・制約
 
