@@ -1,6 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# 最新コミットメッセージに[skip ci]が含まれているかチェック
+COMMIT_MESSAGE=$(git log -1 --pretty=%B)
+if echo "$COMMIT_MESSAGE" | grep -q "\[skip ci\]"; then
+  echo "[INFO] Commit message contains [skip ci]. Skipping deployment."
+  exit 0
+fi
+
 # 必須環境変数のチェック
 for VAR in PODMAN_USER DB_NAME DB_USER DB_PASS DB_HOST HOST_NAME SECRET_KEY; do
   if [ -z "${!VAR:-}" ]; then
@@ -14,6 +21,8 @@ done
 echo "[INFO] Pulling base images..."
 sudo -u "$PODMAN_USER" podman pull python:3.11-slim
 sudo -u "$PODMAN_USER" podman pull nginx:alpine
+
+# sed -i 's/DEBUG = False/DEBUG = True/' config/settings/prod.py
 
 # イメージのビルド
 echo "[INFO] Building images..."
