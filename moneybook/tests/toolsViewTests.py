@@ -621,17 +621,11 @@ class PreCheckedSummaryViewTests(BaseTestCase):
     def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
         # まず事前チェック済みデータを作成
-        data = Data.get(4)  # 必需品1 (2000-1-5, 支出, 1000円)
-        data.pre_checked = True
-        data.save()
-
-        data = Data.get(8)  # スーパー (2000-1-15, 支出, 2800円)
-        data.pre_checked = True
-        data.save()
-
-        data = Data.get(17)  # 立替分1 (2000-1-28, 収入, 400円)
-        data.pre_checked = True
-        data.save()
+        test_pks = [4, 8, 17]  # 必需品1 (1000円), スーパー (2800円), 立替分1 (400円)
+        for pk in test_pks:
+            data = Data.get(pk)
+            data.pre_checked = True
+            data.save()
 
         response = self.client.get(reverse('moneybook:pre_checked_summary'))
         self.assertEqual(response.status_code, 200)

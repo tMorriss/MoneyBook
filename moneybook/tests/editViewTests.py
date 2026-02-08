@@ -177,13 +177,11 @@ class ApplyCheckViewTestCase(BaseTestCase):
         self.client.force_login(User.objects.create_user(self.username))
         # まず事前チェック済みデータを作成
         # pk=4 (必需品1), pk=8 (スーパー) are unchecked items
-        data = Data.get(4)  # 必需品1
-        data.pre_checked = True
-        data.save()
-
-        data = Data.get(8)  # スーパー
-        data.pre_checked = True
-        data.save()
+        test_pks = [4, 8]  # 必需品1, スーパー
+        for pk in test_pks:
+            data = Data.get(pk)
+            data.pre_checked = True
+            data.save()
 
         # 事前チェック済みデータを確認
         all_data = Data.get_all_data()
@@ -196,13 +194,10 @@ class ApplyCheckViewTestCase(BaseTestCase):
         self.assertEqual(response.status_code, 200)
 
         # 事前チェック済みデータがチェック済みになっていることを確認
-        data = Data.get(4)
-        self.assertEqual(data.pre_checked, False)
-        self.assertEqual(data.checked, True)
-
-        data = Data.get(8)
-        self.assertEqual(data.pre_checked, False)
-        self.assertEqual(data.checked, True)
+        for pk in test_pks:
+            data = Data.get(pk)
+            self.assertEqual(data.pre_checked, False)
+            self.assertEqual(data.checked, True)
 
     def test_post_guest(self):
         response = self.client.post(reverse('moneybook:edit_apply_check'))
