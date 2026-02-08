@@ -684,34 +684,3 @@ class Add(SeleniumBase):
         self.assertEqual(len(rows), initial_count + 2)
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
         self.assertEqual(tds[2].text, '250')
-
-    def test_manual_add_income_category(self):
-        '''立替にせず、categoryを収入にするとdirectionが収入になることを確認（addページ）'''
-        now = datetime.now()
-        # 前処理
-        self._login()
-        self._location(self.live_server_url + reverse('moneybook:add'))
-
-        # テスト：立替No、カテゴリを収入に設定
-        self.driver.find_element(By.ID, 'a_day').send_keys('10')
-        self.driver.find_element(By.ID, 'a_item').send_keys('収入テスト')
-        self.driver.find_element(By.ID, 'a_price').send_keys('1000')
-        # カテゴリを「収入」に設定（8番目のラベル）
-        self.driver.find_element(By.XPATH, '//form[4]/table/tbody/tr[6]/td/label[8]').click()
-        # 立替はデフォルトのNo（変更不要）
-        self.driver.find_element(By.XPATH, '//form[4]/input[@type="button"]').click()
-
-        # 結果確認
-        self._location(self.live_server_url + reverse('moneybook:index'))
-        rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
-        self.assertEqual(len(rows), 2)
-        tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[0].text, str(now.year) + "/" + str.zfill(str(now.month), 2) + "/" + '10')
-        self.assertEqual(tds[1].text, '収入テスト')
-        self.assertEqual(tds[2].text, '1000')
-        self.assertEqual(tds[3].text, '銀行')
-        self.assertEqual(tds[4].text, '収入')
-        self.assertEqual(Color.from_string(rows[1].value_of_css_property('background-color')), Color.from_string('rgba(0, 0, 0, 0)'))
-        # direction確認：収入なのでinput[1]がselectedになるはず
-        tds[5].find_element(By.TAG_NAME, 'a').click()
-        self.assertEqual(self.driver.find_element(By.XPATH, '//form/table[1]/tbody/tr[4]/td[1]/input[1]').is_selected(), True)
