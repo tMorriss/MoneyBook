@@ -27,6 +27,9 @@ function keyPressUpdate(code) {
 }
 
 function sendDeleteRow() {
+    if (!confirm("本当に削除しますか?")) {
+        return;
+    }
     $.post({
         url: delete_url,
         data: {
