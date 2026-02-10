@@ -615,3 +615,30 @@ class NowBankViewTests(BaseTestCase):
         self.assertEqual(BankBalance.get_price(2), 20000)
         self.assertEqual(CreditCheckedDate.get_price(1), 30000)
         self.assertEqual(CreditCheckedDate.get_price(2), 2000)
+
+
+class PreCheckedSummaryViewTests(BaseTestCase):
+    def test_get(self):
+        self.client.force_login(User.objects.create_user(self.username))
+        # まず事前チェック済みデータを作成
+        test_pks = [4, 8, 17]  # 必需品1 (1000円), スーパー (2800円), 立替分1 (400円)
+        for pk in test_pks:
+            data = Data.get(pk)
+            data.pre_checked = True
+            data.save()
+
+        response = self.client.get(reverse('moneybook:pre_checked_summary'))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['income_sum'], 400)
+        self.assertEqual(response.context['outgo_sum'], 3800)
+        self.assertEqual(response.context['income_count'], 1)
+        self.assertEqual(response.context['outgo_count'], 2)
+        self._assert_templates(
+            response.templates,
+            ['_pre_checked_summary.html']
+        )
+
+    def test_get_guest(self):
+        response = self.client.get(reverse('moneybook:pre_checked_summary'))
+        # pre_checked_summary is not in the API list, so it should redirect
+        self.assertEqual(response.status_code, 302)

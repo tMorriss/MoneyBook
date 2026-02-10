@@ -23,6 +23,7 @@
     month = "{{ month }}";
     method_first = "{{ methods.first.pk }}";
     category_first = "{{ first_categories.first.pk }}";
+    category_directions = {{ category_directions|safe }};
 
     window.onload = function () {
         fetchData();

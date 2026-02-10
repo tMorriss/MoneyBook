@@ -170,3 +170,85 @@ class EditViewTestCase(BaseTestCase):
         self.assertEqual(data.category.pk, 1)
         self.assertEqual(data.temp, False)
         self.assertEqual(data.checked, True)
+
+
+class ApplyCheckViewTestCase(BaseTestCase):
+    def test_post(self):
+        self.client.force_login(User.objects.create_user(self.username))
+        # まず事前チェック済みデータを作成
+        # pk=4 (必需品1), pk=8 (スーパー) are unchecked items
+        test_pks = [4, 8]  # 必需品1, スーパー
+        for pk in test_pks:
+            data = Data.get(pk)
+            data.pre_checked = True
+            data.save()
+
+        # 事前チェック済みデータを確認
+        all_data = Data.get_all_data()
+        unchecked_data = Data.get_unchecked_data(all_data)
+        pre_checked_data = Data.get_pre_checked_data(unchecked_data)
+        self.assertEqual(len(pre_checked_data), 2)
+
+        # ApplyCheckViewを実行
+        response = self.client.post(reverse('moneybook:edit_apply_check'))
+        self.assertEqual(response.status_code, 200)
+
+        # 事前チェック済みデータがチェック済みになっていることを確認
+        for pk in test_pks:
+            data = Data.get(pk)
+            self.assertEqual(data.pre_checked, False)
+            self.assertEqual(data.checked, True)
+
+    def test_post_guest(self):
+        response = self.client.post(reverse('moneybook:edit_apply_check'))
+        # edit_apply_check is in the API list, so it should return 403
+        self.assertEqual(response.status_code, 403)
+
+
+class PreCheckViewTestCase(BaseTestCase):
+    def test_post_set_true(self):
+        self.client.force_login(User.objects.create_user(self.username))
+        # pk=4 (必需品1) is unchecked
+        data = Data.get(4)
+        self.assertEqual(data.pre_checked, False)
+
+        response = self.client.post(
+            reverse('moneybook:edit_pre_check'),
+            {'id': 4, 'status': '1'}
+        )
+        self.assertEqual(response.status_code, 200)
+
+        data = Data.get(4)
+        self.assertEqual(data.pre_checked, True)
+
+    def test_post_set_false(self):
+        self.client.force_login(User.objects.create_user(self.username))
+        # まず事前チェック済みにする
+        data = Data.get(4)
+        data.pre_checked = True
+        data.save()
+
+        response = self.client.post(
+            reverse('moneybook:edit_pre_check'),
+            {'id': 4, 'status': '0'}
+        )
+        self.assertEqual(response.status_code, 200)
+
+        data = Data.get(4)
+        self.assertEqual(data.pre_checked, False)
+
+    def test_post_invalid_id(self):
+        self.client.force_login(User.objects.create_user(self.username))
+        response = self.client.post(
+            reverse('moneybook:edit_pre_check'),
+            {'id': 99999, 'status': '1'}
+        )
+        self.assertEqual(response.status_code, 400)
+
+    def test_post_guest(self):
+        response = self.client.post(
+            reverse('moneybook:edit_pre_check'),
+            {'id': 4, 'status': '1'}
+        )
+        # edit_pre_check is in the API list, so it should return 403
+        self.assertEqual(response.status_code, 403)

@@ -51,6 +51,7 @@
     show_order: 1
     is_living_cost: 1
     is_variable_cost: 0
+    default_direction: 2
 - model: moneybook.Category
   pk: 2
   fields:
@@ -58,6 +59,7 @@
     show_order: 2
     is_living_cost: 0
     is_variable_cost: 1
+    default_direction: 2
 - model: moneybook.Category
   pk: 3
   fields:
@@ -65,6 +67,7 @@
     show_order: 0
     is_living_cost: 0
     is_variable_cost: 0
+    default_direction: 2
 - model: moneybook.Category
   pk: 4
   fields:
@@ -72,6 +75,7 @@
     show_order: -1
     is_living_cost: 0
     is_variable_cost: 0
+    default_direction: 2
 - model: moneybook.Category
   pk: 5
   fields:
@@ -79,6 +83,7 @@
     show_order: -2
     is_living_cost: 0
     is_variable_cost: 0
+    default_direction: 2
 - model: moneybook.Category
   pk: 6
   fields:
@@ -86,6 +91,7 @@
     show_order: -3
     is_living_cost: 0
     is_variable_cost: 0
+    default_direction: 2
 - model: moneybook.Category
   pk: 7
   fields:
@@ -93,6 +99,7 @@
     show_order: -4
     is_living_cost: 0
     is_variable_cost: 0
+    default_direction: 1
 - model: moneybook.Category
   pk: 8
   fields:
@@ -100,6 +107,7 @@
     show_order: 3
     is_living_cost: 0
     is_variable_cost: 1
+    default_direction: 2
 
 - model: moneybook.Data
   pk: 1
