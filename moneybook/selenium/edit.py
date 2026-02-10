@@ -27,10 +27,14 @@ class Edit(SeleniumBase):
 
         # フォームの値を確認
         now = datetime.now()
-        date_value = self.driver.find_element(By.ID, 'id_date').get_attribute('value')
-        self.assertEqual(date_value, f"{now.year}-{str(now.month).zfill(2)}-10")
-        self.assertEqual(self.driver.find_element(By.ID, 'id_item').get_attribute('value'), '編集テスト')
-        self.assertEqual(self.driver.find_element(By.ID, 'id_price').get_attribute('value'), '1000')
+        year_value = self.driver.find_element(By.ID, 'year').get_attribute('value')
+        month_value = self.driver.find_element(By.ID, 'month').get_attribute('value')
+        day_value = self.driver.find_element(By.ID, 'day').get_attribute('value')
+        self.assertEqual(year_value, str(now.year))
+        self.assertEqual(month_value, str(now.month).zfill(2))
+        self.assertEqual(day_value, '10')
+        self.assertEqual(self.driver.find_element(By.ID, 'item').get_attribute('value'), '編集テスト')
+        self.assertEqual(self.driver.find_element(By.ID, 'price').get_attribute('value'), '1000')
 
     def test_edit_item(self):
         '''項目名を編集できることを確認'''
@@ -48,7 +52,7 @@ class Edit(SeleniumBase):
         time.sleep(1)
 
         # 項目名を変更
-        item_input = self.driver.find_element(By.ID, 'id_item')
+        item_input = self.driver.find_element(By.ID, 'item')
         item_input.clear()
         item_input.send_keys('編集後')
         self.driver.find_element(By.XPATH, '//input[@value="更新"]').click()
@@ -76,7 +80,7 @@ class Edit(SeleniumBase):
         time.sleep(1)
 
         # 金額を変更
-        price_input = self.driver.find_element(By.ID, 'id_price')
+        price_input = self.driver.find_element(By.ID, 'price')
         price_input.clear()
         price_input.send_keys('5000')
         self.driver.find_element(By.XPATH, '//input[@value="更新"]').click()
@@ -105,9 +109,9 @@ class Edit(SeleniumBase):
 
         # 日付を変更
         now = datetime.now()
-        date_input = self.driver.find_element(By.ID, 'id_date')
-        date_input.clear()
-        date_input.send_keys(f"{now.year}-{str(now.month).zfill(2)}-15")
+        day_input = self.driver.find_element(By.ID, 'day')
+        day_input.clear()
+        day_input.send_keys('15')
         self.driver.find_element(By.XPATH, '//input[@value="更新"]').click()
         time.sleep(2)
 
@@ -187,7 +191,7 @@ class Edit(SeleniumBase):
         time.sleep(1)
 
         # 金額を数式で変更 =200*5 → 1000
-        price_input = self.driver.find_element(By.ID, 'id_price')
+        price_input = self.driver.find_element(By.ID, 'price')
         price_input.clear()
         price_input.send_keys('=200*5')
         self.driver.find_element(By.XPATH, '//input[@value="更新"]').click()
@@ -216,10 +220,10 @@ class Edit(SeleniumBase):
 
         # 日付を変更してEnter
         now = datetime.now()
-        date_input = self.driver.find_element(By.ID, 'id_date')
-        date_input.clear()
-        date_input.send_keys(f"{now.year}-{str(now.month).zfill(2)}-20")
-        date_input.send_keys(Keys.RETURN)
+        day_input = self.driver.find_element(By.ID, 'day')
+        day_input.clear()
+        day_input.send_keys('20')
+        day_input.send_keys(Keys.RETURN)
         time.sleep(2)
 
         # トップに戻って確認
@@ -244,7 +248,7 @@ class Edit(SeleniumBase):
         time.sleep(1)
 
         # 項目を変更してEnter
-        item_input = self.driver.find_element(By.ID, 'id_item')
+        item_input = self.driver.find_element(By.ID, 'item')
         item_input.clear()
         item_input.send_keys('Enter項目後')
         item_input.send_keys(Keys.RETURN)
@@ -272,7 +276,7 @@ class Edit(SeleniumBase):
         time.sleep(1)
 
         # 金額を変更してEnter
-        price_input = self.driver.find_element(By.ID, 'id_price')
+        price_input = self.driver.find_element(By.ID, 'price')
         price_input.clear()
         price_input.send_keys('8000')
         price_input.send_keys(Keys.RETURN)
