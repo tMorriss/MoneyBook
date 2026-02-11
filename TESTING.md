@@ -4,13 +4,13 @@
 
 ### 概要
 
-MoneyBookのSeleniumテストは、ブラウザ自動化によるエンドツーエンドテストです。
+MoneyBookのE2Eテストは、ブラウザ自動化によるエンドツーエンドテストです。
 
 ### 基本的な使い方
 
 ```bash
 # 基本的な実行
-python manage.py test moneybook.selenium --settings config.settings.test
+python manage.py test moneybook.e2e --settings config.settings.test
 ```
 
 ### GitHub Actions での実行
@@ -20,7 +20,7 @@ GitHub Actionsでは以下のように実行されています：
 ```yaml
 - name: Test
   run: |
-    python manage.py test moneybook.selenium --settings config.settings.test
+    python manage.py test moneybook.e2e.$TEST_MODULE --settings config.settings.test
 ```
 
 ### デバッグモード
@@ -29,10 +29,10 @@ GitHub Actionsでは以下のように実行されています：
 
 ```bash
 # Mac/Linux
-HEADLESS=0 python manage.py test moneybook.selenium --settings config.settings.test
+HEADLESS=0 python manage.py test moneybook.e2e --settings config.settings.test
 
 # Windows
-$env:HEADLESS="0"; python manage.py test moneybook.selenium --settings config.settings.test
+$env:HEADLESS="0"; python manage.py test moneybook.e2e --settings config.settings.test
 ```
 
 ### トラブルシューティング
@@ -41,16 +41,16 @@ $env:HEADLESS="0"; python manage.py test moneybook.selenium --settings config.se
 
 ```bash
 # 特定のテストクラスを実行
-python manage.py test moneybook.selenium.login --settings config.settings.test
+python manage.py test moneybook.e2e.login --settings config.settings.test
 
 # 特定のテストメソッドを実行
-python manage.py test moneybook.selenium.login.Login.test_login_button --settings config.settings.test
+python manage.py test moneybook.e2e.login.Login.test_login_button --settings config.settings.test
 ```
 
 #### 詳細なログを表示
 
 ```bash
-python manage.py test moneybook.selenium --settings config.settings.test --verbosity 2
+python manage.py test moneybook.e2e --settings config.settings.test --verbosity 2
 ```
 
 ## 単体テスト
