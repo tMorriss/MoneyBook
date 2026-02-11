@@ -56,6 +56,7 @@ class SeleniumBase(StaticLiveServerTestCase):
             {'href': reverse('moneybook:index'), 'text': 'ホーム'},
             {'href': reverse('moneybook:add'), 'text': '追加'},
             {'href': reverse('moneybook:statistics'), 'text': '統計'},
+            {'href': reverse('moneybook:periodic_list'), 'text': '定期取引'},
             {'href': reverse('moneybook:search'), 'text': '検索'},
             {'href': reverse('moneybook:tools'), 'text': 'ツール'}
         ]
