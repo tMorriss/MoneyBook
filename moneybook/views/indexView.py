@@ -19,8 +19,8 @@ class IndexView(View):
 
 class IndexMonthView(View):
     def get(self, request, *args, **kwargs):
-        year = kwargs["year"]
-        month = kwargs["month"]
+        year = kwargs['year']
+        month = kwargs['month']
         # validation
         if not is_valid_date(year, month):
             return redirect('moneybook:index')
@@ -31,7 +31,7 @@ class IndexMonthView(View):
 
         # 今月の場合だけ日付を入れる
         now = datetime.now()
-        day = day = now.day if year == now.year and month == now.month else ""
+        day = day = now.day if year == now.year and month == now.month else ''
 
         context = {
             'app_name': settings.APP_NAME,
@@ -48,7 +48,7 @@ class IndexMonthView(View):
             'unused_methods': Method.un_used_list(),
             'first_categories': Category.first_list(),
             'latter_categories': Category.latter_list(),
-            'temps': {0: "No", 1: "Yes"},
+            'temps': {0: 'No', 1: 'Yes'},
             'category_directions': {
                 c.pk: c.default_direction.pk if c.default_direction else 2
                 for c in Category.list().select_related('default_direction')
@@ -61,13 +61,13 @@ class IndexMonthView(View):
 class IndexBalanceStatisticMiniView(View):
     def get(self, request, *args, **kwargs):
         # validation
-        if "year" in request.GET and "month" in request.GET:
-            year = request.GET.get("year")
-            month = request.GET.get("month")
+        if 'year' in request.GET and 'month' in request.GET:
+            year = request.GET.get('year')
+            month = request.GET.get('month')
             if not is_valid_date(year, month):
-                return HttpResponseBadRequest("parameter error")
+                return HttpResponseBadRequest('parameter error')
         else:
-            return HttpResponseBadRequest("parameter error")
+            return HttpResponseBadRequest('parameter error')
 
         # 全データ
         all_data = Data.get_all_data()
@@ -128,13 +128,13 @@ class IndexBalanceStatisticMiniView(View):
 class IndexChartDataView(View):
     def get(self, request, *args, **kwargs):
         # validation
-        if "year" in request.GET and "month" in request.GET:
-            year = request.GET.get("year")
-            month = request.GET.get("month")
+        if 'year' in request.GET and 'month' in request.GET:
+            year = request.GET.get('year')
+            month = request.GET.get('month')
             if not is_valid_date(year, month):
-                return HttpResponseBadRequest("parameter error")
+                return HttpResponseBadRequest('parameter error')
         else:
-            return HttpResponseBadRequest("parameter error")
+            return HttpResponseBadRequest('parameter error')
 
         # 今月のデータ
         monthly_data = Data.get_month_data(int(year), int(month))
@@ -154,13 +154,13 @@ class IndexChartDataView(View):
 class DataTableView(View):
     def get(self, request, *args, **kwargs):
         # validation
-        if "year" in request.GET and "month" in request.GET:
-            year = request.GET.get("year")
-            month = request.GET.get("month")
+        if 'year' in request.GET and 'month' in request.GET:
+            year = request.GET.get('year')
+            month = request.GET.get('month')
             if not is_valid_date(year, month):
-                return HttpResponseBadRequest("parameter error")
+                return HttpResponseBadRequest('parameter error')
         else:
-            return HttpResponseBadRequest("parameter error")
+            return HttpResponseBadRequest('parameter error')
 
         # 今月のデータ
         monthly_data = Data.sort_descending(

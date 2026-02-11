@@ -47,10 +47,10 @@ class SeleniumBase(StaticLiveServerTestCase):
 
     def _assert_common(self):
         # アプリ名
-        self.assertEqual(self.driver.find_element(By.CLASS_NAME, "header-cont1").text, 'test-MoneyBook')
+        self.assertEqual(self.driver.find_element(By.CLASS_NAME, 'header-cont1').text, 'test-MoneyBook')
         # 名前表示
-        self.assertTrue(self.username + "さん" in self.driver.find_element(By.CLASS_NAME, "header-cont2").text,
-                        self.driver.find_element(By.CLASS_NAME, "header-cont2").text)
+        self.assertTrue(self.username + 'さん' in self.driver.find_element(By.CLASS_NAME, 'header-cont2').text,
+                        self.driver.find_element(By.CLASS_NAME, 'header-cont2').text)
         # タスクバー
         expects = [
             {'href': reverse('moneybook:index'), 'text': 'ホーム'},

@@ -6,4 +6,4 @@ DATABASES = {
     }
 }
 
-APP_NAME = "test-MoneyBook"
+APP_NAME = 'test-MoneyBook'
