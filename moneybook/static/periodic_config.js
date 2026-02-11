@@ -1,6 +1,24 @@
 // 定期取引設定ページのJavaScript
 
+// CSRFトークンを取得する関数
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
 $(document).ready(function() {
+    const csrftoken = getCookie('csrftoken');
+    
     // 行を追加ボタンクリック
     $('#btn_add_row').on('click', function() {
         addNewRow();
@@ -61,6 +79,9 @@ $(document).ready(function() {
             url: periodic_config_url,
             type: 'POST',
             contentType: 'application/json',
+            headers: {
+                'X-CSRFToken': csrftoken
+            },
             data: JSON.stringify({
                 periodic_data_list: periodicDataList
             }),

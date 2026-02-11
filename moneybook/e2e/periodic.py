@@ -76,6 +76,11 @@ class Periodic(SeleniumBase):
 
         # 更新ボタンをクリック
         self.driver.find_element(By.ID, 'btn_update').click()
+        time.sleep(0.3)
+
+        # アラートを受け入れる
+        alert = self.driver.switch_to.alert
+        alert.accept()
         time.sleep(1.5)
 
         # 一覧画面に遷移したこと

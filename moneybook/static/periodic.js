@@ -1,6 +1,24 @@
 // 定期取引一覧ページのJavaScript
 
+// CSRFトークンを取得する関数
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
 $(document).ready(function() {
+    const csrftoken = getCookie('csrftoken');
+    
     // 追加ボタンクリック
     $('#btn_add_bulk').on('click', function() {
         // 年月を取得（空の場合はplaceholderの値を使用）
@@ -66,6 +84,9 @@ $(document).ready(function() {
                 url: periodic_add_bulk_url,
                 type: 'POST',
                 contentType: 'application/json',
+                headers: {
+                    'X-CSRFToken': csrftoken
+                },
                 data: JSON.stringify({
                     year: year,
                     month: month,
