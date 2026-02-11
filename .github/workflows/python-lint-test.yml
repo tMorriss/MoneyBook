@@ -50,6 +50,7 @@ jobs:
     name: E2E Test - ${{ matrix.test-module }}
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         test-module: [index, add, login]
     env:
