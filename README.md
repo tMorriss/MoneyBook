@@ -42,10 +42,8 @@ $ coverage xml
 
 ## E2E テスト
 
-### 基本的な実行
-
 ```
-$ python manage.py test moneybook.selenium --settings config.settings.test
+$ python manage.py test moneybook.e2e --settings config.settings.test
 ```
 
 ### ヘッドレスモード
@@ -54,9 +52,9 @@ E2E テストはデフォルトでヘッドレスモードで実行されます�
 
 ```
 # mac
-$ HEADLESS=0 python manage.py test moneybook.selenium --settings config.settings.test
+$ HEADLESS=0 python manage.py test moneybook.e2e --settings config.settings.test
 # winodows
-$ $env:HEADLESS="0"; python manage.py test moneybook.selenium --settings config.settings.test
+$ $env:HEADLESS="0"; python manage.py test moneybook.e2e --settings config.settings.test
 ```
 
 ## メモ
