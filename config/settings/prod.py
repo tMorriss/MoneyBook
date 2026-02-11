@@ -13,7 +13,7 @@ DATABASES = {
     }
 }
 
-APP_NAME = "MoneyBook"
+APP_NAME = 'MoneyBook'
 
 ALLOWED_HOSTS = [os.environ.get('HOST_NAME')]
 

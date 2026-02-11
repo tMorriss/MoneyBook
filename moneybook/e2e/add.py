@@ -15,7 +15,7 @@ class Add(SeleniumBase):
         rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self.assertEqual(len(rows), 3)
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[0].text, str(now.year) + "/" + str.zfill(str(now.month), 2) + "/" + '01')
+        self.assertEqual(tds[0].text, str(now.year) + '/' + str.zfill(str(now.month), 2) + '/' + '01')
         self.assertEqual(tds[1].text, method + 'チャージ')
         self.assertEqual(tds[2].text, '100')
         self.assertEqual(tds[3].text, method)
@@ -28,7 +28,7 @@ class Add(SeleniumBase):
         self._location(self.live_server_url + reverse('moneybook:index'))
         rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         tds = rows[2].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[0].text, str(now.year) + "/" + str.zfill(str(now.month), 2) + "/" + '01')
+        self.assertEqual(tds[0].text, str(now.year) + '/' + str.zfill(str(now.month), 2) + '/' + '01')
         self.assertEqual(tds[1].text, method + 'チャージ')
         self.assertEqual(tds[2].text, '100')
         self.assertEqual(tds[3].text, '銀行')
@@ -44,7 +44,7 @@ class Add(SeleniumBase):
         rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self.assertEqual(len(rows), 3)
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[0].text, str(now.year) + "/" + str.zfill(str(now.month), 2) + "/" + '02')
+        self.assertEqual(tds[0].text, str(now.year) + '/' + str.zfill(str(now.month), 2) + '/' + '02')
         self.assertEqual(tds[1].text, 'ないぶいどう')
         self.assertEqual(tds[2].text, '200')
         self.assertEqual(tds[3].text, 'Kyash')
@@ -57,7 +57,7 @@ class Add(SeleniumBase):
         self._location(self.live_server_url + reverse('moneybook:index'))
         rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         tds = rows[2].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[0].text, str(now.year) + "/" + str.zfill(str(now.month), 2) + "/" + '02')
+        self.assertEqual(tds[0].text, str(now.year) + '/' + str.zfill(str(now.month), 2) + '/' + '02')
         self.assertEqual(tds[1].text, 'ないぶいどう')
         self.assertEqual(tds[2].text, '200')
         self.assertEqual(tds[3].text, '現金')
@@ -355,7 +355,7 @@ class Add(SeleniumBase):
         rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self.assertEqual(len(rows), 2)
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[0].text, str(now.year) + "/" + str.zfill(str(now.month), 2) + "/" + '04')
+        self.assertEqual(tds[0].text, str(now.year) + '/' + str.zfill(str(now.month), 2) + '/' + '04')
         self.assertEqual(tds[1].text, 'Suicaチャージ')
         self.assertEqual(tds[2].text, '400')
         self.assertEqual(tds[3].text, '銀行')
@@ -380,7 +380,7 @@ class Add(SeleniumBase):
         self.assertEqual(len(rows), 2)
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
         # 今日の日付が使われていることを確認
-        self.assertEqual(tds[0].text, str(now.year) + "/" + str.zfill(str(now.month), 2) + "/" + str.zfill(str(now.day), 2))
+        self.assertEqual(tds[0].text, str(now.year) + '/' + str.zfill(str(now.month), 2) + '/' + str.zfill(str(now.day), 2))
         self.assertEqual(tds[1].text, 'Suicaチャージ')
         self.assertEqual(tds[2].text, '400')
         self.assertEqual(tds[3].text, '銀行')
@@ -400,7 +400,7 @@ class Add(SeleniumBase):
         rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self.assertEqual(len(rows), 2)
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[0].text, str(now.year) + "/" + str.zfill(str(now.month), 2) + "/" + '05')
+        self.assertEqual(tds[0].text, str(now.year) + '/' + str.zfill(str(now.month), 2) + '/' + '05')
         self.assertEqual(tds[1].text, 'Suicaチャージ')
         # デフォルトの3000円が使われていることを確認
         self.assertEqual(tds[2].text, '3,000')
@@ -421,7 +421,7 @@ class Add(SeleniumBase):
         self.assertEqual(len(rows), 2)
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
         # 今日の日付とデフォルトの3000円が使われていることを確認
-        self.assertEqual(tds[0].text, str(now.year) + "/" + str.zfill(str(now.month), 2) + "/" + str.zfill(str(now.day), 2))
+        self.assertEqual(tds[0].text, str(now.year) + '/' + str.zfill(str(now.month), 2) + '/' + str.zfill(str(now.day), 2))
         self.assertEqual(tds[1].text, 'Suicaチャージ')
         self.assertEqual(tds[2].text, '3,000')
         self.assertEqual(tds[3].text, '銀行')
@@ -446,7 +446,7 @@ class Add(SeleniumBase):
         rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self.assertEqual(len(rows), 2)
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[0].text, str(now.year) + "/" + str.zfill(str(now.month), 2) + "/" + '05')
+        self.assertEqual(tds[0].text, str(now.year) + '/' + str.zfill(str(now.month), 2) + '/' + '05')
         self.assertEqual(tds[1].text, 'マニュアルテスト')
         self.assertEqual(tds[2].text, '500')
         self.assertEqual(tds[3].text, '現金')
@@ -472,7 +472,7 @@ class Add(SeleniumBase):
         rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self.assertEqual(len(rows), 2)
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[0].text, str(now.year) + "/" + str.zfill(str(now.month), 2) + "/" + '05')
+        self.assertEqual(tds[0].text, str(now.year) + '/' + str.zfill(str(now.month), 2) + '/' + '05')
         self.assertEqual(tds[1].text, 'マニュアルテスト')
         self.assertEqual(tds[2].text, '500')
         self.assertEqual(tds[3].text, '銀行')
@@ -498,7 +498,7 @@ class Add(SeleniumBase):
         rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self.assertEqual(len(rows), 2)
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[0].text, str(now.year) + "/" + str.zfill(str(now.month), 2) + "/" + '05')
+        self.assertEqual(tds[0].text, str(now.year) + '/' + str.zfill(str(now.month), 2) + '/' + '05')
         self.assertEqual(tds[1].text, 'マニュアルテスト')
         self.assertEqual(tds[2].text, '500')
         self.assertEqual(tds[3].text, '銀行')
@@ -524,7 +524,7 @@ class Add(SeleniumBase):
         rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self.assertEqual(len(rows), 2)
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[0].text, str(now.year) + "/" + str.zfill(str(now.month), 2) + "/" + '05')
+        self.assertEqual(tds[0].text, str(now.year) + '/' + str.zfill(str(now.month), 2) + '/' + '05')
         self.assertEqual(tds[1].text, 'マニュアルテスト')
         self.assertEqual(tds[2].text, '500')
         self.assertEqual(tds[3].text, '銀行')
@@ -550,7 +550,7 @@ class Add(SeleniumBase):
         rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self.assertEqual(len(rows), 2)
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[0].text, str(now.year) + "/" + str.zfill(str(now.month), 2) + "/" + '05')
+        self.assertEqual(tds[0].text, str(now.year) + '/' + str.zfill(str(now.month), 2) + '/' + '05')
         self.assertEqual(tds[1].text, 'マニュアルテスト')
         self.assertEqual(tds[2].text, '500')
         self.assertEqual(tds[3].text, '銀行')
@@ -576,7 +576,7 @@ class Add(SeleniumBase):
         rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self.assertEqual(len(rows), 2)
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[0].text, str(now.year) + "/" + str.zfill(str(now.month), 2) + "/" + '05')
+        self.assertEqual(tds[0].text, str(now.year) + '/' + str.zfill(str(now.month), 2) + '/' + '05')
         self.assertEqual(tds[1].text, 'マニュアルテスト')
         self.assertEqual(tds[2].text, '500')
         self.assertEqual(tds[3].text, '銀行')
@@ -603,7 +603,7 @@ class Add(SeleniumBase):
         rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self.assertEqual(len(rows), 2)
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[0].text, str(now.year) + "/" + str.zfill(str(now.month), 2) + "/" + '05')
+        self.assertEqual(tds[0].text, str(now.year) + '/' + str.zfill(str(now.month), 2) + '/' + '05')
         self.assertEqual(tds[1].text, 'マニュアルテスト')
         self.assertEqual(tds[2].text, '500')
         self.assertEqual(tds[3].text, '銀行')
@@ -614,7 +614,7 @@ class Add(SeleniumBase):
         self.assertEqual(self.driver.find_element(By.XPATH, '//form/table[1]/tbody/tr[4]/td[1]/input[2]').is_selected(), False)
 
     def test_add_formula_normal_form(self):
-        '''通常追加フォームで数式を入力できることを確認（addページ）'''
+        """通常追加フォームで数式を入力できることを確認（addページ）"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:add'))
 
@@ -638,7 +638,7 @@ class Add(SeleniumBase):
         self.assertEqual(tds[2].text, '150')
 
     def test_add_formula_internal_transfer(self):
-        '''内部移動フォームで数式を入力できることを確認（addページ）'''
+        """内部移動フォームで数式を入力できることを確認（addページ）"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:add'))
 
@@ -663,7 +663,7 @@ class Add(SeleniumBase):
         self.assertEqual(tds[2].text, '300')
 
     def test_add_formula_charge(self):
-        '''チャージフォームで数式を入力できることを確認（addページ）'''
+        """チャージフォームで数式を入力できることを確認（addページ）"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:add'))
 

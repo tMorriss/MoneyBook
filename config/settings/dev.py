@@ -13,7 +13,7 @@ DATABASES = {
     }
 }
 
-APP_NAME = "dev-MoneyBook"
+APP_NAME = 'dev-MoneyBook'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

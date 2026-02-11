@@ -33,20 +33,20 @@ class StatisticsMonthView(View):
             tomonth_context['outgo'] = Data.get_outgo_sum(monthly_normal_data) - td
             tomonth_context['balance'] = tomonth_context['income'] - tomonth_context['outgo']
             # 給与
-            tomonth_context['salary'] = Data.get_income_sum(Data.get_keyword_data(monthly_data, "給与"))
+            tomonth_context['salary'] = Data.get_income_sum(Data.get_keyword_data(monthly_data, '給与'))
             # 生活費
             tomonth_context['living_cost'] = Data.get_living_cost(monthly_data)
             # 食費
             tomonth_context['food_cost'] = Data.get_food_costs(monthly_data)
             # 電気代
-            tomonth_context['electricity_cost'] = Data.get_outgo_sum(Data.get_keyword_data(monthly_data, "電気代"))
+            tomonth_context['electricity_cost'] = Data.get_outgo_sum(Data.get_keyword_data(monthly_data, '電気代'))
             # ガス代
-            tomonth_context['gus_cost'] = Data.get_outgo_sum(Data.get_keyword_data(monthly_data, "ガス代"))
+            tomonth_context['gus_cost'] = Data.get_outgo_sum(Data.get_keyword_data(monthly_data, 'ガス代'))
             # 水道代
-            w = Data.get_outgo_sum(Data.get_keyword_data(monthly_data, "水道代")) / 2
+            w = Data.get_outgo_sum(Data.get_keyword_data(monthly_data, '水道代')) / 2
             if (w == 0):
                 d = Data.get_month_data(next_month_first.year, next_month_first.month)
-                w = Data.get_outgo_sum(Data.get_keyword_data(d, "水道代")) / 2
+                w = Data.get_outgo_sum(Data.get_keyword_data(d, '水道代')) / 2
             tomonth_context['water_cost'] = w
             tomonth_context['infra_cost'] = tomonth_context['electricity_cost'] + \
                 tomonth_context['gus_cost'] + tomonth_context['water_cost']

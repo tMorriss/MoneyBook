@@ -23,7 +23,7 @@ class AddView(View):
             'chargeable_methods': Method.chargeable_list(),
             'first_categories': Category.first_list(),
             'latter_categories': Category.latter_list(),
-            'temps': {0: "No", 1: "Yes"},
+            'temps': {0: 'No', 1: 'Yes'},
             'paypay_pk': Method.get_paypay().pk,
             'bank_pk': Method.get_bank().pk,
             'traffic_cost_pk': Category.get_traffic_cost().pk,
@@ -45,7 +45,7 @@ class AddView(View):
             for a in new_data.errors:
                 error_list.append(a)
             res_data = {
-                "ErrorList": error_list,
+                'ErrorList': error_list,
             }
             return HttpResponseBadRequest(json.dumps(res_data))
 
@@ -53,12 +53,12 @@ class AddView(View):
 class SuggestView(View):
     def get(self, request, *args, **kwargs):
         if 'item' not in request.GET:
-            res = {"message": "missing item"}
+            res = {'message': 'missing item'}
             return HttpResponseBadRequest(json.dumps(res))
 
         item = request.GET.get('item')
         if item == '':
-            res = {"message": "empty item"}
+            res = {'message': 'empty item'}
             return HttpResponseBadRequest(json.dumps(res))
 
         data = Data.sort_descending(Data.get_startswith_keyword_data(Data.get_all_data(), item))

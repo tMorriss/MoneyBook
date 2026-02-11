@@ -10,7 +10,7 @@ from selenium.webdriver.support.color import Color
 
 class Index(SeleniumBase):
     def _assert_initialized_add_mini(self, year, month):
-        '''入力欄が初期値であることを確認'''
+        """入力欄が初期値であることを確認"""
         self.assertEqual(self.driver.find_element(By.ID, 'a_year').get_attribute('value'), str(year))
         self.assertEqual(self.driver.find_element(By.ID, 'a_month').get_attribute('value'), str(month))
         self.assertEqual(self.driver.find_element(By.ID, 'a_day').get_attribute('value'), '')
@@ -49,7 +49,7 @@ class Index(SeleniumBase):
         rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self.assertEqual(len(rows), 2)
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[0].text, str(now.year) + "/" + str.zfill(str(now.month), 2) + "/" + '03')
+        self.assertEqual(tds[0].text, str(now.year) + '/' + str.zfill(str(now.month), 2) + '/' + '03')
         self.assertEqual(tds[1].text, item)
         self.assertEqual(tds[2].text, '1,000')
         self.assertEqual(tds[3].text, method)
@@ -172,8 +172,8 @@ class Index(SeleniumBase):
             self.assertTrue(i.is_selected())
 
         # 一覧表示
-        expects = ["立替分2", "立替分1", "水道代", "ガス代", "電気代", "PayPayチャージ", "PayPayチャージ",
-                   "貯金", "計算外", "スーパー", "銀行収入", "現金収入", "必需品2", "必需品1", "その他1", "コンビニ", "給与"]
+        expects = ['立替分2', '立替分1', '水道代', 'ガス代', '電気代', 'PayPayチャージ', 'PayPayチャージ',
+                   '貯金', '計算外', 'スーパー', '銀行収入', '現金収入', '必需品2', '必需品1', 'その他1', 'コンビニ', '給与']
         actuals = self.driver.find_elements(By.CLASS_NAME, 'data_item')
         self._assert_texts(actuals, expects)
         # 背景色
@@ -242,7 +242,7 @@ class Index(SeleniumBase):
         self._assert_texts(actuals, expects)
 
     def test_index_month_out_of_range(self):
-        '''存在しない日付に飛ぶとtopにリダイレクト'''
+        """存在しない日付に飛ぶとtopにリダイレクト"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 13}))
         self.assertEqual(self.driver.current_url, self.live_server_url + reverse('moneybook:index'))
@@ -288,7 +288,7 @@ class Index(SeleniumBase):
         rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self.assertEqual(len(rows), 2)
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[0].text, str(now.year) + "/" + str.zfill(str(now.month), 2) + "/" + '05')
+        self.assertEqual(tds[0].text, str(now.year) + '/' + str.zfill(str(now.month), 2) + '/' + '05')
         self.assertEqual(tds[1].text, '立替テスト')
         self.assertEqual(tds[2].text, '1,500')
         self.assertEqual(tds[3].text, '銀行')
@@ -322,7 +322,7 @@ class Index(SeleniumBase):
         rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self.assertEqual(len(rows), 2)
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[0].text, str(now.year) + "/" + str.zfill(str(now.month), 2) + "/" + '06')
+        self.assertEqual(tds[0].text, str(now.year) + '/' + str.zfill(str(now.month), 2) + '/' + '06')
         self.assertEqual(tds[1].text, '収入立替テスト')
         self.assertEqual(tds[2].text, '2,000')
         self.assertEqual(tds[3].text, '銀行')
@@ -355,7 +355,7 @@ class Index(SeleniumBase):
         rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         self.assertEqual(len(rows), 2)
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[0].text, str(now.year) + "/" + str.zfill(str(now.month), 2) + "/" + '07')
+        self.assertEqual(tds[0].text, str(now.year) + '/' + str.zfill(str(now.month), 2) + '/' + '07')
         self.assertEqual(tds[1].text, '収入テスト')
         self.assertEqual(tds[2].text, '3,000')
         self.assertEqual(tds[3].text, '銀行')
@@ -380,7 +380,7 @@ class Index(SeleniumBase):
 
         rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[0].text, str(now.year) + "/" + str.zfill(str(now.month), 2) + "/" + str.zfill(str(now.day), 2))
+        self.assertEqual(tds[0].text, str(now.year) + '/' + str.zfill(str(now.month), 2) + '/' + str.zfill(str(now.day), 2))
         self.assertEqual(tds[1].text, 'テスト2')
         self.assertEqual(tds[2].text, '3,000')
         self.assertEqual(tds[3].text, 'Kyash')
@@ -622,7 +622,7 @@ class Index(SeleniumBase):
         self.assertEqual(self.driver.current_url, self.live_server_url + reverse('moneybook:edit', kwargs={'pk': 18}))
 
     def test_add_formula_mini_addition(self):
-        '''金額入力欄に足し算の数式を入力できることを確認（_add_mini）'''
+        """金額入力欄に足し算の数式を入力できることを確認（_add_mini）"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:index'))
 
@@ -643,7 +643,7 @@ class Index(SeleniumBase):
         self.assertEqual(tds[2].text, '300')
 
     def test_add_formula_mini_multiplication_with_parentheses(self):
-        '''金額入力欄に掛け算と括弧の数式を入力できることを確認（_add_mini）'''
+        """金額入力欄に掛け算と括弧の数式を入力できることを確認（_add_mini）"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:index'))
 
@@ -664,7 +664,7 @@ class Index(SeleniumBase):
         self.assertEqual(tds[2].text, '900')
 
     def test_add_formula_mini_division(self):
-        '''金額入力欄に割り算の数式を入力できることを確認（_add_mini）'''
+        """金額入力欄に割り算の数式を入力できることを確認（_add_mini）"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:index'))
 
@@ -685,7 +685,7 @@ class Index(SeleniumBase):
         self.assertEqual(tds[2].text, '250')
 
     def test_add_formula_mini_with_commas(self):
-        '''金額入力欄にカンマ付き数値の数式を入力できることを確認（_add_mini）'''
+        """金額入力欄にカンマ付き数値の数式を入力できることを確認（_add_mini）"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:index'))
 
