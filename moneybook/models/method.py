@@ -15,22 +15,22 @@ class Method(models.Model):
 
     @staticmethod
     def list():
-        return Method.objects.filter(show_order__gt=0).order_by("show_order")
+        return Method.objects.filter(show_order__gt=0).order_by('show_order')
 
     @staticmethod
     def un_used_list():
-        return Method.objects.filter(show_order__lte=0).order_by("-show_order", "id")
+        return Method.objects.filter(show_order__lte=0).order_by('-show_order', 'id')
 
     @staticmethod
     def chargeable_list():
         return Method.objects.filter(show_order__gt=0, chargeable=1).order_by(
-            "show_order"
+            'show_order'
         )
 
     @staticmethod
     def get_bank():
-        return Method.objects.get(name="銀行")
+        return Method.objects.get(name='銀行')
 
     @staticmethod
     def get_paypay():
-        return Method.objects.get(name="PayPay")
+        return Method.objects.get(name='PayPay')

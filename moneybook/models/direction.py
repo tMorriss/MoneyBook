@@ -13,4 +13,4 @@ class Direction(models.Model):
 
     @staticmethod
     def list():
-        return Direction.objects.order_by("pk")
+        return Direction.objects.order_by('pk')

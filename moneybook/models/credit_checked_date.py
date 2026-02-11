@@ -12,7 +12,7 @@ class CreditCheckedDate(models.Model):
 
     @staticmethod
     def get_all():
-        return CreditCheckedDate.objects.all().order_by("show_order")
+        return CreditCheckedDate.objects.all().order_by('show_order')
 
     @staticmethod
     def set_date(pk, new_date):

@@ -8,7 +8,7 @@ class BankBalance(models.Model):
 
     @staticmethod
     def get_all():
-        return BankBalance.objects.all().order_by("show_order")
+        return BankBalance.objects.all().order_by('show_order')
 
     @staticmethod
     def get_price(pk):

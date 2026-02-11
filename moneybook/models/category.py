@@ -21,28 +21,28 @@ class Category(models.Model):
 
     @staticmethod
     def list():
-        return Category.objects.order_by("show_order")
+        return Category.objects.order_by('show_order')
 
     @staticmethod
     def first_list():
-        return Category.objects.filter(show_order__gt=0).order_by("show_order")
+        return Category.objects.filter(show_order__gt=0).order_by('show_order')
 
     @staticmethod
     def latter_list():
-        return Category.objects.filter(show_order__lte=0).order_by("-show_order")
+        return Category.objects.filter(show_order__lte=0).order_by('-show_order')
 
     @staticmethod
     def get_intra_move():
-        return Category.objects.get(name="内部移動")
+        return Category.objects.get(name='内部移動')
 
     @staticmethod
     def get_deposit():
-        return Category.objects.get(name="貯金")
+        return Category.objects.get(name='貯金')
 
     @staticmethod
     def get_income():
-        return Category.objects.get(name="収入")
+        return Category.objects.get(name='収入')
 
     @staticmethod
     def get_traffic_cost():
-        return Category.objects.get(name="交通費")
+        return Category.objects.get(name='交通費')

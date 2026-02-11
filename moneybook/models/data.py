@@ -51,7 +51,7 @@ class Data(models.Model):
     @staticmethod
     def get_sum(data, direction):
         """収入や支出の合計"""
-        v = data.filter(direction=direction).aggregate(Sum("price"))["price__sum"]
+        v = data.filter(direction=direction).aggregate(Sum('price'))['price__sum']
         if v is None:
             v = 0
         return v
@@ -90,8 +90,8 @@ class Data(models.Model):
     def get_temp_sum(data):
         """貯金以外の立替合計"""
         deposit = Category.get_deposit()
-        temp = data.filter(temp=1).exclude(category=deposit).aggregate(Sum("price"))[
-            "price__sum"
+        temp = data.filter(temp=1).exclude(category=deposit).aggregate(Sum('price'))[
+            'price__sum'
         ]
         return temp if temp is not None else 0
 
@@ -100,8 +100,8 @@ class Data(models.Model):
         """貯金の支出分をフィルタ"""
         category = Category.get_deposit()
         deposit_out = (
-            data.filter(category=category, direction=2).aggregate(Sum("price"))[
-                "price__sum"
+            data.filter(category=category, direction=2).aggregate(Sum('price'))[
+                'price__sum'
             ]
         )
 
@@ -112,12 +112,12 @@ class Data(models.Model):
         """貯金をフィルタ"""
         category = Category.get_deposit()
         deposit_out = (
-            data.filter(category=category, direction=2).aggregate(Sum("price"))[
-                "price__sum"
+            data.filter(category=category, direction=2).aggregate(Sum('price'))[
+                'price__sum'
             ]
         )
         deposit_temp = (
-            data.filter(category=category, temp=1).aggregate(Sum("price"))["price__sum"]
+            data.filter(category=category, temp=1).aggregate(Sum('price'))['price__sum']
         )
 
         return (deposit_out if deposit_out is not None else 0) - (
@@ -127,15 +127,15 @@ class Data(models.Model):
     @staticmethod
     def filter_without_intra_move(data):
         """内部移動だけを排除"""
-        category = Category.objects.get(name="内部移動")
+        category = Category.objects.get(name='内部移動')
         return Data.sort_ascending(data.exclude(category=category))
 
     @staticmethod
     def get_normal_data(data):
         """計算外と内部移動と立替を排除"""
         return (
-            data.exclude(category=Category.objects.get(name="計算外"))
-            .exclude(category=Category.objects.get(name="内部移動"))
+            data.exclude(category=Category.objects.get(name='計算外'))
+            .exclude(category=Category.objects.get(name='内部移動'))
         )
 
     @staticmethod
@@ -155,7 +155,7 @@ class Data(models.Model):
     @staticmethod
     def get_food_costs(data):
         """食費"""
-        data = Data.get_category_data(data, Category.objects.get(name="食費"))
+        data = Data.get_category_data(data, Category.objects.get(name='食費'))
         i = Data.get_income_sum(data.filter(temp=1))
         o = Data.get_outgo_sum(data)
         return o - i
@@ -163,12 +163,12 @@ class Data(models.Model):
     @staticmethod
     def sort_ascending(data):
         """日付順にソート"""
-        return data.order_by("date", "id")
+        return data.order_by('date', 'id')
 
     @staticmethod
     def sort_descending(data):
         """日付の逆にソート"""
-        return data.order_by("-date", "-id")
+        return data.order_by('-date', '-id')
 
     @staticmethod
     def get_keyword_data(data, keyword):
@@ -183,13 +183,13 @@ class Data(models.Model):
     @staticmethod
     def get_cash_data(data):
         """現金のデータを取得"""
-        method = Method.objects.get(name="現金")
+        method = Method.objects.get(name='現金')
         return Data.sort_ascending(Data.get_method_data(data, method))
 
     @staticmethod
     def get_bank_data(data):
         """銀行のデータを取得"""
-        method = Method.objects.get(name="銀行")
+        method = Method.objects.get(name='銀行')
         return Data.sort_ascending(Data.get_method_data(data, method))
 
     @staticmethod
