@@ -1,11 +1,17 @@
 from django import forms
 
-from .models import Data
+from .models import Data, PeriodicData
 
 
 class DataForm(forms.ModelForm):
     class Meta:
         model = Data
+        exclude = []
+
+
+class PeriodicDataForm(forms.ModelForm):
+    class Meta:
+        model = PeriodicData
         exclude = []
 
 

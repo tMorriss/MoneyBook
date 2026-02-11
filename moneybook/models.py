@@ -321,6 +321,29 @@ class Data(models.Model):
         return Data.sort_ascending(data.filter(checked__in=checkeds))
 
 
+class PeriodicData(models.Model):
+    day = models.IntegerField()
+    item = models.CharField(max_length=100)
+    price = models.IntegerField()
+    direction = models.ForeignKey(Direction, on_delete=models.RESTRICT)
+    method = models.ForeignKey(Method, on_delete=models.RESTRICT)
+    category = models.ForeignKey(Category, on_delete=models.RESTRICT)
+    temp = models.BooleanField()
+
+    def __str__(self):
+        return self.item
+
+    @staticmethod
+    def get_all():
+        """全データを取得"""
+        return PeriodicData.objects.all().order_by('day', 'id')
+
+    @staticmethod
+    def get(pk):
+        """指定データを取得"""
+        return PeriodicData.objects.get(pk=pk)
+
+
 class CheckedDate(models.Model):
     method = models.OneToOneField(Method, on_delete=models.RESTRICT)
     date = models.DateField()

@@ -1,0 +1,212 @@
+/* 定期取引ページのスタイル */
+
+.main-content {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.control-panel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0;
+    padding: 15px;
+    background: #f5f5f5;
+    border-radius: 5px;
+}
+
+.input-group label {
+    margin-right: 5px;
+    font-weight: bold;
+}
+
+.input-group input[type="number"] {
+    width: 80px;
+    margin-right: 15px;
+    padding: 5px;
+    font-size: 1em;
+}
+
+.button-group {
+    margin: 10px 0;
+}
+
+/* ボタンスタイル */
+.btn-green {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    margin: 0 5px;
+}
+
+.btn-green:hover {
+    background-color: #218838;
+}
+
+.btn-blue {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    margin: 0 5px;
+}
+
+.btn-blue:hover {
+    background-color: #0056b3;
+}
+
+.btn-red {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 5px 15px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+.btn-red:hover {
+    background-color: #c82333;
+}
+
+/* テーブルスタイル */
+.periodic-table-container {
+    margin: 20px 0;
+    overflow-x: auto;
+}
+
+.tbl-periodic {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tbl-periodic th {
+    background-color: #005000;
+    color: white;
+    padding: 10px;
+    text-align: center;
+}
+
+.tbl-periodic td {
+    padding: 8px;
+    border: 1px solid #ddd;
+}
+
+.tbl-periodic tbody tr:hover {
+    background-color: #f5f5f5;
+}
+
+.empty-message {
+    text-align: center;
+    color: #999;
+    font-style: italic;
+}
+
+/* 設定画面のテーブル */
+.periodic-config-container {
+    margin: 20px 0;
+    overflow-x: auto;
+}
+
+.tbl-periodic-config {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tbl-periodic-config th {
+    background-color: #005000;
+    color: white;
+    padding: 10px;
+    text-align: center;
+}
+
+.tbl-periodic-config td {
+    padding: 5px;
+    border: 1px solid #ddd;
+}
+
+.tbl-periodic-config input[type="number"],
+.tbl-periodic-config input[type="text"] {
+    width: 100%;
+    padding: 5px;
+    box-sizing: border-box;
+    font-size: 1em;
+}
+
+.tbl-periodic-config select {
+    width: 100%;
+    padding: 5px;
+    font-size: 1em;
+}
+
+/* 入力フィールドの幅調整 */
+.input-day {
+    width: 60px !important;
+}
+
+.input-item {
+    min-width: 150px !important;
+}
+
+.input-price {
+    width: 100px !important;
+}
+
+.select-direction,
+.select-method,
+.select-category,
+.select-temp {
+    min-width: 100px;
+}
+
+/* 進捗エリア */
+#progress_area {
+    margin: 20px 0;
+    padding: 15px;
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+}
+
+#progress_log {
+    text-align: left;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.progress-item {
+    margin: 5px 0;
+    padding: 5px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+/* ボトムボタン */
+.bottom-buttons {
+    margin: 30px 0 20px;
+    text-align: center;
+}
+
+/* レスポンシブデザイン */
+@media screen and (max-width: 768px) {
+    .control-panel {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .input-group {
+        margin-bottom: 10px;
+    }
+    
+    .tbl-periodic,
+    .tbl-periodic-config {
+        font-size: 0.9em;
+    }
+}

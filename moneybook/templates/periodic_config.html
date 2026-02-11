@@ -1,0 +1,106 @@
+{% extends "_base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}定期取引設定 - {{ app_name }}{% endblock %}
+
+{% block header %}
+<link rel="stylesheet" type="text/css" href="{% static 'periodic.css' %}">
+<script type="text/javascript" src="{% static 'periodic_config.js' %}"></script>
+<script type="text/javascript">
+    periodic_config_url = "{% url 'moneybook:periodic_config' %}";
+    periodic_list_url = "{% url 'moneybook:periodic_list' %}";
+    
+    const directions = [
+        {% for d in directions %}
+        {pk: {{ d.pk }}, name: "{{ d.name }}"},
+        {% endfor %}
+    ];
+    const methods = [
+        {% for m in methods %}
+        {pk: {{ m.pk }}, name: "{{ m.name }}"},
+        {% endfor %}
+    ];
+    const categories = [
+        {% for c in first_categories %}
+        {pk: {{ c.pk }}, name: "{{ c.name }}"},
+        {% endfor %}
+        {% for c in latter_categories %}
+        {pk: {{ c.pk }}, name: "{{ c.name }}"},
+        {% endfor %}
+    ];
+</script>
+{% endblock %}
+
+{% block content %}
+<section class="main-content">
+    <h1>定期取引設定</h1>
+    
+    <div class="periodic-config-container">
+        <table class="tbl-periodic-config tbl-boarder" id="periodic_config_table">
+            <thead>
+                <tr>
+                    <th>日</th>
+                    <th>品目</th>
+                    <th>金額</th>
+                    <th>方向</th>
+                    <th>支払い方法</th>
+                    <th>分類</th>
+                    <th>立替</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody id="config_tbody">
+                {% for pd in periodic_data_list %}
+                <tr data-id="{{ pd.pk }}">
+                    <td><input type="number" class="input-day" value="{{ pd.day }}" min="1" max="31"></td>
+                    <td><input type="text" class="input-item" value="{{ pd.item }}" maxlength="100"></td>
+                    <td><input type="number" class="input-price" value="{{ pd.price }}"></td>
+                    <td>
+                        <select class="select-direction">
+                            {% for d in directions %}
+                            <option value="{{ d.pk }}" {% if d.pk == pd.direction.pk %}selected{% endif %}>{{ d.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                        <select class="select-method">
+                            {% for m in methods %}
+                            <option value="{{ m.pk }}" {% if m.pk == pd.method.pk %}selected{% endif %}>{{ m.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                        <select class="select-category">
+                            {% for c in first_categories %}
+                            <option value="{{ c.pk }}" {% if c.pk == pd.category.pk %}selected{% endif %}>{{ c.name }}</option>
+                            {% endfor %}
+                            {% for c in latter_categories %}
+                            <option value="{{ c.pk }}" {% if c.pk == pd.category.pk %}selected{% endif %}>{{ c.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                        <select class="select-temp">
+                            <option value="0" {% if not pd.temp %}selected{% endif %}>No</option>
+                            <option value="1" {% if pd.temp %}selected{% endif %}>Yes</option>
+                        </select>
+                    </td>
+                    <td><button class="btn-delete btn-red">削除</button></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <div class="button-group">
+            <button id="btn_add_row" class="btn-green">行を追加</button>
+        </div>
+    </div>
+
+    <div class="bottom-buttons">
+        <button id="btn_update" class="btn-green">更新</button>
+        <button id="btn_back" class="btn-blue">戻る</button>
+    </div>
+</section>
+{% include "_result_message.html" %}
+{% endblock %}
