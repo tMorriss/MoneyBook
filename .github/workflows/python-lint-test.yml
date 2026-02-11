@@ -46,9 +46,14 @@ jobs:
         uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-  e2e-index:
-    name: E2E Test - Index
+  e2e:
+    name: E2E Test - ${{ matrix.test-module }}
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        test-module: [index, add, login]
+    env:
+      TEST_MODULE: ${{ matrix.test-module }}
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python 3.11
@@ -66,46 +71,4 @@ jobs:
           if [ -f requirements/requirements_selenium.txt ]; then pip install -r requirements/requirements_selenium.txt; fi
       - name: Test
         run: |
-          python manage.py test moneybook.e2e.index --settings config.settings.test
-  e2e-add:
-    name: E2E Test - Add
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python 3.11
-        uses: actions/setup-python@v2
-        with:
-          python-version: "3.11"
-      - name: Install Chrome
-        uses: browser-actions/setup-chrome@latest
-        with:
-          chrome-version: stable
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          if [ -f requirements/requirements.txt ]; then pip install -r requirements/requirements.txt; fi
-          if [ -f requirements/requirements_selenium.txt ]; then pip install -r requirements/requirements_selenium.txt; fi
-      - name: Test
-        run: |
-          python manage.py test moneybook.e2e.add --settings config.settings.test
-  e2e-login:
-    name: E2E Test - Login
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python 3.11
-        uses: actions/setup-python@v2
-        with:
-          python-version: "3.11"
-      - name: Install Chrome
-        uses: browser-actions/setup-chrome@latest
-        with:
-          chrome-version: stable
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          if [ -f requirements/requirements.txt ]; then pip install -r requirements/requirements.txt; fi
-          if [ -f requirements/requirements_selenium.txt ]; then pip install -r requirements/requirements_selenium.txt; fi
-      - name: Test
-        run: |
-          python manage.py test moneybook.e2e.login --settings config.settings.test
+          python manage.py test moneybook.e2e.$TEST_MODULE --settings config.settings.test
