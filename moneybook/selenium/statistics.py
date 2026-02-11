@@ -148,20 +148,25 @@ class Statistics(SeleniumBase):
         # 統計画面に移動
         self._location(self.live_server_url + reverse('moneybook:statistics'))
 
-        # 食費が集計されている
-        rows = self.driver.find_elements(By.XPATH, '//table/tbody/tr')
-        current_month_row = None
-        for row in rows:
-            first_cell = row.find_element(By.TAG_NAME, 'th')
-            if first_cell.text == f"{now.month}月":
-                current_month_row = row
-                break
+        # 食費データが存在することを確認（hidden ulに格納されている）
+        food_costs_ul = self.driver.find_element(By.ID, 'food_costs')
+        self.assertIsNotNone(food_costs_ul)
+        food_costs_items = food_costs_ul.find_elements(By.TAG_NAME, 'li')
+        self.assertGreater(len(food_costs_items), 0)
 
-        self.assertIsNotNone(current_month_row)
+        # 当月の食費データが含まれていることを確認
+        current_month_data = None
+        for item in food_costs_items:
+            if f"{now.month}月" in item.text:
+                current_month_data = item.text
+                break
+        self.assertIsNotNone(current_month_data)
+        self.assertIn("1500", current_month_data)
 
     def test_statistics_living_cost(self):
         '''生活費が正しく集計されることを確認'''
         self._login()
+        now = datetime.now()
 
         # 生活費データを追加（食費は生活費に含まれる）
         self._location(self.live_server_url + reverse('moneybook:index'))
@@ -175,9 +180,20 @@ class Statistics(SeleniumBase):
         # 統計画面に移動
         self._location(self.live_server_url + reverse('moneybook:statistics'))
 
-        # テーブルが表示されている
-        rows = self.driver.find_elements(By.XPATH, '//table/tbody/tr')
-        self.assertEqual(len(rows), 12)
+        # 生活費データが存在することを確認（hidden ulに格納されている）
+        living_costs_ul = self.driver.find_element(By.ID, 'living_costs')
+        self.assertIsNotNone(living_costs_ul)
+        living_costs_items = living_costs_ul.find_elements(By.TAG_NAME, 'li')
+        self.assertGreater(len(living_costs_items), 0)
+
+        # 当月の生活費データが含まれていることを確認
+        current_month_data = None
+        for item in living_costs_items:
+            if f"{now.month}月" in item.text:
+                current_month_data = item.text
+                break
+        self.assertIsNotNone(current_month_data)
+        self.assertIn("2000", current_month_data)
 
     def test_statistics_link_from_taskbar(self):
         '''タスクバーから統計画面に遷移できることを確認'''
