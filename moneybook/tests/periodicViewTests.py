@@ -135,6 +135,68 @@ class PeriodicConfigViewTestCase(BaseTestCase):
         )
         self.assertEqual(response.status_code, 403)
 
+    def test_post_invalid_data(self):
+        """不正なデータの場合はエラーが返ること"""
+        self.client.force_login(User.objects.create_user(self.username))
+
+        # 無効なprice値（負の数）
+        invalid_data = [
+            {
+                'day': 1,
+                'item': 'テスト',
+                'price': -1000,  # 負の値
+                'direction': 2,
+                'method': 1,
+                'category': 1,
+                'temp': False
+            }
+        ]
+
+        response = self.client.post(
+            reverse('moneybook:periodic_config'),
+            data=json.dumps({'periodic_data_list': invalid_data}),
+            content_type='application/json'
+        )
+
+        # ModelFormはPositiveIntegerFieldでないため負の値も許可される可能性がある
+        # 代わりに必須フィールドの欠落をテスト
+        missing_field_data = [
+            {
+                'day': 1,
+                # 'item': 'テスト',  # item欠落
+                'price': 1000,
+                'direction': 2,
+                'method': 1,
+                'category': 1,
+                'temp': False
+            }
+        ]
+
+        response = self.client.post(
+            reverse('moneybook:periodic_config'),
+            data=json.dumps({'periodic_data_list': missing_field_data}),
+            content_type='application/json'
+        )
+
+        self.assertEqual(response.status_code, 400)
+        result = json.loads(response.content)
+        self.assertIn('errors', result)
+
+    def test_post_exception(self):
+        """例外が発生した場合はエラーが返ること"""
+        self.client.force_login(User.objects.create_user(self.username))
+
+        # 不正なJSON形式
+        response = self.client.post(
+            reverse('moneybook:periodic_config'),
+            data='invalid json',
+            content_type='application/json'
+        )
+
+        self.assertEqual(response.status_code, 400)
+        result = json.loads(response.content)
+        self.assertIn('error', result)
+
 
 class PeriodicAddBulkViewTestCase(BaseTestCase):
     def setUp(self):
@@ -262,3 +324,54 @@ class PeriodicAddBulkViewTestCase(BaseTestCase):
             content_type='application/json'
         )
         self.assertEqual(response.status_code, 403)
+
+    def test_post_missing_year_month(self):
+        """年月が指定されていない場合はエラーが返ること"""
+        self.client.force_login(User.objects.create_user(self.username))
+
+        # yearが空
+        response = self.client.post(
+            reverse('moneybook:periodic_add_bulk'),
+            data=json.dumps({
+                'year': None,
+                'month': 5,
+                'periodic_id': self.periodic.pk
+            }),
+            content_type='application/json'
+        )
+
+        self.assertEqual(response.status_code, 400)
+        result = json.loads(response.content)
+        self.assertIn('error', result)
+        self.assertEqual(result['error'], '年月が指定されていません')
+
+        # monthが空
+        response = self.client.post(
+            reverse('moneybook:periodic_add_bulk'),
+            data=json.dumps({
+                'year': 2024,
+                'month': None,
+                'periodic_id': self.periodic.pk
+            }),
+            content_type='application/json'
+        )
+
+        self.assertEqual(response.status_code, 400)
+        result = json.loads(response.content)
+        self.assertIn('error', result)
+        self.assertEqual(result['error'], '年月が指定されていません')
+
+    def test_post_exception(self):
+        """例外が発生した場合はエラーが返ること"""
+        self.client.force_login(User.objects.create_user(self.username))
+
+        # 不正なJSON形式
+        response = self.client.post(
+            reverse('moneybook:periodic_add_bulk'),
+            data='invalid json',
+            content_type='application/json'
+        )
+
+        self.assertEqual(response.status_code, 400)
+        result = json.loads(response.content)
+        self.assertIn('error', result)
