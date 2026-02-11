@@ -41,14 +41,14 @@ class PeriodBalances(SeleniumBase):
         self.assertEqual(end_month, str(now.month))
 
     def test_display_button(self):
-        '''表示ボタンをクリックしてグラフが表示されることを確認'''
+        '''更新ボタンをクリックしてグラフが表示されることを確認'''
         self._login()
 
         # 期間残高画面に移動
         self._location(self.live_server_url + reverse('moneybook:period_balances'))
 
-        # 表示ボタンをクリック
-        self.driver.find_element(By.XPATH, '//input[@value="表示"]').click()
+        # 更新ボタンをクリック
+        self.driver.find_element(By.XPATH, '//input[@value="更新"]').click()
         time.sleep(2)
 
         # グラフコンテナが表示されている
@@ -72,8 +72,8 @@ class PeriodBalances(SeleniumBase):
         start_month_input.clear()
         start_month_input.send_keys('1')
 
-        # 表示ボタンをクリック
-        self.driver.find_element(By.XPATH, '//input[@value="表示"]').click()
+        # 更新ボタンをクリック
+        self.driver.find_element(By.XPATH, '//input[@value="更新"]').click()
         time.sleep(2)
 
         # グラフが表示されている
@@ -136,8 +136,8 @@ class PeriodBalances(SeleniumBase):
         # 期間残高画面に移動
         self._location(self.live_server_url + reverse('moneybook:period_balances'))
 
-        # 表示ボタンをクリック
-        self.driver.find_element(By.XPATH, '//input[@value="表示"]').click()
+        # 更新ボタンをクリック
+        self.driver.find_element(By.XPATH, '//input[@value="更新"]').click()
         time.sleep(2)
 
         # グラフが表示されている
@@ -169,8 +169,8 @@ class PeriodBalances(SeleniumBase):
         end_month_input.clear()
         end_month_input.send_keys(str(now.month))
 
-        # 表示ボタンをクリック
-        self.driver.find_element(By.XPATH, '//input[@value="表示"]').click()
+        # 更新ボタンをクリック
+        self.driver.find_element(By.XPATH, '//input[@value="更新"]').click()
         time.sleep(2)
 
         # グラフが表示されている
@@ -194,8 +194,8 @@ class PeriodBalances(SeleniumBase):
         start_month_input.clear()
         start_month_input.send_keys('1')
 
-        # 表示ボタンをクリック
-        self.driver.find_element(By.XPATH, '//input[@value="表示"]').click()
+        # 更新ボタンをクリック
+        self.driver.find_element(By.XPATH, '//input[@value="更新"]').click()
         time.sleep(2)
 
         # グラフが表示されている
@@ -212,8 +212,8 @@ class PeriodBalances(SeleniumBase):
         url = f"{base_url}?start_year={now.year}&start_month=1&end_year={now.year}&end_month={now.month}"
         self._location(url)
 
-        # 表示ボタンをクリック
-        self.driver.find_element(By.XPATH, '//input[@value="表示"]').click()
+        # 更新ボタンをクリック
+        self.driver.find_element(By.XPATH, '//input[@value="更新"]').click()
         time.sleep(2)
 
         # グラフが表示されている
