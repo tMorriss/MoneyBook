@@ -96,7 +96,7 @@ class SearchViewTestCase(BaseTestCase):
         self.assertEqual(response.url, reverse('moneybook:login'))
 
     def test_get_new_only_is_query(self):
-        '''is_queryだけ指定すると全データ表示される'''
+        """is_queryだけ指定すると全データ表示される"""
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:search'), {'is_query': 1})
         self._search_common(response)
@@ -107,7 +107,7 @@ class SearchViewTestCase(BaseTestCase):
         self._assert_templates(response.templates, expects)
 
     def test_get_empty_query(self):
-        '''is_query含め全部空'''
+        """is_query含め全部空"""
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(
             reverse('moneybook:search'),
@@ -165,7 +165,7 @@ class SearchViewTestCase(BaseTestCase):
         self._assert_templates(response.templates, expects)
 
     def test_get_with_input_query(self):
-        '''全queryに正しい値を入れる'''
+        """全queryに正しい値を入れる"""
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(
             reverse('moneybook:search'),

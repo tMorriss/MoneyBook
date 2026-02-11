@@ -130,7 +130,7 @@ class SuggestViewTestCase(BaseTestCase):
 
         self.assertEqual(response.status_code, 400, response.content)
         body = json.loads(response.content.decode())
-        self.assertEqual(body, {"message": "missing item"})
+        self.assertEqual(body, {'message': 'missing item'})
 
     def test_get_empty_item(self):
         self.client.force_login(User.objects.create_user(self.username))
@@ -138,4 +138,4 @@ class SuggestViewTestCase(BaseTestCase):
 
         self.assertEqual(response.status_code, 400, response.content)
         body = json.loads(response.content.decode())
-        self.assertEqual(body, {"message": "empty item"})
+        self.assertEqual(body, {'message': 'empty item'})

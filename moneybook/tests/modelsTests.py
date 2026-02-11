@@ -6,20 +6,20 @@ from moneybook.tests.base import BaseTestCase
 
 class DirectionTestCase(BaseTestCase):
     def test_get(self):
-        self.assertEqual(str(Direction.get(1)), "収入")
-        self.assertEqual(str(Direction.get(2)), "支出")
+        self.assertEqual(str(Direction.get(1)), '収入')
+        self.assertEqual(str(Direction.get(2)), '支出')
 
     def test_list(self):
         ls = Direction.list()
         self.assertEqual(ls.count(), 2)
-        self.assertEqual(str(ls[0]), "収入")
-        self.assertEqual(str(ls[1]), "支出")
+        self.assertEqual(str(ls[0]), '収入')
+        self.assertEqual(str(ls[1]), '支出')
 
 
 class MethodTestCase(BaseTestCase):
     def test_get(self):
-        self.assertEqual(str(Method.get(1)), "現金")
-        self.assertEqual(str(Method.get(4)), "nanaco")
+        self.assertEqual(str(Method.get(1)), '現金')
+        self.assertEqual(str(Method.get(4)), 'nanaco')
 
     def test_list(self):
         ls = Method.list()
@@ -39,8 +39,8 @@ class MethodTestCase(BaseTestCase):
 
 class CategoryTestCase(BaseTestCase):
     def test_get(self):
-        self.assertEqual(str(Category.get(1)), "食費")
-        self.assertEqual(str(Category.get(4)), "内部移動")
+        self.assertEqual(str(Category.get(1)), '食費')
+        self.assertEqual(str(Category.get(4)), '内部移動')
 
     def test_list(self):
         ls = Category.list()
@@ -67,12 +67,12 @@ class DataTestCase(BaseTestCase):
         end = date(2000, 1, 10)
         data = Data.get_range_data(start, end)
         expects = [
-            "給与",
-            "コンビニ",
-            "その他1",
-            "必需品1",
-            "必需品2",
-            "現金収入"
+            '給与',
+            'コンビニ',
+            'その他1',
+            '必需品1',
+            '必需品2',
+            '現金収入'
         ]
         self._assert_list(data, expects)
 
@@ -85,23 +85,23 @@ class DataTestCase(BaseTestCase):
     def test_get_month_data(self):
         data = Data.get_month_data(2000, 1)
         expects = [
-            "給与",
-            "コンビニ",
-            "その他1",
-            "必需品1",
-            "必需品2",
-            "現金収入",
-            "銀行収入",
-            "スーパー",
-            "計算外",
-            "貯金",
-            "PayPayチャージ",
-            "PayPayチャージ",
-            "電気代",
-            "ガス代",
-            "水道代",
-            "立替分1",
-            "立替分2"
+            '給与',
+            'コンビニ',
+            'その他1',
+            '必需品1',
+            '必需品2',
+            '現金収入',
+            '銀行収入',
+            'スーパー',
+            '計算外',
+            '貯金',
+            'PayPayチャージ',
+            'PayPayチャージ',
+            '電気代',
+            'ガス代',
+            '水道代',
+            '立替分1',
+            '立替分2'
         ]
         self._assert_list(data, expects)
 
@@ -173,8 +173,8 @@ class DataTestCase(BaseTestCase):
         month_data = Data.get_month_data(2000, 1)
         data = Data.get_method_data(month_data, 3)
         expects = [
-            "PayPayチャージ",
-            "立替分1"
+            'PayPayチャージ',
+            '立替分1'
         ]
         self._assert_list(data, expects)
 
@@ -192,9 +192,9 @@ class DataTestCase(BaseTestCase):
         month_data = Data.get_month_data(2000, 1)
         data = Data.get_category_data(month_data, 1)
         expects = [
-            "コンビニ",
-            "スーパー",
-            "立替分1"
+            'コンビニ',
+            'スーパー',
+            '立替分1'
         ]
         self._assert_list(data, expects)
 
@@ -223,7 +223,7 @@ class DataTestCase(BaseTestCase):
     def test_get_deposit_sum(self):
         Data.objects.create(
             date=date(2100, 1, 1),
-            item="貯金",
+            item='貯金',
             price=1000,
             direction=Direction.get(2),
             method=Method.get(1),
@@ -231,7 +231,7 @@ class DataTestCase(BaseTestCase):
             temp=False)
         Data.objects.create(
             date=date(2100, 1, 1),
-            item="貯金代",
+            item='貯金代',
             price=500,
             direction=Direction.get(1),
             method=Method.get(1),
@@ -252,21 +252,21 @@ class DataTestCase(BaseTestCase):
         base_data = Data.get_month_data(2000, 1)
         data = Data.filter_without_intra_move(base_data)
         expects = [
-            "給与",
-            "コンビニ",
-            "その他1",
-            "必需品1",
-            "必需品2",
-            "現金収入",
-            "銀行収入",
-            "スーパー",
-            "計算外",
-            "貯金",
-            "電気代",
-            "ガス代",
-            "水道代",
-            "立替分1",
-            "立替分2"
+            '給与',
+            'コンビニ',
+            'その他1',
+            '必需品1',
+            '必需品2',
+            '現金収入',
+            '銀行収入',
+            'スーパー',
+            '計算外',
+            '貯金',
+            '電気代',
+            'ガス代',
+            '水道代',
+            '立替分1',
+            '立替分2'
         ]
         self._assert_list(data, expects)
 
@@ -281,24 +281,24 @@ class DataTestCase(BaseTestCase):
         self.assertEqual(data.count(), 0)
 
     def test_get_normal_data(self):
-        '''計算外と内部移動を除く'''
+        """計算外と内部移動を除く"""
         base_data = Data.get_month_data(2000, 1)
         data = Data.get_normal_data(base_data)
         expects = [
-            "給与",
-            "コンビニ",
-            "その他1",
-            "必需品1",
-            "必需品2",
-            "現金収入",
-            "銀行収入",
-            "スーパー",
-            "貯金",
-            "電気代",
-            "ガス代",
-            "水道代",
-            "立替分1",
-            "立替分2"
+            '給与',
+            'コンビニ',
+            'その他1',
+            '必需品1',
+            '必需品2',
+            '現金収入',
+            '銀行収入',
+            'スーパー',
+            '貯金',
+            '電気代',
+            'ガス代',
+            '水道代',
+            '立替分1',
+            '立替分2'
         ]
         self._assert_list(data, expects)
 
@@ -340,23 +340,23 @@ class DataTestCase(BaseTestCase):
         base_data = Data.get_month_data(2000, 1)
         data = Data.sort_ascending(base_data)
         expects = [
-            "給与",
-            "コンビニ",
-            "その他1",
-            "必需品1",
-            "必需品2",
-            "現金収入",
-            "銀行収入",
-            "スーパー",
-            "計算外",
-            "貯金",
-            "PayPayチャージ",
-            "PayPayチャージ",
-            "電気代",
-            "ガス代",
-            "水道代",
-            "立替分1",
-            "立替分2"
+            '給与',
+            'コンビニ',
+            'その他1',
+            '必需品1',
+            '必需品2',
+            '現金収入',
+            '銀行収入',
+            'スーパー',
+            '計算外',
+            '貯金',
+            'PayPayチャージ',
+            'PayPayチャージ',
+            '電気代',
+            'ガス代',
+            '水道代',
+            '立替分1',
+            '立替分2'
         ]
         self._assert_list(data, expects)
 
@@ -369,23 +369,23 @@ class DataTestCase(BaseTestCase):
         base_data = Data.get_month_data(2000, 1)
         data = Data.sort_descending(base_data)
         expects = [
-            "立替分2",
-            "立替分1",
-            "水道代",
-            "ガス代",
-            "電気代",
-            "PayPayチャージ",
-            "PayPayチャージ",
-            "貯金",
-            "計算外",
-            "スーパー",
-            "銀行収入",
-            "現金収入",
-            "必需品2",
-            "必需品1",
-            "その他1",
-            "コンビニ",
-            "給与"
+            '立替分2',
+            '立替分1',
+            '水道代',
+            'ガス代',
+            '電気代',
+            'PayPayチャージ',
+            'PayPayチャージ',
+            '貯金',
+            '計算外',
+            'スーパー',
+            '銀行収入',
+            '現金収入',
+            '必需品2',
+            '必需品1',
+            'その他1',
+            'コンビニ',
+            '給与'
         ]
         self._assert_list(data, expects)
 
@@ -396,38 +396,38 @@ class DataTestCase(BaseTestCase):
 
     def test_get_keyword_data_part(self):
         base_data = Data.get_month_data(2000, 1)
-        data = Data.get_keyword_data(base_data, "分")
+        data = Data.get_keyword_data(base_data, '分')
         expects = [
-            "立替分1",
-            "立替分2"
+            '立替分1',
+            '立替分2'
         ]
         self._assert_list(data, expects)
 
     def test_get_keyword_data_same(self):
         base_data = Data.get_month_data(2000, 1)
-        data = Data.get_keyword_data(base_data, "必需品1")
+        data = Data.get_keyword_data(base_data, '必需品1')
         self.assertEqual(data.count(), 1)
-        self.assertEqual(str(data[0]), "必需品1")
+        self.assertEqual(str(data[0]), '必需品1')
 
     def test_get_keyword_data_nothing(self):
         base_data = Data.get_month_data(2000, 1)
-        data = Data.get_keyword_data(base_data, "カレーライス")
+        data = Data.get_keyword_data(base_data, 'カレーライス')
         self.assertEqual(data.count(), 0)
 
     def test_get_keyword_data_empty(self):
         base_data = Data.get_month_data(1999, 1)
-        data = Data.get_keyword_data(base_data, "カレーライス")
+        data = Data.get_keyword_data(base_data, 'カレーライス')
         self.assertEqual(data.count(), 0)
 
     def test_get_cash_data(self):
         base_data = Data.get_month_data(2000, 1)
         data = Data.get_cash_data(base_data)
         expects = [
-            "コンビニ",
-            "その他1",
-            "必需品2",
-            "現金収入",
-            "スーパー"
+            'コンビニ',
+            'その他1',
+            '必需品2',
+            '現金収入',
+            'スーパー'
         ]
         self._assert_list(data, expects)
 
@@ -445,16 +445,16 @@ class DataTestCase(BaseTestCase):
         base_data = Data.get_month_data(2000, 1)
         data = Data.get_bank_data(base_data)
         expects = [
-            "給与",
-            "必需品1",
-            "銀行収入",
-            "計算外",
-            "貯金",
-            "PayPayチャージ",
-            "電気代",
-            "ガス代",
-            "水道代",
-            "立替分2"
+            '給与',
+            '必需品1',
+            '銀行収入',
+            '計算外',
+            '貯金',
+            'PayPayチャージ',
+            '電気代',
+            'ガス代',
+            '水道代',
+            '立替分2'
         ]
         self._assert_list(data, expects)
 
@@ -472,17 +472,17 @@ class DataTestCase(BaseTestCase):
         base_data = Data.get_month_data(2000, 1)
         data = Data.get_checked_data(base_data)
         expects = [
-            "給与",
-            "コンビニ",
-            "その他1",
-            "必需品2",
-            "現金収入",
-            "銀行収入",
-            "PayPayチャージ",
-            "電気代",
-            "ガス代",
-            "水道代",
-            "立替分2"
+            '給与',
+            'コンビニ',
+            'その他1',
+            '必需品2',
+            '現金収入',
+            '銀行収入',
+            'PayPayチャージ',
+            '電気代',
+            'ガス代',
+            '水道代',
+            '立替分2'
         ]
         self._assert_list(data, expects)
 
@@ -500,12 +500,12 @@ class DataTestCase(BaseTestCase):
         base_data = Data.get_month_data(2000, 1)
         data = Data.get_unchecked_data(base_data)
         expects = [
-            "必需品1",
-            "スーパー",
-            "計算外",
-            "貯金",
-            "PayPayチャージ",
-            "立替分1"
+            '必需品1',
+            'スーパー',
+            '計算外',
+            '貯金',
+            'PayPayチャージ',
+            '立替分1'
         ]
         self._assert_list(data, expects)
 
@@ -520,8 +520,8 @@ class DataTestCase(BaseTestCase):
         self.assertEqual(data.count(), 0)
 
     def test_get(self):
-        self.assertEqual(str(Data.get(1)), "松屋")
-        self.assertEqual(str(Data.get(6)), "必需品2")
+        self.assertEqual(str(Data.get(1)), '松屋')
+        self.assertEqual(str(Data.get(6)), '必需品2')
 
     def test_get_nothing(self):
         self.assertRaises(Data.DoesNotExist, Data.get, 100)
@@ -530,10 +530,10 @@ class DataTestCase(BaseTestCase):
         base_data = Data.get_month_data(2000, 1)
         data = Data.filter_price(base_data, 100, 400)
         expects = [
-            "コンビニ",
-            "貯金",
-            "ガス代",
-            "立替分1"
+            'コンビニ',
+            '貯金',
+            'ガス代',
+            '立替分1'
         ]
         self._assert_list(data, expects)
 
@@ -541,10 +541,10 @@ class DataTestCase(BaseTestCase):
         base_data = Data.get_month_data(2000, 1)
         data = Data.filter_price(base_data, 3000, None)
         expects = [
-            "給与",
-            "必需品2",
-            "現金収入",
-            "銀行収入"
+            '給与',
+            '必需品2',
+            '現金収入',
+            '銀行収入'
         ]
         self._assert_list(data, expects)
 
@@ -552,9 +552,9 @@ class DataTestCase(BaseTestCase):
         base_data = Data.get_month_data(2000, 1)
         data = Data.filter_price(base_data, None, 130)
         expects = [
-            "コンビニ",
-            "その他1",
-            "貯金"
+            'コンビニ',
+            'その他1',
+            '貯金'
         ]
         self._assert_list(data, expects)
 
@@ -572,12 +572,12 @@ class DataTestCase(BaseTestCase):
         base_data = Data.get_month_data(2000, 1)
         data = Data.filter_directions(base_data, [1])
         expects = [
-            "給与",
-            "現金収入",
-            "銀行収入",
-            "PayPayチャージ",
-            "立替分1",
-            "立替分2"
+            '給与',
+            '現金収入',
+            '銀行収入',
+            'PayPayチャージ',
+            '立替分1',
+            '立替分2'
         ]
         self._assert_list(data, expects)
 
@@ -595,13 +595,13 @@ class DataTestCase(BaseTestCase):
         base_data = Data.get_month_data(2000, 1)
         data = Data.filter_methods(base_data, [1, 3])
         expects = [
-            "コンビニ",
-            "その他1",
-            "必需品2",
-            "現金収入",
-            "スーパー",
-            "PayPayチャージ",
-            "立替分1",
+            'コンビニ',
+            'その他1',
+            '必需品2',
+            '現金収入',
+            'スーパー',
+            'PayPayチャージ',
+            '立替分1',
         ]
         self._assert_list(data, expects)
 
@@ -619,9 +619,9 @@ class DataTestCase(BaseTestCase):
         base_data = Data.get_month_data(2000, 1)
         data = Data.filter_categories(base_data, [1])
         expects = [
-            "コンビニ",
-            "スーパー",
-            "立替分1"
+            'コンビニ',
+            'スーパー',
+            '立替分1'
         ]
         self._assert_list(data, expects)
 
@@ -639,8 +639,8 @@ class DataTestCase(BaseTestCase):
         base_data = Data.get_month_data(2000, 1)
         data = Data.filter_temps(base_data, [True])
         expects = [
-            "立替分1",
-            "立替分2"
+            '立替分1',
+            '立替分2'
         ]
         self._assert_list(data, expects)
 
@@ -658,12 +658,12 @@ class DataTestCase(BaseTestCase):
         base_data = Data.get_month_data(2000, 1)
         data = Data.filter_checkeds(base_data, [False])
         expects = [
-            "必需品1",
-            "スーパー",
-            "計算外",
-            "貯金",
-            "PayPayチャージ",
-            "立替分1"
+            '必需品1',
+            'スーパー',
+            '計算外',
+            '貯金',
+            'PayPayチャージ',
+            '立替分1'
         ]
         self._assert_list(data, expects)
 
@@ -692,10 +692,10 @@ class CheckedDateTestCase(BaseTestCase):
 class CreditCheckedDateTestCase(BaseTestCase):
     def test_get_all(self):
         data = CreditCheckedDate.get_all()
-        self.assertEqual(data[0].name, "AmexGold")
+        self.assertEqual(data[0].name, 'AmexGold')
         self.assertEqual(data[0].date, date(2000, 2, 4))
         self.assertEqual(data[0].price, 2000)
-        self.assertEqual(data[1].name, "センチュリオン")
+        self.assertEqual(data[1].name, 'センチュリオン')
         self.assertEqual(data[1].date, date(3000, 1, 1))
         self.assertEqual(data[1].price, 30000)
 
@@ -709,22 +709,22 @@ class CreditCheckedDateTestCase(BaseTestCase):
     def test_set_date(self):
         CreditCheckedDate.set_date(2, date(2001, 1, 2))
         data = CreditCheckedDate.get_all()
-        self.assertEqual(data[0].name, "AmexGold")
+        self.assertEqual(data[0].name, 'AmexGold')
         self.assertEqual(data[0].date, date(2001, 1, 2))
 
     def test_set_price(self):
         CreditCheckedDate.set_price(2, 2001)
         data = CreditCheckedDate.get_all()
-        self.assertEqual(data[0].name, "AmexGold")
+        self.assertEqual(data[0].name, 'AmexGold')
         self.assertEqual(data[0].price, 2001)
 
 
 class BankBalanceTestCase(BaseTestCase):
     def test_get_all(self):
         data = BankBalance.get_all()
-        self.assertEqual(data[0].name, "三井住友")
+        self.assertEqual(data[0].name, '三井住友')
         self.assertEqual(data[0].price, 20000)
-        self.assertEqual(data[1].name, "みずほ")
+        self.assertEqual(data[1].name, 'みずほ')
         self.assertEqual(data[1].price, 40000)
 
     def test_get_price(self):
@@ -737,7 +737,7 @@ class BankBalanceTestCase(BaseTestCase):
     def test_set(self):
         BankBalance.set(2, 10001)
         data = BankBalance.get_all()
-        self.assertEqual(data[0].name, "三井住友")
+        self.assertEqual(data[0].name, '三井住友')
         self.assertEqual(data[0].price, 10001)
 
 
@@ -746,7 +746,7 @@ class SeveralCostsTestCase(BaseTestCase):
         self.assertEqual(SeveralCosts.get_living_cost_mark(), 1000)
 
     def test_get_living_cost_mark_nothing(self):
-        SeveralCosts.objects.get(name="LivingCostMark").delete()
+        SeveralCosts.objects.get(name='LivingCostMark').delete()
         self.assertEqual(SeveralCosts.get_living_cost_mark(), 0)
 
     def test_set_living_cost_mark(self):
@@ -754,7 +754,7 @@ class SeveralCostsTestCase(BaseTestCase):
         self.assertEqual(SeveralCosts.get_living_cost_mark(), 1001)
 
     def test_set_living_cost_mark_nothing(self):
-        SeveralCosts.objects.get(name="LivingCostMark").delete()
+        SeveralCosts.objects.get(name='LivingCostMark').delete()
         SeveralCosts.set_living_cost_mark(1001)
         self.assertEqual(SeveralCosts.get_living_cost_mark(), 1001)
 
@@ -762,7 +762,7 @@ class SeveralCostsTestCase(BaseTestCase):
         self.assertEqual(SeveralCosts.get_actual_cash_balance(), 2000)
 
     def test_get_actual_cash_balance_nothing(self):
-        SeveralCosts.objects.get(name="ActualCashBalance").delete()
+        SeveralCosts.objects.get(name='ActualCashBalance').delete()
         self.assertEqual(SeveralCosts.get_actual_cash_balance(), 0)
 
     def test_set_actual_cash_balance(self):
@@ -770,6 +770,6 @@ class SeveralCostsTestCase(BaseTestCase):
         self.assertEqual(SeveralCosts.get_actual_cash_balance(), 2001)
 
     def test_set_actual_cash_balance_nothing(self):
-        SeveralCosts.objects.get(name="ActualCashBalance").delete()
+        SeveralCosts.objects.get(name='ActualCashBalance').delete()
         SeveralCosts.set_actual_cash_balance(2001)
         self.assertEqual(SeveralCosts.get_actual_cash_balance(), 2001)

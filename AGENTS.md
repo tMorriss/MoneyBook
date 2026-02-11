@@ -50,6 +50,9 @@
 - **Selenium**: E2Eテスト（ブラウザ自動化）
 - **Coverage.py**: コードカバレッジ測定
 - **Flake8**: コード品質チェック（リンター）
+  - **flake8-quotes**: クオートスタイルチェック（シングルクオート強制）
+  - **flake8-import-order**: インポート順序チェック
+  - **pep8-naming**: 命名規則チェック
 - **python-dateutil**: 日付処理ユーティリティ
 
 ### DevOps
@@ -74,7 +77,7 @@ MoneyBook/
 │   ├── urls.py                # メインURLルーティング
 │   └── wsgi.py                # WSGIアプリケーションエントリーポイント
 ├── moneybook/                   # メインDjangoアプリ
-│   ├── models.py              # データベースモデル
+│   ├── models/                # データベースモデル（1モデル1ファイル）
 │   ├── views/                 # ビューハンドラー（10個の専門化されたビュー）
 │   ├── forms.py               # フォーム定義
 │   ├── urls.py                # URLパターン
@@ -122,7 +125,7 @@ MoneyBook/
 | ディレクトリ | 目的 |
 |-----------|---------|
 | `config/settings/` | 環境別のDjango設定（開発、本番、テスト） |
-| `moneybook/models.py` | データベースモデル定義（Direction, Method, Category, Data, FixedCostなど） |
+| `moneybook/models/` | データベースモデル定義（Direction, Method, Category, Dataなど） |
 | `moneybook/views/` | ビューロジック（10個のモジュールに分割） |
 | `moneybook/templates/` | Djangoテンプレート（ベースレイアウト、フォーム、データテーブル、チャート） |
 | `moneybook/static/` | クライアント側アセット（CSS、JS、画像） |
@@ -137,7 +140,7 @@ MoneyBook/
 
 ## 主要コンポーネント
 
-### データベースモデル（`models.py`）
+### データベースモデル（`models/`）
 
 MoneyBookの中核となるデータモデル：
 
@@ -229,6 +232,9 @@ flake8 . --count --ignore=E722,W503 --max-line-length=140 \
 - 最大行長: 140文字
 - 除外: マイグレーション、`__init__.py`
 - インポート順序スタイル: smarkets
+- **クオートスタイル**: `flake8-quotes`により、シングルクオート `'...'` を強制
+  - 文字列内にシングルクオートが含まれる場合のみダブルクオート `"..."` を使用（エスケープ回避のため）
+  - docstringは常にダブルクオート `"""..."""` を使用（PEP 257に準拠）
 
 ### 単体テスト
 
@@ -280,7 +286,12 @@ $env:HEADLESS="0"; python manage.py test moneybook.e2e --settings config.setting
    - 標準ライブラリ
    - サードパーティライブラリ
    - ローカルアプリケーション
-4. **例外処理**: bare exceptは避ける（E722は特定箇所で許可）
+4. **文字リテラル**: 
+   - **原則**: シングルクオート `'...'` を使用
+   - **例外**: 文字列内にシングルクオートが含まれる場合はダブルクオート `"..."` を使用（エスケープ回避のため）
+   - **docstring**: 常にダブルクオート `"""..."""` を使用（PEP 257に準拠）
+   - `flake8-quotes`プラグインにより自動チェック（`.flake8`に`inline-quotes = single`を設定）
+5. **例外処理**: bare exceptは避ける（E722は特定箇所で許可）
 
 ### Djangoベストプラクティス
 
