@@ -51,7 +51,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        test-module: [index, add, login]
+        test-module: [index, add, login, delete, edit, period_balances, search, statistics, tools]
     env:
       TEST_MODULE: ${{ matrix.test-module }}
     steps:
