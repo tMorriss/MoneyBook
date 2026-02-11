@@ -2,6 +2,7 @@ import calendar
 import json
 from datetime import date, datetime
 
+from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render
@@ -15,7 +16,6 @@ class PeriodicListView(View):
     def get(self, request, *args, **kwargs):
         now = datetime.now()
         # 来月を計算
-        from dateutil.relativedelta import relativedelta
         next_month = now + relativedelta(months=1)
 
         context = {

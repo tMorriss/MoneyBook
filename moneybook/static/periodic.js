@@ -72,9 +72,8 @@ $(document).ready(function() {
                     periodic_id: pd.id
                 }),
                 success: function(response) {
-                    const res = JSON.parse(response);
-                    $('#progress_log .progress-item:last').append(` ✓ ${res.message}`);
-                    
+                    $('#progress_log .progress-item:last').append(` ✓ ${response.message}`);
+
                     index++;
                     setTimeout(addNext, 100); // 少し間隔を空けて次へ
                 },
