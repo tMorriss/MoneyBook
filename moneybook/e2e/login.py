@@ -1,5 +1,5 @@
 from django.urls import reverse
-from moneybook.selenium.base import SeleniumBase
+from moneybook.e2e.base import SeleniumBase
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 
