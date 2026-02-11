@@ -83,7 +83,7 @@ MoneyBook/
 │   ├── templates/             # HTMLテンプレート
 │   ├── static/                # CSS、JS、画像
 │   ├── migrations/            # DBスキーママイグレーション
-│   ├── tests/                 # テストスイート
+│   ├── tests/                 # ユニットテスト
 │   ├── e2e/                   # E2Eテスト（Selenium）
 │   ├── fixtures/              # テストデータ
 │   ├── admin.py               # Django管理画面設定
@@ -316,6 +316,8 @@ HEADLESS=0 python manage.py test moneybook.e2e --settings config.settings.test
 $env:HEADLESS="0"; python manage.py test moneybook.e2e --settings config.settings.test
 ```
 
+**重要**: `moneybook/e2e/` ディレクトリに新しいテストファイルを追加した場合、GitHub Actionsのワークフロー (`.github/workflows/python-lint-test.yml`) のe2eジョブのmatrixも更新する必要があります。詳細は「[エージェント向け注意事項 > コード変更時の推奨手順 > E2Eテストファイル追加時の手順](#エージェント向け注意事項)」を参照してください。
+
 ---
 
 ## コーディング規約
@@ -371,6 +373,12 @@ docker run -p 8000:8000 moneybook:latest
 
 - **Jenkins**: `build/jenkins.sh`スクリプトでビルド・テスト・デプロイを自動化
 - **GitHub Actions**: `.github/workflows/`でワークフロー定義
+  - `python-lint-test.yml`: Pull Request時に自動実行
+    - **lint**: Flake8によるコード品質チェック
+    - **unittest**: カバレッジ付き単体テスト
+    - **e2e**: E2Eテスト（matrix戦略でテストモジュール別に並列実行）
+      - 現在のテストモジュール: `index`, `add`, `login`
+      - ⚠️ 新規e2eテストファイル追加時は、matrixを更新してCI上で実行されるようにすること
 
 ---
 
@@ -390,27 +398,39 @@ docker run -p 8000:8000 moneybook:latest
    - 関連する単体テストを実行
    - 必要に応じてE2Eテストを実行
 
-4. **マイグレーション**
+4. **E2Eテストファイル追加時の手順**
+   - `moneybook/e2e/` ディレクトリに新しいテストファイル（例: `edit.py`）を追加した場合
+   - **必ず** `.github/workflows/python-lint-test.yml` のe2eジョブのmatrixを更新する
+   - 具体的には、以下の箇所に新しいテストモジュール名を追加：
+     ```yaml
+     strategy:
+       matrix:
+         test-module: [index, add, login, edit]  # 新規モジュール名を追加
+     ```
+   - これにより、CI上でも新しいe2eテストが自動実行される
+   - ⚠️ この更新を忘れると、新しいe2eテストがCI上で実行されないため注意
+
+5. **マイグレーション**
    - モデル変更時は`makemigrations`を実行
    - マイグレーションファイルをレビュー
 
-5. **ブランチの最新化（必須）**
+6. **ブランチの最新化（必須）**
    - **git pushする前に、必ずPRのマージ先ブランチを取り込んで最新化すること**
    - マージ先ブランチ（通常は`master`または`main`）の最新変更を取り込む
    - コンフリクトがある場合は解決してからpushする
    - 例: `git fetch origin && git merge origin/master` または `git pull origin master`
 
-6. **コミット**
+7. **コミット**
    - 小さな単位でコミット
    - 日本語のコミットメッセージ
 
-7. **PRのタイトルと説明**
+8. **PRのタイトルと説明**
    - PRのタイトルやコメント（説明）は、直近の修正のみではなく、このPRでの修正すべてを含んだものにする
    - PR全体の目的と変更内容を網羅的に記載する
    - 個別のコミットメッセージは各変更の詳細を記載し、PRの説明は全体のサマリーとする
    - アプリケーション本体の本番環境に影響がないとき（ドキュメント更新、テストのみの変更など）はPRタイトルに`[skip ci]`を付ける
 
-8. **AGENTS.mdの更新**
+9. **AGENTS.mdの更新**
    - 修正結果に応じて、このAGENTS.mdドキュメント自体の更新が必要か確認する
    - 新しいディレクトリ、ファイル、技術スタック、開発手順などを追加した場合は、AGENTS.mdに反映する
    - ドキュメントがリポジトリの実態と常に同期するよう維持する
