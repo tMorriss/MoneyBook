@@ -1,12 +1,25 @@
 import os
 import time
 
-import chromedriver_binary  # noqa: F401
+try:
+    import chromedriver_binary  # noqa: F401
+    USE_CHROMEDRIVER_BINARY = True
+except ImportError:
+    USE_CHROMEDRIVER_BINARY = False
+
 from django.contrib.auth.models import User
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.urls import reverse
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+
+if not USE_CHROMEDRIVER_BINARY:
+    try:
+        from selenium.webdriver.chrome.service import Service
+        from webdriver_manager.chrome import ChromeDriverManager
+        USE_WEBDRIVER_MANAGER = True
+    except ImportError:
+        USE_WEBDRIVER_MANAGER = False
 
 
 class SeleniumBase(StaticLiveServerTestCase):
@@ -24,7 +37,14 @@ class SeleniumBase(StaticLiveServerTestCase):
             options.add_argument('--headless')
         options.add_argument('--window-size=1920,1080')
         options.add_argument('--no-sandbox')
-        self.driver = webdriver.Chrome(options=options)
+        options.add_argument('--disable-dev-shm-usage')
+
+        if not USE_CHROMEDRIVER_BINARY and USE_WEBDRIVER_MANAGER:
+            service = Service(ChromeDriverManager().install())
+            self.driver = webdriver.Chrome(service=service, options=options)
+        else:
+            self.driver = webdriver.Chrome(options=options)
+
         self.driver.implicitly_wait(10)
 
     def tearDown(self):
