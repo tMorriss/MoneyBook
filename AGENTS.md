@@ -74,7 +74,7 @@ MoneyBook/
 │   ├── urls.py                # メインURLルーティング
 │   └── wsgi.py                # WSGIアプリケーションエントリーポイント
 ├── moneybook/                   # メインDjangoアプリ
-│   ├── models.py              # データベースモデル
+│   ├── models/                # データベースモデル（1モデル1ファイル）
 │   ├── views/                 # ビューハンドラー（10個の専門化されたビュー）
 │   ├── forms.py               # フォーム定義
 │   ├── urls.py                # URLパターン
@@ -122,7 +122,7 @@ MoneyBook/
 | ディレクトリ | 目的 |
 |-----------|---------|
 | `config/settings/` | 環境別のDjango設定（開発、本番、テスト） |
-| `moneybook/models.py` | データベースモデル定義（Direction, Method, Category, Data, FixedCostなど） |
+| `moneybook/models/` | データベースモデル定義（Direction, Method, Category, Dataなど） |
 | `moneybook/views/` | ビューロジック（10個のモジュールに分割） |
 | `moneybook/templates/` | Djangoテンプレート（ベースレイアウト、フォーム、データテーブル、チャート） |
 | `moneybook/static/` | クライアント側アセット（CSS、JS、画像） |
@@ -137,7 +137,7 @@ MoneyBook/
 
 ## 主要コンポーネント
 
-### データベースモデル（`models.py`）
+### データベースモデル（`models/`）
 
 MoneyBookの中核となるデータモデル：
 
@@ -280,6 +280,7 @@ $env:HEADLESS="0"; python manage.py test moneybook.e2e --settings config.setting
    - 標準ライブラリ
    - サードパーティライブラリ
    - ローカルアプリケーション
+4. **文字リテラル**: 原則シングルクオート `'...'` を使用
 4. **例外処理**: bare exceptは避ける（E722は特定箇所で許可）
 
 ### Djangoベストプラクティス
