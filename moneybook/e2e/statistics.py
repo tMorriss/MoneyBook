@@ -8,7 +8,7 @@ from selenium.webdriver.common.by import By
 
 class Statistics(SeleniumBase):
     def test_get(self):
-        '''統計画面が正しく表示されることを確認'''
+        """統計画面が正しく表示されることを確認"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:statistics'))
 
@@ -23,7 +23,7 @@ class Statistics(SeleniumBase):
         self.assertTrue(self.driver.find_element(By.XPATH, '//table').is_displayed())
 
     def test_statistics_table_structure(self):
-        '''統計テーブルの構造が正しいことを確認'''
+        """統計テーブルの構造が正しいことを確認"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:statistics'))
 
@@ -36,7 +36,7 @@ class Statistics(SeleniumBase):
         self.assertEqual(len(rows), 12)
 
     def test_statistics_with_data(self):
-        '''データがある状態で統計画面を表示して集計が反映されることを確認'''
+        """データがある状態で統計画面を表示して集計が反映されることを確認"""
         self._login()
         now = datetime.now()
 
@@ -57,14 +57,14 @@ class Statistics(SeleniumBase):
         current_month_row = None
         for row in rows:
             first_cell = row.find_element(By.TAG_NAME, 'th')
-            if first_cell.text == f"{now.month}月":
+            if first_cell.text == f'{now.month}月':
                 current_month_row = row
                 break
 
         self.assertIsNotNone(current_month_row)
 
     def test_statistics_year_navigation(self):
-        '''年の選択ができることを確認'''
+        """年の選択ができることを確認"""
         self._login()
         now = datetime.now()
 
@@ -85,7 +85,7 @@ class Statistics(SeleniumBase):
         self.assertIn(str(now.year - 1), year_element.text)
 
     def test_statistics_specific_year(self):
-        '''特定の年の統計画面に直接アクセスできることを確認'''
+        """特定の年の統計画面に直接アクセスできることを確認"""
         self._login()
         target_year = 2020
 
@@ -97,7 +97,7 @@ class Statistics(SeleniumBase):
         self.assertIn(str(target_year), year_element.text)
 
     def test_statistics_multiple_months_data(self):
-        '''複数月にデータがある場合の統計を確認'''
+        """複数月にデータがある場合の統計を確認"""
         self._login()
         now = datetime.now()
 
@@ -132,7 +132,7 @@ class Statistics(SeleniumBase):
         self.assertEqual(len(rows), 12)
 
     def test_statistics_food_cost(self):
-        '''食費が正しく集計されることを確認'''
+        """食費が正しく集計されることを確認"""
         self._login()
         now = datetime.now()
 
@@ -157,14 +157,14 @@ class Statistics(SeleniumBase):
         # 当月の食費データが含まれていることを確認
         current_month_data = None
         for item in food_costs_items:
-            if f"{now.month}月" in item.text:
+            if f'{now.month}月' in item.text:
                 current_month_data = item.text
                 break
         self.assertIsNotNone(current_month_data)
-        self.assertIn("1500", current_month_data)
+        self.assertIn('1500', current_month_data)
 
     def test_statistics_living_cost(self):
-        '''生活費が正しく集計されることを確認'''
+        """生活費が正しく集計されることを確認"""
         self._login()
         now = datetime.now()
 
@@ -189,14 +189,14 @@ class Statistics(SeleniumBase):
         # 当月の生活費データが含まれていることを確認
         current_month_data = None
         for item in living_costs_items:
-            if f"{now.month}月" in item.text:
+            if f'{now.month}月' in item.text:
                 current_month_data = item.text
                 break
         self.assertIsNotNone(current_month_data)
-        self.assertIn("2000", current_month_data)
+        self.assertIn('2000', current_month_data)
 
     def test_statistics_link_from_taskbar(self):
-        '''タスクバーから統計画面に遷移できることを確認'''
+        """タスクバーから統計画面に遷移できることを確認"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:index'))
 

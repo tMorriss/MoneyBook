@@ -8,7 +8,7 @@ from selenium.webdriver.common.keys import Keys
 
 class Tools(SeleniumBase):
     def test_get(self):
-        '''ツール画面が正しく表示されることを確認'''
+        """ツール画面が正しく表示されることを確認"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:tools'))
 
@@ -18,7 +18,7 @@ class Tools(SeleniumBase):
         self.assertTrue(self.driver.find_element(By.TAG_NAME, 'h2').is_displayed())
 
     def test_actual_cash_section(self):
-        '''実際の現金残高セクションが表示されることを確認'''
+        """実際の現金残高セクションが表示されることを確認"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:tools'))
 
@@ -26,7 +26,7 @@ class Tools(SeleniumBase):
         self.assertTrue(self.driver.find_element(By.ID, 'actual_cash').is_displayed())
 
     def test_update_actual_cash(self):
-        '''実際の現金残高を更新できることを確認'''
+        """実際の現金残高を更新できることを確認"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:tools'))
 
@@ -45,7 +45,7 @@ class Tools(SeleniumBase):
         self.assertEqual(actual_cash_value, '5000')
 
     def test_update_actual_cash_enter(self):
-        '''Enterキーで実際の現金残高を更新できることを確認'''
+        """Enterキーで実際の現金残高を更新できることを確認"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:tools'))
 
@@ -62,7 +62,7 @@ class Tools(SeleniumBase):
         self.assertEqual(actual_cash_value, '10000')
 
     def test_checked_date_section(self):
-        '''チェック日セクションが表示されることを確認'''
+        """チェック日セクションが表示されることを確認"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:tools'))
 
@@ -71,7 +71,7 @@ class Tools(SeleniumBase):
         self.assertTrue(checked_date_table.is_displayed())
 
     def test_update_checked_date(self):
-        '''チェック日を更新できることを確認'''
+        """チェック日を更新できることを確認"""
         self._login()
 
         self._location(self.live_server_url + reverse('moneybook:tools'))
@@ -84,7 +84,7 @@ class Tools(SeleniumBase):
         # チェック日を変更する処理
 
     def test_now_bank_section(self):
-        '''銀行残高セクションが表示されることを確認'''
+        """銀行残高セクションが表示されることを確認"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:tools'))
 
@@ -94,7 +94,7 @@ class Tools(SeleniumBase):
         self.assertIn('銀行', page_source)
 
     def test_living_cost_mark_section(self):
-        '''生活費目標額セクションが表示されることを確認'''
+        """生活費目標額セクションが表示されることを確認"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:tools'))
 
@@ -103,7 +103,7 @@ class Tools(SeleniumBase):
         self.assertTrue(living_cost_input.is_displayed())
 
     def test_update_living_cost_mark(self):
-        '''生活費目標額を更新できることを確認'''
+        """生活費目標額を更新できることを確認"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:tools'))
 
@@ -122,7 +122,7 @@ class Tools(SeleniumBase):
         self.assertEqual(living_cost_value, '30000')
 
     def test_update_living_cost_mark_enter(self):
-        '''Enterキーで生活費目標額を更新できることを確認'''
+        """Enterキーで生活費目標額を更新できることを確認"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:tools'))
 
@@ -139,7 +139,7 @@ class Tools(SeleniumBase):
         self.assertEqual(living_cost_value, '40000')
 
     def test_unchecked_data_section(self):
-        '''未チェックデータセクションが表示されることを確認'''
+        """未チェックデータセクションが表示されることを確認"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:tools'))
 
@@ -148,7 +148,7 @@ class Tools(SeleniumBase):
         self.assertIn('未チェック', page_source)
 
     def test_link_from_taskbar(self):
-        '''タスクバーからツール画面に遷移できることを確認'''
+        """タスクバーからツール画面に遷移できることを確認"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:index'))
 
@@ -168,7 +168,7 @@ class Tools(SeleniumBase):
         self.assertEqual(self.driver.current_url, self.live_server_url + reverse('moneybook:tools'))
 
     def test_cash_balance_display(self):
-        '''現金残高が正しく表示されることを確認'''
+        """現金残高が正しく表示されることを確認"""
         self._login()
         # データを追加
         self._location(self.live_server_url + reverse('moneybook:index'))
@@ -187,7 +187,7 @@ class Tools(SeleniumBase):
         self.assertIn('現金残高', page_source)
 
     def test_multiple_updates(self):
-        '''複数の値を連続して更新できることを確認'''
+        """複数の値を連続して更新できることを確認"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:tools'))
 

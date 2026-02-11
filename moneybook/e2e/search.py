@@ -9,7 +9,7 @@ from selenium.webdriver.common.keys import Keys
 
 class Search(SeleniumBase):
     def test_get(self):
-        '''検索画面が正しく表示されることを確認'''
+        """検索画面が正しく表示されることを確認"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:search'))
 
@@ -27,7 +27,7 @@ class Search(SeleniumBase):
         self.assertTrue(self.driver.find_element(By.ID, 'upper_price').is_displayed())
 
     def test_search_by_item(self):
-        '''項目名で検索できることを確認'''
+        """項目名で検索できることを確認"""
         self._login()
         # テストデータを追加
         self._location(self.live_server_url + reverse('moneybook:index'))
@@ -58,7 +58,7 @@ class Search(SeleniumBase):
         self.assertEqual(tds[1].text, '検索テスト1')
 
     def test_search_by_date_range(self):
-        '''日付範囲で検索できることを確認'''
+        """日付範囲で検索できることを確認"""
         self._login()
         now = datetime.now()
 
@@ -106,7 +106,7 @@ class Search(SeleniumBase):
         self.assertEqual(tds[1].text, '15日のデータ')
 
     def test_search_by_price_range(self):
-        '''金額範囲で検索できることを確認'''
+        """金額範囲で検索できることを確認"""
         self._login()
         # テストデータを追加
         self._location(self.live_server_url + reverse('moneybook:index'))
@@ -144,7 +144,7 @@ class Search(SeleniumBase):
         self.assertEqual(tds[1].text, '中間のデータ')
 
     def test_search_by_method(self):
-        '''支払い方法で検索できることを確認'''
+        """支払い方法で検索できることを確認"""
         self._login()
         # テストデータを追加（銀行）
         self._location(self.live_server_url + reverse('moneybook:index'))
@@ -178,7 +178,7 @@ class Search(SeleniumBase):
         self.assertEqual(tds[1].text, '銀行データ')
 
     def test_search_by_category(self):
-        '''カテゴリーで検索できることを確認'''
+        """カテゴリーで検索できることを確認"""
         self._login()
         # テストデータを追加（食費）
         self._location(self.live_server_url + reverse('moneybook:index'))
@@ -212,7 +212,7 @@ class Search(SeleniumBase):
         self.assertEqual(tds[1].text, '食費データ')
 
     def test_search_combined_conditions(self):
-        '''複数の条件を組み合わせて検索できることを確認'''
+        """複数の条件を組み合わせて検索できることを確認"""
         self._login()
 
         # テストデータを追加
@@ -250,7 +250,7 @@ class Search(SeleniumBase):
         self.assertEqual(tds[1].text, 'スーパー買い物')
 
     def test_search_button_enter(self):
-        '''Enterキーで検索できることを確認'''
+        """Enterキーで検索できることを確認"""
         self._login()
         # テストデータを追加
         self._location(self.live_server_url + reverse('moneybook:index'))
@@ -276,7 +276,7 @@ class Search(SeleniumBase):
         self.assertEqual(tds[1].text, 'Enterテスト')
 
     def test_search_no_results(self):
-        '''検索結果が0件の場合の表示を確認'''
+        """検索結果が0件の場合の表示を確認"""
         self._login()
         # 検索画面に移動
         self._location(self.live_server_url + reverse('moneybook:search'))
@@ -291,7 +291,7 @@ class Search(SeleniumBase):
         self.assertEqual(len(rows), 1)  # ヘッダーのみ
 
     def test_search_result_link_to_edit(self):
-        '''検索結果から編集画面に遷移できることを確認'''
+        """検索結果から編集画面に遷移できることを確認"""
         self._login()
         # テストデータを追加
         self._location(self.live_server_url + reverse('moneybook:index'))

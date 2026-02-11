@@ -9,7 +9,7 @@ from selenium.webdriver.common.keys import Keys
 
 class Edit(SeleniumBase):
     def test_get(self):
-        '''編集画面が正しく表示されることを確認'''
+        """編集画面が正しく表示されることを確認"""
         self._login()
         # まずデータを追加
         self._location(self.live_server_url + reverse('moneybook:index'))
@@ -45,7 +45,7 @@ class Edit(SeleniumBase):
         self.assertEqual(category_selected.get_attribute('value'), '1')  # 食費
 
     def test_edit_item(self):
-        '''項目名を編集できることを確認'''
+        """項目名を編集できることを確認"""
         self._login()
         # データを追加
         self._location(self.live_server_url + reverse('moneybook:index'))
@@ -73,7 +73,7 @@ class Edit(SeleniumBase):
         self.assertEqual(tds[1].text, '編集後')
 
     def test_edit_price(self):
-        '''金額を編集できることを確認'''
+        """金額を編集できることを確認"""
         self._login()
         # データを追加
         self._location(self.live_server_url + reverse('moneybook:index'))
@@ -101,7 +101,7 @@ class Edit(SeleniumBase):
         self.assertEqual(tds[2].text, '5,000')
 
     def test_edit_date(self):
-        '''日付を編集できることを確認'''
+        """日付を編集できることを確認"""
         self._login()
         # データを追加
         self._location(self.live_server_url + reverse('moneybook:index'))
@@ -127,10 +127,10 @@ class Edit(SeleniumBase):
         self._location(self.live_server_url + reverse('moneybook:index'))
         rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[0].text, f"{now.year}/{str(now.month).zfill(2)}/15")
+        self.assertEqual(tds[0].text, f'{now.year}/{str(now.month).zfill(2)}/15')
 
     def test_edit_method(self):
-        '''支払い方法を編集できることを確認'''
+        """支払い方法を編集できることを確認"""
         self._login()
         # データを追加（銀行で登録）
         self._location(self.live_server_url + reverse('moneybook:index'))
@@ -157,7 +157,7 @@ class Edit(SeleniumBase):
         self.assertEqual(tds[3].text, '現金')
 
     def test_edit_category(self):
-        '''カテゴリーを編集できることを確認'''
+        """カテゴリーを編集できることを確認"""
         self._login()
         # データを追加（食費で登録）
         self._location(self.live_server_url + reverse('moneybook:index'))
@@ -184,7 +184,7 @@ class Edit(SeleniumBase):
         self.assertEqual(tds[4].text, '必需品')
 
     def test_edit_formula_price(self):
-        '''編集画面で金額入力欄に数式を入力できることを確認'''
+        """編集画面で金額入力欄に数式を入力できることを確認"""
         self._login()
         # データを追加
         self._location(self.live_server_url + reverse('moneybook:index'))
@@ -212,7 +212,7 @@ class Edit(SeleniumBase):
         self.assertEqual(tds[2].text, '1,000')
 
     def test_edit_enter_date(self):
-        '''日付入力欄でEnterキーを押すと更新されることを確認'''
+        """日付入力欄でEnterキーを押すと更新されることを確認"""
         self._login()
         # データを追加
         self._location(self.live_server_url + reverse('moneybook:index'))
@@ -238,10 +238,10 @@ class Edit(SeleniumBase):
         self._location(self.live_server_url + reverse('moneybook:index'))
         rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[0].text, f"{now.year}/{str(now.month).zfill(2)}/20")
+        self.assertEqual(tds[0].text, f'{now.year}/{str(now.month).zfill(2)}/20')
 
     def test_edit_enter_item(self):
-        '''項目入力欄でEnterキーを押すと更新されることを確認'''
+        """項目入力欄でEnterキーを押すと更新されることを確認"""
         self._login()
         # データを追加
         self._location(self.live_server_url + reverse('moneybook:index'))
@@ -269,7 +269,7 @@ class Edit(SeleniumBase):
         self.assertEqual(tds[1].text, 'Enter項目後')
 
     def test_edit_enter_price(self):
-        '''金額入力欄でEnterキーを押すと更新されることを確認'''
+        """金額入力欄でEnterキーを押すと更新されることを確認"""
         self._login()
         # データを追加
         self._location(self.live_server_url + reverse('moneybook:index'))
@@ -297,7 +297,7 @@ class Edit(SeleniumBase):
         self.assertEqual(tds[2].text, '8,000')
 
     def test_edit_invalid_pk(self):
-        '''存在しないIDで編集画面にアクセスするとトップにリダイレクトされることを確認'''
+        """存在しないIDで編集画面にアクセスするとトップにリダイレクトされることを確認"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:edit', kwargs={'pk': 999999}))
         time.sleep(1)

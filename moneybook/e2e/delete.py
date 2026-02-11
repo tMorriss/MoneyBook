@@ -7,7 +7,7 @@ from selenium.webdriver.common.by import By
 
 class Delete(SeleniumBase):
     def test_delete_from_edit_page(self):
-        '''編集画面から削除できることを確認'''
+        """編集画面から削除できることを確認"""
         self._login()
         # データを追加
         self._location(self.live_server_url + reverse('moneybook:index'))
@@ -41,7 +41,7 @@ class Delete(SeleniumBase):
         self.assertEqual(len(rows), 1)  # ヘッダーのみ
 
     def test_delete_cancel(self):
-        '''削除確認ダイアログでキャンセルすると削除されないことを確認'''
+        """削除確認ダイアログでキャンセルすると削除されないことを確認"""
         self._login()
         # データを追加
         self._location(self.live_server_url + reverse('moneybook:index'))
@@ -76,7 +76,7 @@ class Delete(SeleniumBase):
         self.assertEqual(tds[1].text, 'キャンセルテスト')
 
     def test_delete_multiple_data(self):
-        '''複数のデータのうち1件だけ削除できることを確認'''
+        """複数のデータのうち1件だけ削除できることを確認"""
         self._login()
         # データを2件追加
         self._location(self.live_server_url + reverse('moneybook:index'))

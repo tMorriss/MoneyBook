@@ -9,7 +9,7 @@ from selenium.webdriver.common.keys import Keys
 
 class PeriodBalances(SeleniumBase):
     def test_get(self):
-        '''期間残高画面が正しく表示されることを確認'''
+        """期間残高画面が正しく表示されることを確認"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:period_balances'))
 
@@ -22,7 +22,7 @@ class PeriodBalances(SeleniumBase):
         self.assertTrue(self.driver.find_element(By.ID, 'end_month').is_displayed())
 
     def test_default_period(self):
-        '''デフォルトの期間が表示されることを確認'''
+        """デフォルトの期間が表示されることを確認"""
         self._login()
         now = datetime.now()
 
@@ -41,7 +41,7 @@ class PeriodBalances(SeleniumBase):
         self.assertEqual(end_month, str(now.month))
 
     def test_display_button(self):
-        '''更新ボタンをクリックしてグラフが表示されることを確認'''
+        """更新ボタンをクリックしてグラフが表示されることを確認"""
         self._login()
 
         # 期間残高画面に移動
@@ -56,7 +56,7 @@ class PeriodBalances(SeleniumBase):
         self.assertTrue(graph_container.is_displayed())
 
     def test_change_period(self):
-        '''期間を変更して表示できることを確認'''
+        """期間を変更して表示できることを確認"""
         self._login()
         now = datetime.now()
 
@@ -85,7 +85,7 @@ class PeriodBalances(SeleniumBase):
         self.assertEqual(self.driver.find_element(By.ID, 'start_month').get_attribute('value'), '1')
 
     def test_enter_year(self):
-        '''年入力欄でEnterキーを押すと表示されることを確認'''
+        """年入力欄でEnterキーを押すと表示されることを確認"""
         self._login()
         now = datetime.now()
 
@@ -104,7 +104,7 @@ class PeriodBalances(SeleniumBase):
         self.assertTrue(graph_container.is_displayed())
 
     def test_enter_month(self):
-        '''月入力欄でEnterキーを押すと表示されることを確認'''
+        """月入力欄でEnterキーを押すと表示されることを確認"""
         self._login()
 
         # 期間残高画面に移動
@@ -122,7 +122,7 @@ class PeriodBalances(SeleniumBase):
         self.assertTrue(graph_container.is_displayed())
 
     def test_with_data(self):
-        '''データがある状態で期間残高を表示できることを確認'''
+        """データがある状態で期間残高を表示できることを確認"""
         self._login()
 
         # テストデータを追加
@@ -145,7 +145,7 @@ class PeriodBalances(SeleniumBase):
         self.assertTrue(graph_container.is_displayed())
 
     def test_single_month_period(self):
-        '''1ヶ月だけの期間を指定して表示できることを確認'''
+        """1ヶ月だけの期間を指定して表示できることを確認"""
         self._login()
         now = datetime.now()
 
@@ -178,7 +178,7 @@ class PeriodBalances(SeleniumBase):
         self.assertTrue(graph_container.is_displayed())
 
     def test_multiple_year_period(self):
-        '''複数年にまたがる期間を指定して表示できることを確認'''
+        """複数年にまたがる期間を指定して表示できることを確認"""
         self._login()
         now = datetime.now()
 
@@ -203,13 +203,13 @@ class PeriodBalances(SeleniumBase):
         self.assertTrue(graph_container.is_displayed())
 
     def test_period_with_params(self):
-        '''URLパラメータで期間を指定して表示できることを確認'''
+        """URLパラメータで期間を指定して表示できることを確認"""
         self._login()
         now = datetime.now()
 
         # パラメータ付きで期間残高画面に移動
-        base_url = f"{self.live_server_url}{reverse('moneybook:period_balances')}"
-        url = f"{base_url}?start_year={now.year}&start_month=1&end_year={now.year}&end_month={now.month}"
+        base_url = f'{self.live_server_url}{reverse("moneybook:period_balances")}'
+        url = f'{base_url}?start_year={now.year}&start_month=1&end_year={now.year}&end_month={now.month}'
         self._location(url)
 
         # 更新ボタンをクリック
