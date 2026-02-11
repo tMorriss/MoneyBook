@@ -280,6 +280,7 @@ $env:HEADLESS="0"; python manage.py test moneybook.e2e --settings config.setting
    - 標準ライブラリ
    - サードパーティライブラリ
    - ローカルアプリケーション
+4. **文字リテラル**: 原則シングルクオート `'...'` を使用
 4. **例外処理**: bare exceptは避ける（E722は特定箇所で許可）
 
 ### Djangoベストプラクティス
