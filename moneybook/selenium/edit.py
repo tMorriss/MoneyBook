@@ -36,11 +36,13 @@ class Edit(SeleniumBase):
         self.assertEqual(self.driver.find_element(By.ID, 'item').get_attribute('value'), '編集テスト')
         self.assertEqual(self.driver.find_element(By.ID, 'price').get_attribute('value'), '1000')
 
-        # 支払い方法と分類が選択されていることを確認
+        # 支払い方法と分類が正しく選択されていることを確認
         method_selected = self.driver.find_element(By.CSS_SELECTOR, 'input[name="method"]:checked')
         self.assertIsNotNone(method_selected)
+        self.assertEqual(method_selected.get_attribute('value'), '2')  # 銀行
         category_selected = self.driver.find_element(By.CSS_SELECTOR, 'input[name="category"]:checked')
         self.assertIsNotNone(category_selected)
+        self.assertEqual(category_selected.get_attribute('value'), '1')  # 食費
 
     def test_edit_item(self):
         '''項目名を編集できることを確認'''
