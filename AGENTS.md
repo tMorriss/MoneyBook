@@ -84,7 +84,7 @@ MoneyBook/
 │   ├── static/                # CSS、JS、画像
 │   ├── migrations/            # DBスキーママイグレーション
 │   ├── tests/                 # テストスイート
-│   ├── selenium/              # E2Eテスト（Selenium）
+│   ├── e2e/                   # E2Eテスト（Selenium）
 │   ├── fixtures/              # テストデータ
 │   ├── admin.py               # Django管理画面設定
 │   └── apps.py                # アプリケーション設定
@@ -128,7 +128,7 @@ MoneyBook/
 | `moneybook/static/` | クライアント側アセット（CSS、JS、画像） |
 | `moneybook/migrations/` | データベーススキーマバージョニング（22マイグレーション） |
 | `moneybook/tests/` | ユニットテスト（モデル、ビュー、フォーム、ユーティリティ） |
-| `moneybook/selenium/` | E2Eブラウザ自動化テスト |
+| `moneybook/e2e/` | E2Eブラウザ自動化テスト |
 | `moneybook/middleware/` | カスタム認証ミドルウェア |
 | `build/` | 依存関係、Docker、デプロイ設定 |
 | `requirements/` | Pythonパッケージの依存関係ファイル |
@@ -307,13 +307,13 @@ coverage xml
 
 ```bash
 # ヘッドレスモード（デフォルト）
-python manage.py test moneybook.selenium --settings config.settings.test
+python manage.py test moneybook.e2e --settings config.settings.test
 
 # ブラウザ表示モード（Mac）
-HEADLESS=0 python manage.py test moneybook.selenium --settings config.settings.test
+HEADLESS=0 python manage.py test moneybook.e2e --settings config.settings.test
 
 # ブラウザ表示モード（Windows）
-$env:HEADLESS="0"; python manage.py test moneybook.selenium --settings config.settings.test
+$env:HEADLESS="0"; python manage.py test moneybook.e2e --settings config.settings.test
 ```
 
 ---
