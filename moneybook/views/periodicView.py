@@ -6,7 +6,7 @@ from django.conf import settings
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render
 from django.views import View
-from moneybook.forms import DataForm, PeriodicDataForm
+from moneybook.forms import PeriodicDataForm
 from moneybook.models import Category, Data, Direction, Method, PeriodicData
 
 
@@ -17,7 +17,7 @@ class PeriodicListView(View):
         # 来月を計算
         from dateutil.relativedelta import relativedelta
         next_month = now + relativedelta(months=1)
-        
+
         context = {
             'app_name': settings.APP_NAME,
             'username': request.user,
