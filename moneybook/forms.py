@@ -3,7 +3,6 @@ from django import forms
 from .models import Data, PeriodicData
 
 
-
 class DataForm(forms.ModelForm):
     class Meta:
         model = Data
