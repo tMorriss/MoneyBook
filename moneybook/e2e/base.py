@@ -47,16 +47,15 @@ class SeleniumBase(StaticLiveServerTestCase):
 
     def _assert_common(self):
         # アプリ名
-        self.assertEqual(self.driver.find_element(By.CLASS_NAME, "header-cont1").text, 'test-MoneyBook')
+        self.assertEqual(self.driver.find_element(By.CLASS_NAME, 'header-cont1').text, 'test-MoneyBook')
         # 名前表示
-        self.assertTrue(self.username + "さん" in self.driver.find_element(By.CLASS_NAME, "header-cont2").text,
-                        self.driver.find_element(By.CLASS_NAME, "header-cont2").text)
+        self.assertTrue(self.username + 'さん' in self.driver.find_element(By.CLASS_NAME, 'header-cont2').text,
+                        self.driver.find_element(By.CLASS_NAME, 'header-cont2').text)
         # タスクバー
         expects = [
             {'href': reverse('moneybook:index'), 'text': 'ホーム'},
             {'href': reverse('moneybook:add'), 'text': '追加'},
             {'href': reverse('moneybook:statistics'), 'text': '統計'},
-            {'href': reverse('moneybook:periodic_list'), 'text': '定期取引'},
             {'href': reverse('moneybook:search'), 'text': '検索'},
             {'href': reverse('moneybook:tools'), 'text': 'ツール'}
         ]

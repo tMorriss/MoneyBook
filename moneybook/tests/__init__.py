@@ -12,3 +12,4 @@ from .searchViewTests import *
 from .statisticsViewTests import *
 from .toolsViewTests import *
 from .utilsTests import *
+

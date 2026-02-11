@@ -49,8 +49,8 @@ class BaseTestCase(TestCase):
 
     def _assert_all_temps(self, response):
         data = response.context['temps']
-        self.assertEqual(data, {0: "No", 1: "Yes"})
+        self.assertEqual(data, {0: 'No', 1: 'Yes'})
 
     def _assert_all_checkeds(self, response):
         data = response.context['checkeds']
-        self.assertEqual(data, {0: "No", 1: "Yes"})
+        self.assertEqual(data, {0: 'No', 1: 'Yes'})

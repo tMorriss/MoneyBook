@@ -192,23 +192,23 @@ class DataTableViewTestCase(BaseTestCase):
         response = self.client.get(reverse('moneybook:data_table'), {'year': 2000, 'month': 1})
         self.assertEqual(response.status_code, 200)
         expects = [
-            "立替分2",
-            "立替分1",
-            "水道代",
-            "ガス代",
-            "電気代",
-            "PayPayチャージ",
-            "PayPayチャージ",
-            "貯金",
-            "計算外",
-            "スーパー",
-            "銀行収入",
-            "現金収入",
-            "必需品2",
-            "必需品1",
-            "その他1",
-            "コンビニ",
-            "給与"
+            '立替分2',
+            '立替分1',
+            '水道代',
+            'ガス代',
+            '電気代',
+            'PayPayチャージ',
+            'PayPayチャージ',
+            '貯金',
+            '計算外',
+            'スーパー',
+            '銀行収入',
+            '現金収入',
+            '必需品2',
+            '必需品1',
+            'その他1',
+            'コンビニ',
+            '給与'
         ]
         data = response.context['show_data']
         self._assert_list(data, expects)
