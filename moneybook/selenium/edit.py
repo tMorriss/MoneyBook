@@ -36,6 +36,12 @@ class Edit(SeleniumBase):
         self.assertEqual(self.driver.find_element(By.ID, 'item').get_attribute('value'), '編集テスト')
         self.assertEqual(self.driver.find_element(By.ID, 'price').get_attribute('value'), '1000')
 
+        # 支払い方法と分類が選択されていることを確認
+        method_selected = self.driver.find_element(By.CSS_SELECTOR, 'input[name="method"]:checked')
+        self.assertIsNotNone(method_selected)
+        category_selected = self.driver.find_element(By.CSS_SELECTOR, 'input[name="category"]:checked')
+        self.assertIsNotNone(category_selected)
+
     def test_edit_item(self):
         '''項目名を編集できることを確認'''
         self._login()
