@@ -22,7 +22,7 @@ Pod定義はKubernetes互換のYAML形式（`build/pod.yaml`）で管理され�
 ## lint 確認
 
 ```
-$ flake8 . --count --ignore=E722,W503 --max-line-length=140 --exclude moneybook/migrations,__init__.py --show-source --statistics --import-order-style smarkets
+$ tox -e lint
 ```
 
 ## 単体テスト
@@ -30,20 +30,17 @@ $ flake8 . --count --ignore=E722,W503 --max-line-length=140 --exclude moneybook/
 [![codecov](https://codecov.io/gh/tMorriss/MoneyBook/branch/master/graph/badge.svg?token=E522OPRLRM)](https://codecov.io/gh/tMorriss/MoneyBook)
 
 ```
-$ coverage run --source='moneybook.models,moneybook.views,moneybook.utils,moneybook.middleware,moneybook.forms' manage.py test moneybook.tests --settings config.settings.test
-# レポートを表示
-$ coverage report -m
-
-# VSCodeでハイライト
-$ coverage xml
-# vscodeのコマンド
->code coverage: Toggle coverage display
+$ tox -e unittest
 ```
 
 ## e2e テスト
 
 ```
-$ python manage.py test moneybook.e2e --settings config.settings.test
+# 全てのe2eテストを実行
+$ tox -e e2e
+
+# 特定のテストモジュールを実行（例：indexモジュールのみ）
+$ TEST_MODULE=moneybook.e2e.index tox -e e2e
 ```
 
 ### ヘッドレスモード
@@ -52,9 +49,9 @@ e2e テストはデフォルトでヘッドレスモードで実行されます�
 
 ```
 # mac
-$ HEADLESS=0 python manage.py test moneybook.e2e --settings config.settings.test
-# winodows
-$ $env:HEADLESS="0"; python manage.py test moneybook.e2e --settings config.settings.test
+$ HEADLESS=0 tox -e e2e
+# windows
+$ $env:HEADLESS="0"; tox -e e2e
 ```
 
 ## メモ
