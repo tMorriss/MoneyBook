@@ -73,7 +73,7 @@ e2e テストはデフォルトでヘッドレスモードで実行されます�
 $ HEADLESS=0 tox -e e2e
 # または直接実行
 $ HEADLESS=0 python manage.py test moneybook.e2e --settings config.settings.test
-# winodows
+# windows
 $ $env:HEADLESS="0"; tox -e e2e
 # または直接実行
 $ $env:HEADLESS="0"; python manage.py test moneybook.e2e --settings config.settings.test
