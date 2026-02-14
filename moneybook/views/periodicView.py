@@ -41,7 +41,7 @@ class PeriodicConfigView(View):
             'methods': Method.list(),
             'first_categories': Category.first_list(),
             'latter_categories': Category.latter_list(),
-            'temps': {0: "No", 1: "Yes"},
+            'temps': {0: 'No', 1: 'Yes'},
         }
         return render(request, 'periodic_config.html', context)
 

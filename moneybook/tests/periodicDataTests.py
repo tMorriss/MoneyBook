@@ -8,7 +8,7 @@ class PeriodicDataTestCase(BaseTestCase):
         # テスト用のPeriodicDataを作成
         PeriodicData.objects.create(
             day=1,
-            item="テスト定期取引1",
+            item='テスト定期取引1',
             price=1000,
             direction=Direction.get(2),
             method=Method.get(1),
@@ -17,7 +17,7 @@ class PeriodicDataTestCase(BaseTestCase):
         )
         PeriodicData.objects.create(
             day=15,
-            item="テスト定期取引2",
+            item='テスト定期取引2',
             price=2000,
             direction=Direction.get(2),
             method=Method.get(2),
@@ -37,20 +37,20 @@ class PeriodicDataTestCase(BaseTestCase):
         """指定したIDの定期取引データを取得できること"""
         pd = PeriodicData.objects.first()
         retrieved = PeriodicData.get(pd.pk)
-        self.assertEqual(retrieved.item, "テスト定期取引1")
+        self.assertEqual(retrieved.item, 'テスト定期取引1')
         self.assertEqual(retrieved.price, 1000)
         self.assertEqual(retrieved.day, 1)
 
     def test_str(self):
         """__str__メソッドがitemを返すこと"""
         pd = PeriodicData.objects.first()
-        self.assertEqual(str(pd), "テスト定期取引1")
+        self.assertEqual(str(pd), 'テスト定期取引1')
 
     def test_fields(self):
         """全フィールドが正しく保存されること"""
         pd = PeriodicData.objects.first()
         self.assertEqual(pd.day, 1)
-        self.assertEqual(pd.item, "テスト定期取引1")
+        self.assertEqual(pd.item, 'テスト定期取引1')
         self.assertEqual(pd.price, 1000)
         self.assertEqual(pd.direction.pk, 2)
         self.assertEqual(pd.method.pk, 1)
@@ -62,7 +62,7 @@ class PeriodicDataTestCase(BaseTestCase):
         # 追加のデータを作成（日付が小さい順）
         PeriodicData.objects.create(
             day=5,
-            item="中間",
+            item='中間',
             price=500,
             direction=Direction.get(1),
             method=Method.get(1),

@@ -14,7 +14,7 @@ class PeriodicListViewTestCase(BaseTestCase):
         # テスト用のPeriodicDataを作成
         PeriodicData.objects.create(
             day=1,
-            item="定期取引テスト",
+            item='定期取引テスト',
             price=5000,
             direction=Direction.get(2),
             method=Method.get(1),
@@ -40,7 +40,7 @@ class PeriodicListViewTestCase(BaseTestCase):
         # 定期取引データが含まれていること
         periodic_data = response.context['periodic_data_list']
         self.assertEqual(periodic_data.count(), 1)
-        self.assertEqual(periodic_data[0].item, "定期取引テスト")
+        self.assertEqual(periodic_data[0].item, '定期取引テスト')
 
     def test_get_guest(self):
         """ログインしていない場合はリダイレクトされること"""
@@ -53,7 +53,7 @@ class PeriodicConfigViewTestCase(BaseTestCase):
         super().setUp()
         PeriodicData.objects.create(
             day=1,
-            item="設定テスト",
+            item='設定テスト',
             price=3000,
             direction=Direction.get(2),
             method=Method.get(1),
@@ -203,7 +203,7 @@ class PeriodicAddBulkViewTestCase(BaseTestCase):
         super().setUp()
         self.periodic = PeriodicData.objects.create(
             day=15,
-            item="一括登録テスト",
+            item='一括登録テスト',
             price=7000,
             direction=Direction.get(2),
             method=Method.get(1),
@@ -241,7 +241,7 @@ class PeriodicAddBulkViewTestCase(BaseTestCase):
         self.assertEqual(new_data.date.year, 2024)
         self.assertEqual(new_data.date.month, 5)
         self.assertEqual(new_data.date.day, 15)
-        self.assertEqual(new_data.item, "一括登録テスト")
+        self.assertEqual(new_data.item, '一括登録テスト')
         self.assertEqual(new_data.price, 7000)
 
     def test_post_duplicate(self):
@@ -287,7 +287,7 @@ class PeriodicAddBulkViewTestCase(BaseTestCase):
         # day=31の定期取引を作成
         periodic_31 = PeriodicData.objects.create(
             day=31,
-            item="月末処理",
+            item='月末処理',
             price=5000,
             direction=Direction.get(2),
             method=Method.get(1),
