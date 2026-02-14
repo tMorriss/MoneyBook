@@ -2,7 +2,7 @@ from django.test import TestCase
 
 
 class BaseTestCase(TestCase):
-    fixtures = ['data_test_case']
+    fixtures = ['test_case', 'data_test_case']
     username = 'tester'
 
     def _assert_list(self, data, expects):
