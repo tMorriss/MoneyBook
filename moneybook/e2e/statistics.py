@@ -16,8 +16,8 @@ class Statistics(SeleniumBase):
 
         # 年が表示されている
         now = datetime.now()
-        year_element = self.driver.find_element(By.XPATH, '//h2')
-        self.assertIn(str(now.year), year_element.text)
+        year_element = self.driver.find_element(By.ID, 'jump_year')
+        self.assertEqual(year_element.get_attribute('value'), str(now.year))
 
         # 統計テーブルが表示されている
         self.assertTrue(self.driver.find_element(By.XPATH, '//table').is_displayed())
