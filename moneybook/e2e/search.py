@@ -52,7 +52,7 @@ class Search(SeleniumBase):
         time.sleep(2)
 
         # 検索結果を確認
-        rows = self.driver.find_elements(By.XPATH, '//table[@id="search-result"]/tbody/tr')
+        rows = self.driver.find_elements(By.XPATH, '//table[@class="tbl-inout tbl-boarder"]/tbody/tr')
         self.assertEqual(len(rows), 2)  # ヘッダー + 1件
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
         self.assertEqual(tds[1].text, '検索テスト1')
@@ -270,7 +270,7 @@ class Search(SeleniumBase):
         time.sleep(2)
 
         # 検索結果を確認
-        rows = self.driver.find_elements(By.XPATH, '//table[@id="search-result"]/tbody/tr')
+        rows = self.driver.find_elements(By.XPATH, '//table[@class="tbl-inout tbl-boarder"]/tbody/tr')
         self.assertEqual(len(rows), 2)  # ヘッダー + 1件
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
         self.assertEqual(tds[1].text, 'Enterテスト')
@@ -310,9 +310,9 @@ class Search(SeleniumBase):
         time.sleep(2)
 
         # 編集リンクをクリック
-        self.driver.find_element(By.XPATH, '//table[@id="search-result"]/tbody/tr[2]/td[6]/a').click()
+        self.driver.find_element(By.XPATH, '//table[@class="tbl-inout tbl-boarder"]/tbody/tr[2]/td[6]/a').click()
         time.sleep(1)
 
         # 編集画面に遷移したことを確認
         self.assertIn('edit', self.driver.current_url)
-        self.assertEqual(self.driver.find_element(By.ID, 'id_item').get_attribute('value'), '編集遷移テスト')
+        self.assertEqual(self.driver.find_element(By.ID, 'item').get_attribute('value'), '編集遷移テスト')
