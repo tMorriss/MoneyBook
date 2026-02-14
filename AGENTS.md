@@ -109,6 +109,7 @@ MoneyBook/
 ├── .dockerignore               # Dockerビルド除外設定
 ├── .flake8                     # Flake8リンター設定
 ├── .gitignore                  # Git除外設定
+├── check_e2e_matrix.py         # E2E Matrix検証スクリプト（CI用）
 ├── createDataYaml.py           # データYAML生成スクリプト
 ├── createOtherYaml.py          # その他YAML生成スクリプト
 ├── generate_secretkey_setting.py # シークレットキー生成
@@ -336,10 +337,13 @@ docker run -p 8000:8000 moneybook:latest
 - **GitHub Actions**: `.github/workflows/`でワークフロー定義
   - `python-lint-test.yml`: Pull Request時に自動実行
     - **lint**: Flake8によるコード品質チェック
+    - **check-e2e-matrix**: E2E Matrix設定の検証（`check_e2e_matrix.py`スクリプトを実行）
+      - `moneybook/e2e/`ディレクトリのテストモジュールとmatrix設定の整合性をチェック
+      - 漏れがある場合はCIをエラーにする
     - **unittest**: カバレッジ付き単体テスト
     - **e2e**: E2Eテスト（matrix戦略でテストモジュール別に並列実行）
       - 現在のテストモジュール: `index`, `add`, `login`
-      - ⚠️ 新規e2eテストファイル追加時は、matrixを更新してCI上で実行されるようにすること
+      - ⚠️ 新規e2eテストファイル追加時は、matrixを更新してCI上で実行されるようにすること（`check-e2e-matrix`ジョブが自動チェックする）
 
 ---
 
@@ -370,6 +374,7 @@ docker run -p 8000:8000 moneybook:latest
      ```
    - これにより、CI上でも新しいe2eテストが自動実行される
    - ⚠️ この更新を忘れると、新しいe2eテストがCI上で実行されないため注意
+   - **自動チェック**: GitHub Actionsの`check-e2e-matrix`ジョブが自動的にmatrix設定の漏れをチェックし、漏れがある場合はCIをエラーにする
 
 5. **マイグレーション**
    - モデル変更時は`makemigrations`を実行
