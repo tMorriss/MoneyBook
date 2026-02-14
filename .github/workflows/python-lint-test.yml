@@ -18,7 +18,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          if [ -f requirements/requirements_dev.txt ]; then pip install -r requirements/requirements_dev.txt; fi
+          pip install -r requirements/requirements_dev.txt
       - name: Lint with tox
         run: |
           tox -e lint
@@ -47,7 +47,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          if [ -f requirements/requirements_dev.txt ]; then pip install -r requirements/requirements_dev.txt; fi
+          pip install -r requirements/requirements_dev.txt
       - name: Test with tox
         run: |
           tox -e unittest
@@ -77,7 +77,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          if [ -f requirements/requirements_dev.txt ]; then pip install -r requirements/requirements_dev.txt; fi
+          pip install -r requirements/requirements_dev.txt
       - name: Test with tox
         run: |
           tox -e e2e

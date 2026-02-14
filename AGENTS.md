@@ -101,7 +101,7 @@ MoneyBook/
 │   ├── requirements.txt       # 本番環境の依存関係
 │   ├── requirements_test.txt  # テストツール
 │   ├── requirements_lint.txt  # コード品質チェック
-│   ├── requirements_selenium.txt # e2eテスト（Selenium、ChromeDriver）
+│   ├── requirements_e2e.txt   # e2eテスト（Selenium、ChromeDriver）
 │   └── requirements_dev.txt   # 開発ツール（tox等）
 ├── .github/                    # GitHub関連
 │   └── workflows/             # GitHub Actionsワークフロー
@@ -369,8 +369,9 @@ docker run -p 8000:8000 moneybook:latest
 |---------|------|
 | `requirements/requirements.txt` | 本番環境の依存関係 |
 | `requirements/requirements_test.txt` | テストツール |
-| `requirements/requirements_selenium.txt` | e2eテスト（Selenium、ChromeDriver） |
+| `requirements/requirements_e2e.txt` | e2eテスト（Selenium、ChromeDriver） |
 | `requirements/requirements_lint.txt` | コード品質チェック |
+| `requirements/requirements_dev.txt` | 開発ツール（tox等） |
 | `requirements/requirements_dev.txt` | 開発ツール（tox等） |
 
 ### CI/CD
