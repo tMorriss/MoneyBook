@@ -16,15 +16,15 @@ class Search(SeleniumBase):
         self._assert_common()
 
         # 検索フォームが表示されている
-        self.assertTrue(self.driver.find_element(By.ID, 'start_year').is_displayed())
-        self.assertTrue(self.driver.find_element(By.ID, 'start_month').is_displayed())
-        self.assertTrue(self.driver.find_element(By.ID, 'start_day').is_displayed())
-        self.assertTrue(self.driver.find_element(By.ID, 'end_year').is_displayed())
-        self.assertTrue(self.driver.find_element(By.ID, 'end_month').is_displayed())
-        self.assertTrue(self.driver.find_element(By.ID, 'end_day').is_displayed())
-        self.assertTrue(self.driver.find_element(By.ID, 'item').is_displayed())
-        self.assertTrue(self.driver.find_element(By.ID, 'lower_price').is_displayed())
-        self.assertTrue(self.driver.find_element(By.ID, 'upper_price').is_displayed())
+        self.assertTrue(self.driver.find_element(By.NAME, 'start_year').is_displayed())
+        self.assertTrue(self.driver.find_element(By.NAME, 'start_month').is_displayed())
+        self.assertTrue(self.driver.find_element(By.NAME, 'start_day').is_displayed())
+        self.assertTrue(self.driver.find_element(By.NAME, 'end_year').is_displayed())
+        self.assertTrue(self.driver.find_element(By.NAME, 'end_month').is_displayed())
+        self.assertTrue(self.driver.find_element(By.NAME, 'end_day').is_displayed())
+        self.assertTrue(self.driver.find_element(By.NAME, 'item').is_displayed())
+        self.assertTrue(self.driver.find_element(By.NAME, 'lower_price').is_displayed())
+        self.assertTrue(self.driver.find_element(By.NAME, 'upper_price').is_displayed())
 
     def test_search_by_item(self):
         """項目名で検索できることを確認"""
@@ -47,7 +47,7 @@ class Search(SeleniumBase):
         self._location(self.live_server_url + reverse('moneybook:search'))
 
         # 項目名で検索
-        self.driver.find_element(By.ID, 'item').send_keys('検索テスト1')
+        self.driver.find_element(By.NAME, 'item').send_keys('検索テスト1')
         self.driver.find_element(By.XPATH, '//input[@value="検索"]').click()
         time.sleep(2)
 
@@ -86,16 +86,16 @@ class Search(SeleniumBase):
         self._location(self.live_server_url + reverse('moneybook:search'))
 
         # 10日〜20日の範囲で検索
-        self.driver.find_element(By.ID, 'start_year').clear()
-        self.driver.find_element(By.ID, 'start_year').send_keys(str(now.year))
-        self.driver.find_element(By.ID, 'start_month').clear()
-        self.driver.find_element(By.ID, 'start_month').send_keys(str(now.month))
-        self.driver.find_element(By.ID, 'start_day').send_keys('10')
-        self.driver.find_element(By.ID, 'end_year').clear()
-        self.driver.find_element(By.ID, 'end_year').send_keys(str(now.year))
-        self.driver.find_element(By.ID, 'end_month').clear()
-        self.driver.find_element(By.ID, 'end_month').send_keys(str(now.month))
-        self.driver.find_element(By.ID, 'end_day').send_keys('20')
+        self.driver.find_element(By.NAME, 'start_year').clear()
+        self.driver.find_element(By.NAME, 'start_year').send_keys(str(now.year))
+        self.driver.find_element(By.NAME, 'start_month').clear()
+        self.driver.find_element(By.NAME, 'start_month').send_keys(str(now.month))
+        self.driver.find_element(By.NAME, 'start_day').send_keys('10')
+        self.driver.find_element(By.NAME, 'end_year').clear()
+        self.driver.find_element(By.NAME, 'end_year').send_keys(str(now.year))
+        self.driver.find_element(By.NAME, 'end_month').clear()
+        self.driver.find_element(By.NAME, 'end_month').send_keys(str(now.month))
+        self.driver.find_element(By.NAME, 'end_day').send_keys('20')
         self.driver.find_element(By.XPATH, '//input[@value="検索"]').click()
         time.sleep(2)
 
@@ -132,8 +132,8 @@ class Search(SeleniumBase):
         self._location(self.live_server_url + reverse('moneybook:search'))
 
         # 1000円〜3000円の範囲で検索
-        self.driver.find_element(By.ID, 'lower_price').send_keys('1000')
-        self.driver.find_element(By.ID, 'upper_price').send_keys('3000')
+        self.driver.find_element(By.NAME, 'lower_price').send_keys('1000')
+        self.driver.find_element(By.NAME, 'upper_price').send_keys('3000')
         self.driver.find_element(By.XPATH, '//input[@value="検索"]').click()
         time.sleep(2)
 
@@ -237,7 +237,7 @@ class Search(SeleniumBase):
         self._location(self.live_server_url + reverse('moneybook:search'))
 
         # 項目名に「スーパー」を含み、銀行、食費で検索
-        self.driver.find_element(By.ID, 'item').send_keys('スーパー')
+        self.driver.find_element(By.NAME, 'item').send_keys('スーパー')
         self.driver.find_element(By.XPATH, '//form/table/tbody/tr[6]/td/label[1]').click()  # 銀行
         self.driver.find_element(By.XPATH, '//form/table/tbody/tr[7]/td/label[1]').click()  # 食費
         self.driver.find_element(By.XPATH, '//input[@value="検索"]').click()
@@ -264,7 +264,7 @@ class Search(SeleniumBase):
         self._location(self.live_server_url + reverse('moneybook:search'))
 
         # 項目名で検索（Enterキーを使用）
-        item_input = self.driver.find_element(By.ID, 'item')
+        item_input = self.driver.find_element(By.NAME, 'item')
         item_input.send_keys('Enterテスト')
         item_input.send_keys(Keys.RETURN)
         time.sleep(2)
@@ -282,7 +282,7 @@ class Search(SeleniumBase):
         self._location(self.live_server_url + reverse('moneybook:search'))
 
         # 存在しない項目名で検索
-        self.driver.find_element(By.ID, 'item').send_keys('存在しないデータ')
+        self.driver.find_element(By.NAME, 'item').send_keys('存在しないデータ')
         self.driver.find_element(By.XPATH, '//input[@value="検索"]').click()
         time.sleep(2)
 
@@ -305,7 +305,7 @@ class Search(SeleniumBase):
         self._location(self.live_server_url + reverse('moneybook:search'))
 
         # 項目名で検索
-        self.driver.find_element(By.ID, 'item').send_keys('編集遷移テスト')
+        self.driver.find_element(By.NAME, 'item').send_keys('編集遷移テスト')
         self.driver.find_element(By.XPATH, '//input[@value="検索"]').click()
         time.sleep(2)
 
