@@ -22,6 +22,19 @@ jobs:
       - name: Lint with flake8
         run: |
           flake8 . --count --exclude moneybook/migrations,__init__.py --show-source --statistics --import-order-style smarkets
+  check-e2e-matrix:
+    name: Check e2e Matrix Configuration
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install yq
+        run: |
+          sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+          sudo chmod +x /usr/local/bin/yq
+      - name: Validate e2e Matrix
+        run: |
+          chmod +x check_e2e_matrix.sh
+          ./check_e2e_matrix.sh
   unittest:
     name: Unit Test
     runs-on: ubuntu-latest
@@ -47,7 +60,7 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
   e2e:
-    name: E2E Test - ${{ matrix.test-module }}
+    name: e2e - ${{ matrix.test-module }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
