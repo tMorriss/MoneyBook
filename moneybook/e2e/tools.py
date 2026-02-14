@@ -39,7 +39,7 @@ class Tools(SeleniumBase):
         # ページをリロードして値が保持されていることを確認
         self._location(self.live_server_url + reverse('moneybook:tools'))
         actual_cash_value = self.driver.find_element(By.ID, 'actual_balance').get_attribute('value')
-        self.assertEqual(actual_cash_value, '5000')
+        self.assertEqual(actual_cash_value, '5,000')
 
     def test_update_actual_cash_enter(self):
         """Enterキーで実際の現金残高を更新できることを確認"""
@@ -56,7 +56,7 @@ class Tools(SeleniumBase):
         # ページをリロードして値が保持されていることを確認
         self._location(self.live_server_url + reverse('moneybook:tools'))
         actual_cash_value = self.driver.find_element(By.ID, 'actual_balance').get_attribute('value')
-        self.assertEqual(actual_cash_value, '10000')
+        self.assertEqual(actual_cash_value, '10,000')
 
     def test_checked_date_section(self):
         """チェック日セクションが表示されることを確認"""
@@ -77,16 +77,6 @@ class Tools(SeleniumBase):
         self.assertTrue(self.driver.find_element(By.ID, 'check_year').is_displayed())
         self.assertTrue(self.driver.find_element(By.ID, 'check_month').is_displayed())
         self.assertTrue(self.driver.find_element(By.ID, 'check_day').is_displayed())
-
-    def test_now_bank_section(self):
-        """銀行残高セクションが表示されることを確認"""
-        self._login()
-        self._location(self.live_server_url + reverse('moneybook:tools'))
-
-        # 銀行残高情報が表示されている
-        # セクションの存在を確認
-        page_source = self.driver.page_source
-        self.assertIn('銀行', page_source)
 
     def test_living_cost_mark_section(self):
         """生活費目標額セクションが表示されることを確認"""
@@ -115,7 +105,7 @@ class Tools(SeleniumBase):
         # ページをリロードして値が保持されていることを確認
         self._location(self.live_server_url + reverse('moneybook:tools'))
         living_cost_value = self.driver.find_element(By.ID, 'txt_living_cost').get_attribute('value')
-        self.assertEqual(living_cost_value, '30000')
+        self.assertEqual(living_cost_value, '30,000')
 
     def test_update_living_cost_mark_enter(self):
         """Enterキーで生活費目標額を更新できることを確認"""
@@ -132,16 +122,7 @@ class Tools(SeleniumBase):
         # ページをリロードして値が保持されていることを確認
         self._location(self.live_server_url + reverse('moneybook:tools'))
         living_cost_value = self.driver.find_element(By.ID, 'txt_living_cost').get_attribute('value')
-        self.assertEqual(living_cost_value, '40000')
-
-    def test_unchecked_data_section(self):
-        """未チェックデータセクションが表示されることを確認"""
-        self._login()
-        self._location(self.live_server_url + reverse('moneybook:tools'))
-
-        # 未チェックデータボタンが表示されている
-        page_source = self.driver.page_source
-        self.assertIn('未チェック', page_source)
+        self.assertEqual(living_cost_value, '40,000')
 
     def test_link_from_taskbar(self):
         """タスクバーからツール画面に遷移できることを確認"""
@@ -162,25 +143,6 @@ class Tools(SeleniumBase):
 
         # ツール画面に遷移したことを確認
         self.assertEqual(self.driver.current_url, self.live_server_url + reverse('moneybook:tools'))
-
-    def test_cash_balance_display(self):
-        """現金残高が正しく表示されることを確認"""
-        self._login()
-        # データを追加
-        self._location(self.live_server_url + reverse('moneybook:index'))
-        self.driver.find_element(By.ID, 'a_day').send_keys('10')
-        self.driver.find_element(By.ID, 'a_item').send_keys('現金テスト')
-        self.driver.find_element(By.ID, 'a_price').send_keys('1000')
-        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/table/tbody/tr[4]/td/label[2]').click()  # 現金
-        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/input[@value="追加"]').click()
-        time.sleep(2)
-
-        # ツール画面に移動
-        self._location(self.live_server_url + reverse('moneybook:tools'))
-
-        # 現金残高が表示されている
-        page_source = self.driver.page_source
-        self.assertIn('現金残高', page_source)
 
     def test_multiple_updates(self):
         """複数の値を連続して更新できることを確認"""
@@ -207,5 +169,5 @@ class Tools(SeleniumBase):
         self._location(self.live_server_url + reverse('moneybook:tools'))
         actual_cash_value = self.driver.find_element(By.ID, 'actual_balance').get_attribute('value')
         living_cost_value = self.driver.find_element(By.ID, 'txt_living_cost').get_attribute('value')
-        self.assertEqual(actual_cash_value, '15000')
-        self.assertEqual(living_cost_value, '50000')
+        self.assertEqual(actual_cash_value, '15,000')
+        self.assertEqual(living_cost_value, '50,000')

@@ -10,7 +10,7 @@ from selenium.webdriver.common.by import By
 
 
 class SeleniumBase(StaticLiveServerTestCase):
-    fixtures = ['data_test_case']
+    fixtures = ['test_case', 'data_test_case']
     username = 'tester'
     password = 'GZK-kva_yfj1ahr0tcr'  # Chromeで警告が出ちゃうので複雑なパスワードを使う
 
