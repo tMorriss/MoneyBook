@@ -52,7 +52,7 @@ class PeriodBalances(SeleniumBase):
         time.sleep(2)
 
         # グラフコンテナが表示されている
-        graph_container = self.driver.find_element(By.ID, 'chart_container')
+        graph_container = self.driver.find_element(By.ID, 'lineplot_monthly_balance')
         self.assertTrue(graph_container.is_displayed())
 
     def test_change_period(self):
@@ -77,7 +77,7 @@ class PeriodBalances(SeleniumBase):
         time.sleep(2)
 
         # グラフが表示されている
-        graph_container = self.driver.find_element(By.ID, 'chart_container')
+        graph_container = self.driver.find_element(By.ID, 'lineplot_monthly_balance')
         self.assertTrue(graph_container.is_displayed())
 
         # 入力値が保持されている
@@ -100,7 +100,7 @@ class PeriodBalances(SeleniumBase):
         time.sleep(2)
 
         # グラフが表示されている
-        graph_container = self.driver.find_element(By.ID, 'chart_container')
+        graph_container = self.driver.find_element(By.ID, 'lineplot_monthly_balance')
         self.assertTrue(graph_container.is_displayed())
 
     def test_enter_month(self):
@@ -118,7 +118,7 @@ class PeriodBalances(SeleniumBase):
         time.sleep(2)
 
         # グラフが表示されている
-        graph_container = self.driver.find_element(By.ID, 'chart_container')
+        graph_container = self.driver.find_element(By.ID, 'lineplot_monthly_balance')
         self.assertTrue(graph_container.is_displayed())
 
     def test_with_data(self):
@@ -141,7 +141,7 @@ class PeriodBalances(SeleniumBase):
         time.sleep(2)
 
         # グラフが表示されている
-        graph_container = self.driver.find_element(By.ID, 'chart_container')
+        graph_container = self.driver.find_element(By.ID, 'lineplot_monthly_balance')
         self.assertTrue(graph_container.is_displayed())
 
     def test_single_month_period(self):
@@ -174,7 +174,7 @@ class PeriodBalances(SeleniumBase):
         time.sleep(2)
 
         # グラフが表示されている
-        graph_container = self.driver.find_element(By.ID, 'chart_container')
+        graph_container = self.driver.find_element(By.ID, 'lineplot_monthly_balance')
         self.assertTrue(graph_container.is_displayed())
 
     def test_multiple_year_period(self):
@@ -199,7 +199,7 @@ class PeriodBalances(SeleniumBase):
         time.sleep(2)
 
         # グラフが表示されている
-        graph_container = self.driver.find_element(By.ID, 'chart_container')
+        graph_container = self.driver.find_element(By.ID, 'lineplot_monthly_balance')
         self.assertTrue(graph_container.is_displayed())
 
     def test_period_with_params(self):
@@ -217,7 +217,7 @@ class PeriodBalances(SeleniumBase):
         time.sleep(2)
 
         # グラフが表示されている
-        graph_container = self.driver.find_element(By.ID, 'chart_container')
+        graph_container = self.driver.find_element(By.ID, 'lineplot_monthly_balance')
         self.assertTrue(graph_container.is_displayed())
 
         # パラメータの値が入力欄に反映されている
