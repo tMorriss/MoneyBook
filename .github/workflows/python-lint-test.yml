@@ -60,7 +60,7 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
   e2e:
-    name: E2E Test - ${{ matrix.test-module }}
+    name: e2e - ${{ matrix.test-module }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
