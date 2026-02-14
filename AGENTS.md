@@ -248,13 +248,7 @@ tox
 #### 実行コマンド
 
 ```bash
-# tox使用（推奨）
 tox -e lint
-
-# 直接実行
-flake8 . --count --ignore=E722,W503 --max-line-length=140 \
-  --exclude moneybook/migrations,__init__.py \
-  --show-source --statistics --import-order-style smarkets
 ```
 
 #### 設定詳細 (`.flake8`)
@@ -277,18 +271,7 @@ flake8 . --count --ignore=E722,W503 --max-line-length=140 \
 # tox使用（推奨）
 tox -e unittest
 
-# 直接実行
-# カバレッジ付きテスト実行
-coverage run --source='moneybook.models,moneybook.views,moneybook.utils,moneybook.middleware,moneybook.forms' \
-  manage.py test moneybook.tests --settings config.settings.test
-
-# レポート表示
-coverage report -m
-
-# XML形式で出力（VSCode連携など）
-coverage xml
-
-# 通常の実行（カバレッジなし）
+# 直接実行（カバレッジなし）
 python manage.py test moneybook.tests --settings config.settings.test
 ```
 
@@ -313,7 +296,7 @@ Seleniumを使用したブラウザ自動化テストです。`moneybook.e2e` �
 tox -e e2e
 
 # 特定のテストモジュールを実行（例：indexモジュールのみ）
-TEST_MODULE=moneybook.e2e.index tox -e e2e
+TEST_MODULE=moneybook.e2e.index.Index.test_index tox -e e2e
 
 # ブラウザ表示モード（Mac）
 HEADLESS=0 tox -e e2e
@@ -323,16 +306,6 @@ $env:HEADLESS="0"; tox -e e2e
 ```
 
 #### トラブルシューティング
-
-**特定のテストのみ実行**:
-
-```bash
-# 特定のテストクラスを実行
-python manage.py test moneybook.e2e.login --settings config.settings.test
-
-# 特定のテストメソッドを実行
-python manage.py test moneybook.e2e.login.Login.test_login_button --settings config.settings.test
-```
 
 **詳細なログを表示**:
 
