@@ -338,7 +338,8 @@ docker run -p 8000:8000 moneybook:latest
   - `python-lint-test.yml`: Pull Request時に自動実行
     - **lint**: Flake8によるコード品質チェック
     - **check-e2e-matrix**: E2E Matrix設定の検証（`check_e2e_matrix.sh`シェルスクリプトを実行）
-      - `moneybook/e2e/`ディレクトリのテストモジュールとmatrix設定の整合性をチェック
+      - `moneybook/e2e/`ディレクトリ内で` def test_`パターンを含むファイル（実際のテストを含むファイル）を自動検出
+      - matrix設定との整合性をチェック
       - 漏れがある場合はCIをエラーにする
       - `yq`コマンドを使用してYAML解析
     - **unittest**: カバレッジ付き単体テスト

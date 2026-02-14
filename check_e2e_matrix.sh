@@ -14,23 +14,14 @@ echo "E2E Matrix Validation"
 echo "=================================================="
 
 # E2Eディレクトリ内のテストモジュールを取得
-# 除外するファイル: __init__.py, base.py
+# grep -rl " def test_" でテストメソッドを含むファイルのみを検出
 e2e_modules=()
-for file in "$E2E_DIR"/*.py; do
-    if [ -f "$file" ]; then
-        filename=$(basename "$file")
-        module_name="${filename%.py}"
-        
-        # 除外ファイルをスキップ
-        if [ "$module_name" != "__init__" ] && [ "$module_name" != "base" ]; then
-            e2e_modules+=("$module_name")
-        fi
-    fi
-done
+while IFS= read -r module; do
+    [ -n "$module" ] && e2e_modules+=("$module")
+done < <(grep -rl " def test_" "$E2E_DIR" 2>/dev/null | sed 's/moneybook\/e2e\///g' | sed 's/.py//g' | sort)
 
-# ソートして表示
-IFS=$'\n' sorted_e2e=($(sort <<<"${e2e_modules[*]}"))
-unset IFS
+# 既にソート済み
+sorted_e2e=("${e2e_modules[@]}")
 
 echo -n "E2Eディレクトリ内のテストモジュール: ["
 for i in "${!sorted_e2e[@]}"; do
