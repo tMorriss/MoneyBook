@@ -12,6 +12,7 @@ class PeriodBalances(SeleniumBase):
         """期間残高画面が正しく表示されることを確認"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:period_balances'))
+        time.sleep(1)
 
         self._assert_common()
 
@@ -28,6 +29,7 @@ class PeriodBalances(SeleniumBase):
 
         # 期間残高画面に移動
         self._location(self.live_server_url + reverse('moneybook:period_balances'))
+        time.sleep(1)
 
         # デフォルト値が設定されている（去年1月〜今月）
         start_year = self.driver.find_element(By.ID, 'start_year').get_attribute('value')
@@ -46,6 +48,7 @@ class PeriodBalances(SeleniumBase):
 
         # 期間残高画面に移動
         self._location(self.live_server_url + reverse('moneybook:period_balances'))
+        time.sleep(1)
 
         # 更新ボタンをクリック
         self.driver.find_element(By.XPATH, '//input[@value="更新"]').click()
@@ -62,6 +65,7 @@ class PeriodBalances(SeleniumBase):
 
         # 期間残高画面に移動
         self._location(self.live_server_url + reverse('moneybook:period_balances'))
+        time.sleep(1)
 
         # 期間を変更（今年1月〜今月）
         start_year_input = self.driver.find_element(By.ID, 'start_year')
@@ -91,6 +95,7 @@ class PeriodBalances(SeleniumBase):
 
         # 期間残高画面に移動
         self._location(self.live_server_url + reverse('moneybook:period_balances'))
+        time.sleep(1)
 
         # 年を入力してEnter
         start_year_input = self.driver.find_element(By.ID, 'start_year')
@@ -109,6 +114,7 @@ class PeriodBalances(SeleniumBase):
 
         # 期間残高画面に移動
         self._location(self.live_server_url + reverse('moneybook:period_balances'))
+        time.sleep(1)
 
         # 月を入力してEnter
         start_month_input = self.driver.find_element(By.ID, 'start_month')
@@ -127,6 +133,7 @@ class PeriodBalances(SeleniumBase):
 
         # テストデータを追加
         self._location(self.live_server_url + reverse('moneybook:index'))
+        time.sleep(1)
         self.driver.find_element(By.ID, 'a_day').send_keys('10')
         self.driver.find_element(By.ID, 'a_item').send_keys('期間残高テスト')
         self.driver.find_element(By.ID, 'a_price').send_keys('5000')
@@ -135,6 +142,7 @@ class PeriodBalances(SeleniumBase):
 
         # 期間残高画面に移動
         self._location(self.live_server_url + reverse('moneybook:period_balances'))
+        time.sleep(1)
 
         # 更新ボタンをクリック
         self.driver.find_element(By.XPATH, '//input[@value="更新"]').click()
@@ -151,6 +159,7 @@ class PeriodBalances(SeleniumBase):
 
         # 期間残高画面に移動
         self._location(self.live_server_url + reverse('moneybook:period_balances'))
+        time.sleep(1)
 
         # 開始と終了を同じ月に設定
         start_year_input = self.driver.find_element(By.ID, 'start_year')
@@ -184,6 +193,7 @@ class PeriodBalances(SeleniumBase):
 
         # 期間残高画面に移動
         self._location(self.live_server_url + reverse('moneybook:period_balances'))
+        time.sleep(1)
 
         # 3年前から今月までの期間を設定
         start_year_input = self.driver.find_element(By.ID, 'start_year')
@@ -211,6 +221,7 @@ class PeriodBalances(SeleniumBase):
         base_url = f'{self.live_server_url}{reverse("moneybook:period_balances")}'
         url = f'{base_url}?start_year={now.year}&start_month=1&end_year={now.year}&end_month={now.month}'
         self._location(url)
+        time.sleep(1)
 
         # 更新ボタンをクリック
         self.driver.find_element(By.XPATH, '//input[@value="更新"]').click()
