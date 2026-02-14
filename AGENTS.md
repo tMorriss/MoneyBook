@@ -293,7 +293,11 @@ coverage xml
 
 ```bash
 # tox使用（推奨）
+# 全てのe2eテストを実行
 tox -e e2e
+
+# 特定のテストモジュールを実行（例：indexモジュールのみ）
+TEST_MODULE=moneybook.e2e.index tox -e e2e
 
 # 直接実行
 # ヘッドレスモード（デフォルト）

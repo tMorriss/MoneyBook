@@ -63,7 +63,7 @@ jobs:
       matrix:
         test-module: [index, add, login]
     env:
-      TEST_MODULE: ${{ matrix.test-module }}
+      TEST_MODULE: moneybook.e2e.${{ matrix.test-module }}
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python 3.11

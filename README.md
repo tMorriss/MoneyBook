@@ -55,7 +55,11 @@ $ coverage xml
 ## e2e テスト
 
 ```
+# 全てのe2eテストを実行
 $ tox -e e2e
+
+# 特定のテストモジュールを実行（例：indexモジュールのみ）
+$ TEST_MODULE=moneybook.e2e.index tox -e e2e
 ```
 
 または、直接実行する場合：
