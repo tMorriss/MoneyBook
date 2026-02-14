@@ -64,21 +64,19 @@ class Tools(SeleniumBase):
         self._location(self.live_server_url + reverse('moneybook:tools'))
 
         # チェック日の表が表示されている
-        checked_date_table = self.driver.find_element(By.ID, 'checked_dates')
+        checked_date_table = self.driver.find_element(By.ID, 'checked-date')
         self.assertTrue(checked_date_table.is_displayed())
 
     def test_update_checked_date(self):
-        """チェック日を更新できることを確認"""
+        """チェック日の入力フィールドが表示されることを確認"""
         self._login()
 
         self._location(self.live_server_url + reverse('moneybook:tools'))
 
-        # チェック日更新ボタンをクリック
-        self.driver.find_element(By.XPATH, '//button[contains(text(), "チェック日更新")]').click()
-        time.sleep(1)
-
-        # モーダルが表示される（実装による）
-        # チェック日を変更する処理
+        # チェック日の入力フィールドが表示されている
+        self.assertTrue(self.driver.find_element(By.ID, 'check_year').is_displayed())
+        self.assertTrue(self.driver.find_element(By.ID, 'check_month').is_displayed())
+        self.assertTrue(self.driver.find_element(By.ID, 'check_day').is_displayed())
 
     def test_now_bank_section(self):
         """銀行残高セクションが表示されることを確認"""
