@@ -101,7 +101,8 @@ MoneyBook/
 │   ├── requirements.txt       # 本番環境の依存関係
 │   ├── requirements_test.txt  # テストツール
 │   ├── requirements_lint.txt  # コード品質チェック
-│   └── requirements_selenium.txt # e2eテスト（Selenium、ChromeDriver）
+│   ├── requirements_selenium.txt # e2eテスト（Selenium、ChromeDriver）
+│   └── requirements_dev.txt   # 開発ツール（tox等）
 ├── .github/                    # GitHub関連
 │   └── workflows/             # GitHub Actionsワークフロー
 ├── .vscode/                    # VSCode設定
@@ -109,6 +110,7 @@ MoneyBook/
 ├── .dockerignore               # Dockerビルド除外設定
 ├── .flake8                     # Flake8リンター設定
 ├── .gitignore                  # Git除外設定
+├── tox.ini                     # Tox設定（lint、テスト実行）
 ├── check_e2e_matrix.sh         # e2e Matrix検証スクリプト（CI用）
 ├── createDataYaml.py           # データYAML生成スクリプト
 ├── createOtherYaml.py          # その他YAML生成スクリプト
@@ -201,6 +203,7 @@ Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
 pip install -r requirements/requirements.txt
 pip install -r requirements/requirements_test.txt
 pip install -r requirements/requirements_lint.txt
+pip install -r requirements/requirements_dev.txt
 
 # データベースマイグレーション
 python manage.py migrate
@@ -220,9 +223,31 @@ python manage.py runserver
 
 ## テスト実行
 
+### 推奨: toxを使用した実行
+
+toxを使用することで、環境を分離して一貫性のあるテストが可能です。
+
+```bash
+# リント確認
+tox -e lint
+
+# 単体テスト
+tox -e unittest
+
+# e2eテスト
+tox -e e2e
+
+# 全て実行
+tox
+```
+
 ### リント確認
 
 ```bash
+# tox使用（推奨）
+tox -e lint
+
+# 直接実行
 flake8 . --count --ignore=E722,W503 --max-line-length=140 \
   --exclude moneybook/migrations,__init__.py \
   --show-source --statistics --import-order-style smarkets
@@ -240,6 +265,10 @@ flake8 . --count --ignore=E722,W503 --max-line-length=140 \
 ### 単体テスト
 
 ```bash
+# tox使用（推奨）
+tox -e unittest
+
+# 直接実行
 # カバレッジ付きテスト実行
 coverage run --source='moneybook.models,moneybook.views,moneybook.utils,moneybook.middleware,moneybook.forms' \
   manage.py test moneybook.tests --settings config.settings.test
@@ -263,13 +292,21 @@ coverage xml
 ### e2eテスト
 
 ```bash
+# tox使用（推奨）
+tox -e e2e
+
+# 直接実行
 # ヘッドレスモード（デフォルト）
 python manage.py test moneybook.e2e --settings config.settings.test
 
 # ブラウザ表示モード（Mac）
+HEADLESS=0 tox -e e2e
+# または直接実行
 HEADLESS=0 python manage.py test moneybook.e2e --settings config.settings.test
 
 # ブラウザ表示モード（Windows）
+$env:HEADLESS="0"; tox -e e2e
+# または直接実行
 $env:HEADLESS="0"; python manage.py test moneybook.e2e --settings config.settings.test
 ```
 
@@ -330,20 +367,21 @@ docker run -p 8000:8000 moneybook:latest
 | `requirements/requirements_test.txt` | テストツール |
 | `requirements/requirements_selenium.txt` | e2eテスト（Selenium、ChromeDriver） |
 | `requirements/requirements_lint.txt` | コード品質チェック |
+| `requirements/requirements_dev.txt` | 開発ツール（tox等） |
 
 ### CI/CD
 
 - **Jenkins**: `build/jenkins.sh`スクリプトでビルド・テスト・デプロイを自動化
 - **GitHub Actions**: `.github/workflows/`でワークフロー定義
   - `python-lint-test.yml`: Pull Request時に自動実行
-    - **lint**: Flake8によるコード品質チェック
+    - **lint**: toxを使用したFlake8によるコード品質チェック
     - **check-e2e-matrix**: e2e Matrix設定の検証（`check_e2e_matrix.sh`シェルスクリプトを実行）
       - `moneybook/e2e/`ディレクトリ内で` def test_`パターンを含むファイル（実際のテストを含むファイル）を自動検出
       - matrix設定との整合性をチェック
       - 漏れがある場合はCIをエラーにする
       - `yq`コマンドを使用してYAML解析
-    - **unittest**: カバレッジ付き単体テスト
-    - **e2e**: e2eテスト（matrix戦略でテストモジュール別に並列実行）
+    - **unittest**: toxを使用したカバレッジ付き単体テスト
+    - **e2e**: toxを使用したe2eテスト（matrix戦略でテストモジュール別に並列実行）
       - 現在のテストモジュール: `index`, `add`, `login`
       - ⚠️ 新規e2eテストファイル追加時は、matrixを更新してCI上で実行されるようにすること（`check-e2e-matrix`ジョブが自動チェックする）
 

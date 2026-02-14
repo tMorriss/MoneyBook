@@ -22,12 +22,24 @@ Pod定義はKubernetes互換のYAML形式（`build/pod.yaml`）で管理され�
 ## lint 確認
 
 ```
+$ tox -e lint
+```
+
+または、直接実行する場合：
+
+```
 $ flake8 . --count --ignore=E722,W503 --max-line-length=140 --exclude moneybook/migrations,__init__.py --show-source --statistics --import-order-style smarkets
 ```
 
 ## 単体テスト
 
 [![codecov](https://codecov.io/gh/tMorriss/MoneyBook/branch/master/graph/badge.svg?token=E522OPRLRM)](https://codecov.io/gh/tMorriss/MoneyBook)
+
+```
+$ tox -e unittest
+```
+
+または、直接実行する場合：
 
 ```
 $ coverage run --source='moneybook.models,moneybook.views,moneybook.utils,moneybook.middleware,moneybook.forms' manage.py test moneybook.tests --settings config.settings.test
@@ -43,6 +55,12 @@ $ coverage xml
 ## e2e テスト
 
 ```
+$ tox -e e2e
+```
+
+または、直接実行する場合：
+
+```
 $ python manage.py test moneybook.e2e --settings config.settings.test
 ```
 
@@ -52,8 +70,12 @@ e2e テストはデフォルトでヘッドレスモードで実行されます�
 
 ```
 # mac
+$ HEADLESS=0 tox -e e2e
+# または直接実行
 $ HEADLESS=0 python manage.py test moneybook.e2e --settings config.settings.test
 # winodows
+$ $env:HEADLESS="0"; tox -e e2e
+# または直接実行
 $ $env:HEADLESS="0"; python manage.py test moneybook.e2e --settings config.settings.test
 ```
 
