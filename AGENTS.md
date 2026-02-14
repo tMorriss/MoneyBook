@@ -109,6 +109,7 @@ MoneyBook/
 ├── .dockerignore               # Dockerビルド除外設定
 ├── .flake8                     # Flake8リンター設定
 ├── .gitignore                  # Git除外設定
+├── check_init_py.py            # __init__.py記載漏れチェックスクリプト
 ├── createDataYaml.py           # データYAML生成スクリプト
 ├── createOtherYaml.py          # その他YAML生成スクリプト
 ├── generate_secretkey_setting.py # シークレットキー生成
@@ -210,14 +211,35 @@ python manage.py runserver
 
 ### コード変更時の確認事項
 
-1. **リント実行** - コード品質チェック
-2. **単体テスト** - 機能の正常性確認
-3. **E2Eテスト** - 統合動作確認
-4. **マイグレーション** - モデル変更時
+1. **__init__.pyチェック** - Pythonパッケージディレクトリの完全性確認
+2. **リント実行** - コード品質チェック
+3. **単体テスト** - 機能の正常性確認
+4. **E2Eテスト** - 統合動作確認
+5. **マイグレーション** - モデル変更時
 
 ---
 
 ## テスト実行
+
+### __init__.pyチェック
+
+```bash
+python check_init_py.py
+```
+
+このスクリプトは、Pythonパッケージとして扱うべきディレクトリに`__init__.py`ファイルが存在するかをチェックします。
+
+**チェック対象**:
+- Pythonファイル(.py)を含むディレクトリ
+- サブディレクトリに`__init__.py`を持つディレクトリ
+
+**除外対象**:
+- `.git`, `.github`, `.vscode`などの設定ディレクトリ
+- `__pycache__`, `.pytest_cache`などのキャッシュディレクトリ
+- `build`, `dist`などのビルド成果物ディレクトリ
+- `static`, `templates`, `fixtures`, `migrations`などの非Pythonコードディレクトリ
+
+新しいPythonパッケージディレクトリを追加した場合は、必ず空の`__init__.py`ファイルを作成してください。
 
 ### リント確認
 
@@ -335,6 +357,7 @@ docker run -p 8000:8000 moneybook:latest
 - **Jenkins**: `build/jenkins.sh`スクリプトでビルド・テスト・デプロイを自動化
 - **GitHub Actions**: `.github/workflows/`でワークフロー定義
   - `python-lint-test.yml`: Pull Request時に自動実行
+    - **check-init-py**: `__init__.py`ファイルの記載漏れチェック
     - **lint**: Flake8によるコード品質チェック
     - **unittest**: カバレッジ付き単体テスト
     - **e2e**: E2Eテスト（matrix戦略でテストモジュール別に並列実行）
@@ -359,7 +382,14 @@ docker run -p 8000:8000 moneybook:latest
    - 関連する単体テストを実行
    - 必要に応じてE2Eテストを実行
 
-4. **E2Eテストファイル追加時の手順**
+4. **新規Pythonパッケージディレクトリ追加時の手順**
+   - 新しいディレクトリにPythonファイル(.py)を追加した場合
+   - **必ず**そのディレクトリに空の`__init__.py`ファイルを作成する
+   - `python check_init_py.py`を実行して記載漏れがないことを確認
+   - これにより、Pythonパッケージとして正しく認識される
+   - ⚠️ `__init__.py`を忘れると、インポートエラーが発生する可能性がある
+
+5. **E2Eテストファイル追加時の手順**
    - `moneybook/e2e/` ディレクトリに新しいテストファイル（例: `edit.py`）を追加した場合
    - **必ず** `.github/workflows/python-lint-test.yml` のe2eジョブのmatrixを更新する
    - 具体的には、以下の箇所に新しいテストモジュール名を追加：
