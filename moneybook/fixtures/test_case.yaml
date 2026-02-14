@@ -1,0 +1,168 @@
+- model: moneybook.Direction
+  pk: 1
+  fields:
+    name: 収入
+- model: moneybook.Direction
+  pk: 2
+  fields:
+    name: 支出
+
+- model: moneybook.Method
+  pk: 1
+  fields:
+    show_order: 2
+    name: 現金
+    chargeable: 0
+- model: moneybook.Method
+  pk: 2
+  fields:
+    show_order: 1
+    name: 銀行
+    chargeable: 0
+- model: moneybook.Method
+  pk: 3
+  fields:
+    show_order: 4
+    name: PayPay
+    chargeable: 1
+- model: moneybook.Method
+  pk: 4
+  fields:
+    show_order: 0
+    name: nanaco
+    chargeable: 1
+- model: moneybook.Method
+  pk: 5
+  fields:
+    show_order: -1
+    name: Edy
+    chargeable: 1
+- model: moneybook.Method
+  pk: 6
+  fields:
+    show_order: 3
+    name: Kyash
+    chargeable: 1
+
+- model: moneybook.Category
+  pk: 1
+  fields:
+    name: 食費
+    show_order: 1
+    is_living_cost: 1
+    is_variable_cost: 0
+    default_direction: 2
+- model: moneybook.Category
+  pk: 2
+  fields:
+    name: 必需品
+    show_order: 2
+    is_living_cost: 0
+    is_variable_cost: 1
+    default_direction: 2
+- model: moneybook.Category
+  pk: 3
+  fields:
+    name: その他
+    show_order: 0
+    is_living_cost: 0
+    is_variable_cost: 0
+    default_direction: 2
+- model: moneybook.Category
+  pk: 4
+  fields:
+    name: 内部移動
+    show_order: -1
+    is_living_cost: 0
+    is_variable_cost: 0
+    default_direction: 2
+- model: moneybook.Category
+  pk: 5
+  fields:
+    name: 貯金
+    show_order: -2
+    is_living_cost: 0
+    is_variable_cost: 0
+    default_direction: 2
+- model: moneybook.Category
+  pk: 6
+  fields:
+    name: 計算外
+    show_order: -3
+    is_living_cost: 0
+    is_variable_cost: 0
+    default_direction: 2
+- model: moneybook.Category
+  pk: 7
+  fields:
+    name: 収入
+    show_order: -4
+    is_living_cost: 0
+    is_variable_cost: 0
+    default_direction: 1
+- model: moneybook.Category
+  pk: 8
+  fields:
+    name: 交通費
+    show_order: 3
+    is_living_cost: 0
+    is_variable_cost: 1
+    default_direction: 2
+
+- model: moneybook.SeveralCosts
+  fields:
+    name: LivingCostMark
+    price: 1000
+- model: moneybook.SeveralCosts
+  fields:
+    name: ActualCashBalance
+    price: 2000
+
+- model: moneybook.CreditCheckedDate
+  pk: 1
+  fields:
+    name: センチュリオン
+    date: 3000-01-01
+    price: 30000
+    show_order: 2
+- model: moneybook.CreditCheckedDate
+  pk: 2
+  fields:
+    name: AmexGold
+    date: 2000-02-04
+    price: 2000
+    show_order: 1
+
+- model: moneybook.BankBalance
+  pk: 1
+  fields:
+    name: みずほ
+    price: 40000
+    show_order: 2
+- model: moneybook.BankBalance
+  pk: 2
+  fields:
+    name: 三井住友
+    price: 20000
+    show_order: 1
+
+- model: moneybook.CheckedDate
+  pk: 1
+  fields:
+    method: 1
+    date: 2000-01-02
+- model: moneybook.CheckedDate
+  pk: 2
+  fields:
+    method: 2
+    date: 2000-01-05
+- model: moneybook.CheckedDate
+  pk: 3
+  fields:
+    method: 3
+    date: 2000-02-02
+- model: moneybook.CheckedDate
+  pk: 6
+  fields:
+    method: 6
+    date: 2000-02-03

@@ -243,6 +243,10 @@ tox
 
 ### リント確認
 
+プロジェクトでは `flake8` を使用してコード品質をチェックしています。
+
+#### 実行コマンド
+
 ```bash
 # tox使用（推奨）
 tox -e lint
@@ -253,16 +257,21 @@ flake8 . --count --ignore=E722,W503 --max-line-length=140 \
   --show-source --statistics --import-order-style smarkets
 ```
 
-**設定** (`.flake8`):
-- 無視するルール: `E722` (bare except), `W503` (line break before binary operator)
-- 最大行長: 140文字
-- 除外: マイグレーション、`__init__.py`
-- インポート順序スタイル: smarkets
+#### 設定詳細 (`.flake8`)
+
+- **無視するルール**: `E722` (bare except), `W503` (line break before binary operator)
+- **最大行長**: 140文字
+- **除外**: マイグレーション、`__init__.py`
+- **インポート順序スタイル**: smarkets
 - **クオートスタイル**: `flake8-quotes`により、シングルクオート `'...'` を強制
-  - 文字列内にシングルクオートが含まれる場合のみダブルクオート `"..."` を使用（エスケープ回避のため）
-  - docstringは常にダブルクオート `"""..."""` を使用（PEP 257に準拠）
+  - 文字列内にシングルクオートが含まれる場合のみダブルクオート `"..."` を使用
+  - docstringは常にダブルクオート `"""..."""` を使用（PEP 257準拠）
 
 ### 単体テスト
+
+`moneybook.tests` パッケージ内のテストを実行します。カバレッジ測定も合わせて行うことを推奨します。
+
+#### 実行コマンド
 
 ```bash
 # tox使用（推奨）
@@ -276,11 +285,14 @@ coverage run --source='moneybook.models,moneybook.views,moneybook.utils,moneyboo
 # レポート表示
 coverage report -m
 
-# XML形式で出力（VSCode連携）
+# XML形式で出力（VSCode連携など）
 coverage xml
+
+# 通常の実行（カバレッジなし）
+python manage.py test moneybook.tests --settings config.settings.test
 ```
 
-**カバレッジ対象**:
+#### カバレッジ対象
 - `moneybook.models`
 - `moneybook.views`
 - `moneybook.utils`
@@ -289,7 +301,11 @@ coverage xml
 
 [![codecov](https://codecov.io/gh/tMorriss/MoneyBook/branch/master/graph/badge.svg?token=E522OPRLRM)](https://codecov.io/gh/tMorriss/MoneyBook)
 
-### e2eテスト
+### E2Eテスト
+
+Seleniumを使用したブラウザ自動化テストです。`moneybook.e2e` パッケージ内に配置されています。
+
+#### 実行コマンド
 
 ```bash
 # tox使用（推奨）
@@ -304,6 +320,24 @@ HEADLESS=0 tox -e e2e
 
 # ブラウザ表示モード（Windows）
 $env:HEADLESS="0"; tox -e e2e
+```
+
+#### トラブルシューティング
+
+**特定のテストのみ実行**:
+
+```bash
+# 特定のテストクラスを実行
+python manage.py test moneybook.e2e.login --settings config.settings.test
+
+# 特定のテストメソッドを実行
+python manage.py test moneybook.e2e.login.Login.test_login_button --settings config.settings.test
+```
+
+**詳細なログを表示**:
+
+```bash
+python manage.py test moneybook.e2e --settings config.settings.test --verbosity 2
 ```
 
 **重要**: `moneybook/e2e/` ディレクトリに新しいテストファイルを追加した場合、GitHub Actionsのワークフロー (`.github/workflows/python-lint-test.yml`) のe2eジョブのmatrixも更新する必要があります。詳細は「[エージェント向け注意事項 > コード変更時の推奨手順 > e2eテストファイル追加時の手順](#エージェント向け注意事項)」を参照してください。

@@ -61,7 +61,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        test-module: [index, add, login]
+        test-module: [index, add, login, delete, edit, period_balances, search, tools]
     env:
       TEST_MODULE: moneybook.e2e.${{ matrix.test-module }}
     steps:

@@ -10,7 +10,7 @@ from selenium.webdriver.common.by import By
 
 
 class SeleniumBase(StaticLiveServerTestCase):
-    fixtures = ['data_test_case']
+    fixtures = ['test_case', 'data_test_case']
     username = 'tester'
     password = 'GZK-kva_yfj1ahr0tcr'  # Chromeで警告が出ちゃうので複雑なパスワードを使う
 
@@ -33,7 +33,7 @@ class SeleniumBase(StaticLiveServerTestCase):
 
     def _location(self, url):
         self.driver.get(url)
-        time.sleep(0.5)
+        time.sleep(1)
 
     def _login(self):
         self._location(self.live_server_url + reverse('moneybook:login'))
