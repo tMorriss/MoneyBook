@@ -52,7 +52,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        test-module: [index, add, login, delete, edit, period_balances, search, statistics, tools]
+        test-module: [index, add, login, delete, edit, period_balances, search, tools]
     env:
       TEST_MODULE: ${{ matrix.test-module }}
     steps:

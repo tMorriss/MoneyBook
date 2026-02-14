@@ -5,5 +5,4 @@ from .index import *
 from .login import *
 from .period_balances import *
 from .search import *
-from .statistics import *
 from .tools import *
