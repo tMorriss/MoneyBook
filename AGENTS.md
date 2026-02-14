@@ -299,19 +299,11 @@ tox -e e2e
 # 特定のテストモジュールを実行（例：indexモジュールのみ）
 TEST_MODULE=moneybook.e2e.index tox -e e2e
 
-# 直接実行
-# ヘッドレスモード（デフォルト）
-python manage.py test moneybook.e2e --settings config.settings.test
-
 # ブラウザ表示モード（Mac）
 HEADLESS=0 tox -e e2e
-# または直接実行
-HEADLESS=0 python manage.py test moneybook.e2e --settings config.settings.test
 
 # ブラウザ表示モード（Windows）
 $env:HEADLESS="0"; tox -e e2e
-# または直接実行
-$env:HEADLESS="0"; python manage.py test moneybook.e2e --settings config.settings.test
 ```
 
 **重要**: `moneybook/e2e/` ディレクトリに新しいテストファイルを追加した場合、GitHub Actionsのワークフロー (`.github/workflows/python-lint-test.yml`) のe2eジョブのmatrixも更新する必要があります。詳細は「[エージェント向け注意事項 > コード変更時の推奨手順 > e2eテストファイル追加時の手順](#エージェント向け注意事項)」を参照してください。
