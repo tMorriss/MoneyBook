@@ -27,17 +27,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Python 3.11
-        uses: actions/setup-python@v2
-        with:
-          python-version: "3.11"
-      - name: Install PyYAML
+      - name: Install yq
         run: |
-          python -m pip install --upgrade pip
-          pip install PyYAML
+          sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+          sudo chmod +x /usr/local/bin/yq
       - name: Validate E2E Matrix
         run: |
-          python check_e2e_matrix.py
+          chmod +x check_e2e_matrix.sh
+          ./check_e2e_matrix.sh
   unittest:
     name: Unit Test
     runs-on: ubuntu-latest

@@ -109,7 +109,7 @@ MoneyBook/
 ├── .dockerignore               # Dockerビルド除外設定
 ├── .flake8                     # Flake8リンター設定
 ├── .gitignore                  # Git除外設定
-├── check_e2e_matrix.py         # E2E Matrix検証スクリプト（CI用）
+├── check_e2e_matrix.sh         # E2E Matrix検証スクリプト（CI用）
 ├── createDataYaml.py           # データYAML生成スクリプト
 ├── createOtherYaml.py          # その他YAML生成スクリプト
 ├── generate_secretkey_setting.py # シークレットキー生成
@@ -337,9 +337,10 @@ docker run -p 8000:8000 moneybook:latest
 - **GitHub Actions**: `.github/workflows/`でワークフロー定義
   - `python-lint-test.yml`: Pull Request時に自動実行
     - **lint**: Flake8によるコード品質チェック
-    - **check-e2e-matrix**: E2E Matrix設定の検証（`check_e2e_matrix.py`スクリプトを実行）
+    - **check-e2e-matrix**: E2E Matrix設定の検証（`check_e2e_matrix.sh`シェルスクリプトを実行）
       - `moneybook/e2e/`ディレクトリのテストモジュールとmatrix設定の整合性をチェック
       - 漏れがある場合はCIをエラーにする
+      - `yq`コマンドを使用してYAML解析
     - **unittest**: カバレッジ付き単体テスト
     - **e2e**: E2Eテスト（matrix戦略でテストモジュール別に並列実行）
       - 現在のテストモジュール: `index`, `add`, `login`
