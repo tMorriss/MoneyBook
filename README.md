@@ -43,6 +43,12 @@ $ tox -e e2e
 $ TEST_MODULE=moneybook.e2e.index tox -e e2e
 ```
 
+または、直接実行する場合：
+
+```
+$ python manage.py test moneybook.e2e --settings config.settings.test
+```
+
 ### ヘッドレスモード
 
 e2e テストはデフォルトでヘッドレスモードで実行されます。ブラウザを表示して実行する場合は、環境変数`HEADLESS=0`を設定してください。
@@ -50,8 +56,12 @@ e2e テストはデフォルトでヘッドレスモードで実行されます�
 ```
 # mac
 $ HEADLESS=0 tox -e e2e
+# または直接実行
+$ HEADLESS=0 python manage.py test moneybook.e2e --settings config.settings.test
 # windows
 $ $env:HEADLESS="0"; tox -e e2e
+# または直接実行
+$ $env:HEADLESS="0"; python manage.py test moneybook.e2e --settings config.settings.test
 ```
 
 ## メモ
