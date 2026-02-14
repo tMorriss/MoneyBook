@@ -33,7 +33,7 @@ class SeleniumBase(StaticLiveServerTestCase):
 
     def _location(self, url):
         self.driver.get(url)
-        time.sleep(0.5)
+        time.sleep(1)
 
     def _login(self):
         self._location(self.live_server_url + reverse('moneybook:login'))
