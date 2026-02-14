@@ -28,11 +28,6 @@ class Delete(SeleniumBase):
 
         # 削除ボタンをクリック
         self.driver.find_element(By.XPATH, '//input[@value="削除"]').click()
-        time.sleep(1)
-
-        # アラートを承認
-        alert = self.driver.switch_to.alert
-        alert.accept()
         time.sleep(2)
 
         # トップに戻って削除されたことを確認
@@ -61,12 +56,7 @@ class Delete(SeleniumBase):
 
         # 削除ボタンをクリック
         self.driver.find_element(By.XPATH, '//input[@value="削除"]').click()
-        time.sleep(1)
-
-        # アラートをキャンセル
-        alert = self.driver.switch_to.alert
-        alert.dismiss()
-        time.sleep(1)
+        time.sleep(2)
 
         # トップに戻ってデータがまだ存在することを確認
         self._location(self.live_server_url + reverse('moneybook:index'))
@@ -105,11 +95,6 @@ class Delete(SeleniumBase):
 
         # 削除ボタンをクリック
         self.driver.find_element(By.XPATH, '//input[@value="削除"]').click()
-        time.sleep(1)
-
-        # アラートを承認
-        alert = self.driver.switch_to.alert
-        alert.accept()
         time.sleep(2)
 
         # トップに戻って1件だけ削除されたことを確認
