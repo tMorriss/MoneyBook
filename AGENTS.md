@@ -2,6 +2,8 @@
 
 このドキュメントは、MoneyBookリポジトリに対してコード変更やレビューを行うエージェント向けの包括的なガイドです。
 
+## 前提
+
 対話やレビュー、サマリー作成、PRタイトル作成やコメント(ソースコード上のコメントも含む)などは日本語で行うこと。
 
 ## 📋 目次
@@ -22,6 +24,7 @@
 **MoneyBook** は、個人用の家計簿管理を行うDjangoベースのWebアプリケーションです。
 
 ### 主な機能
+
 - 📊 収支データの記録と管理
 - 💰 カテゴリー別の支出・収入の分類
 - 🏦 銀行残高の追跡
@@ -35,6 +38,7 @@
 ## 技術スタック
 
 ### バックエンド
+
 - **Python**: プログラミング言語
 - **Django 4.2.27+**: Webフレームワーク
 - **MySQL**: データベース
@@ -42,11 +46,13 @@
 - **Gunicorn**: WSGIサーバー
 
 ### フロントエンド
+
 - **HTML/CSS/JavaScript**: 基本的なWeb技術
 - **AmCharts4**: チャートライブラリ（統計グラフ表示）
 - **django-mathfilters**: Djangoテンプレートの数学フィルター
 
 ### 開発・テスト
+
 - **Selenium**: e2eテスト（ブラウザ自動化）
 - **Coverage.py**: コードカバレッジ測定
 - **Flake8**: コード品質チェック（リンター）
@@ -56,6 +62,7 @@
 - **python-dateutil**: 日付処理ユーティリティ
 
 ### DevOps
+
 - **Docker**: コンテナ化
 - **Nginx**: リバースプロキシ・Webサーバー
 - **Jenkins**: CI/CDパイプライン
@@ -101,7 +108,8 @@ MoneyBook/
 │   ├── requirements.txt       # 本番環境の依存関係
 │   ├── requirements_test.txt  # テストツール
 │   ├── requirements_lint.txt  # コード品質チェック
-│   └── requirements_selenium.txt # e2eテスト（Selenium、ChromeDriver）
+│   ├── requirements_e2e.txt   # e2eテスト（Selenium、ChromeDriver）
+│   └── requirements_dev.txt   # 開発ツール（tox等）
 ├── .github/                    # GitHub関連
 │   └── workflows/             # GitHub Actionsワークフロー
 ├── .vscode/                    # VSCode設定
@@ -109,6 +117,7 @@ MoneyBook/
 ├── .dockerignore               # Dockerビルド除外設定
 ├── .flake8                     # Flake8リンター設定
 ├── .gitignore                  # Git除外設定
+├── tox.ini                     # Tox設定（lint、テスト実行）
 ├── check_e2e_matrix.sh         # e2e Matrix検証スクリプト（CI用）
 ├── createDataYaml.py           # データYAML生成スクリプト
 ├── createOtherYaml.py          # その他YAML生成スクリプト
@@ -121,22 +130,6 @@ MoneyBook/
 └── README.md                   # プロジェクトREADME
 ```
 
-### ディレクトリ詳細
-
-| ディレクトリ | 目的 |
-|-----------|---------|
-| `config/settings/` | 環境別のDjango設定（開発、本番、テスト） |
-| `moneybook/models/` | データベースモデル定義（Direction, Method, Category, Dataなど） |
-| `moneybook/views/` | ビューロジック（10個のモジュールに分割） |
-| `moneybook/templates/` | Djangoテンプレート（ベースレイアウト、フォーム、データテーブル、チャート） |
-| `moneybook/static/` | クライアント側アセット（CSS、JS、画像） |
-| `moneybook/migrations/` | データベーススキーマバージョニング（22マイグレーション） |
-| `moneybook/tests/` | ユニットテスト（モデル、ビュー、フォーム、ユーティリティ） |
-| `moneybook/e2e/` | e2eブラウザ自動化テスト |
-| `moneybook/middleware/` | カスタム認証ミドルウェア |
-| `build/` | 依存関係、Docker、デプロイ設定 |
-| `requirements/` | Pythonパッケージの依存関係ファイル |
-
 ---
 
 ## 主要コンポーネント
@@ -145,16 +138,16 @@ MoneyBook/
 
 MoneyBookの中核となるデータモデル：
 
-| モデル | 説明 |
-|--------|------|
-| `Direction` | 取引方向（収入/支出） |
-| `Method` | 支払い方法（銀行、PayPay、現金など） |
-| `Category` | 費目カテゴリー（生活費フラグ、変動費フラグ付き） |
-| `Data` | メインの取引記録 |
-| `PeriodicData` | 定期取引データ（毎月の定期的な取引を設定） |
-| `BankBalance` | 銀行残高 |
-| `CheckedDate` | 確認済み日付 |
-| `PreCheckedDate` | 事前確認日付 |
+| モデル           | 説明                                             |
+| ---------------- | ------------------------------------------------ |
+| `Direction`      | 取引方向（収入/支出）                            |
+| `Method`         | 支払い方法（銀行、PayPay、現金など）             |
+| `Category`       | 費目カテゴリー（生活費フラグ、変動費フラグ付き） |
+| `Data`           | メインの取引記録                                 |
+| `PeriodicData`   | 定期取引データ（毎月の定期的な取引を設定）       |
+| `BankBalance`    | 銀行残高                                         |
+| `CheckedDate`    | 確認済み日付                                     |
+| `PreCheckedDate` | 事前確認日付                                     |
 
 ### ビュー（`views/`ディレクトリ）
 
@@ -191,28 +184,33 @@ MoneyBookの中核となるデータモデル：
 ## 定期取引機能（Periodic）
 
 ### 概要
+
 家賃やサブスク支払い、貯金など、毎月定期的に発生する取引を一括登録する機能です。
 
 ### 機能詳細
 
 #### 1. 一覧表示（`/periodic`）
+
 - 設定済みの定期取引を表形式で一覧表示
 - 年月を指定して「追加」ボタンで一括登録を実行
 - 年月のデフォルト値は来月（未入力時に使用）
 - 「設定」ボタンで設定画面に遷移
 
 #### 2. 設定画面（`/periodic/config`）
+
 - 定期取引データの追加・編集・削除
 - テーブル形式で全項目を編集可能
 - 「更新」ボタンで保存して一覧画面に戻る
 
 #### 3. 一括登録API（`/periodic/add_bulk`）
+
 - 指定された年月に対して定期取引を登録
 - 日付の早いものから順にAjax送信
 - 重複チェックなし（常に登録）
 - 月の日数を超える日付は最終日に自動調整
 
 ### データモデル
+
 ```python
 class PeriodicData:
     day         # 日（1-31）
@@ -225,11 +223,13 @@ class PeriodicData:
 ```
 
 ### URL設計
+
 - `/moneybook/periodic` - 一覧表示
 - `/moneybook/periodic/config` - 設定画面
 - `/moneybook/periodic/add_bulk` - 一括登録API（POST）
 
 ### テスト
+
 - **モデルテスト**: 5個のテストケース
 - **ビューテスト**: 14個のテストケース（重複登録、日付オーバーフロー等）
 - **E2Eテスト**: 7個のテストケース（ナビゲーション、CRUD、一括登録、デフォルト値）
@@ -252,6 +252,7 @@ Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
 pip install -r requirements/requirements.txt
 pip install -r requirements/requirements_test.txt
 pip install -r requirements/requirements_lint.txt
+pip install -r requirements/requirements_dev.txt
 
 # データベースマイグレーション
 python manage.py migrate
@@ -260,28 +261,31 @@ python manage.py migrate
 python manage.py runserver
 ```
 
-### コード変更時の確認事項
-
-1. **リント実行** - コード品質チェック
-2. **単体テスト** - 機能の正常性確認
-3. **e2eテスト** - 統合動作確認
-4. **マイグレーション** - モデル変更時
-
 ---
 
 ## テスト実行
 
+### 推奨: toxを使用した実行
+
+toxを使用することで、環境を分離して一貫性のあるテストが可能です。
+
+```bash
+# リント確認
+tox -e lint
+
+# 単体テスト
+tox -e unittest
+
+# e2eテスト
+tox -e e2e
+
+# 全て実行
+tox
+```
+
 ### リント確認
 
 プロジェクトでは `flake8` を使用してコード品質をチェックしています。
-
-#### 実行コマンド
-
-```bash
-flake8 . --count --ignore=E722,W503 --max-line-length=140 \
-  --exclude moneybook/migrations,__init__.py \
-  --show-source --statistics --import-order-style smarkets
-```
 
 #### 設定詳細 (`.flake8`)
 
@@ -297,24 +301,8 @@ flake8 . --count --ignore=E722,W503 --max-line-length=140 \
 
 `moneybook.tests` パッケージ内のテストを実行します。カバレッジ測定も合わせて行うことを推奨します。
 
-#### 実行コマンド
-
-```bash
-# カバレッジ付きテスト実行
-coverage run --source='moneybook.models,moneybook.views,moneybook.utils,moneybook.middleware,moneybook.forms' \
-  manage.py test moneybook.tests --settings config.settings.test
-
-# レポート表示
-coverage report -m
-
-# XML形式で出力（VSCode連携など）
-coverage xml
-
-# 通常の実行（カバレッジなし）
-python manage.py test moneybook.tests --settings config.settings.test
-```
-
 #### カバレッジ対象
+
 - `moneybook.models`
 - `moneybook.views`
 - `moneybook.utils`
@@ -327,38 +315,25 @@ python manage.py test moneybook.tests --settings config.settings.test
 
 Seleniumを使用したブラウザ自動化テストです。`moneybook.e2e` パッケージ内に配置されています。
 
-#### 実行コマンド
+#### 実行例
 
 ```bash
-# ヘッドレスモード（デフォルト・CI環境）
-python manage.py test moneybook.e2e --settings config.settings.test
+# 特定のテストモジュールを実行（例：indexモジュールのみ）
+TEST_MODULE=moneybook.e2e.index.Index.test_index tox -e e2e
 
 # ブラウザ表示モード（Mac）
-HEADLESS=0 python manage.py test moneybook.e2e --settings config.settings.test
+HEADLESS=0 tox -e e2e
 
 # ブラウザ表示モード（Windows）
-$env:HEADLESS="0"; python manage.py test moneybook.e2e --settings config.settings.test
+$env:HEADLESS="0"; tox -e e2e
 ```
 
 #### トラブルシューティング
 
-**特定のテストのみ実行**:
-
 ```bash
-# 特定のテストクラスを実行
-python manage.py test moneybook.e2e.login --settings config.settings.test
-
-# 特定のテストメソッドを実行
-python manage.py test moneybook.e2e.login.Login.test_login_button --settings config.settings.test
-```
-
-**詳細なログを表示**:
-
-```bash
+# 詳細なログを表示
 python manage.py test moneybook.e2e --settings config.settings.test --verbosity 2
 ```
-
-**重要**: `moneybook/e2e/` ディレクトリに新しいテストファイルを追加した場合、GitHub Actionsのワークフロー (`.github/workflows/python-lint-test.yml`) のe2eジョブのmatrixも更新する必要があります。詳細は「[エージェント向け注意事項 > コード変更時の推奨手順 > e2eテストファイル追加時の手順](#エージェント向け注意事項)」を参照してください。
 
 ---
 
@@ -372,7 +347,7 @@ python manage.py test moneybook.e2e --settings config.settings.test --verbosity 
    - 標準ライブラリ
    - サードパーティライブラリ
    - ローカルアプリケーション
-4. **文字リテラル**: 
+4. **文字リテラル**:
    - **原則**: シングルクオート `'...'` を使用
    - **例外**: 文字列内にシングルクオートが含まれる場合はダブルクオート `"..."` を使用（エスケープ回避のため）
    - **docstring**: 常にダブルクオート `"""..."""` を使用（PEP 257に準拠）
@@ -409,28 +384,29 @@ docker run -p 8000:8000 moneybook:latest
 
 ### 依存関係
 
-| ファイル | 用途 |
-|---------|------|
-| `requirements/requirements.txt` | 本番環境の依存関係 |
-| `requirements/requirements_test.txt` | テストツール |
-| `requirements/requirements_selenium.txt` | e2eテスト（Selenium、ChromeDriver） |
-| `requirements/requirements_lint.txt` | コード品質チェック |
+| ファイル                             | 用途                                |
+| ------------------------------------ | ----------------------------------- |
+| `requirements/requirements.txt`      | 本番環境の依存関係                  |
+| `requirements/requirements_test.txt` | テストツール                        |
+| `requirements/requirements_e2e.txt`  | e2eテスト（Selenium、ChromeDriver） |
+| `requirements/requirements_lint.txt` | コード品質チェック                  |
+| `requirements/requirements_dev.txt`  | 開発ツール（tox等）                 |
 
 ### CI/CD
 
-- **Jenkins**: `build/jenkins.sh`スクリプトでビルド・テスト・デプロイを自動化
-- **GitHub Actions**: `.github/workflows/`でワークフロー定義
-  - `python-lint-test.yml`: Pull Request時に自動実行
-    - **lint**: Flake8によるコード品質チェック
-    - **check-e2e-matrix**: e2e Matrix設定の検証（`check_e2e_matrix.sh`シェルスクリプトを実行）
-      - `moneybook/e2e/`ディレクトリ内で` def test_`パターンを含むファイル（実際のテストを含むファイル）を自動検出
-      - matrix設定との整合性をチェック
-      - 漏れがある場合はCIをエラーにする
-      - `yq`コマンドを使用してYAML解析
-    - **unittest**: カバレッジ付き単体テスト
-    - **e2e**: e2eテスト（matrix戦略でテストモジュール別に並列実行）
-      - 現在のテストモジュール: `index`, `add`, `login`
-      - ⚠️ 新規e2eテストファイル追加時は、matrixを更新してCI上で実行されるようにすること（`check-e2e-matrix`ジョブが自動チェックする）
+#### Jenkins
+
+- `build/jenkins.sh` スクリプトによる自動ビルド・テスト・デプロイ
+
+#### GitHub Actions
+
+- **ワークフロー**: `.github/workflows/python-lint-test.yml`
+- **トリガー**: Pull Request時に自動実行
+- **ジョブ構成**:
+  - `lint`: コード品質チェック（flake8）
+  - `check-e2e-matrix`: e2e Matrix設定の整合性検証
+  - `unittest`: カバレッジ付き単体テスト
+  - `e2e`: matrix戦略によるe2eテスト並列実行
 
 ---
 
@@ -451,25 +427,23 @@ docker run -p 8000:8000 moneybook:latest
    - 必要に応じてe2eテストを実行
 
 4. **e2eテストファイル追加時の手順**
-   - `moneybook/e2e/` ディレクトリに新しいテストファイル（例: `edit.py`）を追加した場合
+   - `moneybook/e2e/` ディレクトリに新しいテストファイルを追加した場合
    - **必ず** `.github/workflows/python-lint-test.yml` のe2eジョブのmatrixを更新する
    - 具体的には、以下の箇所に新しいテストモジュール名を追加：
      ```yaml
      strategy:
        matrix:
-         test-module: [index, add, login, edit]  # 新規モジュール名を追加
+         test-module: [index, add, login, edit] # 新規モジュール名を追加
      ```
-   - これにより、CI上でも新しいe2eテストが自動実行される
-   - ⚠️ この更新を忘れると、新しいe2eテストがCI上で実行されないため注意
-   - **自動チェック**: GitHub Actionsの`check-e2e-matrix`ジョブが自動的にmatrix設定の漏れをチェックし、漏れがある場合はCIをエラーにする
+   - CI上で新しいe2eテストが自動実行されるようになる
+   - ⚠️ GitHub Actionsの`check-e2e-matrix`ジョブが自動的にmatrix設定の漏れを検出し、CIをエラーにする
 
 5. **マイグレーション**
    - モデル変更時は`makemigrations`を実行
    - マイグレーションファイルをレビュー
 
 6. **ブランチの最新化（必須）**
-   - **git pushする前に、必ずPRのマージ先ブランチを取り込んで最新化すること**
-   - マージ先ブランチ（通常は`master`または`main`）の最新変更を取り込む
+   - **git pushする前に、必ずPRのマージ先ブランチ（通常は`master`）を取り込んで最新化すること**
    - コンフリクトがある場合は解決してからpushする
    - 例: `git fetch origin && git merge origin/master` または `git pull origin master`
 
@@ -478,15 +452,13 @@ docker run -p 8000:8000 moneybook:latest
    - 日本語のコミットメッセージ
 
 8. **PRのタイトルと説明**
-   - PRのタイトルやコメント（説明）は、直近の修正のみではなく、このPRでの修正すべてを含んだものにする
-   - PR全体の目的と変更内容を網羅的に記載する
+   - PRのタイトルと説明は、このPRでの修正すべてを含んだものにする
    - 個別のコミットメッセージは各変更の詳細を記載し、PRの説明は全体のサマリーとする
-   - アプリケーション本体の本番環境に影響がないとき（ドキュメント更新、テストのみの変更など）はPRタイトルに`[skip ci]`を付ける
+   - 本番環境に影響がない場合（ドキュメント更新、テストのみの変更など）はPRタイトルに`[skip ci]`を付ける
 
 9. **AGENTS.mdの更新**
-   - 修正結果に応じて、このAGENTS.mdドキュメント自体の更新が必要か確認する
-   - 新しいディレクトリ、ファイル、技術スタック、開発手順などを追加した場合は、AGENTS.mdに反映する
-   - ドキュメントがリポジトリの実態と常に同期するよう維持する
+   - 修正結果に応じて、このドキュメント自体の更新が必要か確認する
+   - 新しいディレクトリ、ファイル、技術スタック、開発手順などを追加した場合は反映する
 
 ### 既知の問題・制約
 
