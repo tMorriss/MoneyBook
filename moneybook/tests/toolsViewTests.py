@@ -23,7 +23,7 @@ class ToolsViewTests(BaseTestCase):
         self.assertEqual(response.context['actual_cash_balance'], 2000)
         self._assert_list(response.context['credit_checked_date'], ['AmexGold', 'センチュリオン'])
         self.assertEqual(response.context['living_cost_mark'], 1000)
-        self._assert_templates(response.templates, ['tools.html', '_base.html', '_result_message.html'])
+        self._assert_templates(response.templates, ['tools.html', '_base.html', '_tools_task_bar.html', '_result_message.html'])
 
     def test_get_guest(self):
         response = self.client.get(reverse('moneybook:tools'))
