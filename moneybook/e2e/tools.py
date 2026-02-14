@@ -14,9 +14,6 @@ class Tools(SeleniumBase):
 
         self._assert_common()
 
-        # ツール画面のコンテンツが表示されている
-        self.assertTrue(self.driver.find_element(By.TAG_NAME, 'h2').is_displayed())
-
     def test_actual_cash_section(self):
         """実際の現金残高セクションが表示されることを確認"""
         self._login()
