@@ -372,7 +372,6 @@ docker run -p 8000:8000 moneybook:latest
 | `requirements/requirements_e2e.txt` | e2eテスト（Selenium、ChromeDriver） |
 | `requirements/requirements_lint.txt` | コード品質チェック |
 | `requirements/requirements_dev.txt` | 開発ツール（tox等） |
-| `requirements/requirements_dev.txt` | 開発ツール（tox等） |
 
 ### CI/CD
 
