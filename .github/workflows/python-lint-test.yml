@@ -22,6 +22,18 @@ jobs:
       - name: Lint with flake8
         run: |
           flake8 . --count --exclude moneybook/migrations,__init__.py --show-source --statistics --import-order-style smarkets
+  check-init-py:
+    name: Check __init__.py files
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.11"
+      - name: Check __init__.py files
+        run: |
+          python check_init_py.py
   unittest:
     name: Unit Test
     runs-on: ubuntu-latest
