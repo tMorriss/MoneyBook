@@ -47,7 +47,7 @@
 - **django-mathfilters**: Djangoテンプレートの数学フィルター
 
 ### 開発・テスト
-- **Selenium**: E2Eテスト（ブラウザ自動化）
+- **Selenium**: e2eテスト（ブラウザ自動化）
 - **Coverage.py**: コードカバレッジ測定
 - **Flake8**: コード品質チェック（リンター）
   - **flake8-quotes**: クオートスタイルチェック（シングルクオート強制）
@@ -87,7 +87,7 @@ MoneyBook/
 │   ├── static/                # CSS、JS、画像
 │   ├── migrations/            # DBスキーママイグレーション
 │   ├── tests/                 # ユニットテスト
-│   ├── e2e/                   # E2Eテスト（Selenium）
+│   ├── e2e/                   # e2eテスト（Selenium）
 │   ├── fixtures/              # テストデータ
 │   ├── admin.py               # Django管理画面設定
 │   └── apps.py                # アプリケーション設定
@@ -101,7 +101,7 @@ MoneyBook/
 │   ├── requirements.txt       # 本番環境の依存関係
 │   ├── requirements_test.txt  # テストツール
 │   ├── requirements_lint.txt  # コード品質チェック
-│   └── requirements_selenium.txt # E2Eテスト（Selenium、ChromeDriver）
+│   └── requirements_selenium.txt # e2eテスト（Selenium、ChromeDriver）
 ├── .github/                    # GitHub関連
 │   └── workflows/             # GitHub Actionsワークフロー
 ├── .vscode/                    # VSCode設定
@@ -109,7 +109,7 @@ MoneyBook/
 ├── .dockerignore               # Dockerビルド除外設定
 ├── .flake8                     # Flake8リンター設定
 ├── .gitignore                  # Git除外設定
-├── check_e2e_matrix.sh         # E2E Matrix検証スクリプト（CI用）
+├── check_e2e_matrix.sh         # e2e Matrix検証スクリプト（CI用）
 ├── createDataYaml.py           # データYAML生成スクリプト
 ├── createOtherYaml.py          # その他YAML生成スクリプト
 ├── generate_secretkey_setting.py # シークレットキー生成
@@ -132,7 +132,7 @@ MoneyBook/
 | `moneybook/static/` | クライアント側アセット（CSS、JS、画像） |
 | `moneybook/migrations/` | データベーススキーマバージョニング（22マイグレーション） |
 | `moneybook/tests/` | ユニットテスト（モデル、ビュー、フォーム、ユーティリティ） |
-| `moneybook/e2e/` | E2Eブラウザ自動化テスト |
+| `moneybook/e2e/` | e2eブラウザ自動化テスト |
 | `moneybook/middleware/` | カスタム認証ミドルウェア |
 | `build/` | 依存関係、Docker、デプロイ設定 |
 | `requirements/` | Pythonパッケージの依存関係ファイル |
@@ -213,7 +213,7 @@ python manage.py runserver
 
 1. **リント実行** - コード品質チェック
 2. **単体テスト** - 機能の正常性確認
-3. **E2Eテスト** - 統合動作確認
+3. **e2eテスト** - 統合動作確認
 4. **マイグレーション** - モデル変更時
 
 ---
@@ -260,7 +260,7 @@ coverage xml
 
 [![codecov](https://codecov.io/gh/tMorriss/MoneyBook/branch/master/graph/badge.svg?token=E522OPRLRM)](https://codecov.io/gh/tMorriss/MoneyBook)
 
-### E2Eテスト
+### e2eテスト
 
 ```bash
 # ヘッドレスモード（デフォルト）
@@ -273,7 +273,7 @@ HEADLESS=0 python manage.py test moneybook.e2e --settings config.settings.test
 $env:HEADLESS="0"; python manage.py test moneybook.e2e --settings config.settings.test
 ```
 
-**重要**: `moneybook/e2e/` ディレクトリに新しいテストファイルを追加した場合、GitHub Actionsのワークフロー (`.github/workflows/python-lint-test.yml`) のe2eジョブのmatrixも更新する必要があります。詳細は「[エージェント向け注意事項 > コード変更時の推奨手順 > E2Eテストファイル追加時の手順](#エージェント向け注意事項)」を参照してください。
+**重要**: `moneybook/e2e/` ディレクトリに新しいテストファイルを追加した場合、GitHub Actionsのワークフロー (`.github/workflows/python-lint-test.yml`) のe2eジョブのmatrixも更新する必要があります。詳細は「[エージェント向け注意事項 > コード変更時の推奨手順 > e2eテストファイル追加時の手順](#エージェント向け注意事項)」を参照してください。
 
 ---
 
@@ -328,7 +328,7 @@ docker run -p 8000:8000 moneybook:latest
 |---------|------|
 | `requirements/requirements.txt` | 本番環境の依存関係 |
 | `requirements/requirements_test.txt` | テストツール |
-| `requirements/requirements_selenium.txt` | E2Eテスト（Selenium、ChromeDriver） |
+| `requirements/requirements_selenium.txt` | e2eテスト（Selenium、ChromeDriver） |
 | `requirements/requirements_lint.txt` | コード品質チェック |
 
 ### CI/CD
@@ -337,13 +337,13 @@ docker run -p 8000:8000 moneybook:latest
 - **GitHub Actions**: `.github/workflows/`でワークフロー定義
   - `python-lint-test.yml`: Pull Request時に自動実行
     - **lint**: Flake8によるコード品質チェック
-    - **check-e2e-matrix**: E2E Matrix設定の検証（`check_e2e_matrix.sh`シェルスクリプトを実行）
+    - **check-e2e-matrix**: e2e Matrix設定の検証（`check_e2e_matrix.sh`シェルスクリプトを実行）
       - `moneybook/e2e/`ディレクトリ内で` def test_`パターンを含むファイル（実際のテストを含むファイル）を自動検出
       - matrix設定との整合性をチェック
       - 漏れがある場合はCIをエラーにする
       - `yq`コマンドを使用してYAML解析
     - **unittest**: カバレッジ付き単体テスト
-    - **e2e**: E2Eテスト（matrix戦略でテストモジュール別に並列実行）
+    - **e2e**: e2eテスト（matrix戦略でテストモジュール別に並列実行）
       - 現在のテストモジュール: `index`, `add`, `login`
       - ⚠️ 新規e2eテストファイル追加時は、matrixを更新してCI上で実行されるようにすること（`check-e2e-matrix`ジョブが自動チェックする）
 
@@ -363,9 +363,9 @@ docker run -p 8000:8000 moneybook:latest
 
 3. **テスト実行**
    - 関連する単体テストを実行
-   - 必要に応じてE2Eテストを実行
+   - 必要に応じてe2eテストを実行
 
-4. **E2Eテストファイル追加時の手順**
+4. **e2eテストファイル追加時の手順**
    - `moneybook/e2e/` ディレクトリに新しいテストファイル（例: `edit.py`）を追加した場合
    - **必ず** `.github/workflows/python-lint-test.yml` のe2eジョブのmatrixを更新する
    - 具体的には、以下の箇所に新しいテストモジュール名を追加：

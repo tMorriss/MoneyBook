@@ -10,16 +10,16 @@ set -e
 WORKFLOW_FILE=".github/workflows/python-lint-test.yml"
 E2E_DIR="moneybook/e2e"
 
-echo "E2E Matrix Validation"
+echo "e2e Matrix Validation"
 echo "=================================================="
 
-# E2Eディレクトリ内のテストモジュールを取得（カンマ+スペース区切り、ソート済み）
+# e2eディレクトリ内のテストモジュールを取得（カンマ+スペース区切り、ソート済み）
 e2e_modules=$(grep -rl " def test_" "$E2E_DIR" 2>/dev/null | sed 's/moneybook\/e2e\///g' | sed 's/.py//g' | sort | paste -sd "," - | sed 's/,/, /g')
 
 # Matrix設定からテストモジュールを取得（カンマ+スペース区切り、ソート済み）
 matrix_modules=$(yq eval '.jobs.e2e.strategy.matrix.test-module | sort | join(", ")' "$WORKFLOW_FILE")
 
-echo "E2Eディレクトリ: $e2e_modules"
+echo "e2eディレクトリ: $e2e_modules"
 echo "Matrix設定: $matrix_modules"
 echo
 

@@ -40,7 +40,7 @@ $ coverage xml
 >code coverage: Toggle coverage display
 ```
 
-## E2E テスト
+## e2e テスト
 
 ```
 $ python manage.py test moneybook.e2e --settings config.settings.test
@@ -48,7 +48,7 @@ $ python manage.py test moneybook.e2e --settings config.settings.test
 
 ### ヘッドレスモード
 
-E2E テストはデフォルトでヘッドレスモードで実行されます。ブラウザを表示して実行する場合は、環境変数`HEADLESS=0`を設定してください。
+e2e テストはデフォルトでヘッドレスモードで実行されます。ブラウザを表示して実行する場合は、環境変数`HEADLESS=0`を設定してください。
 
 ```
 # mac
