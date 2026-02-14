@@ -27,9 +27,9 @@ class Statistics(SeleniumBase):
         self._login()
         self._location(self.live_server_url + reverse('moneybook:statistics'))
 
-        # テーブルのヘッダーを確認
-        headers = self.driver.find_elements(By.XPATH, '//table/thead/tr[1]/th')
-        self.assertGreater(len(headers), 0)
+        # テーブルのヘッダーを確認（空列1つ + 12ヶ月）
+        headers = self.driver.find_elements(By.XPATH, '//table[@class="tbl-per-month"]/tr[1]/th')
+        self.assertEqual(len(headers), 13)
 
         # 12ヶ月分の行が存在することを確認
         rows = self.driver.find_elements(By.XPATH, '//table/tbody/tr')
