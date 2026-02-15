@@ -105,7 +105,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
-STATIC_URL = '/static/'
+# Static version for cache busting (set by build process)
+STATIC_VERSION = os.environ.get('STATIC_VERSION', 'dev')
+STATIC_URL = f'/static/{STATIC_VERSION}/'
 
 NUMBER_GROUPING = 3
 
