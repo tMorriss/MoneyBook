@@ -41,11 +41,11 @@ echo "[INFO] Running DB migration..."
 sudo -u "$PODMAN_USER" podman run \
   --rm \
   --name moneybook_migration \
-  -e DB_NAME=$DB_NAME \
-  -e DB_USER=$DB_USER \
-  -e DB_PASS=$DB_PASS \
-  -e DB_HOST=$DB_HOST \
-  -e SECRET_KEY=$SECRET_KEY \
+  -e DB_NAME="$DB_NAME" \
+  -e DB_USER="$DB_USER" \
+  -e DB_PASS="$DB_PASS" \
+  -e DB_HOST="$DB_HOST" \
+  -e SECRET_KEY="$SECRET_KEY" \
   moneybook_gunicorn:latest \
   python /MoneyBook/manage.py migrate --settings config.settings.prod
 
