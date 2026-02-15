@@ -25,9 +25,10 @@
 
 ### その他
 
-- **nginx.conf**: Nginx設定ファイル（参考用）
-  - configmap-nginx.yamlの内容と同じ
-  - 直接マウントしないが、設定の参照用に保持
+- **nginx.conf**: Nginx設定ファイル（ConfigMapのソース）
+  - configmap-nginx.yamlの`data.moneybook.conf`と同じ内容
+  - ConfigMapを更新する際のソースファイルとして保持
+  - 直接コンテナにマウントはしない（ConfigMap経由で使用）
 
 - **jenkins.sh**: CI/CDデプロイスクリプト
   - イメージのビルド
