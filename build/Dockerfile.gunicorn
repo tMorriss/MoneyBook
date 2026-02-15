@@ -16,5 +16,15 @@ RUN pip install --no-cache-dir -r /MoneyBook/requirements/requirements.txt
 # Set working directory
 WORKDIR /MoneyBook
 
-# Run gunicorn
-CMD ["gunicorn", "--bind", "0.0.0.0:8081", "--workers", "4", "--access-logfile", "-", "config.wsgi"]
+# Create startup script to copy static files and run gunicorn
+RUN echo '#!/bin/sh\n\
+if [ -d "/shared-static" ]; then\n\
+  echo "Copying static files to shared volume..."\n\
+  cp -r /MoneyBook/moneybook/static/* /shared-static/\n\
+  echo "Static files copied successfully"\n\
+fi\n\
+exec gunicorn --bind 0.0.0.0:8081 --workers 4 --access-logfile - config.wsgi\n\
+' > /start.sh && chmod +x /start.sh
+
+# Run startup script
+CMD ["/start.sh"]

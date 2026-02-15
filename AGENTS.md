@@ -100,8 +100,8 @@ MoneyBook/
 │   └── apps.py                # アプリケーション設定
 ├── build/                       # ビルド・デプロイ設定
 │   ├── Dockerfile.gunicorn    # GunicornコンテナのDockerfile
-│   ├── Dockerfile.nginx       # NginxコンテナのDockerfile
-│   ├── nginx.conf             # Nginx設定ファイル
+│   ├── configmap-nginx.yaml   # Nginx設定用ConfigMap
+│   ├── nginx.conf             # Nginx設定ファイル（参考用）
 │   ├── pod.yaml               # Kubernetes Pod定義
 │   └── jenkins.sh             # CI/CDスクリプト
 ├── requirements/               # Pythonパッケージ依存関係

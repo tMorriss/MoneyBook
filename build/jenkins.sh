@@ -20,18 +20,21 @@ done
 # ベースイメージのpull
 echo "[INFO] Pulling base images..."
 sudo -u "$PODMAN_USER" podman pull python:3.11-slim
-sudo -u "$PODMAN_USER" podman pull nginx:alpine
+sudo -u "$PODMAN_USER" podman pull docker.io/nginx:alpine
 
 # sed -i 's/DEBUG = False/DEBUG = True/' config/settings/prod.py
 
 # イメージのビルド
-echo "[INFO] Building images..."
+echo "[INFO] Building application image..."
 sudo -u "$PODMAN_USER" podman build -t moneybook_gunicorn:latest -f build/Dockerfile.gunicorn .
-sudo -u "$PODMAN_USER" podman build -t moneybook_nginx:latest -f build/Dockerfile.nginx .
 
 # 既存のPodが存在する場合は停止・削除
 echo "[INFO] Stopping existing pod..."
 sudo -u "$PODMAN_USER" podman play kube --down build/pod.yaml || true
+
+# ConfigMapの作成
+echo "[INFO] Creating ConfigMaps..."
+sudo -u "$PODMAN_USER" podman play kube build/configmap-nginx.yaml
 
 # DBマイグレーション実行
 echo "[INFO] Running DB migration..."

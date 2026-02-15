@@ -4,6 +4,13 @@ metadata:
   name: moneybook-pod
 spec:
   restartPolicy: Always
+  volumes:
+  - name: nginx-config
+    configMap:
+      name: moneybook-nginx-config
+  - name: static-files
+    emptyDir: {}
+  
   containers:
   - name: gunicorn
     image: localhost/moneybook_gunicorn:latest
@@ -23,10 +30,20 @@ spec:
     ports:
     - containerPort: 8081
       protocol: TCP
+    volumeMounts:
+    - name: static-files
+      mountPath: /shared-static
     
   - name: nginx
-    image: localhost/moneybook_nginx:latest
+    image: docker.io/nginx:alpine
     ports:
     - containerPort: 80
       hostPort: 8081
       protocol: TCP
+    volumeMounts:
+    - name: nginx-config
+      mountPath: /etc/nginx/conf.d
+      readOnly: true
+    - name: static-files
+      mountPath: /usr/share/nginx/html/static
+      readOnly: true
