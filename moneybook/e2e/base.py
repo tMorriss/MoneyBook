@@ -42,7 +42,7 @@ class SeleniumBase(StaticLiveServerTestCase):
         password_input = self.driver.find_element(By.ID, 'id_password')
         password_input.send_keys(self.password)
         time.sleep(0.5)
-        self.driver.find_element(By.CLASS_NAME, 'btn-apply').click()
+        self.driver.find_element(By.CLASS_NAME, 'btn-green').click()
         time.sleep(0.5)
 
     def _assert_common(self):
