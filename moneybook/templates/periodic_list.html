@@ -1,0 +1,73 @@
+{% extends "_base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}定期取引 - {{ app_name }}{% endblock %}
+
+{% block header %}
+<link rel="stylesheet" type="text/css" href="{% static 'periodic.css' %}">
+<script type="text/javascript" src="{% static 'periodic.js' %}"></script>
+<script type="text/javascript">
+    periodic_add_bulk_url = "{% url 'moneybook:periodic_add_bulk' %}";
+    periodic_config_url = "{% url 'moneybook:periodic_config' %}";
+    periodic_list_url = "{% url 'moneybook:periodic_list' %}";
+</script>
+{% endblock %}
+
+{% block content %}
+<section class="main-content">
+    <h1>定期取引一覧</h1>
+    
+    <div class="control-panel">
+        <div class="input-group">
+            <label for="target_year">年:</label>
+            <input type="number" id="target_year" placeholder="{{ next_year }}" min="2000" max="2100">
+            <label for="target_month">月:</label>
+            <input type="number" id="target_month" placeholder="{{ next_month }}" min="1" max="12">
+            <button id="btn_add_bulk" class="btn-green">追加</button>
+        </div>
+        <div class="button-group">
+            <button id="btn_config" class="btn-blue">設定</button>
+        </div>
+    </div>
+
+    <div class="periodic-table-container">
+        <table class="tbl-periodic tbl-boarder">
+            <thead>
+                <tr>
+                    <th>日</th>
+                    <th>品目</th>
+                    <th>金額</th>
+                    <th>方向</th>
+                    <th>支払い方法</th>
+                    <th>分類</th>
+                    <th>立替</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pd in periodic_data_list %}
+                <tr data-id="{{ pd.pk }}">
+                    <td>{{ pd.day }}</td>
+                    <td>{{ pd.item }}</td>
+                    <td class="righter">{{ pd.price|intcomma }}</td>
+                    <td>{{ pd.direction }}</td>
+                    <td>{{ pd.method }}</td>
+                    <td>{{ pd.category }}</td>
+                    <td>{% if pd.temp %}Yes{% else %}No{% endif %}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="empty-message">定期取引が設定されていません</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div id="progress_area" style="display:none;">
+        <h3>登録進捗</h3>
+        <div id="progress_log"></div>
+    </div>
+</section>
+{% include "_result_message.html" %}
+{% endblock %}
