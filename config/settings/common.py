@@ -118,3 +118,43 @@ LOGOUT_REDIRECT_URL = 'moneybook:login'
 
 # modelのprimary_key設定方式
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
+# ログ設定
+# DEBUGの値に関係なく、同じログレベルを維持する
+# Djangoのデフォルト設定を継承し、必要な部分のみ上書き
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,  # デフォルト設定を継承
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+    },
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+            # デフォルトのrequire_debug_trueフィルターを削除
+            # これによりDEBUGの値に関係なくコンソールへログ出力
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler',
+            # 本番環境でエラーをメール送信（Djangoのデフォルトを再定義）
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'mail_admins'],
+            'level': 'INFO',
+        },
+    },
+}
