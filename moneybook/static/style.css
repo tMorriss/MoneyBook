@@ -140,24 +140,24 @@ section h2 {
 }
 
 /* buttons */
-.btn-apply,
-.btn-cancel,
-.btn-delete {
+.btn-green,
+.btn-blue,
+.btn-red {
     border-radius: 10px;
     cursor: pointer;
     color: #fff;
     -webkit-appearance: none;
 }
 
-.btn-apply {
+.btn-green {
     background: #008000;
 }
 
-.btn-cancel {
+.btn-blue {
     background: #3333ff;
 }
 
-.btn-delete {
+.btn-red {
     background: #dd0000;
 }
 

@@ -22,6 +22,17 @@ jobs:
       - name: Lint with tox
         run: |
           tox -e lint
+  check-init-py:
+    name: Check __init__.py
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v2
+      - name: Validate __init__.py
+        run: |
+          chmod +x check_init_py.sh
+          ./check_init_py.sh
   check-e2e-matrix:
     name: Check e2e Matrix Configuration
     runs-on: ubuntu-latest
