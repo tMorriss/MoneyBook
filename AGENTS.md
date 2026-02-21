@@ -120,6 +120,7 @@ MoneyBook/
 ├── .gitignore                  # Git除外設定
 ├── tox.ini                     # Tox設定（lint、テスト実行）
 ├── check_e2e_matrix.sh         # e2e Matrix検証スクリプト（CI用）
+├── check_init_py.sh            # __init__.py記載漏れ検証スクリプト（CI用）
 ├── createDataYaml.py           # データYAML生成スクリプト
 ├── createOtherYaml.py          # その他YAML生成スクリプト
 ├── generate_secretkey_setting.py # シークレットキー生成
@@ -303,7 +304,7 @@ python manage.py test moneybook.e2e --settings config.settings.test --verbosity 
 2. **ビューの分割**: 機能ごとに専門化されたビューモジュール
 3. **URL命名**: 明確なURL名を使用（`name=`パラメータ）
 4. **テンプレート**: ベーステンプレート継承パターン
-5. **静的ファイル**: 
+5. **静的ファイル**:
    - `{% static %}`タグを使用してパスを生成
    - キャッシュバスティング: ビルドごとに生成されるバージョン番号がパスに自動挿入される（`/static/{STATIC_VERSION}/...`）
    - 開発環境では`STATIC_VERSION='dev'`がデフォルト値として使用される
@@ -331,7 +332,8 @@ docker run -e STATIC_VERSION=$STATIC_VERSION -p 8081:8081 moneybook_gunicorn:$ST
 docker run -p 80:80 moneybook_nginx:$STATIC_VERSION
 ```
 
-**注意**: 
+**注意**:
+
 - `STATIC_VERSION`は必須のビルド引数で、Jenkins CI/CDで自動生成される
 - 静的ファイルは`/static/{STATIC_VERSION}/`パスでアクセスされ、ブラウザキャッシュの問題を防ぐ
 - Nginxコンテナは`STATIC_VERSION`ディレクトリに静的ファイルをコピーし、正規表現マッチングで提供する
@@ -384,7 +386,12 @@ docker run -p 80:80 moneybook_nginx:$STATIC_VERSION
    - 関連する単体テストを実行
    - 必要に応じてe2eテストを実行
 
-4. **e2eテストファイル追加時の手順**
+4. **新しいPythonパッケージディレクトリ追加時の手順**
+   - `moneybook/` または `config/` 配下に新しいディレクトリを追加し、そこに`.py`ファイルを置く場合
+   - **必ず** `__init__.py` も一緒に追加する
+   - ⚠️ GitHub Actionsの`check-init-py`ジョブが自動的に`__init__.py`の漏れを検出し、CIをエラーにする
+
+5. **e2eテストファイル追加時の手順**
    - `moneybook/e2e/` ディレクトリに新しいテストファイルを追加した場合
    - **必ず** `.github/workflows/python-lint-test.yml` のe2eジョブのmatrixを更新する
    - 具体的には、以下の箇所に新しいテストモジュール名を追加：
@@ -396,31 +403,31 @@ docker run -p 80:80 moneybook_nginx:$STATIC_VERSION
    - CI上で新しいe2eテストが自動実行されるようになる
    - ⚠️ GitHub Actionsの`check-e2e-matrix`ジョブが自動的にmatrix設定の漏れを検出し、CIをエラーにする
 
-5. **マイグレーション**
+6. **マイグレーション**
    - モデル変更時は`makemigrations`を実行
    - マイグレーションファイルをレビュー
 
-6. **静的ファイルの変更**
+7. **静的ファイルの変更**
    - 静的ファイル（JS/CSS）を変更した場合、特別な対応は不要
    - `{% static %}`タグが自動的にバージョン付きパスを生成するため、キャッシュ問題は発生しない
    - 開発環境では`STATIC_VERSION='dev'`として`/static/dev/`パスが使用される
    - 本番環境ではJenkinsが生成したビルドタグが使用される
 
-7. **ブランチの最新化（必須）**
+8. **ブランチの最新化（必須）**
    - **git pushする前に、必ずPRのマージ先ブランチ（通常は`master`）を取り込んで最新化すること**
    - コンフリクトがある場合は解決してからpushする
    - 例: `git fetch origin && git merge origin/master` または `git pull origin master`
 
-8. **コミット**
+9. **コミット**
    - 小さな単位でコミット
    - 日本語のコミットメッセージ
 
-9. **PRのタイトルと説明**
+10. **PRのタイトルと説明**
    - PRのタイトルと説明は、このPRでの修正すべてを含んだものにする
    - 個別のコミットメッセージは各変更の詳細を記載し、PRの説明は全体のサマリーとする
    - 本番環境に影響がない場合（ドキュメント更新、テストのみの変更など）はPRタイトルに`[skip ci]`を付ける
 
-10. **AGENTS.mdの更新**
+11. **AGENTS.mdの更新**
    - 修正結果に応じて、このドキュメント自体の更新が必要か確認する
    - 新しいディレクトリ、ファイル、技術スタック、開発手順などを追加した場合は反映する
 
