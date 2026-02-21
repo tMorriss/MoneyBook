@@ -63,12 +63,8 @@ for base_dir in "${SEARCH_DIRS[@]}"; do
         fi
 
         # 非空の__init__.pyに対して各モジュールのインポート漏れをチェック
-        # （base.pyはヘルパークラス用のため除外）
         while IFS= read -r py_file; do
             module=$(basename "$py_file" .py)
-            if [ "$module" = "base" ]; then
-                continue
-            fi
             if ! grep -q "from \.$module " "$init_py" && ! grep -q "from \.$module$" "$init_py"; then
                 missing_imports+=("$init_py: $module が未インポート")
             fi
