@@ -1,13 +1,19 @@
 FROM nginx:alpine
 
+# Build arg for static version
+ARG STATIC_VERSION
+
 # Remove default nginx configuration
 RUN rm /etc/nginx/conf.d/default.conf
 
 # Copy custom nginx configuration
 COPY build/nginx.conf /etc/nginx/conf.d/moneybook.conf
 
-# Copy static files
-COPY moneybook/static /usr/share/nginx/html/static
+# Copy static files to versioned directory
+COPY moneybook/static /usr/share/nginx/html/static/${STATIC_VERSION}
+
+# Copy favicon.ico to static root for direct access
+COPY moneybook/static/favicon.ico /usr/share/nginx/html/static/favicon.ico
 
 # Expose port 80
 EXPOSE 80

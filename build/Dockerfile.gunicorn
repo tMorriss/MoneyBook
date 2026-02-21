@@ -16,5 +16,9 @@ RUN pip install --no-cache-dir -r /MoneyBook/requirements/requirements.txt
 # Set working directory
 WORKDIR /MoneyBook
 
+# Build arg and env for static version
+ARG STATIC_VERSION
+ENV STATIC_VERSION=${STATIC_VERSION}
+
 # Run gunicorn
 CMD ["gunicorn", "--bind", "0.0.0.0:8081", "--workers", "4", "--access-logfile", "-", "config.wsgi"]
