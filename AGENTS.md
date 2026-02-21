@@ -119,6 +119,7 @@ MoneyBook/
 ├── .gitignore                  # Git除外設定
 ├── tox.ini                     # Tox設定（lint、テスト実行）
 ├── check_e2e_matrix.sh         # e2e Matrix検証スクリプト（CI用）
+├── check_init_py.sh            # __init__.py記載漏れ検証スクリプト（CI用）
 ├── createDataYaml.py           # データYAML生成スクリプト
 ├── createOtherYaml.py          # その他YAML生成スクリプト
 ├── generate_secretkey_setting.py # シークレットキー生成
@@ -368,7 +369,12 @@ docker run -p 8000:8000 moneybook:latest
    - 関連する単体テストを実行
    - 必要に応じてe2eテストを実行
 
-4. **e2eテストファイル追加時の手順**
+4. **新しいPythonパッケージディレクトリ追加時の手順**
+   - `moneybook/` または `config/` 配下に新しいディレクトリを追加し、そこに`.py`ファイルを置く場合
+   - **必ず** `__init__.py` も一緒に追加する
+   - ⚠️ GitHub Actionsの`check-init-py`ジョブが自動的に`__init__.py`の漏れを検出し、CIをエラーにする
+
+5. **e2eテストファイル追加時の手順**
    - `moneybook/e2e/` ディレクトリに新しいテストファイルを追加した場合
    - **必ず** `.github/workflows/python-lint-test.yml` のe2eジョブのmatrixを更新する
    - 具体的には、以下の箇所に新しいテストモジュール名を追加：
@@ -380,27 +386,27 @@ docker run -p 8000:8000 moneybook:latest
    - CI上で新しいe2eテストが自動実行されるようになる
    - ⚠️ GitHub Actionsの`check-e2e-matrix`ジョブが自動的にmatrix設定の漏れを検出し、CIをエラーにする
 
-5. **マイグレーション**
+6. **マイグレーション**
    - モデル変更時は`makemigrations`を実行
    - マイグレーションファイルをレビュー
 
-6. **ブランチの最新化（必須）**
+7. **ブランチの最新化（必須）**
    - **git pushする前に、必ずPRのマージ先ブランチ（通常は`master`）を取り込んで最新化すること**
    - コンフリクトがある場合は解決してからpushする
    - 例: `git fetch origin && git merge origin/master` または `git pull origin master`
 
-7. **コミット**
+8. **コミット**
    - 小さな単位でコミット
    - 日本語のコミットメッセージ
 
-8. **PRのタイトルと説明**
+9. **PRのタイトルと説明**
    - PRのタイトルと説明は、このPRでの修正すべてを含んだものにする
    - 個別のコミットメッセージは各変更の詳細を記載し、PRの説明は全体のサマリーとする
    - 本番環境に影響がない場合（ドキュメント更新、テストのみの変更など）はPRタイトルに`[skip ci]`を付ける
 
-9. **AGENTS.mdの更新**
-   - 修正結果に応じて、このドキュメント自体の更新が必要か確認する
-   - 新しいディレクトリ、ファイル、技術スタック、開発手順などを追加した場合は反映する
+10. **AGENTS.mdの更新**
+    - 修正結果に応じて、このドキュメント自体の更新が必要か確認する
+    - 新しいディレクトリ、ファイル、技術スタック、開発手順などを追加した場合は反映する
 
 ### 既知の問題・制約
 
