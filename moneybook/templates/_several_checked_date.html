@@ -21,7 +21,7 @@
     </tr>{% endfor %}
     {% for c in credit_checked_date %}
     <tr>
-        <td><input type="button" class="btn-apply" value="{{ c.name }}" onclick="updateSeveralCheckedDate('{{ c.pk }}')">
+        <td><input type="button" class="btn-green" value="{{ c.name }}" onclick="updateSeveralCheckedDate('{{ c.pk }}')">
         </td>
         <td>最新確定引き落とし日: {{ c.date|date:"Y"}}年{{ c.date|date:"m" }}月{{ c.date|date:"d" }}日</td>
         <td><input type="text" class="righter now_bank_credit" id="credit-{{ c.pk }}" style="width:9ex"
@@ -33,4 +33,4 @@
         <td id="now_bank_balance" class="righter"></td>
     </tr>
 </table>
-<input type="button" class="btn-apply" value="計算" onclick="calculateNowBank()" />
+<input type="button" class="btn-green" value="計算" onclick="calculateNowBank()" />

@@ -67,7 +67,7 @@ function getCheckedDate() {
             }
             var rowText = '<tr class="checked-date-row">';
             rowText += '<td>';
-            rowText += '<input type="button" class="btn-apply" value="' + dataJson[i].name + '" onclick="updateCheckedDate(' + dataJson[i].pk + ', ' + checkAll + ')">'
+            rowText += '<input type="button" class="btn-green" value="' + dataJson[i].name + '" onclick="updateCheckedDate(' + dataJson[i].pk + ', ' + checkAll + ')">'
             rowText += '</td>';
             rowText += '<td>現在: ' + zeroPadding(dataJson[i].year, 4) + '年' + zeroPadding(dataJson[i].month, 2) + '月' + zeroPadding(dataJson[i].day, 2) + '日</td>';
             rowText += '<td class="righter">' + separate(dataJson[i].balance) + '円</td>';
