@@ -362,6 +362,30 @@ python manage.py test moneybook.e2e --settings config.settings.test --verbosity 
 4. **テンプレート**: ベーステンプレート継承パターン
 5. **静的ファイル**: `{% static %}`タグを使用
 
+### CSS/スタイル規約
+
+1. **共通スタイルの使用**: 
+   - 基本的なスタイルは`static/style.css`に定義し、全ページで共有する
+   - ボタン（`.btn-green`, `.btn-blue`, `.btn-red`）
+   - テーブル（`.tbl-periodic`, `.tbl-periodic-config`）
+   - コンテンツエリア（`.main-content`, `.control-panel`）
+   - 進捗表示（`#progress_area`, `.progress-item`）
+   - レスポンシブデザイン（メディアクエリ）
+
+2. **ページ固有CSSファイル**:
+   - 各ページ専用のCSSファイル（例: `periodic.css`, `tools.css`）には、そのページ固有のスタイルのみを記載
+   - 共通スタイルの重複定義は避ける
+   - ページ固有の例: 特定の入力フィールドの幅調整、特殊なレイアウト調整
+
+3. **CSS読み込み**:
+   - `style.css`は`_base.html`で自動的に読み込まれる
+   - ページ固有のCSSは各テンプレートの`{% block header %}`内で読み込む
+   ```html
+   {% block header %}
+   <link rel="stylesheet" type="text/css" href="{% static 'periodic.css' %}">
+   {% endblock %}
+   ```
+
 ### レビュー規則
 
 - **言語**: レビューやサマリーは日本語で記載
