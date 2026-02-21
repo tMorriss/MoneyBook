@@ -1,7 +1,18 @@
+# Database
 *.sqlite3*
-/**/__pycache__
-chrome*
-/fixture/
+
+# Python
+**/__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+
+# Testing & Coverage
 .coverage
 coverage.*
-.venv/
+
+# Tools & Drivers
+chrome*
+
+# Local Data
+/fixture/

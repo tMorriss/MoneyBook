@@ -4,10 +4,9 @@ cd %~dp0
 
 scp createDataYaml.py createOtherYaml.py yaml_utils.py mars:~/
 
-mkdir fixture
+if not exist "..\fixture" mkdir "..\fixture"
 
 REM 1Passwordからデータベース認証情報を読み込む（1回のみ）
-REM プロセスリストに認証情報が表示されることを防ぐ
 for /f "delims=" %%i in ('op read "op://Personal/Mariadb_MoneyBook/hostname"') do set DB_HOSTNAME=%%i
 for /f "delims=" %%i in ('op read "op://Personal/Mariadb_MoneyBook/port"') do set DB_PORT=%%i
 for /f "delims=" %%i in ('op read "op://Personal/Mariadb_MoneyBook/username"') do set DB_USER=%%i
@@ -21,7 +20,7 @@ REM コマンドライン引数ではなく標準入力経由でデータベー�
   echo %DB_USER%
   echo %DB_PASSWORD%
   echo %DB_DATABASE%
-) | ssh mars python3 /home/tmorriss/createDataYaml.py > fixture\data_all.yaml
+) | ssh mars python3 /home/tmorriss/createDataYaml.py > ..\fixture\data_all.yaml
 
 (
   echo %DB_HOSTNAME%
@@ -29,7 +28,7 @@ REM コマンドライン引数ではなく標準入力経由でデータベー�
   echo %DB_USER%
   echo %DB_PASSWORD%
   echo %DB_DATABASE%
-) | ssh mars python3 /home/tmorriss/createOtherYaml.py > fixture\initial_data.yaml
+) | ssh mars python3 /home/tmorriss/createOtherYaml.py > ..\fixture\initial_data.yaml
 
-python manage.py loaddata fixture\initial_data.yaml
-python manage.py loaddata fixture\data_all.yaml
+python ..\manage.py loaddata ..\fixture\initial_data.yaml
+python ..\manage.py loaddata ..\fixture\data_all.yaml
