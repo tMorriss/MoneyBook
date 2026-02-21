@@ -49,7 +49,7 @@
             <td id="balance_diff" class="righter"></td>
         </tr>
     </table>
-    <input type="button" class="btn-apply" value="計算" onclick="updateDiff()" onkeypress="KeyPressDiff(event.keyCode)">
+    <input type="button" class="btn-green" value="計算" onclick="updateDiff()" onkeypress="KeyPressDiff(event.keyCode)">
 
     <h1>確認済み日付</h1>
     <table class="tbl-common fcs-blue" id="checked-date">
@@ -70,7 +70,7 @@
             <td><input type="text" class="righter" id="txt_living_cost" style="width:10ex" onfocus="unseparateValue('#txt_living_cost')"
                     onblur="separateValue('#txt_living_cost')" onkeypress="keyPressLiving(event.keyCode)"
                     value="{{ living_cost_mark| intcomma }}"></td>
-            <td><input type="button" value="更新" class="btn-apply" onclick="updateLivingCostMark()"
+            <td><input type="button" value="更新" class="btn-green" onclick="updateLivingCostMark()"
                     onkeypress="keyPressLiving(event.keyCode)"></td>
         </tr>
     </table>
