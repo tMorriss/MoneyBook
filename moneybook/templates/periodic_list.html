@@ -15,21 +15,19 @@
 {% endblock %}
 
 {% block content %}
-<section class="main-content">
+<section>
     <h1>定期取引一覧</h1>
     
-    <div class="control-panel">
-        <div class="input-group">
-            <label for="target_year">年:</label>
-            <input type="number" id="target_year" placeholder="{{ next_year }}" min="2000" max="2100">
-            <label for="target_month">月:</label>
-            <input type="number" id="target_month" placeholder="{{ next_month }}" min="1" max="12">
-            <button id="btn_add_bulk" class="btn-green">追加</button>
-        </div>
-        <div class="button-group">
-            <button id="btn_config" class="btn-blue">設定</button>
-        </div>
-    </div>
+    <table class="tbl-common fcs-blue">
+        <tr>
+            <td>
+                <input type="text" id="target_year" style="width:6ex" class="righter" placeholder="{{ next_year }}"
+                    onkeypress="keyPressAddBulk(event.keyCode)">年
+                <input type="text" id="target_month" style="width:5ex" class="righter" placeholder="{{ next_month }}"
+                    onkeypress="keyPressAddBulk(event.keyCode)">月
+            </td>
+        </tr>
+    </table>
 
     <div class="periodic-table-container">
         <table class="tbl-periodic tbl-boarder">
@@ -63,6 +61,13 @@
             </tbody>
         </table>
     </div>
+
+    <table class="tbl-buttons">
+        <tr>
+            <td><input type="button" value="追加" class="btn-green" id="btn_add_bulk"></td>
+            <td><input type="button" value="設定" class="btn-blue" id="btn_config"></td>
+        </tr>
+    </table>
 
     <div id="progress_area" style="display:none;">
         <h3>登録進捗</h3>

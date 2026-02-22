@@ -16,6 +16,13 @@ function getCookie(name) {
     return cookieValue;
 }
 
+// Enterキー押下時の処理
+function keyPressAddBulk(keyCode) {
+    if (keyCode === 13) { // Enter key
+        $('#btn_add_bulk').click();
+    }
+}
+
 $(document).ready(function() {
     const csrftoken = getCookie('csrftoken');
     
