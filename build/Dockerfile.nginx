@@ -1,19 +1,11 @@
-# Stage 1: collect static files (includes Django admin CSS/JS)
-FROM python:3.11-slim AS collector
+# Build arg for gunicorn image reference
+ARG GUNICORN_IMAGE
 
-RUN apt-get update && apt-get install -y \
-    default-libmysqlclient-dev \
-    gcc \
-    pkg-config \
-    && rm -rf /var/lib/apt/lists/*
-
-COPY . /MoneyBook
-RUN pip install --no-cache-dir -r /MoneyBook/requirements/requirements.txt
-
-WORKDIR /MoneyBook
+# Stage 1: collect static files using gunicorn image (Python env + app code already set up)
+FROM ${GUNICORN_IMAGE} AS collector
 
 # collectstatic はDBへの接続不要のため dev 設定を利用
-RUN python manage.py collectstatic --noinput --settings config.settings.dev
+RUN python /MoneyBook/manage.py collectstatic --noinput --settings config.settings.dev
 
 # Stage 2: nginx
 FROM nginx:alpine
