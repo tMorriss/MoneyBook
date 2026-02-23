@@ -4,8 +4,8 @@ ARG GUNICORN_IMAGE
 # Stage 1: collect static files using gunicorn image (Python env + app code already set up)
 FROM ${GUNICORN_IMAGE} AS collector
 
-# collectstatic はDBへの接続不要のため dev 設定を利用
-RUN python /MoneyBook/manage.py collectstatic --noinput --settings config.settings.dev
+# collectstatic専用設定を利用（DBへの接続不要、DEBUG=False）
+RUN python /MoneyBook/manage.py collectstatic --noinput --settings config.settings.collectstatic
 
 # Stage 2: nginx
 FROM nginx:alpine
