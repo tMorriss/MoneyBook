@@ -1,3 +1,13 @@
+# Build arg for gunicorn image reference
+ARG GUNICORN_IMAGE
+
+# Stage 1: collect static files using gunicorn image (Python env + app code already set up)
+FROM ${GUNICORN_IMAGE} AS collector
+
+# collectstatic はDBへの接続不要のため dev 設定を利用
+RUN python /MoneyBook/manage.py collectstatic --noinput --settings config.settings.dev
+
+# Stage 2: nginx
 FROM nginx:alpine
 
 # Build arg for static version
@@ -9,8 +19,8 @@ RUN rm /etc/nginx/conf.d/default.conf
 # Copy custom nginx configuration
 COPY build/nginx.conf /etc/nginx/conf.d/moneybook.conf
 
-# Copy static files to versioned directory
-COPY moneybook/static /usr/share/nginx/html/static/${STATIC_VERSION}
+# Copy collected static files (app + Django admin) to versioned directory
+COPY --from=collector /MoneyBook/staticfiles /usr/share/nginx/html/static/${STATIC_VERSION}
 
 # Copy favicon.ico to static root for direct access
 COPY moneybook/static/favicon.ico /usr/share/nginx/html/static/favicon.ico
