@@ -5,6 +5,7 @@ from .deleteView import *
 from .editView import *
 from .indexView import *
 from .periodBalanceView import *
+from .periodicView import *
 from .searchView import *
 from .statisticsView import *
 from .toolsView import *

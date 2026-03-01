@@ -1,0 +1,78 @@
+{% extends "_base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}定期取引 - {{ app_name }}{% endblock %}
+
+{% block header %}
+<link rel="stylesheet" type="text/css" href="{% static 'periodic.css' %}">
+<script type="text/javascript" src="{% static 'periodic.js' %}"></script>
+<script type="text/javascript">
+    periodic_add_bulk_url = "{% url 'moneybook:periodic_add_bulk' %}";
+    periodic_config_url = "{% url 'moneybook:periodic_config' %}";
+    periodic_list_url = "{% url 'moneybook:periodic_list' %}";
+</script>
+{% endblock %}
+
+{% block content %}
+<section>
+    <h1>定期取引一覧</h1>
+    
+    <table class="tbl-common fcs-blue">
+        <tr>
+            <td>
+                <input type="text" id="target_year" style="width:6ex" class="righter" placeholder="{{ next_year }}"
+                    onkeypress="keyPressAddBulk(event.keyCode)">年
+                <input type="text" id="target_month" style="width:5ex" class="righter" placeholder="{{ next_month }}"
+                    onkeypress="keyPressAddBulk(event.keyCode)">月
+            </td>
+        </tr>
+    </table>
+
+    <div class="periodic-table-container">
+        <table class="tbl-periodic tbl-boarder">
+            <thead>
+                <tr>
+                    <th>日</th>
+                    <th>品目</th>
+                    <th>金額</th>
+                    <th>方向</th>
+                    <th>支払い方法</th>
+                    <th>分類</th>
+                    <th>立替</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pd in periodic_data_list %}
+                <tr data-id="{{ pd.pk }}">
+                    <td>{{ pd.day }}</td>
+                    <td>{{ pd.item }}</td>
+                    <td class="righter">{{ pd.price|intcomma }}</td>
+                    <td>{{ pd.direction }}</td>
+                    <td>{{ pd.method }}</td>
+                    <td>{{ pd.category }}</td>
+                    <td>{% if pd.temp %}Yes{% else %}No{% endif %}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="empty-message">定期取引が設定されていません</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <table class="tbl-buttons">
+        <tr>
+            <td><input type="button" value="追加" class="btn-green" id="btn_add_bulk"></td>
+            <td><input type="button" value="設定" class="btn-blue" id="btn_config"></td>
+        </tr>
+    </table>
+
+    <div id="progress_area" style="display:none;">
+        <h3>登録進捗</h3>
+        <div id="progress_log"></div>
+    </div>
+</section>
+{% include "_result_message.html" %}
+{% endblock %}
