@@ -102,9 +102,10 @@ MoneyBook/
 ├── build/                       # ビルド・デプロイ設定
 │   ├── Dockerfile.gunicorn    # GunicornコンテナのDockerfile
 │   ├── Dockerfile.nginx       # NginxコンテナのDockerfile
-│   ├── nginx.conf             # Nginx設定ファイル
 │   ├── pod.yaml               # Kubernetes Pod定義
 │   └── jenkins.sh             # CI/CDスクリプト
+├── nginx/                       # Nginx設定
+│   └── nginx.conf             # Nginx設定ファイル
 ├── requirements/               # Pythonパッケージ依存関係
 │   ├── requirements.txt       # 本番環境の依存関係
 │   ├── requirements_test.txt  # テストツール
