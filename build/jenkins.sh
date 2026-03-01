@@ -44,7 +44,8 @@ sudo -u "$PODMAN_USER" podman build \
 
 # 既存のPodが存在する場合は停止・削除
 echo "[INFO] Stopping existing pod..."
-sudo -u "$PODMAN_USER" podman play kube --down build/pod.yaml || true
+sudo -u "$PODMAN_USER" podman pod stop moneybook-pod || true
+sudo -u "$PODMAN_USER" podman pod rm moneybook-pod || true
 
 # DBマイグレーション実行
 echo "[INFO] Running DB migration..."
