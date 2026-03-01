@@ -54,7 +54,7 @@ class Search(SeleniumBase):
         time.sleep(2)
 
         # 検索結果を確認
-        rows = self.driver.find_elements(By.XPATH, '//table[@class="tbl-inout tbl-boarder"]/tbody/tr')
+        rows = self.driver.find_elements(By.XPATH, '//table[@class="tbl-data tbl-boarder"]/tbody/tr')
         self.assertEqual(len(rows), 2)  # ヘッダー + 1件
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
         self.assertEqual(tds[1].text, '検索テスト1')

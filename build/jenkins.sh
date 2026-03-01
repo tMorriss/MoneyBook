@@ -38,12 +38,14 @@ sudo -u "$PODMAN_USER" podman build \
   -f build/Dockerfile.gunicorn .
 sudo -u "$PODMAN_USER" podman build \
   --build-arg STATIC_VERSION=$STATIC_VERSION \
+  --build-arg GUNICORN_IMAGE=moneybook_gunicorn:$BUILD_TAG \
   -t moneybook_nginx:$BUILD_TAG \
   -f build/Dockerfile.nginx .
 
 # 既存のPodが存在する場合は停止・削除
 echo "[INFO] Stopping existing pod..."
-sudo -u "$PODMAN_USER" podman play kube --down build/pod.yaml || true
+sudo -u "$PODMAN_USER" podman pod stop moneybook-pod || true
+sudo -u "$PODMAN_USER" podman pod rm moneybook-pod || true
 
 # DBマイグレーション実行
 echo "[INFO] Running DB migration..."

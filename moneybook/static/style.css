@@ -217,12 +217,12 @@ section h2 {
     border-color: #00bfff !important;
 }
 
-.tbl-inout th {
+.tbl-data th {
     background: #b0ffff;
 }
 
-.tbl-inout th,
-.tbl-inout td:not(.a-edit):not(.a-check) {
+.tbl-data th,
+.tbl-data td:not(.a-edit):not(.a-check) {
     padding: 0 5px;
 }
 
@@ -398,7 +398,7 @@ section h2 {
         width: 100%;
     }
 
-    .tbl-inout {
+    .tbl-data {
         font-size: 2.5vw;
     }
 
