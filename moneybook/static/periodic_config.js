@@ -82,7 +82,7 @@ $(document).ready(function() {
                 periodic_data_list: periodicDataList
             })
         }).done(function() {
-            showResultMsg('設定を更新しました', function() {
+            showResultMsg('Success!', function() {
                 window.location.href = periodic_list_url;
             });
         }).fail(function() {
