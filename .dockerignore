@@ -22,7 +22,7 @@ check_e2e_matrix.sh
 
 # Build & Dependencies
 build/
-requirements/
+requirements/requirements_*.txt
 
 # Python Build & Cache
 __pycache__/
