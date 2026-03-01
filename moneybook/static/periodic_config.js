@@ -80,17 +80,13 @@ $(document).ready(function() {
             },
             data: JSON.stringify({
                 periodic_data_list: periodicDataList
-            }),
-            success: function(response) {
-                showResultMessage('設定を更新しました', 'success');
-                setTimeout(function() {
-                    window.location.href = periodic_list_url;
-                }, 1000);
-            },
-            error: function(xhr) {
-                const errorMsg = xhr.responseJSON ? JSON.stringify(xhr.responseJSON) : 'エラーが発生しました';
-                showResultMessage('更新に失敗しました: ' + errorMsg, 'error');
-            }
+            })
+        }).done(function() {
+            showResultMsg('設定を更新しました', function() {
+                window.location.href = periodic_list_url;
+            });
+        }).fail(function() {
+            showResultMsg('エラーが発生しました', empty);
         });
     });
     
