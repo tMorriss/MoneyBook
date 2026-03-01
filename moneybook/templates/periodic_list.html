@@ -18,17 +18,6 @@
 <section>
     <h1>定期取引一覧</h1>
     
-    <table class="tbl-common fcs-blue">
-        <tr>
-            <td>
-                <input type="text" id="target_year" style="width:6ex" class="righter" placeholder="{{ next_year }}"
-                    onkeypress="keyPressAddBulk(event.keyCode)">年
-                <input type="text" id="target_month" style="width:5ex" class="righter" placeholder="{{ next_month }}"
-                    onkeypress="keyPressAddBulk(event.keyCode)">月
-            </td>
-        </tr>
-    </table>
-
     <div class="periodic-table-container">
         <table class="tbl-periodic tbl-boarder">
             <thead>
@@ -64,6 +53,12 @@
 
     <table class="tbl-buttons">
         <tr>
+            <td>
+                <input type="text" id="target_year" style="width:6ex" class="righter" placeholder="{{ next_year }}"
+                    onkeypress="keyPressAddBulk(event.keyCode)">年
+                <input type="text" id="target_month" style="width:5ex" class="righter" placeholder="{{ next_month }}"
+                    onkeypress="keyPressAddBulk(event.keyCode)">月
+            </td>
             <td><input type="button" value="追加" class="btn-green" id="btn_add_bulk"></td>
             <td><input type="button" value="設定" class="btn-blue" id="btn_config"></td>
         </tr>
