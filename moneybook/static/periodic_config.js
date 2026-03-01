@@ -86,7 +86,7 @@ $(document).ready(function() {
                 window.location.href = periodic_list_url;
             });
         }).fail(function() {
-            showResultMsg('エラーが発生しました', empty);
+            showResultMsg('Error...', empty);
         });
     });
     
