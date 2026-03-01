@@ -26,6 +26,10 @@ class PeriodicListView(View):
             'next_year': next_month.year,
             'next_month': next_month.month,
             'periodic_data_list': PeriodicData.get_all(),
+            'directions': Direction.list(),
+            'methods': Method.list(),
+            'first_categories': Category.first_list(),
+            'latter_categories': Category.latter_list(),
         }
         return render(request, 'periodic_list.html', context)
 
