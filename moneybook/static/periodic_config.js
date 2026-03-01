@@ -33,10 +33,6 @@ $(document).ready(function() {
     
     // 更新ボタンクリック
     $('#btn_update').on('click', function() {
-        if (!confirm('設定を更新しますか？')) {
-            return;
-        }
-        
         const periodicDataList = [];
         
         // テーブルの各行からデータを取得
