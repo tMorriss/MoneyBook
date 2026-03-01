@@ -50,7 +50,7 @@ class Periodic(SeleniumBase):
         update_btn = self.driver.find_element(By.ID, 'btn_update')
         cancel_btn = self.driver.find_element(By.ID, 'btn_cancel_edit')
         add_row_btn = self.driver.find_element(By.ID, 'btn_add_row')
-        
+
         self.assertTrue(update_btn.is_displayed())
         self.assertTrue(cancel_btn.is_displayed())
         self.assertTrue(add_row_btn.is_displayed())
