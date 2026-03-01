@@ -71,3 +71,16 @@ Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
 deactivate
 
 ```
+
+### git worktree
+
+```
+# 作成
+git worktree add -b new-branch ../MoneyBook_new-branch master
+
+# 一覧表示
+git worktree list
+
+# 削除
+git worktree remove ../MoneyBook_new-branch
+```
