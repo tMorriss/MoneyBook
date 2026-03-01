@@ -108,6 +108,7 @@ USE_TZ = True
 # Static version for cache busting (set by build process)
 STATIC_VERSION = os.environ.get('STATIC_VERSION', 'dev')
 STATIC_URL = f'/static/{STATIC_VERSION}/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 NUMBER_GROUPING = 3
 

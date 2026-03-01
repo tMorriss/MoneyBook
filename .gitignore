@@ -16,3 +16,6 @@ chrome*
 
 # Local Data
 /fixture/
+
+# build
+staticfiles/

@@ -38,6 +38,7 @@ sudo -u "$PODMAN_USER" podman build \
   -f build/Dockerfile.gunicorn .
 sudo -u "$PODMAN_USER" podman build \
   --build-arg STATIC_VERSION=$STATIC_VERSION \
+  --build-arg GUNICORN_IMAGE=moneybook_gunicorn:$BUILD_TAG \
   -t moneybook_nginx:$BUILD_TAG \
   -f build/Dockerfile.nginx .
 
