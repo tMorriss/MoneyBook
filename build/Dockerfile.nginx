@@ -17,7 +17,7 @@ ARG STATIC_VERSION
 RUN rm /etc/nginx/conf.d/default.conf
 
 # Copy custom nginx configuration
-COPY build/nginx.conf /etc/nginx/conf.d/moneybook.conf
+COPY nginx/nginx.conf /etc/nginx/conf.d/moneybook.conf
 
 # Copy collected static files (app + Django admin) to versioned directory
 COPY --from=collector /MoneyBook/staticfiles /usr/share/nginx/html/static/${STATIC_VERSION}
