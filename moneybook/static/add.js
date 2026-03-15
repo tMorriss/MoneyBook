@@ -122,7 +122,7 @@ function resetAddForm() {
     $('#c_day').val('');
     $('#c_item').val('');
     $('#c_price').val('');
-    $('input[name=c_method]').val([method_first]);
+    $('input[name=c_method]').val([chargeable_method_first]);
 
     // 内部移動
     $('#m_day').val('');

@@ -212,6 +212,22 @@ class Add(SeleniumBase):
         # 検証
         self._assert_bank_charge_kyash('PayPay')
 
+    def test_bank_charge_reset(self):
+        # 前処理
+        self._login()
+        self._location(self.live_server_url + reverse('moneybook:add'))
+
+        # テスト: PayPay(2番目のラジオボタン)を選択して追加
+        self.driver.find_element(By.ID, 'c_day').send_keys('1')
+        self.driver.find_element(By.ID, 'c_price').send_keys('100')
+        self.driver.find_element(By.XPATH, '//form[1]/table/tbody/tr[3]/td/label[2]').click()  # PayPayラベル
+        self.driver.find_element(By.XPATH, '//form[1]/input[@type="button"]').click()
+
+        # 検証: 成功後にchargeable_methods.first(Kyash=1番目)が選択されていること
+        time.sleep(1)
+        self.assertEqual(self.driver.find_element(By.XPATH, '//form[1]/table/tbody/tr[3]/td/input[1]').is_selected(), True)   # Kyash
+        self.assertEqual(self.driver.find_element(By.XPATH, '//form[1]/table/tbody/tr[3]/td/input[2]').is_selected(), False)  # PayPay
+
     def test_intra_move_click(self):
         # 前処理
         self._login()
