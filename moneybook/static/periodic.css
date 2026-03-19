@@ -1,0 +1,22 @@
+/* 定期取引ページ固有のスタイル */
+
+/* 設定画面のテーブル入力フィールドの幅調整 */
+.input-day {
+    width: 60px !important;
+}
+
+.input-item {
+    min-width: 150px !important;
+}
+
+.input-price {
+    width: 100px !important;
+}
+
+.select-direction,
+.select-method,
+.select-category,
+.select-temp {
+    min-width: 100px;
+}
+
