@@ -6,6 +6,9 @@ class BankBalance(models.Model):
     name = models.CharField(max_length=200)
     price = models.IntegerField(default=0)
 
+    def __str__(self):
+        return self.name
+
     @staticmethod
     def get_all():
         return BankBalance.objects.all().order_by('show_order')
