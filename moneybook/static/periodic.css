@@ -17,7 +17,6 @@
     color: #869198;
 }
 
-.select-green option:hover,
 .select-green option:checked {
     background-color: #a1b91d; /* 選択時: 緑（radio-greenの緑と同じ） */
     color: #fff;
