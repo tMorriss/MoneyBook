@@ -103,9 +103,7 @@ $(document).ready(function() {
 
     // キャンセルボタンクリック
     $('#btn_cancel_edit').on('click', function() {
-        if (confirm('編集内容を破棄してよろしいですか？')) {
-            location.reload();
-        }
+        location.reload();
     });
 
     // 行を追加ボタンクリック
@@ -115,12 +113,10 @@ $(document).ready(function() {
 
     // 削除ボタンクリック（動的に追加される要素にも対応）
     $(document).on('click', '.btn-delete', function() {
-        if (confirm('この行を削除しますか？')) {
-            $(this).closest('tr').remove();
-            // 行がなくなった場合は空メッセージを表示
-            if ($('#periodic_tbody tr').length === 0) {
-                $('#periodic_tbody').append('<tr id="empty_row"><td colspan="8" class="empty-message">定期取引が設定されていません</td></tr>');
-            }
+        $(this).closest('tr').remove();
+        // 行がなくなった場合は空メッセージを表示
+        if ($('#periodic_tbody tr').length === 0) {
+            $('#periodic_tbody').append('<tr id="empty_row"><td colspan="8" class="empty-message">定期取引が設定されていません</td></tr>');
         }
     });
 
@@ -179,9 +175,7 @@ $(document).ready(function() {
                 periodic_data_list: periodicDataList
             })
         }).done(function() {
-            showResultMsg('Success!', function() {
-                location.reload();
-            });
+            location.reload();
         }).fail(function() {
             showResultMsg('Error...', empty);
         });
@@ -219,62 +213,63 @@ $(document).ready(function() {
             if (id) {
                 periodicDataList.push({
                     id: id,
-                    day: parseInt($(this).data('day'))
+                    day: parseInt($(this).data('day')),
+                    item: $(this).data('item'),
+                    price: parseInt($(this).data('price')),
+                    direction: parseInt($(this).data('direction')),
+                    method: parseInt($(this).data('method')),
+                    category: parseInt($(this).data('category')),
+                    temp: $(this).data('temp') === 1
                 });
             }
         });
 
         if (periodicDataList.length === 0) {
-            alert('定期取引が設定されていません');
+            showResultMsg('定期取引が設定されていません', empty);
             return;
         }
 
         // 日付順にソート
         periodicDataList.sort((a, b) => a.day - b.day);
 
-        // 進捗エリアを表示
-        $('#progress_area').show();
-        $('#progress_log').empty();
-        $('#btn_add_bulk').prop('disabled', true);
-
         // 順番に登録処理を実行
         let index = 0;
+        let successCount = 0;
 
         function addNext() {
             if (index >= periodicDataList.length) {
-                $('#btn_add_bulk').prop('disabled', false);
-                showResultMessage('すべての登録が完了しました', 'success');
+                showResultMsg('Success!', empty);
                 return;
             }
 
             const pd = periodicDataList[index];
-            const logMsg = `${pd.day}日のデータを登録中...`;
-            $('#progress_log').append(`<p class="progress-item">${logMsg}</p>`);
+            
+            // 日付の妥当性チェック
+            let day = pd.day;
+            const maxDay = new Date(year, month, 0).getDate();
+            if (day > maxDay) {
+                day = maxDay;
+            }
 
-            $.ajax({
-                url: periodic_add_bulk_url,
-                type: 'POST',
-                contentType: 'application/json',
-                headers: {
-                    'X-CSRFToken': csrftoken
-                },
-                data: JSON.stringify({
-                    year: year,
-                    month: month,
-                    periodic_id: pd.id
-                }),
-                success: function(response) {
-                    $('#progress_log .progress-item:last').append(` ✓ ${response.message}`);
-
-                    index++;
-                    setTimeout(addNext, 100); // 少し間隔を空けて次へ
-                },
-                error: function(xhr) {
-                    const errorMsg = xhr.responseJSON ? xhr.responseJSON.error : 'エラーが発生しました';
-                    $('#progress_log .progress-item:last').append(` ✗ ${errorMsg}`);
-                    $('#btn_add_bulk').prop('disabled', false);
-                    showResultMessage('登録中にエラーが発生しました', 'error');
+            $.post({
+                url: add_url,
+                data: {
+                    'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val(),
+                    'date': `${year}-${month}-${day}`,
+                    'item': pd.item,
+                    'price': pd.price,
+                    'direction': pd.direction,
+                    'method': pd.method,
+                    'category': pd.category,
+                    'temp': pd.temp ? 'True' : 'False',
+                    'checked': 'False',
                 }
+            }).done(function() {
+                successCount++;
+                index++;
+                setTimeout(addNext, 100); // 少し間隔を空けて次へ
+            }).fail(function() {
+                showResultMsg('Error...', empty);
             });
         }
 

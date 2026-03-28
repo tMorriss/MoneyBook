@@ -8,7 +8,7 @@
 <link rel="stylesheet" type="text/css" href="{% static 'periodic.css' %}">
 <script type="text/javascript" src="{% static 'periodic.js' %}"></script>
 <script type="text/javascript">
-    periodic_add_bulk_url = "{% url 'moneybook:periodic_add_bulk' %}";
+    add_url = "{% url 'moneybook:add' %}";
     periodic_config_url = "{% url 'moneybook:periodic_config' %}";
     periodic_list_url = "{% url 'moneybook:periodic_list' %}";
 
@@ -34,6 +34,7 @@
 {% endblock %}
 
 {% block content %}
+{% csrf_token %}
 <section>
     <h1>定期取引一覧</h1>
 
@@ -136,11 +137,6 @@
             <td class="edit-mode" style="display:none;"><input type="button" value="キャンセル" class="btn-blue" id="btn_cancel_edit"></td>
         </tr>
     </table>
-
-    <div id="progress_area" style="display:none;">
-        <h3>登録進捗</h3>
-        <div id="progress_log"></div>
-    </div>
 </section>
 {% include "_result_message.html" %}
 {% endblock %}

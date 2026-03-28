@@ -1,14 +1,15 @@
-import calendar
 import json
-from datetime import date, datetime
+from datetime import datetime
 
 from dateutil.relativedelta import relativedelta
+
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render
 from django.views import View
+
 from moneybook.forms import PeriodicDataForm
-from moneybook.models import Category, Data, Direction, Method, PeriodicData
+from moneybook.models import Category, Direction, Method, PeriodicData
 
 
 class PeriodicListView(View):
@@ -35,20 +36,7 @@ class PeriodicListView(View):
 
 
 class PeriodicConfigView(View):
-    """定期取引設定画面"""
-    def get(self, request, *args, **kwargs):
-        context = {
-            'app_name': settings.APP_NAME,
-            'username': request.user,
-            'periodic_data_list': PeriodicData.get_all(),
-            'directions': Direction.list(),
-            'methods': Method.list(),
-            'first_categories': Category.first_list(),
-            'latter_categories': Category.latter_list(),
-            'temps': {0: 'No', 1: 'Yes'},
-        }
-        return render(request, 'periodic_config.html', context)
-
+    """定期取引設定API"""
     def post(self, request, *args, **kwargs):
         """設定を更新"""
         try:
@@ -68,58 +56,6 @@ class PeriodicConfigView(View):
                     error_list = [str(e) for e in form.errors]
                     return HttpResponseBadRequest(json.dumps({'errors': error_list}))
 
-            return HttpResponse(json.dumps({'success': True}))
-        except Exception as e:
-            return HttpResponseBadRequest(json.dumps({'error': str(e)}))
-
-
-class PeriodicAddBulkView(View):
-    """定期取引一括登録API"""
-    def post(self, request, *args, **kwargs):
-        try:
-            # JSONデータを取得
-            data = json.loads(request.body)
-            year = data.get('year')
-            month = data.get('month')
-            periodic_id = int(data.get('periodic_id'))
-
-            # yearまたはmonthが空の場合はエラー（JavaScriptでデフォルト値が設定されるはず）
-            if not year or not month:
-                return HttpResponseBadRequest(json.dumps({'error': '年月が指定されていません'}))
-
-            year = int(year)
-            month = int(month)
-
-            # PeriodicDataを取得
-            periodic_data = PeriodicData.get(periodic_id)
-
-            # 日付の妥当性チェック
-            day = periodic_data.day
-            max_day = calendar.monthrange(year, month)[1]
-            if day > max_day:
-                day = max_day
-
-            # Dataオブジェクトを作成
-            target_date = date(year, month, day)
-
-            # データを作成（重複チェックなし）
-            new_data = Data(
-                date=target_date,
-                item=periodic_data.item,
-                price=periodic_data.price,
-                direction=periodic_data.direction,
-                method=periodic_data.method,
-                category=periodic_data.category,
-                temp=periodic_data.temp,
-                checked=False,
-                pre_checked=False,
-            )
-            new_data.save()
-
-            return HttpResponse(json.dumps({
-                'success': True,
-                'message': 'データを登録しました'
-            }))
-
+            return HttpResponse()
         except Exception as e:
             return HttpResponseBadRequest(json.dumps({'error': str(e)}))
