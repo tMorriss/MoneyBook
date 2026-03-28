@@ -7,6 +7,9 @@ class CheckedDate(models.Model):
     method = models.OneToOneField(Method, on_delete=models.RESTRICT)
     date = models.DateField()
 
+    def __str__(self):
+        return str(self.method)
+
     @staticmethod
     def get(pk):
         return CheckedDate.objects.get(pk=pk)

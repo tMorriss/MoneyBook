@@ -679,6 +679,10 @@ class DataTestCase(BaseTestCase):
 
 
 class CheckedDateTestCase(BaseTestCase):
+    def test_str(self):
+        self.assertEqual(str(CheckedDate.get(1)), '現金')
+        self.assertEqual(str(CheckedDate.get(2)), '銀行')
+
     def test_get(self):
         self.assertEqual(CheckedDate.get(1).date, date(2000, 1, 2))
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
@@ -720,6 +724,10 @@ class CreditCheckedDateTestCase(BaseTestCase):
 
 
 class BankBalanceTestCase(BaseTestCase):
+    def test_str(self):
+        self.assertEqual(str(BankBalance.objects.get(pk=1)), 'みずほ')
+        self.assertEqual(str(BankBalance.objects.get(pk=2)), '三井住友')
+
     def test_get_all(self):
         data = BankBalance.get_all()
         self.assertEqual(data[0].name, '三井住友')
@@ -742,6 +750,10 @@ class BankBalanceTestCase(BaseTestCase):
 
 
 class SeveralCostsTestCase(BaseTestCase):
+    def test_str(self):
+        self.assertEqual(str(SeveralCosts.objects.get(name='LivingCostMark')), 'LivingCostMark')
+        self.assertEqual(str(SeveralCosts.objects.get(name='ActualCashBalance')), 'ActualCashBalance')
+
     def test_get_living_cost_mark(self):
         self.assertEqual(SeveralCosts.get_living_cost_mark(), 1000)
 
