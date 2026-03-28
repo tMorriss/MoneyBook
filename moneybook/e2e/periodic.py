@@ -1,10 +1,8 @@
 import time
 
 from django.urls import reverse
-
 from moneybook.e2e.base import SeleniumBase
 from moneybook.models import Data, PeriodicData
-
 from selenium.webdriver.common.by import By
 
 

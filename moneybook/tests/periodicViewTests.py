@@ -2,10 +2,8 @@ import json
 from datetime import datetime
 
 from dateutil.relativedelta import relativedelta
-
 from django.contrib.auth.models import User
 from django.urls import reverse
-
 from moneybook.models import Category, Direction, Method, PeriodicData
 from moneybook.tests.base import BaseTestCase
 
