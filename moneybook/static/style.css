@@ -315,53 +315,10 @@ section h2 {
     max-width: 90%;
 }
 
-/* 共通テーブルコンテナ */
-.periodic-table-container,
-.periodic-config-container {
-    margin: 20px 0;
-    overflow-x: auto;
-}
-
-/* 共通テーブルスタイル */
-.tbl-periodic-config {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.tbl-periodic-config th {
-    background-color: #005000;
-    color: white;
-    padding: 10px;
-    text-align: center;
-}
-
-.tbl-periodic-config td {
-    padding: 5px;
-    border: 1px solid #ddd;
-}
-
-.tbl-periodic-config input[type="number"],
-.tbl-periodic-config input[type="text"] {
-    width: 100%;
-    padding: 5px;
-    box-sizing: border-box;
-    font-size: 1em;
-}
-
-.tbl-periodic-config select {
-    width: 100%;
-    padding: 5px;
-    font-size: 1em;
-}
-
 .empty-message {
     text-align: center;
     color: #999;
     font-style: italic;
-}
-
-.button-group {
-    margin: 10px 0;
 }
 
 /* スマホ */
@@ -394,9 +351,5 @@ section h2 {
     
     .input-group {
         margin-bottom: 10px;
-    }
-    
-    .tbl-periodic-config {
-        font-size: 0.9em;
     }
 }
