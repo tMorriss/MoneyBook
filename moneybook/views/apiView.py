@@ -7,8 +7,8 @@ from django.shortcuts import render
 from django.views import View
 from moneybook.forms import DataForm, IntraMoveForm
 from moneybook.models import (BankBalance, Category, CheckedDate,
-                             CreditCheckedDate, Data, Direction, InOutBalance,
-                             Method, SeveralCosts)
+                             CreditCheckedDate, Data, Direction,
+                             InOutBalance, Method, SeveralCosts)
 from moneybook.utils import is_valid_date
 
 

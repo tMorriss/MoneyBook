@@ -2,10 +2,9 @@ from datetime import datetime
 
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
-from django.http import HttpResponseBadRequest
 from django.shortcuts import redirect, render
 from django.views import View
-from moneybook.models import Category, Data, Direction, InOutBalance, Method, SeveralCosts
+from moneybook.models import Category, Direction, Method
 from moneybook.utils import is_valid_date
 
 
@@ -56,7 +55,3 @@ class IndexMonthView(View):
         }
 
         return render(request, 'index.html', context)
-
-
-
-

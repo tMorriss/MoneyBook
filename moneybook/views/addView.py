@@ -1,12 +1,9 @@
-import json
 from datetime import datetime
 
 from django.conf import settings
-from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render
 from django.views import View
-from moneybook.forms import DataForm
-from moneybook.models import Category, Data, Direction, Method
+from moneybook.models import Category, Direction, Method
 
 
 class AddView(View):

@@ -1,11 +1,9 @@
-import json
-from datetime import date, datetime
+from datetime import datetime
 
 from django.conf import settings
-from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render
 from django.views import View
-from moneybook.models import BankBalance, CheckedDate, CreditCheckedDate, Data, Method, SeveralCosts
+from moneybook.models import CreditCheckedDate, Data, SeveralCosts
 
 
 class ToolsView(View):
@@ -32,7 +30,3 @@ class ToolsView(View):
             'living_cost_mark': living_cost_mark,
         }
         return render(request, 'tools.html', context)
-
-
-
-

@@ -1,10 +1,6 @@
-import json
-
 from django.conf import settings
-from django.http import (HttpResponse, HttpResponseBadRequest)
 from django.shortcuts import redirect, render
 from django.views import View
-from moneybook.forms import DataForm
 from moneybook.models import Category, Data, Direction, Method
 
 
