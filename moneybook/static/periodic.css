@@ -8,12 +8,18 @@
     padding: 2px 7px;
     cursor: pointer;
     border-radius: 3px;
+    outline: none;
 }
 
-.select-green:focus {
-    outline: none;
-    border-color: #a1b91d;
-    background-color: #a1b91d;
+/* ドロップダウンオプションのスタイル */
+.select-green option {
+    background-color: #bdc3c7; /* 未選択時: グレー（radio-greenの未選択と同じ） */
+    color: #869198;
+}
+
+.select-green option:hover,
+.select-green option:checked {
+    background-color: #a1b91d; /* 選択時: 緑（radio-greenの緑と同じ） */
     color: #fff;
 }
 
