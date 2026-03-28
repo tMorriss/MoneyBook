@@ -44,9 +44,9 @@ function toggleEditMode(isEditMode) {
 function addNewRow() {
     // 空の行メッセージを削除
     $('#empty_row').remove();
-    
+
     const newRow = `
-        <tr data-id="" 
+        <tr data-id=""
             data-day="1"
             data-item=""
             data-price="0"
@@ -94,25 +94,25 @@ function addNewRow() {
 $(document).ready(function() {
     const csrftoken = getCookie('csrftoken');
     let isEditMode = false;
-    
+
     // 編集モードボタンクリック
     $('#btn_edit_mode').on('click', function() {
         isEditMode = true;
         toggleEditMode(true);
     });
-    
+
     // キャンセルボタンクリック
     $('#btn_cancel_edit').on('click', function() {
         if (confirm('編集内容を破棄してよろしいですか？')) {
             location.reload();
         }
     });
-    
+
     // 行を追加ボタンクリック
     $('#btn_add_row').on('click', function() {
         addNewRow();
     });
-    
+
     // 削除ボタンクリック（動的に追加される要素にも対応）
     $(document).on('click', '.btn-delete', function() {
         if (confirm('この行を削除しますか？')) {
@@ -123,17 +123,17 @@ $(document).ready(function() {
             }
         }
     });
-    
+
     // 更新ボタンクリック
     $('#btn_update').on('click', function() {
         const periodicDataList = [];
-        
+
         // テーブルの各行からデータを取得
         $('#periodic_tbody tr').each(function() {
             if ($(this).attr('id') === 'empty_row') {
                 return; // 空の行メッセージはスキップ
             }
-            
+
             const day = parseInt($(this).find('.input-day').val());
             const item = $(this).find('.input-item').val().trim();
             const price = parseInt($(this).find('.input-price').val());
@@ -141,7 +141,7 @@ $(document).ready(function() {
             const method = parseInt($(this).find('.select-method').val());
             const category = parseInt($(this).find('.select-category').val());
             const temp = $(this).find('.select-temp').val() === '1';
-            
+
             // バリデーション
             if (!day || day < 1 || day > 31) {
                 alert('日は1〜31の範囲で入力してください');
@@ -155,7 +155,7 @@ $(document).ready(function() {
                 alert('金額は正の数で入力してください');
                 return false;
             }
-            
+
             periodicDataList.push({
                 day: day,
                 item: item,
@@ -166,7 +166,7 @@ $(document).ready(function() {
                 temp: temp
             });
         });
-        
+
         // データ送信
         $.ajax({
             url: periodic_config_url,
@@ -186,13 +186,13 @@ $(document).ready(function() {
             showResultMsg('Error...', empty);
         });
     });
-    
+
     // 追加ボタンクリック
     $('#btn_add_bulk').on('click', function() {
         // 年月を取得（空の場合はplaceholderの値を使用）
         let year = $('#target_year').val();
         let month = $('#target_month').val();
-        
+
         // 空の場合はplaceholderの値を使用
         if (!year || year.trim() === '') {
             year = $('#target_year').attr('placeholder');
@@ -200,15 +200,15 @@ $(document).ready(function() {
         if (!month || month.trim() === '') {
             month = $('#target_month').attr('placeholder');
         }
-        
+
         year = parseInt(year);
         month = parseInt(month);
-        
+
         if (!year || !month || month < 1 || month > 12) {
             alert('有効な年月を入力してください');
             return;
         }
-        
+
         // 定期取引データを取得
         const periodicDataList = [];
         $('#periodic_tbody tr').each(function() {
@@ -223,34 +223,34 @@ $(document).ready(function() {
                 });
             }
         });
-        
+
         if (periodicDataList.length === 0) {
             alert('定期取引が設定されていません');
             return;
         }
-        
+
         // 日付順にソート
         periodicDataList.sort((a, b) => a.day - b.day);
-        
+
         // 進捗エリアを表示
         $('#progress_area').show();
         $('#progress_log').empty();
         $('#btn_add_bulk').prop('disabled', true);
-        
+
         // 順番に登録処理を実行
         let index = 0;
-        
+
         function addNext() {
             if (index >= periodicDataList.length) {
                 $('#btn_add_bulk').prop('disabled', false);
                 showResultMessage('すべての登録が完了しました', 'success');
                 return;
             }
-            
+
             const pd = periodicDataList[index];
             const logMsg = `${pd.day}日のデータを登録中...`;
             $('#progress_log').append(`<p class="progress-item">${logMsg}</p>`);
-            
+
             $.ajax({
                 url: periodic_add_bulk_url,
                 type: 'POST',
@@ -277,7 +277,7 @@ $(document).ready(function() {
                 }
             });
         }
-        
+
         addNext();
     });
 });
