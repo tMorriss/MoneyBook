@@ -7,9 +7,9 @@
 {% block header %}
 <script type="text/javascript" src="{% static 'edit.js' %}"></script>
 <script type="text/javascript">
-    edit_url = "{% url 'moneybook:edit' data.pk %}";
-    delete_url = "{% url 'moneybook:delete' %}";
-    suggest_url = "{% url 'moneybook:suggest' %}";
+    edit_url = "{% url 'moneybook:edit_api' data.pk %}";
+    delete_url = "{% url 'moneybook:delete_api' %}";
+    suggest_url = "{% url 'moneybook:suggest_api' %}";
 
     data_pk = "{{ data.pk }}";
 </script>

@@ -38,6 +38,8 @@ class EditViewTestCase(BaseTestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('moneybook:login'))
 
+
+class EditApiViewTestCase(BaseTestCase):
     def test_post(self):
         self.client.force_login(User.objects.create_user(self.username))
         # 更新前の値を確認
@@ -52,7 +54,7 @@ class EditViewTestCase(BaseTestCase):
         self.assertEqual(data.checked, True)
 
         response = self.client.post(
-            reverse('moneybook:edit', kwargs={'pk': 1}),
+            reverse('moneybook:edit_api', kwargs={'pk': 1}),
             {
                 'date': '2000-4-1',
                 'item': 'テスト項目1',
@@ -91,7 +93,7 @@ class EditViewTestCase(BaseTestCase):
         self.assertEqual(data.checked, True)
 
         response = self.client.post(
-            reverse('moneybook:edit', kwargs={'pk': 1}),
+            reverse('moneybook:edit_api', kwargs={'pk': 1}),
             {
                 'item': 'テスト項目1',
                 'direction': 1,
@@ -119,7 +121,7 @@ class EditViewTestCase(BaseTestCase):
     def test_post_invalid_pk(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.post(
-            reverse('moneybook:edit', kwargs={'pk': 10000}),
+            reverse('moneybook:edit_api', kwargs={'pk': 10000}),
             {
                 'date': '2000-4-1',
                 'item': 'テスト項目1',
@@ -145,7 +147,7 @@ class EditViewTestCase(BaseTestCase):
         self.assertEqual(data.temp, False)
         self.assertEqual(data.checked, True)
         response = self.client.post(
-            reverse('moneybook:edit', kwargs={'pk': 1}),
+            reverse('moneybook:edit_api', kwargs={'pk': 1}),
             {
                 'date': '2000-4-1',
                 'item': 'テスト項目1',
@@ -157,8 +159,7 @@ class EditViewTestCase(BaseTestCase):
                 'checked': False
             }
         )
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.url, reverse('moneybook:login'))
+        self.assertEqual(response.status_code, 403)
 
         # 更新されていないことを確認
         data = Data.get(1)
@@ -172,7 +173,7 @@ class EditViewTestCase(BaseTestCase):
         self.assertEqual(data.checked, True)
 
 
-class ApplyCheckViewTestCase(BaseTestCase):
+class ApplyCheckApiViewTestCase(BaseTestCase):
     def test_post(self):
         self.client.force_login(User.objects.create_user(self.username))
         # まず事前チェック済みデータを作成
@@ -189,8 +190,8 @@ class ApplyCheckViewTestCase(BaseTestCase):
         pre_checked_data = Data.get_pre_checked_data(unchecked_data)
         self.assertEqual(len(pre_checked_data), 2)
 
-        # ApplyCheckViewを実行
-        response = self.client.post(reverse('moneybook:edit_apply_check'))
+        # ApplyCheckApiViewを実行
+        response = self.client.post(reverse('moneybook:apply_check_api'))
         self.assertEqual(response.status_code, 200)
 
         # 事前チェック済みデータがチェック済みになっていることを確認
@@ -200,12 +201,12 @@ class ApplyCheckViewTestCase(BaseTestCase):
             self.assertEqual(data.checked, True)
 
     def test_post_guest(self):
-        response = self.client.post(reverse('moneybook:edit_apply_check'))
-        # edit_apply_check is in the API list, so it should return 403
+        response = self.client.post(reverse('moneybook:apply_check_api'))
+        # apply_check_api is in the API list, so it should return 403
         self.assertEqual(response.status_code, 403)
 
 
-class PreCheckViewTestCase(BaseTestCase):
+class PreCheckApiViewTestCase(BaseTestCase):
     def test_post_set_true(self):
         self.client.force_login(User.objects.create_user(self.username))
         # pk=4 (必需品1) is unchecked
@@ -213,7 +214,7 @@ class PreCheckViewTestCase(BaseTestCase):
         self.assertEqual(data.pre_checked, False)
 
         response = self.client.post(
-            reverse('moneybook:edit_pre_check'),
+            reverse('moneybook:pre_check_api'),
             {'id': 4, 'status': '1'}
         )
         self.assertEqual(response.status_code, 200)
@@ -229,7 +230,7 @@ class PreCheckViewTestCase(BaseTestCase):
         data.save()
 
         response = self.client.post(
-            reverse('moneybook:edit_pre_check'),
+            reverse('moneybook:pre_check_api'),
             {'id': 4, 'status': '0'}
         )
         self.assertEqual(response.status_code, 200)
@@ -240,15 +241,15 @@ class PreCheckViewTestCase(BaseTestCase):
     def test_post_invalid_id(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.post(
-            reverse('moneybook:edit_pre_check'),
+            reverse('moneybook:pre_check_api'),
             {'id': 99999, 'status': '1'}
         )
         self.assertEqual(response.status_code, 400)
 
     def test_post_guest(self):
         response = self.client.post(
-            reverse('moneybook:edit_pre_check'),
+            reverse('moneybook:pre_check_api'),
             {'id': 4, 'status': '1'}
         )
-        # edit_pre_check is in the API list, so it should return 403
+        # pre_check_api is in the API list, so it should return 403
         self.assertEqual(response.status_code, 403)

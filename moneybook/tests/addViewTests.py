@@ -34,13 +34,16 @@ class AddViewTestCase(BaseTestCase):
 
     def test_get_guest(self):
         response = self.client.get(reverse('moneybook:add'))
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse('moneybook:login'))
 
+
+class AddApiViewTestCase(BaseTestCase):
     def test_post(self):
         self.client.force_login(User.objects.create_user(self.username))
         before_count = Data.get_all_data().count()
         response = self.client.post(
-            reverse('moneybook:add'),
+            reverse('moneybook:add_api'),
             {
                 'date': '2000-4-1',
                 'item': 'テスト項目1',
@@ -61,7 +64,7 @@ class AddViewTestCase(BaseTestCase):
         self.client.force_login(User.objects.create_user(self.username))
         before_count = Data.get_all_data().count()
         response = self.client.post(
-            reverse('moneybook:add'),
+            reverse('moneybook:add_api'),
             {
                 'item': 'テスト項目1',
                 'direction': 2,
@@ -72,14 +75,15 @@ class AddViewTestCase(BaseTestCase):
             }
         )
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.content.decode(), json.dumps({'ErrorList': ['date', 'price']}))
+        self.assertEqual(response.content.decode(), json.dumps(
+            {'ErrorList': ['date', 'price']}))
         after_count = Data.get_all_data().count()
         self.assertEqual(after_count, before_count)
 
     def test_post_guest(self):
         before_count = Data.get_all_data().count()
         response = self.client.post(
-            reverse('moneybook:add'),
+            reverse('moneybook:add_api'),
             {
                 'date': '2000-4-1',
                 'item': 'テスト項目1',
@@ -96,10 +100,11 @@ class AddViewTestCase(BaseTestCase):
         self.assertEqual(after_count, before_count)
 
 
-class SuggestViewTestCase(BaseTestCase):
+class SuggestApiViewTestCase(BaseTestCase):
     def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
-        response = self.client.get(reverse('moneybook:suggest'), {'item': '必需品'})
+        response = self.client.get(
+            reverse('moneybook:suggest_api'), {'item': '必需品'})
 
         self.assertEqual(response.status_code, 200, response.content)
         body = json.loads(response.content.decode())
@@ -113,7 +118,8 @@ class SuggestViewTestCase(BaseTestCase):
 
     def test_get_distinct(self):
         self.client.force_login(User.objects.create_user(self.username))
-        response = self.client.get(reverse('moneybook:suggest'), {'item': 'PayPayチャージ'})
+        response = self.client.get(
+            reverse('moneybook:suggest_api'), {'item': 'PayPayチャージ'})
 
         self.assertEqual(response.status_code, 200, response.content)
         body = json.loads(response.content.decode())
@@ -126,7 +132,7 @@ class SuggestViewTestCase(BaseTestCase):
 
     def test_get_missing_item(self):
         self.client.force_login(User.objects.create_user(self.username))
-        response = self.client.get(reverse('moneybook:suggest'))
+        response = self.client.get(reverse('moneybook:suggest_api'))
 
         self.assertEqual(response.status_code, 400, response.content)
         body = json.loads(response.content.decode())
@@ -134,7 +140,8 @@ class SuggestViewTestCase(BaseTestCase):
 
     def test_get_empty_item(self):
         self.client.force_login(User.objects.create_user(self.username))
-        response = self.client.get(reverse('moneybook:suggest'), {'item': ''})
+        response = self.client.get(
+            reverse('moneybook:suggest_api'), {'item': ''})
 
         self.assertEqual(response.status_code, 400, response.content)
         body = json.loads(response.content.decode())
