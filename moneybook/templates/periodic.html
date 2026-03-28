@@ -9,26 +9,6 @@
 <script type="text/javascript" src="{% static 'periodic.js' %}"></script>
 <script type="text/javascript">
     add_url = "{% url 'moneybook:add' %}";
-    periodic_url = "{% url 'moneybook:periodic' %}";
-
-    const directions = [
-        {% for d in directions %}
-        {pk: {{ d.pk }}, name: "{{ d.name }}"},
-        {% endfor %}
-    ];
-    const methods = [
-        {% for m in methods %}
-        {pk: {{ m.pk }}, name: "{{ m.name }}"},
-        {% endfor %}
-    ];
-    const categories = [
-        {% for c in first_categories %}
-        {pk: {{ c.pk }}, name: "{{ c.name }}"},
-        {% endfor %}
-        {% for c in latter_categories %}
-        {pk: {{ c.pk }}, name: "{{ c.name }}"},
-        {% endfor %}
-    ];
 </script>
 {% endblock %}
 
@@ -37,84 +17,42 @@
 <section>
     <h1>定期取引一覧</h1>
 
-    <div class="periodic-table-container">
-        <table class="tbl-data tbl-boarder" id="periodic_table">
-            <thead>
-                <tr>
-                    <th>日</th>
-                    <th>品目</th>
-                    <th>金額</th>
-                    <th>方向</th>
-                    <th>支払い方法</th>
-                    <th>分類</th>
-                    <th>立替</th>
-                    <th class="edit-mode-only" style="display:none;">操作</th>
-                </tr>
-            </thead>
-            <tbody id="periodic_tbody">
-                {% for pd in periodic_data_list %}
-                <tr data-id="{{ pd.pk }}"
-                    data-day="{{ pd.day }}"
-                    data-item="{{ pd.item }}"
-                    data-price="{{ pd.price }}"
-                    data-direction="{{ pd.direction.pk }}"
-                    data-method="{{ pd.method.pk }}"
-                    data-category="{{ pd.category.pk }}"
-                    data-temp="{% if pd.temp %}1{% else %}0{% endif %}">
-                    <td class="view-mode">{{ pd.day }}</td>
-                    <td class="view-mode">{{ pd.item }}</td>
-                    <td class="view-mode righter">{{ pd.price|intcomma }}</td>
-                    <td class="view-mode">{{ pd.direction }}</td>
-                    <td class="view-mode">{{ pd.method }}</td>
-                    <td class="view-mode">{{ pd.category }}</td>
-                    <td class="view-mode">{% if pd.temp %}Yes{% else %}No{% endif %}</td>
-                    <td class="edit-mode" style="display:none;"><input type="number" class="input-day" value="{{ pd.day }}" min="1" max="31"></td>
-                    <td class="edit-mode" style="display:none;"><input type="text" class="input-item" value="{{ pd.item }}" maxlength="100"></td>
-                    <td class="edit-mode" style="display:none;"><input type="number" class="input-price" value="{{ pd.price }}"></td>
-                    <td class="edit-mode" style="display:none;">
-                        <select class="select-direction">
-                            {% for d in directions %}
-                            <option value="{{ d.pk }}" {% if d.pk == pd.direction.pk %}selected{% endif %}>{{ d.name }}</option>
-                            {% endfor %}
-                        </select>
-                    </td>
-                    <td class="edit-mode" style="display:none;">
-                        <select class="select-method">
-                            {% for m in methods %}
-                            <option value="{{ m.pk }}" {% if m.pk == pd.method.pk %}selected{% endif %}>{{ m.name }}</option>
-                            {% endfor %}
-                        </select>
-                    </td>
-                    <td class="edit-mode" style="display:none;">
-                        <select class="select-category">
-                            {% for c in first_categories %}
-                            <option value="{{ c.pk }}" {% if c.pk == pd.category.pk %}selected{% endif %}>{{ c.name }}</option>
-                            {% endfor %}
-                            {% for c in latter_categories %}
-                            <option value="{{ c.pk }}" {% if c.pk == pd.category.pk %}selected{% endif %}>{{ c.name }}</option>
-                            {% endfor %}
-                        </select>
-                    </td>
-                    <td class="edit-mode" style="display:none;">
-                        <select class="select-temp">
-                            <option value="0" {% if not pd.temp %}selected{% endif %}>No</option>
-                            <option value="1" {% if pd.temp %}selected{% endif %}>Yes</option>
-                        </select>
-                    </td>
-                    <td class="edit-mode-only" style="display:none;"><button class="btn-delete btn-red">削除</button></td>
-                </tr>
-                {% empty %}
-                <tr id="empty_row">
-                    <td colspan="7" class="empty-message">定期取引が設定されていません</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-
-        <div class="button-group edit-mode-only" style="display:none;">
-            <button id="btn_add_row" class="btn-green">行を追加</button>
-        </div>
-    </div>
+    <table class="tbl-data tbl-boarder" id="periodic_table">
+        <thead>
+            <tr>
+                <th>日</th>
+                <th>品目</th>
+                <th>金額</th>
+                <th>方向</th>
+                <th>支払い方法</th>
+                <th>分類</th>
+                <th>立替</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pd in periodic_data_list %}
+            <tr data-day="{{ pd.day }}"
+                data-item="{{ pd.item }}"
+                data-price="{{ pd.price }}"
+                data-direction="{{ pd.direction.pk }}"
+                data-method="{{ pd.method.pk }}"
+                data-category="{{ pd.category.pk }}"
+                data-temp="{% if pd.temp %}1{% else %}0{% endif %}">
+                <td>{{ pd.day }}</td>
+                <td>{{ pd.item }}</td>
+                <td class="righter">{{ pd.price|intcomma }}</td>
+                <td>{{ pd.direction }}</td>
+                <td>{{ pd.method }}</td>
+                <td>{{ pd.category }}</td>
+                <td>{% if pd.temp %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7" class="empty-message">定期取引が設定されていません</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
     <!-- 年月入力 -->
     <table class="tbl-common fcs-blue">
@@ -130,12 +68,11 @@
 
     <table class="tbl-buttons">
         <tr>
-            <td class="view-mode"><input type="button" value="追加" class="btn-green" id="btn_add_bulk"></td>
-            <td class="view-mode"><input type="button" value="編集" class="btn-blue" id="btn_edit_mode"></td>
-            <td class="edit-mode" style="display:none;"><input type="button" value="更新" class="btn-green" id="btn_update"></td>
-            <td class="edit-mode" style="display:none;"><input type="button" value="キャンセル" class="btn-blue" id="btn_cancel_edit"></td>
+            <td><input type="button" value="追加" class="btn-green" id="btn_add_bulk"></td>
+            <td><input type="button" value="編集" class="btn-blue" onclick="location.href='{% url 'moneybook:periodic_edit' %}'"></td>
         </tr>
     </table>
 </section>
 {% include "_result_message.html" %}
 {% endblock %}
+

@@ -1,0 +1,123 @@
+{% extends "_base.html" %}
+{% load static %}
+
+{% block title %}{{ app_name }} 定期取引編集{% endblock %}
+
+{% block header %}
+<link rel="stylesheet" href="{% static 'periodic.css' %}">
+<script type="text/javascript" src="{% static 'periodic_edit.js' %}"></script>
+<script type="text/javascript">
+    periodic_url = "{% url 'moneybook:periodic' %}";
+</script>
+{% endblock %}
+
+{% block content %}
+<section>
+    <h2>定期取引設定</h2>
+    <form method="post" action="{% url 'moneybook:periodic_edit' %}">
+        {% csrf_token %}
+        <table class="tbl-common tbl-boarder">
+            <thead>
+                <tr>
+                    <th>日</th>
+                    <th>品目</th>
+                    <th>金額</th>
+                    <th>方向</th>
+                    <th>支払い方法</th>
+                    <th>分類</th>
+                    <th>立替</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody id="periodic_table">
+                {% for pd in periodic_data_list %}
+                <tr data-id="{{ pd.pk }}">
+                    <td><input type="number" name="day_{{ pd.pk }}" value="{{ pd.day }}" min="1" max="31" style="width:6ex" class="righter"></td>
+                    <td><input type="text" name="item_{{ pd.pk }}" value="{{ pd.item }}" size="20"></td>
+                    <td><input type="number" name="price_{{ pd.pk }}" value="{{ pd.price }}" min="0" style="width:12ex" class="righter"></td>
+                    <td>
+                        <select name="direction_{{ pd.pk }}" class="select-green">
+                            {% for d in directions %}
+                            <option value="{{ d.pk }}" {% if d.pk == pd.direction.pk %}selected{% endif %}>{{ d.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                        <select name="method_{{ pd.pk }}" class="select-green">
+                            {% for m in methods %}
+                            <option value="{{ m.pk }}" {% if m.pk == pd.method.pk %}selected{% endif %}>{{ m.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                        <select name="category_{{ pd.pk }}" class="select-green">
+                            {% for c in first_categories %}
+                            <option value="{{ c.pk }}" {% if c.pk == pd.category.pk %}selected{% endif %}>{{ c.name }}</option>
+                            {% endfor %}
+                            {% for c in latter_categories %}
+                            <option value="{{ c.pk }}" {% if c.pk == pd.category.pk %}selected{% endif %}>{{ c.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                        <select name="temp_{{ pd.pk }}" class="select-green">
+                            <option value="0" {% if pd.temp == 0 %}selected{% endif %}>なし</option>
+                            <option value="1" {% if pd.temp == 1 %}selected{% endif %}>あり</option>
+                        </select>
+                    </td>
+                    <td><button type="button" class="btn-delete-row btn-red" data-id="{{ pd.pk }}">削除</button></td>
+                </tr>
+                {% endfor %}
+                <!-- 新規行テンプレート（JavaScriptで複製） -->
+                <tr id="new_row_template" style="display:none;">
+                    <td><input type="number" name="day_new" value="" min="1" max="31" style="width:6ex" class="righter"></td>
+                    <td><input type="text" name="item_new" value="" size="20"></td>
+                    <td><input type="number" name="price_new" value="" min="0" style="width:12ex" class="righter"></td>
+                    <td>
+                        <select name="direction_new" class="select-green">
+                            {% for d in directions %}
+                            <option value="{{ d.pk }}">{{ d.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                        <select name="method_new" class="select-green">
+                            {% for m in methods %}
+                            <option value="{{ m.pk }}">{{ m.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                        <select name="category_new" class="select-green">
+                            {% for c in first_categories %}
+                            <option value="{{ c.pk }}">{{ c.name }}</option>
+                            {% endfor %}
+                            {% for c in latter_categories %}
+                            <option value="{{ c.pk }}">{{ c.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                        <select name="temp_new" class="select-green">
+                            <option value="0">なし</option>
+                            <option value="1">あり</option>
+                        </select>
+                    </td>
+                    <td><button type="button" class="btn-delete-row btn-red">削除</button></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="tbl-buttons">
+            <tr>
+                <td><button type="button" id="btn_add_row" class="btn-green">行を追加</button></td>
+            </tr>
+            <tr>
+                <td><button type="submit" class="btn-green">更新</button></td>
+                <td><button type="button" class="btn-blue" onclick="location.href='{% url 'moneybook:periodic' %}'">キャンセル</button></td>
+            </tr>
+        </table>
+    </form>
+</section>
+{% include "_result_message.html" %}
+{% endblock %}

@@ -3,15 +3,16 @@ from datetime import datetime
 
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
-from django.http import HttpResponse, HttpResponseBadRequest
-from django.shortcuts import render
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
+from django.shortcuts import render, reverse
 from django.views import View
 from moneybook.forms import PeriodicDataForm
 from moneybook.models import Category, Direction, Method, PeriodicData
 
 
 class PeriodicView(View):
-    """定期取引管理"""
+    """定期取引一覧表示"""
+
     def get(self, request, *args, **kwargs):
         """定期取引一覧表示"""
         now = datetime.now()
@@ -26,32 +27,65 @@ class PeriodicView(View):
             'next_year': next_month.year,
             'next_month': next_month.month,
             'periodic_data_list': PeriodicData.get_all(),
+        }
+        return render(request, 'periodic.html', context)
+
+
+class PeriodicEditView(View):
+    """定期取引編集"""
+
+    def get(self, request, *args, **kwargs):
+        """編集画面表示"""
+        context = {
+            'app_name': settings.APP_NAME,
+            'username': request.user,
+            'periodic_data_list': PeriodicData.get_all(),
             'directions': Direction.list(),
             'methods': Method.list(),
             'first_categories': Category.first_list(),
             'latter_categories': Category.latter_list(),
         }
-        return render(request, 'periodic.html', context)
+        return render(request, 'periodic_edit.html', context)
 
     def post(self, request, *args, **kwargs):
-        """設定を更新"""
+        """設定を更新してperiodicにリダイレクト"""
         try:
-            # JSONデータを取得
-            data = json.loads(request.body)
-            periodic_data_list = data.get('periodic_data_list', [])
-
             # 既存のデータを全削除
             PeriodicData.objects.all().delete()
 
-            # 新しいデータを保存
-            for item in periodic_data_list:
-                form = PeriodicDataForm(item)
-                if form.is_valid():
-                    form.save()
-                else:
-                    error_list = [str(e) for e in form.errors]
-                    return HttpResponseBadRequest(json.dumps({'errors': error_list}))
+            # POSTデータから新しいデータを登録
+            processed_ids = set()
 
-            return HttpResponse()
-        except Exception as e:
-            return HttpResponseBadRequest(json.dumps({'error': str(e)}))
+            for key in request.POST.keys():
+                if key.startswith('day_') and not key.startswith('csrfmiddlewaretoken'):
+                    id_part = key[4:]  # 'day_' を除く
+
+                    if id_part in processed_ids:
+                        continue
+                    processed_ids.add(id_part)
+
+                    day = request.POST.get(f'day_{id_part}')
+                    item = request.POST.get(f'item_{id_part}')
+                    price = request.POST.get(f'price_{id_part}')
+                    direction = request.POST.get(f'direction_{id_part}')
+                    method = request.POST.get(f'method_{id_part}')
+                    category = request.POST.get(f'category_{id_part}')
+                    temp = request.POST.get(f'temp_{id_part}')
+
+                    if day and item and price:  # 必須フィールドのチェック
+                        form_data = {
+                            'day': day,
+                            'item': item,
+                            'price': price,
+                            'direction': direction,
+                            'method': method,
+                            'category': category,
+                            'temp': temp
+                        }
+                        form = PeriodicDataForm(form_data)
+                        if form.is_valid():
+                            form.save()
+
+            return HttpResponseRedirect(reverse('moneybook:periodic'))
+        except Exception:
+            return HttpResponseBadRequest()

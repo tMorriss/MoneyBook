@@ -7,7 +7,7 @@ from selenium.webdriver.common.by import By
 
 
 class Periodic(SeleniumBase):
-    def test_periodic_access(self):
+    def test_periodic_list_access(self):
         """定期取引一覧ページにアクセスできること"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:periodic'))
@@ -17,77 +17,65 @@ class Periodic(SeleniumBase):
 
         # 追加ボタンと編集ボタンが存在すること
         self.assertTrue(self.driver.find_element(By.ID, 'btn_add_bulk'))
-        self.assertTrue(self.driver.find_element(By.ID, 'btn_edit_mode'))
+        edit_btn = self.driver.find_element(By.XPATH, '//input[@value="編集"]')
+        self.assertTrue(edit_btn)
 
     def test_periodic_navigation(self):
         """タスクバーから定期取引ページに遷移できること"""
         self._login()
-        self._location(self.live_server_url + reverse('moneybook:index'))
+        self._location(self.live_server_url + reverse('moneybook:tools'))
 
-        # タスクバーに定期取引リンクが存在すること
-        task_bar_links = self.driver.find_elements(By.XPATH, '//nav[@class="task_bar"]/ul/li/a')
-        periodic_link_found = False
-        for link in task_bar_links:
-            if link.text == '定期取引':
-                periodic_link_found = True
-                link.click()
-                time.sleep(0.5)
-                break
+        # 定期取引リンクをクリック
+        periodic_link = self.driver.find_element(By.LINK_TEXT, '定期取引')
+        periodic_link.click()
+        time.sleep(0.5)
 
-        self.assertTrue(periodic_link_found, '定期取引リンクがタスクバーに見つかりませんでした')
         self.assertEqual(self.driver.current_url, self.live_server_url + reverse('moneybook:periodic'))
 
-    def test_periodic_edit_mode(self):
-        """編集モードに切り替えられること"""
+    def test_periodic_edit_page_access(self):
+        """編集ページに遷移できること"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:periodic'))
 
         # 編集ボタンをクリック
-        self.driver.find_element(By.ID, 'btn_edit_mode').click()
+        edit_btn = self.driver.find_element(By.XPATH, '//input[@value="編集"]')
+        edit_btn.click()
         time.sleep(0.5)
 
-        # 編集モードのボタンが表示されること
-        update_btn = self.driver.find_element(By.ID, 'btn_update')
-        cancel_btn = self.driver.find_element(By.ID, 'btn_cancel_edit')
-        add_row_btn = self.driver.find_element(By.ID, 'btn_add_row')
-
-        self.assertTrue(update_btn.is_displayed())
-        self.assertTrue(cancel_btn.is_displayed())
-        self.assertTrue(add_row_btn.is_displayed())
+        # 編集ページに遷移すること
+        self.assertEqual(self.driver.current_url, self.live_server_url + reverse('moneybook:periodic_edit'))
+        self.assertIn('定期取引設定', self.driver.page_source)
 
     def test_periodic_add_and_display(self):
         """定期取引を追加して一覧に表示されること"""
         self._login()
 
-        # 一覧画面に遷移
-        self._location(self.live_server_url + reverse('moneybook:periodic'))
-
-        # 編集モードに切り替え
-        self.driver.find_element(By.ID, 'btn_edit_mode').click()
-        time.sleep(0.5)
+        # 編集画面に遷移
+        self._location(self.live_server_url + reverse('moneybook:periodic_edit'))
 
         # 行を追加ボタンをクリック
         self.driver.find_element(By.ID, 'btn_add_row').click()
         time.sleep(0.5)
 
         # 新しい行に値を入力
-        rows = self.driver.find_elements(By.XPATH, '//table[@id="periodic_table"]/tbody/tr')
+        rows = self.driver.find_elements(By.XPATH, '//table[@class="tbl-common tbl-boarder"]/tbody/tr')
         last_row = rows[-1]
 
-        last_row.find_element(By.CLASS_NAME, 'input-day').clear()
-        last_row.find_element(By.CLASS_NAME, 'input-day').send_keys('15')
+        day_input = last_row.find_element(By.CSS_SELECTOR, 'input[name^="day_new_"]')
+        day_input.clear()
+        day_input.send_keys('15')
 
-        last_row.find_element(By.CLASS_NAME, 'input-item').clear()
-        last_row.find_element(By.CLASS_NAME, 'input-item').send_keys('テスト定期取引')
+        item_input = last_row.find_element(By.CSS_SELECTOR, 'input[name^="item_new_"]')
+        item_input.send_keys('テスト定期取引')
 
-        last_row.find_element(By.CLASS_NAME, 'input-price').clear()
-        last_row.find_element(By.CLASS_NAME, 'input-price').send_keys('5000')
+        price_input = last_row.find_element(By.CSS_SELECTOR, 'input[name^="price_new_"]')
+        price_input.send_keys('5000')
 
         # 更新ボタンをクリック
-        self.driver.find_element(By.ID, 'btn_update').click()
+        self.driver.find_element(By.XPATH, '//button[@type="submit"]').click()
         time.sleep(1.5)
 
-        # 一覧画面にリロードされたこと
+        # 一覧画面にリダイレクトされること
         self.assertEqual(self.driver.current_url, self.live_server_url + reverse('moneybook:periodic'))
 
         # 追加した定期取引が表示されていること
@@ -127,13 +115,9 @@ class Periodic(SeleniumBase):
         self.driver.find_element(By.ID, 'btn_add_bulk').click()
         time.sleep(2)
 
-        # 進捗エリアが表示されること
-        progress_area = self.driver.find_element(By.ID, 'progress_area')
-        self.assertTrue(progress_area.is_displayed())
-
-        # 完了メッセージが表示されること
+        # 成功メッセージが表示されること
         time.sleep(1)
-        self.assertIn('データを登録しました', self.driver.page_source)
+        self.assertIn('Success!', self.driver.page_source)
 
         # データが追加されたこと
         after_count = Data.objects.count()
@@ -162,26 +146,18 @@ class Periodic(SeleniumBase):
         )
 
         self._login()
-        self._location(self.live_server_url + reverse('moneybook:periodic'))
-
-        # 編集モードに切り替え
-        self.driver.find_element(By.ID, 'btn_edit_mode').click()
-        time.sleep(0.5)
+        self._location(self.live_server_url + reverse('moneybook:periodic_edit'))
 
         # 削除ボタンをクリック
-        delete_buttons = self.driver.find_elements(By.CLASS_NAME, 'btn-delete')
+        delete_buttons = self.driver.find_elements(By.CLASS_NAME, 'btn-delete-row')
         if delete_buttons:
-            initial_count = len(self.driver.find_elements(By.XPATH, '//table[@id="periodic_table"]/tbody/tr'))
+            initial_count = len(self.driver.find_elements(By.XPATH, '//table[@class="tbl-common tbl-boarder"]/tbody/tr'))
 
-            # アラートを受け入れる準備
             delete_buttons[0].click()
             time.sleep(0.3)
-            alert = self.driver.switch_to.alert
-            alert.accept()
-            time.sleep(0.3)
 
-            # 行が削除されたこと
-            after_count = len(self.driver.find_elements(By.XPATH, '//table[@id="periodic_table"]/tbody/tr'))
+            # 行が削除されたこと（DOMから即座に削除される）
+            after_count = len(self.driver.find_elements(By.XPATH, '//table[@class="tbl-common tbl-boarder"]/tbody/tr'))
             self.assertEqual(after_count, initial_count - 1)
 
     def test_periodic_default_month(self):
@@ -216,16 +192,22 @@ class Periodic(SeleniumBase):
         # 現在のデータ件数を取得
         before_count = Data.objects.count()
 
-        # 年月を入力せずに追加ボタンをクリック
+        # 年月を入力せずに追加ボタンをクリック（デフォルト値が使用される）
         self.driver.find_element(By.ID, 'btn_add_bulk').click()
-        time.sleep(2.5)
+        time.sleep(2)
+
+        # 成功メッセージが表示されること
+        time.sleep(1)
+        self.assertIn('Success!', self.driver.page_source)
 
         # データが追加されたこと
         after_count = Data.objects.count()
         self.assertEqual(after_count, before_count + 1)
 
-        # 登録されたデータが来月の日付であること
+        # 登録されたデータの内容を確認（来月の25日に登録されているはず）
         new_data = Data.objects.latest('id')
+        self.assertEqual(new_data.item, 'デフォルト月テスト')
+        self.assertEqual(new_data.price, 3000)
         self.assertEqual(new_data.date.year, next_month.year)
         self.assertEqual(new_data.date.month, next_month.month)
         self.assertEqual(new_data.date.day, 25)

@@ -1,60 +1,20 @@
 /* 定期取引ページ固有のスタイル */
 
-/* 編集モードのテーブルセル - 黄色と緑を基調としたデザイン */
-#periodic_table .edit-mode {
-    background-color: #fff9c4; /* 薄い黄色 */
-}
-
-/* 編集モードの入力フィールド */
-#periodic_table .edit-mode input[type="text"],
-#periodic_table .edit-mode input[type="number"] {
-    border: 2px solid #bdc3c7;
-    background-color: #fffef0;
-    padding: 2px 5px;
-    border-radius: 3px;
-}
-
-#periodic_table .edit-mode input[type="text"]:focus,
-#periodic_table .edit-mode input[type="number"]:focus {
-    outline: none;
-    border-color: #ffeb3b; /* 黄色 */
-    background-color: #ffffff;
-}
-
-/* 編集モードのセレクトボックス - radio-greenと同様のデザイン */
-#periodic_table .edit-mode select {
-    border: 3px solid #bdc3c7;
-    background-color: #bdc3c7;
-    color: #869198;
+/* セレクトボックス - 常に緑色（radio-greenと同様のデザイン） */
+.select-green {
+    border: 3px solid #a1b91d;
+    background-color: #a1b91d;
+    color: #fff;
     padding: 2px 7px;
     cursor: pointer;
     border-radius: 3px;
 }
 
-#periodic_table .edit-mode select:focus {
+.select-green:focus {
     outline: none;
-    border-color: #a1b91d; /* 緑（radio-greenと同じ）*/
+    border-color: #a1b91d;
     background-color: #a1b91d;
     color: #fff;
 }
 
-/* 入力フィールドの幅調整 */
-.input-day {
-    width: 60px !important;
-}
-
-.input-item {
-    min-width: 150px !important;
-}
-
-.input-price {
-    width: 100px !important;
-}
-
-.select-direction,
-.select-method,
-.select-category,
-.select-temp {
-    min-width: 100px;
-}
 
