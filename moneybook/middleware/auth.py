@@ -1,4 +1,6 @@
-from django.http import HttpResponseForbidden, HttpResponseRedirect
+from http import HTTPStatus
+
+from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 
 
@@ -9,7 +11,7 @@ class AuthMiddleware:
     def __call__(self, request):
         if not request.user.is_authenticated and request.path != reverse('moneybook:login'):
             if request.path.startswith('/api/'):
-                return HttpResponseForbidden({'message': 'login is required'})
+                return JsonResponse({'message': 'login is required'}, status=HTTPStatus.FORBIDDEN)
             return HttpResponseRedirect(reverse('moneybook:login'))
 
         return self.get_response(request)
