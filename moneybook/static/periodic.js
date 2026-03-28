@@ -233,46 +233,50 @@ $(document).ready(function() {
         periodicDataList.sort((a, b) => a.day - b.day);
 
         // 順番に登録処理を実行
-        let index = 0;
         let successCount = 0;
+        let hasError = false;
 
-        function addNext() {
-            if (index >= periodicDataList.length) {
-                showResultMsg('Success!', empty);
-                return;
-            }
+        (async function() {
+            for (let i = 0; i < periodicDataList.length; i++) {
+                if (hasError) break;
 
-            const pd = periodicDataList[index];
-            
-            // 日付の妥当性チェック
-            let day = pd.day;
-            const maxDay = new Date(year, month, 0).getDate();
-            if (day > maxDay) {
-                day = maxDay;
-            }
-
-            $.post({
-                url: add_url,
-                data: {
-                    'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val(),
-                    'date': `${year}-${month}-${day}`,
-                    'item': pd.item,
-                    'price': pd.price,
-                    'direction': pd.direction,
-                    'method': pd.method,
-                    'category': pd.category,
-                    'temp': pd.temp ? 'True' : 'False',
-                    'checked': 'False',
+                const pd = periodicDataList[i];
+                
+                // 日付の妥当性チェック
+                let day = pd.day;
+                const maxDay = new Date(year, month, 0).getDate();
+                if (day > maxDay) {
+                    day = maxDay;
                 }
-            }).done(function() {
-                successCount++;
-                index++;
-                setTimeout(addNext, 100); // 少し間隔を空けて次へ
-            }).fail(function() {
-                showResultMsg('Error...', empty);
-            });
-        }
 
-        addNext();
+                try {
+                    await $.post({
+                        url: add_url,
+                        data: {
+                            'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val(),
+                            'date': `${year}-${month}-${day}`,
+                            'item': pd.item,
+                            'price': pd.price,
+                            'direction': pd.direction,
+                            'method': pd.method,
+                            'category': pd.category,
+                            'temp': pd.temp ? 'True' : 'False',
+                            'checked': 'False',
+                        }
+                    });
+                    successCount++;
+                    // 少し間隔を空けて次へ
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                } catch (error) {
+                    hasError = true;
+                    showResultMsg('Error...', empty);
+                    break;
+                }
+            }
+
+            if (!hasError) {
+                showResultMsg('Success!', empty);
+            }
+        })();
     });
 });
