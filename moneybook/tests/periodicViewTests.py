@@ -1,4 +1,3 @@
-import json
 from datetime import datetime
 
 from dateutil.relativedelta import relativedelta
@@ -68,7 +67,7 @@ class PeriodicEditViewGetTestCase(BaseTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['app_name'], 'test-MoneyBook')
-        
+
         # 定期取引データが含まれていること
         periodic_data = response.context['periodic_data_list']
         self.assertEqual(periodic_data.count(), 1)
