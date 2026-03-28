@@ -11,7 +11,7 @@
     periodic_add_bulk_url = "{% url 'moneybook:periodic_add_bulk' %}";
     periodic_config_url = "{% url 'moneybook:periodic_config' %}";
     periodic_list_url = "{% url 'moneybook:periodic_list' %}";
-    
+
     const directions = [
         {% for d in directions %}
         {pk: {{ d.pk }}, name: "{{ d.name }}"},
@@ -36,7 +36,7 @@
 {% block content %}
 <section>
     <h1>定期取引一覧</h1>
-    
+
     <div class="periodic-table-container">
         <table class="tbl-data tbl-boarder" id="periodic_table">
             <thead>
@@ -53,7 +53,7 @@
             </thead>
             <tbody id="periodic_tbody">
                 {% for pd in periodic_data_list %}
-                <tr data-id="{{ pd.pk }}" 
+                <tr data-id="{{ pd.pk }}"
                     data-day="{{ pd.day }}"
                     data-item="{{ pd.item }}"
                     data-price="{{ pd.price }}"
@@ -110,7 +110,7 @@
                 {% endfor %}
             </tbody>
         </table>
-        
+
         <div class="button-group edit-mode-only" style="display:none;">
             <button id="btn_add_row" class="btn-green">行を追加</button>
         </div>
