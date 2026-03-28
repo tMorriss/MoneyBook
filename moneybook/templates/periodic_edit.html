@@ -110,11 +110,11 @@
 
         <table class="tbl-buttons">
             <tr>
-                <td><button type="button" id="btn_add_row" class="btn-green">行を追加</button></td>
+                <td colspan="2" style="text-align: center;"><button type="button" id="btn_add_row" class="btn-green">行を追加</button></td>
             </tr>
             <tr>
                 <td><button type="submit" class="btn-green">更新</button></td>
-                <td><button type="button" class="btn-blue" onclick="location.href='{% url 'moneybook:periodic' %}'">キャンセル</button></td>
+                <td><button type="button" class="btn-blue" onclick="location.href=periodic_url">キャンセル</button></td>
             </tr>
         </table>
     </form>
