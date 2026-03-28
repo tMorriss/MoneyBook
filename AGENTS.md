@@ -286,6 +286,8 @@ python manage.py test moneybook.e2e --settings config.settings.test --verbosity 
 
 ## コーディング規約
 
+基本的にはコードスタイルや実装方針、仕様やデザインは既存のものに沿うようにします。
+
 ### Pythonコードスタイル
 
 1. **PEP 8準拠** - ただし、一部カスタマイズあり
