@@ -1,7 +1,7 @@
-import json
 from datetime import date, datetime
+from http import HTTPStatus
 
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.views import View
 from moneybook.models import BankBalance, CheckedDate, CreditCheckedDate, Data, Method, SeveralCosts
@@ -10,15 +10,15 @@ from moneybook.models import BankBalance, CheckedDate, CreditCheckedDate, Data, 
 class ActualCashApiView(View):
     def post(self, request, *args, **kwargs):
         if 'price' not in request.POST:
-            return HttpResponseBadRequest(json.dumps({'message': 'missing parameter'}))
+            return JsonResponse({'message': 'missing parameter'}, status=HTTPStatus.BAD_REQUEST)
 
         try:
             price = int(request.POST.get('price'))
         except ValueError:
-            return HttpResponseBadRequest(json.dumps({'message': 'price must be int'}))
+            return JsonResponse({'message': 'price must be int'}, status=HTTPStatus.BAD_REQUEST)
 
         SeveralCosts.set_actual_cash_balance(price)
-        return HttpResponse()
+        return JsonResponse({})
 
 
 class CheckedDateApiView(View):
@@ -43,11 +43,11 @@ class CheckedDateApiView(View):
                 'day': CheckedDate.get(m.pk).date.day
             })
 
-        return HttpResponse(json.dumps(methods_bd))
+        return JsonResponse({'checked_dates': methods_bd})
 
     def post(self, request, *args, **kwargs):
         if 'year' not in request.POST or 'month' not in request.POST or 'day' not in request.POST or 'method' not in request.POST:
-            return HttpResponseBadRequest(json.dumps({'message': 'missing parameter'}))
+            return JsonResponse({'message': 'missing parameter'}, status=HTTPStatus.BAD_REQUEST)
 
         method_pk = request.POST.get('method')
         try:
@@ -59,15 +59,15 @@ class CheckedDateApiView(View):
                 Data.filter_checkeds(Data.get_method_data(Data.get_range_data(
                     None, new_date), method_pk), [False]).update(checked=True)
         except ValueError:
-            return HttpResponseBadRequest(json.dumps({'message': 'date format is invalid'}))
+            return JsonResponse({'message': 'date format is invalid'}, status=HTTPStatus.BAD_REQUEST)
 
         try:
             # チェック日を更新
             CheckedDate.set(method_pk, new_date)
         except CheckedDate.DoesNotExist:
-            return HttpResponseBadRequest(json.dumps({'message': 'method id is invalid'}))
+            return JsonResponse({'message': 'method id is invalid'}, status=HTTPStatus.BAD_REQUEST)
 
-        return HttpResponse()
+        return JsonResponse({})
 
 
 class SeveralCheckedDateApiView(View):
@@ -103,36 +103,36 @@ class SeveralCheckedDateApiView(View):
 class CreditCheckedDateApiView(View):
     def post(self, request, *args, **kwargs):
         if 'year' not in request.POST or 'month' not in request.POST or 'day' not in request.POST or 'pk' not in request.POST:
-            return HttpResponseBadRequest(json.dumps({'message': 'missing parameter'}))
+            return JsonResponse({'message': 'missing parameter'}, status=HTTPStatus.BAD_REQUEST)
 
         pk = request.POST.get('pk')
         try:
             new_date = date(int(request.POST.get('year')), int(
                 request.POST.get('month')), int(request.POST.get('day')))
         except ValueError:
-            return HttpResponseBadRequest(json.dumps({'message': 'date format is invalid'}))
+            return JsonResponse({'message': 'date format is invalid'}, status=HTTPStatus.BAD_REQUEST)
 
         try:
             # 更新
             CreditCheckedDate.set_date(pk, new_date)
         except CreditCheckedDate.DoesNotExist:
-            return HttpResponseBadRequest(json.dumps({'message': 'method id is invalid'}))
+            return JsonResponse({'message': 'method id is invalid'}, status=HTTPStatus.BAD_REQUEST)
 
-        return HttpResponse()
+        return JsonResponse({})
 
 
 class LivingCostMarkApiView(View):
     def post(self, request, *args, **kwargs):
         if 'price' not in request.POST:
-            return HttpResponseBadRequest(json.dumps({'message': 'missing parameter'}))
+            return JsonResponse({'message': 'missing parameter'}, status=HTTPStatus.BAD_REQUEST)
 
         try:
             price = int(request.POST.get('price'))
         except ValueError:
-            return HttpResponseBadRequest(json.dumps({'message': 'price must be int'}))
+            return JsonResponse({'message': 'price must be int'}, status=HTTPStatus.BAD_REQUEST)
 
         SeveralCosts.set_living_cost_mark(price)
-        return HttpResponse(json.dumps({'message': 'success'}))
+        return JsonResponse({'message': 'success'})
 
 
 class UncheckedDataApiView(View):
@@ -184,7 +184,7 @@ class NowBankApiView(View):
                 if key in request.POST:
                     int(request.POST.get(key))
         except ValueError:
-            return HttpResponseBadRequest(json.dumps({'message': 'invalid parameter'}))
+            return JsonResponse({'message': 'invalid parameter'}, status=HTTPStatus.BAD_REQUEST)
 
         # 更新と計算
         for b in bb:
@@ -200,5 +200,5 @@ class NowBankApiView(View):
                 value = int(request.POST.get(key))
                 CreditCheckedDate.set_price(c.pk, value)
             bank_sum -= CreditCheckedDate.get_price(c.pk)
-        return HttpResponse(
-            json.dumps({'balance': Data.get_income_sum(written_bank_data) - Data.get_outgo_sum(written_bank_data) - bank_sum}))
+        return JsonResponse(
+            {'balance': Data.get_income_sum(written_bank_data) - Data.get_outgo_sum(written_bank_data) - bank_sum})
