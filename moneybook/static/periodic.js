@@ -101,7 +101,7 @@ $(document).ready(function() {
                     await new Promise(resolve => setTimeout(resolve, 100));
                 } catch (error) {
                     hasError = true;
-                    showResultMsg('Error...', empty);
+                    showResultMsg('Error: ' + error, empty);
                     break;
                 }
             }

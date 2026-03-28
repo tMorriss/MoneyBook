@@ -5,10 +5,10 @@
 {% block title %}定期取引 - {{ app_name }}{% endblock %}
 
 {% block header %}
-<link rel="stylesheet" type="text/css" href="{% static 'periodic.css' %}">
 <script type="text/javascript" src="{% static 'periodic.js' %}"></script>
 <script type="text/javascript">
     add_url = "{% url 'moneybook:add' %}";
+    periodic_edit_url = "{% url 'moneybook:periodic_edit' %}";
 </script>
 {% endblock %}
 
@@ -69,7 +69,7 @@
     <table class="tbl-buttons">
         <tr>
             <td><input type="button" value="追加" class="btn-green" id="btn_add_bulk"></td>
-            <td><input type="button" value="編集" class="btn-blue" onclick="location.href='{% url 'moneybook:periodic_edit' %}'"></td>
+            <td><input type="button" value="編集" class="btn-blue" onclick="location.href=periodic_edit_url"></td>
         </tr>
     </table>
 </section>
