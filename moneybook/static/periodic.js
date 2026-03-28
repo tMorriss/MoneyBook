@@ -165,7 +165,7 @@ $(document).ready(function() {
 
         // データ送信
         $.ajax({
-            url: periodic_config_url,
+            url: periodic_url,
             type: 'POST',
             contentType: 'application/json',
             headers: {

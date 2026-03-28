@@ -8,7 +8,7 @@ from moneybook.models import Category, Direction, Method, PeriodicData
 from moneybook.tests.base import BaseTestCase
 
 
-class PeriodicListViewTestCase(BaseTestCase):
+class PeriodicViewGetTestCase(BaseTestCase):
     def setUp(self):
         super().setUp()
         # テスト用のPeriodicDataを作成
@@ -25,7 +25,7 @@ class PeriodicListViewTestCase(BaseTestCase):
     def test_get(self):
         """一覧ページが正しく表示されること"""
         self.client.force_login(User.objects.create_user(self.username))
-        response = self.client.get(reverse('moneybook:periodic_list'))
+        response = self.client.get(reverse('moneybook:periodic'))
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['app_name'], 'test-MoneyBook')
@@ -44,11 +44,11 @@ class PeriodicListViewTestCase(BaseTestCase):
 
     def test_get_guest(self):
         """ログインしていない場合はリダイレクトされること"""
-        response = self.client.get(reverse('moneybook:periodic_list'))
+        response = self.client.get(reverse('moneybook:periodic'))
         self.assertEqual(response.status_code, 302)
 
 
-class PeriodicConfigViewTestCase(BaseTestCase):
+class PeriodicViewPostTestCase(BaseTestCase):
     def setUp(self):
         super().setUp()
         PeriodicData.objects.create(
@@ -92,7 +92,7 @@ class PeriodicConfigViewTestCase(BaseTestCase):
         ]
 
         response = self.client.post(
-            reverse('moneybook:periodic_config'),
+            reverse('moneybook:periodic'),
             data=json.dumps({'periodic_data_list': new_data}),
             content_type='application/json'
         )
@@ -113,7 +113,7 @@ class PeriodicConfigViewTestCase(BaseTestCase):
     def test_post_guest(self):
         """ログインしていない場合は403エラー"""
         response = self.client.post(
-            reverse('moneybook:periodic_config'),
+            reverse('moneybook:periodic'),
             data=json.dumps({'periodic_data_list': []}),
             content_type='application/json'
         )
@@ -137,7 +137,7 @@ class PeriodicConfigViewTestCase(BaseTestCase):
         ]
 
         response = self.client.post(
-            reverse('moneybook:periodic_config'),
+            reverse('moneybook:periodic'),
             data=json.dumps({'periodic_data_list': invalid_data}),
             content_type='application/json'
         )
@@ -157,7 +157,7 @@ class PeriodicConfigViewTestCase(BaseTestCase):
         ]
 
         response = self.client.post(
-            reverse('moneybook:periodic_config'),
+            reverse('moneybook:periodic'),
             data=json.dumps({'periodic_data_list': missing_field_data}),
             content_type='application/json'
         )
@@ -172,7 +172,7 @@ class PeriodicConfigViewTestCase(BaseTestCase):
 
         # 不正なJSON形式
         response = self.client.post(
-            reverse('moneybook:periodic_config'),
+            reverse('moneybook:periodic'),
             data='invalid json',
             content_type='application/json'
         )

@@ -7,10 +7,10 @@ from selenium.webdriver.common.by import By
 
 
 class Periodic(SeleniumBase):
-    def test_periodic_list_access(self):
+    def test_periodic_access(self):
         """定期取引一覧ページにアクセスできること"""
         self._login()
-        self._location(self.live_server_url + reverse('moneybook:periodic_list'))
+        self._location(self.live_server_url + reverse('moneybook:periodic'))
 
         # ページタイトル確認
         self.assertIn('定期取引一覧', self.driver.page_source)
@@ -35,12 +35,12 @@ class Periodic(SeleniumBase):
                 break
 
         self.assertTrue(periodic_link_found, '定期取引リンクがタスクバーに見つかりませんでした')
-        self.assertEqual(self.driver.current_url, self.live_server_url + reverse('moneybook:periodic_list'))
+        self.assertEqual(self.driver.current_url, self.live_server_url + reverse('moneybook:periodic'))
 
     def test_periodic_edit_mode(self):
         """編集モードに切り替えられること"""
         self._login()
-        self._location(self.live_server_url + reverse('moneybook:periodic_list'))
+        self._location(self.live_server_url + reverse('moneybook:periodic'))
 
         # 編集ボタンをクリック
         self.driver.find_element(By.ID, 'btn_edit_mode').click()
@@ -60,7 +60,7 @@ class Periodic(SeleniumBase):
         self._login()
 
         # 一覧画面に遷移
-        self._location(self.live_server_url + reverse('moneybook:periodic_list'))
+        self._location(self.live_server_url + reverse('moneybook:periodic'))
 
         # 編集モードに切り替え
         self.driver.find_element(By.ID, 'btn_edit_mode').click()
@@ -88,7 +88,7 @@ class Periodic(SeleniumBase):
         time.sleep(1.5)
 
         # 一覧画面にリロードされたこと
-        self.assertEqual(self.driver.current_url, self.live_server_url + reverse('moneybook:periodic_list'))
+        self.assertEqual(self.driver.current_url, self.live_server_url + reverse('moneybook:periodic'))
 
         # 追加した定期取引が表示されていること
         self.assertIn('テスト定期取引', self.driver.page_source)
@@ -109,7 +109,7 @@ class Periodic(SeleniumBase):
         )
 
         self._login()
-        self._location(self.live_server_url + reverse('moneybook:periodic_list'))
+        self._location(self.live_server_url + reverse('moneybook:periodic'))
 
         # 現在のデータ件数を取得
         before_count = Data.objects.count()
@@ -162,7 +162,7 @@ class Periodic(SeleniumBase):
         )
 
         self._login()
-        self._location(self.live_server_url + reverse('moneybook:periodic_list'))
+        self._location(self.live_server_url + reverse('moneybook:periodic'))
 
         # 編集モードに切り替え
         self.driver.find_element(By.ID, 'btn_edit_mode').click()
@@ -202,7 +202,7 @@ class Periodic(SeleniumBase):
         )
 
         self._login()
-        self._location(self.live_server_url + reverse('moneybook:periodic_list'))
+        self._location(self.live_server_url + reverse('moneybook:periodic'))
 
         # placeholderの値を確認（来月になっているはず）
         now = datetime.now()

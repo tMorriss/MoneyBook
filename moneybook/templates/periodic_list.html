@@ -9,8 +9,7 @@
 <script type="text/javascript" src="{% static 'periodic.js' %}"></script>
 <script type="text/javascript">
     add_url = "{% url 'moneybook:add' %}";
-    periodic_config_url = "{% url 'moneybook:periodic_config' %}";
-    periodic_list_url = "{% url 'moneybook:periodic_list' %}";
+    periodic_url = "{% url 'moneybook:periodic' %}";
 
     const directions = [
         {% for d in directions %}

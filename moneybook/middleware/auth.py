@@ -20,7 +20,7 @@ class AuthMiddleware:
             reverse('moneybook:edit_pre_check'),
             reverse('moneybook:living_cost_mark'),
             reverse('moneybook:now_bank'),
-            reverse('moneybook:periodic_config'),
+            reverse('moneybook:periodic'),
             reverse('moneybook:several_checked_date'),
             reverse('moneybook:unchecked_data'),
         ]

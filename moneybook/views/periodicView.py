@@ -10,9 +10,10 @@ from moneybook.forms import PeriodicDataForm
 from moneybook.models import Category, Direction, Method, PeriodicData
 
 
-class PeriodicListView(View):
-    """定期取引一覧表示"""
+class PeriodicView(View):
+    """定期取引管理"""
     def get(self, request, *args, **kwargs):
+        """定期取引一覧表示"""
         now = datetime.now()
         # 来月を計算
         next_month = now + relativedelta(months=1)
@@ -32,9 +33,6 @@ class PeriodicListView(View):
         }
         return render(request, 'periodic_list.html', context)
 
-
-class PeriodicConfigView(View):
-    """定期取引設定API"""
     def post(self, request, *args, **kwargs):
         """設定を更新"""
         try:
