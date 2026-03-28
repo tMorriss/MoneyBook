@@ -45,4 +45,3 @@ class PeriodicViewGetTestCase(BaseTestCase):
         """ログインしていない場合は403が返されること"""
         response = self.client.get(reverse('moneybook:periodic'))
         self.assertEqual(response.status_code, 403)
-

@@ -208,6 +208,27 @@ section h2 {
     color: #fff;
 }
 
+/* セレクトボックス - radio-greenと同じカラースキーム */
+.select-green {
+    border: 3px solid #a1b91d;
+    background-color: #a1b91d;
+    color: #fff;
+    padding: 2px 7px;
+    cursor: pointer;
+    border-radius: 3px;
+    outline: none;
+}
+
+.select-green option {
+    background-color: #bdc3c7; /* 未選択時: グレー（radio-greenの未選択と同じ） */
+    color: #869198;
+}
+
+.select-green option:checked {
+    background-color: #a1b91d; /* 選択時: 緑（radio-greenの緑と同じ） */
+    color: #fff;
+}
+
 .fcs-blue input[type="text"]:focus,
 .fcs-blue input[type="submit"]:focus {
     outline: 5px #00bfff solid;
