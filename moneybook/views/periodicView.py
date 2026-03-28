@@ -31,7 +31,7 @@ class PeriodicView(View):
             'first_categories': Category.first_list(),
             'latter_categories': Category.latter_list(),
         }
-        return render(request, 'periodic_list.html', context)
+        return render(request, 'periodic.html', context)
 
     def post(self, request, *args, **kwargs):
         """設定を更新"""
