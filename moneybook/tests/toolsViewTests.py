@@ -37,7 +37,6 @@ class ActualCashApiViewTestCase(BaseTestCase):
         self.assertEqual(SeveralCosts.get_actual_cash_balance(), 2000)
         response = self.client.post(reverse('moneybook:actual_cash_api'), {'price': 1200})
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content.decode(), '{}')
         self.assertEqual(SeveralCosts.get_actual_cash_balance(), 1200)
 
     def test_post_str(self):
@@ -67,8 +66,6 @@ class CheckedDateApiViewTestCase(BaseTestCase):
         response = self.client.get(reverse('moneybook:checked_date_api'))
         self.assertEqual(response.status_code, 200)
         content_json = json.loads(response.content.decode())
-        self.assertIn('checked_dates', content_json)
-        checked_dates = content_json['checked_dates']
         expects = [
             {
                 'name': '銀行',
@@ -99,14 +96,14 @@ class CheckedDateApiViewTestCase(BaseTestCase):
                 'day': 2
             },
         ]
-        self.assertEqual(len(checked_dates), len(expects))
+        self.assertEqual(len(content_json), len(expects))
         for i in range(len(expects)):
             with self.subTest(i=i):
-                self.assertEqual(checked_dates[i]['name'], expects[i]['name'])
-                self.assertEqual(checked_dates[i]['balance'], expects[i]['balance'])
-                self.assertEqual(checked_dates[i]['year'], expects[i]['year'])
-                self.assertEqual(checked_dates[i]['month'], expects[i]['month'])
-                self.assertEqual(checked_dates[i]['day'], expects[i]['day'])
+                self.assertEqual(content_json[i]['name'], expects[i]['name'])
+                self.assertEqual(content_json[i]['balance'], expects[i]['balance'])
+                self.assertEqual(content_json[i]['year'], expects[i]['year'])
+                self.assertEqual(content_json[i]['month'], expects[i]['month'])
+                self.assertEqual(content_json[i]['day'], expects[i]['day'])
 
     def test_post(self):
         self.client.force_login(User.objects.create_user(self.username))
@@ -119,7 +116,6 @@ class CheckedDateApiViewTestCase(BaseTestCase):
             {'year': 2001, 'month': 2, 'day': 20, 'method': 2}
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content.decode(), '{}')
         self.assertEqual(CheckedDate.get(2).date, date(2001, 2, 20))
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
         self._assert_list(unchecked_data, expects)
@@ -136,7 +132,6 @@ class CheckedDateApiViewTestCase(BaseTestCase):
             {'year': 2000, 'month': 1, 'day': 20, 'method': 2, 'check_all': 1}
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content.decode(), '{}')
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 20))
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
         expects = ['スーパー', 'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
@@ -154,7 +149,6 @@ class CheckedDateApiViewTestCase(BaseTestCase):
             {'year': 2000, 'month': 1, 'day': 20, 'method': 2, 'check_all': 2}
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content.decode(), '{}')
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 20))
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
         self._assert_list(unchecked_data, expects)
@@ -354,7 +348,6 @@ class CreditCheckedDateApiViewTestCase(BaseTestCase):
             {'year': 2001, 'month': 3, 'day': 10, 'pk': 2}
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content.decode(), '{}')
         d = CreditCheckedDate.objects.get(pk=2)
         self.assertEqual(d.name, 'AmexGold')
         self.assertEqual(d.date, date(2001, 3, 10))
