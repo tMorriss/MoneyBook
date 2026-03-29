@@ -42,6 +42,6 @@ class PeriodicViewGetTestCase(BaseTestCase):
         self.assertEqual(periodic_data[0].item, '定期取引テスト')
 
     def test_get_guest(self):
-        """ログインしていない場合は403が返されること"""
+        """ログインしていない場合はログインページにリダイレクトされること"""
         response = self.client.get(reverse('moneybook:periodic'))
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 302)

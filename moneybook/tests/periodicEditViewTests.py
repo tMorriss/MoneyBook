@@ -37,9 +37,9 @@ class PeriodicEditViewGetTestCase(BaseTestCase):
         self.assertIn('latter_categories', response.context)
 
     def test_get_guest(self):
-        """ログインしていない場合は403が返されること"""
+        """ログインしていない場合はログインページにリダイレクトされること"""
         response = self.client.get(reverse('moneybook:periodic_edit'))
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 302)
 
 
 class PeriodicEditViewPostTestCase(BaseTestCase):
@@ -99,9 +99,9 @@ class PeriodicEditViewPostTestCase(BaseTestCase):
         self.assertEqual(data[1].item, '別の定期取引')
 
     def test_post_guest(self):
-        """ログインしていない場合は403エラー"""
+        """ログインしていない場合はログインページにリダイレクトされること"""
         response = self.client.post(reverse('moneybook:periodic_edit'), data={})
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 302)
 
     def test_post_exception(self):
         """例外が発生した場合は400エラー"""
