@@ -6,6 +6,8 @@ from .editViewTests import *
 from .indexViewTests import *
 from .modelsTests import *
 from .periodBalanceViewTests import *
+from .periodicEditViewTests import *
+from .periodicViewTests import *
 from .searchViewTests import *
 from .statisticsViewTests import *
 from .toolsViewTests import *

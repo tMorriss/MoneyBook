@@ -1,0 +1,74 @@
+{% extends "_base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}定期取引 - {{ app_name }}{% endblock %}
+
+{% block header %}
+<script type="text/javascript" src="{% static 'periodic.js' %}"></script>
+<script type="text/javascript">
+    add_api_url = "{% url 'moneybook:add_api' %}";
+    periodic_edit_url = "{% url 'moneybook:periodic_edit' %}";
+</script>
+{% endblock %}
+
+{% block content %}
+{% csrf_token %}
+<section>
+    <h1>定期取引一覧</h1>
+
+    <table class="tbl-data tbl-boarder" id="periodic_table">
+        <thead>
+            <tr>
+                <th>日</th>
+                <th>品目</th>
+                <th>金額</th>
+                <th>方向</th>
+                <th>支払い方法</th>
+                <th>分類</th>
+                <th>立替</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pd in periodic_data_list %}
+            <tr data-day="{{ pd.day }}"
+                data-item="{{ pd.item }}"
+                data-price="{{ pd.price }}"
+                data-direction="{{ pd.direction.pk }}"
+                data-method="{{ pd.method.pk }}"
+                data-category="{{ pd.category.pk }}"
+                data-temp="{% if pd.temp %}1{% else %}0{% endif %}">
+                <td>{{ pd.day }}</td>
+                <td>{{ pd.item }}</td>
+                <td class="righter">{{ pd.price|intcomma }}</td>
+                <td>{{ pd.direction }}</td>
+                <td>{{ pd.method }}</td>
+                <td>{{ pd.category }}</td>
+                <td>{% if pd.temp %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- 年月入力 -->
+    <table class="tbl-common fcs-blue">
+        <tr>
+            <td>
+                <input type="text" id="target_year" style="width:6ex" class="righter" placeholder="{{ next_year }}"
+                    onkeypress="keyPressAddBulk(event.keyCode)">年
+                <input type="text" id="target_month" style="width:5ex" class="righter" placeholder="{{ next_month }}"
+                    onkeypress="keyPressAddBulk(event.keyCode)">月
+            </td>
+        </tr>
+    </table>
+
+    <table class="tbl-buttons">
+        <tr>
+            <td><input type="button" value="追加" class="btn-green" id="btn_add_bulk"></td>
+            <td><input type="button" value="編集" class="btn-blue" onclick="location.href=periodic_edit_url"></td>
+        </tr>
+    </table>
+</section>
+{% include "_result_message.html" %}
+{% endblock %}
+
