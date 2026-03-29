@@ -193,48 +193,73 @@ MoneyBookの中核となるデータモデル：
 
 #### 1. 一覧表示（`/periodic`）
 
-- 設定済みの定期取引を表形式で一覧表示
+- 設定済みの定期取引を表形式で一覧表示（tbl-dataスタイル）
 - 年月を指定して「追加」ボタンで一括登録を実行
-- 年月のデフォルト値は来月（未入力時に使用）
-- 「設定」ボタンで設定画面に遷移
+- 年月のデフォルト値は来月（未入力時に使用、placeholderに表示）
+- 「編集」ボタンで編集画面に遷移
 
-#### 2. 設定画面（`/periodic/config`）
+#### 2. 編集画面（`/periodic/edit`）
 
 - 定期取引データの追加・編集・削除
-- テーブル形式で全項目を編集可能
-- 「更新」ボタンで保存して一覧画面に戻る
+- tbl-commonスタイルを使用したテーブル形式で全項目を編集可能
+- 各入力フィールド:
+  - 日付・金額: type="text"、黄色背景（#fffacd）、spinnerなし
+  - 品目: type="text"、黄色背景
+  - select box: 緑色（#a1b91d）、オプションはhoverで緑（.select-greenクラス）
+- 「行を追加」ボタンで新規行を追加（中央配置）
+- 「削除」ボタンで行を削除（confirmダイアログなし、DOM上で即座に削除）
+- 「更新」ボタンで保存して一覧画面に戻る（form POST + リダイレクト）
+- 「キャンセル」ボタンで変更を破棄して一覧画面に戻る
 
-#### 3. 一括登録API（`/periodic/add_bulk`）
+#### 3. 一括登録処理
 
-- 指定された年月に対して定期取引を登録
-- 日付の早いものから順にAjax送信
+- 既存の`/api/add`エンドポイントを1件ずつ呼び出し
+- async/awaitとfor文による実装
+- 100ms間隔で順次登録
+- 日付の早いものから順に登録
 - 重複チェックなし（常に登録）
 - 月の日数を超える日付は最終日に自動調整
+- 成功時: `Success!`メッセージ（showResultMsg使用）
+- エラー時: `Error...`メッセージ（showResultMsg使用）
 
 ### データモデル
 
 ```python
-class PeriodicData:
-    day         # 日（1-31）
-    item        # 品目
-    price       # 金額
-    direction   # 方向（収入/支出）
-    method      # 支払い方法
-    category    # 分類
-    temp        # 立替フラグ
+class PeriodicData(models.Model):
+    day = models.IntegerField()           # 日（1-31）
+    item = models.CharField(max_length=255)  # 品目
+    price = models.IntegerField()         # 金額
+    direction = models.ForeignKey(Direction, on_delete=models.PROTECT)  # 方向（収入/支出）
+    method = models.ForeignKey(Method, on_delete=models.PROTECT)     # 支払い方法
+    category = models.ForeignKey(Category, on_delete=models.PROTECT) # 分類
+    temp = models.BooleanField(default=False)  # 立替フラグ
+
+    class Meta:
+        ordering = ['day']  # 日の昇順でソート
 ```
 
 ### URL設計
 
-- `/moneybook/periodic` - 一覧表示
-- `/moneybook/periodic/config` - 設定画面
-- `/moneybook/periodic/add_bulk` - 一括登録API（POST）
+- `/moneybook/periodic` - 一覧表示（GETのみ）
+- `/moneybook/periodic/edit` - 編集画面（GET/POST）
+
+### ビュー構成
+
+- **PeriodicView** (`periodicView.py`): 一覧表示（GETのみ）
+- **PeriodicEditView** (`periodicEditView.py`): 編集画面（GET/POST）
+  - GET: periodic_data_list、directions、methods、categoriesをcontextに渡す
+  - POST: フォームデータからPeriodicDataを全削除→再作成、periodicにリダイレクト
 
 ### テスト
 
-- **モデルテスト**: 5個のテストケース
-- **ビューテスト**: 14個のテストケース（重複登録、日付オーバーフロー等）
-- **E2Eテスト**: 7個のテストケース（ナビゲーション、CRUD、一括登録、デフォルト値）
+- **モデルテスト**: 5個のテストケース（modelsTests.pyに統合）
+  - モデルのCRUD操作、ソート順の確認
+- **ビューテスト**: 
+  - periodicViewTests.py: 2ケース（一覧表示、未認証時302リダイレクト）
+  - periodicEditViewTests.py: 7ケース（GET 2ケース、POST 5ケース）
+    - 正常な更新、未認証時302リダイレクト、必須フィールド欠落、バリデーションエラー
+- **E2Eテスト**: 10個のテストケース
+  - 一覧アクセス、ナビゲーション、編集ページ遷移、CRUD、一括登録、デフォルト値、キャンセル動作、重複登録
 
 ---
 

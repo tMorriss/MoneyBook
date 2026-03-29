@@ -7,7 +7,7 @@
 {% block header %}
 <script type="text/javascript" src="{% static 'periodic.js' %}"></script>
 <script type="text/javascript">
-    add_url = "{% url 'moneybook:add' %}";
+    add_api_url = "{% url 'moneybook:add_api' %}";
     periodic_edit_url = "{% url 'moneybook:periodic_edit' %}";
 </script>
 {% endblock %}

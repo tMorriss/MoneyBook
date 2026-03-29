@@ -84,7 +84,7 @@ $(document).ready(function() {
 
                 try {
                     await $.post({
-                        url: add_url,
+                        url: add_api_url,
                         data: {
                             'csrfmiddlewaretoken': csrftoken,
                             'date': `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`,
