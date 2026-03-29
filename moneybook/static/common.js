@@ -113,7 +113,7 @@ $(() => {
     $('.add_item').autocomplete({
         source: (request, response) => {
             $.get({
-                url: suggest_url,
+                url: suggest_api_url,
                 data: {
                     "item": request.term,
                 }
@@ -130,7 +130,7 @@ $(() => {
     $('.add_price').autocomplete({
         source: (request, response) => {
             $.get({
-                url: suggest_url,
+                url: suggest_api_url,
                 data: {
                     "item": $(".add_item").val(),
                 }

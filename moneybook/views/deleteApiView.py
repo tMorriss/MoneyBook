@@ -5,7 +5,7 @@ from django.views import View
 from moneybook.models import Data
 
 
-class DeleteView(View):
+class DeleteApiView(View):
     def post(self, request, *args, **kwargs):
         pk = request.POST.get('pk')
 

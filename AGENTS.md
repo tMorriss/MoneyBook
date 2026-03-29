@@ -154,19 +154,18 @@ MoneyBookの中核となるデータモデル：
 
 ### ビュー（`views/`ディレクトリ）
 
-11個の専門化されたビューモジュール：
+機能ごとに専門化されたビューモジュール：
 
-1. **`IndexView`** - ダッシュボード（当月データ表示）
-2. **`AddView`** - 取引入力
-3. **`AddIntraMoveView`** - 内部移動の入力
-4. **`EditView`** - 取引の編集
-5. **`DeleteView`** - 取引の削除
-6. **`SearchView`** - 取引検索
-7. **`StatisticsView`** - 統計・分析（グラフ表示）
-8. **`PeriodBalanceView`** - 期間別残高トレンド
-9. **`PeriodicView`** - 定期取引管理（一覧、設定、一括登録）
-10. **`ToolsView`** - ユーティリティ機能（実際の現金、残高チェック、事前確認マーク）
-11. **`CustomLoginView`** - 認証
+- **`IndexView`** - ダッシュボード（当月データ表示）
+- **`AddView`** - 取引入力ページ
+- **`EditView`** - 取引の編集ページ
+- **`SearchView`** - 取引検索
+- **`StatisticsView`** - 統計・分析（グラフ表示）
+- **`PeriodBalanceView`** - 期間別残高トレンド
+- **`PeriodicView`** - 定期取引管理（一覧、設定、一括登録）
+- **`ToolsView`** - ユーティリティ機能ページ
+- **`CustomLoginView`** - 認証
+- **`apiView.py` (`*ApiView`)** - JSONを返すAPIエンドポイント（すべて `/api/` プレフィックスを持つ）
 
 ### フォーム（`forms.py`）
 
@@ -374,7 +373,7 @@ python manage.py test moneybook.e2e --settings config.settings.test --verbosity 
 
 ### CSS/スタイル規約
 
-1. **共通スタイルの使用**: 
+1. **共通スタイルの使用**:
    - 基本的なスタイルは`static/style.css`に定義し、全ページで共有する
    - ボタン（`.btn-green`, `.btn-blue`, `.btn-red`）
    - テーブル（`.tbl-periodic`, `.tbl-periodic-config`）
@@ -392,7 +391,7 @@ python manage.py test moneybook.e2e --settings config.settings.test --verbosity 
    - ページ固有のCSSは各テンプレートの`{% block header %}`内で読み込む
    ```html
    {% block header %}
-   <link rel="stylesheet" type="text/css" href="{% static 'periodic.css' %}">
+   <link rel="stylesheet" type="text/css" href="{% static 'periodic.css' %}" />
    {% endblock %}
    ```
 
@@ -524,7 +523,7 @@ docker run -p 80:80 moneybook_nginx:$STATIC_VERSION
 
 - **データベース**: MySQL使用
 - **ブラウザサポート**: モダンブラウザのみ（IE非対応）
-- **認証**: カスタムミドルウェアを使用
+- **認証**: カスタムミドルウェアを使用。未ログイン時、通常ページはログイン画面へリダイレクトされるが、`/api/` で始まるURLは `403 Forbidden` を返す。
 
 ---
 

@@ -6,22 +6,12 @@ from moneybook.models import Data
 from moneybook.tests.base import BaseTestCase
 
 
-class AddIntraMoveViewTestCase(BaseTestCase):
-    def test_get(self):
-        self.client.force_login(User.objects.create_user(self.username))
-        response = self.client.get(reverse('moneybook:add_intra_move'))
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.url, reverse('moneybook:add'))
-
-    def test_get_guest(self):
-        response = self.client.get(reverse('moneybook:add'))
-        self.assertEqual(response.status_code, 403)
-
+class AddIntraMoveApiViewTestCase(BaseTestCase):
     def test_post(self):
         self.client.force_login(User.objects.create_user(self.username))
         before_count = Data.get_all_data().count()
         response = self.client.post(
-            reverse('moneybook:add_intra_move'),
+            reverse('moneybook:add_intra_move_api'),
             {
                 'year': 2000,
                 'month': 4,
@@ -59,7 +49,7 @@ class AddIntraMoveViewTestCase(BaseTestCase):
         self.client.force_login(User.objects.create_user(self.username))
         before_count = Data.get_all_data().count()
         response = self.client.post(
-            reverse('moneybook:add_intra_move'),
+            reverse('moneybook:add_intra_move_api'),
             {
                 'year': 2000,
                 'month': 13,
@@ -79,7 +69,7 @@ class AddIntraMoveViewTestCase(BaseTestCase):
         self.client.force_login(User.objects.create_user(self.username))
         before_count = Data.get_all_data().count()
         response = self.client.post(
-            reverse('moneybook:add_intra_move'),
+            reverse('moneybook:add_intra_move_api'),
             {
                 'year': 2000,
                 'month': 2,
@@ -99,7 +89,7 @@ class AddIntraMoveViewTestCase(BaseTestCase):
         self.client.force_login(User.objects.create_user(self.username))
         before_count = Data.get_all_data().count()
         response = self.client.post(
-            reverse('moneybook:add_intra_move'),
+            reverse('moneybook:add_intra_move_api'),
             {
                 'year': 2000,
                 'month': 4,
@@ -118,7 +108,7 @@ class AddIntraMoveViewTestCase(BaseTestCase):
         self.client.force_login(User.objects.create_user(self.username))
         before_count = Data.get_all_data().count()
         response = self.client.post(
-            reverse('moneybook:add_intra_move'),
+            reverse('moneybook:add_intra_move_api'),
             {
                 'year': 2000,
                 'month': 4,
@@ -137,7 +127,7 @@ class AddIntraMoveViewTestCase(BaseTestCase):
         self.client.force_login(User.objects.create_user(self.username))
         before_count = Data.get_all_data().count()
         response = self.client.post(
-            reverse('moneybook:add_intra_move'),
+            reverse('moneybook:add_intra_move_api'),
             {
                 'year': 2000,
                 'month': 4,
@@ -156,7 +146,7 @@ class AddIntraMoveViewTestCase(BaseTestCase):
         self.client.force_login(User.objects.create_user(self.username))
         before_count = Data.get_all_data().count()
         response = self.client.post(
-            reverse('moneybook:add_intra_move'),
+            reverse('moneybook:add_intra_move_api'),
             {
                 'year': 2000,
                 'month': 4,
@@ -174,7 +164,7 @@ class AddIntraMoveViewTestCase(BaseTestCase):
     def test_post_guest(self):
         before_count = Data.get_all_data().count()
         response = self.client.post(
-            reverse('moneybook:add_intra_move'),
+            reverse('moneybook:add_intra_move_api'),
             {
                 'year': 2000,
                 'month': 4,
