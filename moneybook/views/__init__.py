@@ -4,10 +4,9 @@ from .customLoginView import *
 from .deleteApiView import *
 from .editApiView import *
 from .editView import *
+from .indexApiView import *
 from .indexView import *
 from .periodBalanceView import *
-from .periodicEditView import *
-from .periodicView import *
 from .searchView import *
 from .statisticsView import *
 from .toolsApiView import *

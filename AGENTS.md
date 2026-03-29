@@ -147,7 +147,7 @@ MoneyBookの中核となるデータモデル：
 | `Method`         | 支払い方法（銀行、PayPay、現金など）             |
 | `Category`       | 費目カテゴリー（生活費フラグ、変動費フラグ付き） |
 | `Data`           | メインの取引記録                                 |
-| `PeriodicData`   | 定期取引データ（毎月の定期的な取引を設定）       |
+| `FixedCost`      | 固定費（定期的な支出）                           |
 | `BankBalance`    | 銀行残高                                         |
 | `CheckedDate`    | 確認済み日付                                     |
 | `PreCheckedDate` | 事前確認日付                                     |
@@ -162,16 +162,13 @@ MoneyBookの中核となるデータモデル：
 - **`SearchView`** - 取引検索
 - **`StatisticsView`** - 統計・分析（グラフ表示）
 - **`PeriodBalanceView`** - 期間別残高トレンド
-- **`PeriodicView`** - 定期取引管理（一覧、設定、一括登録）
 - **`ToolsView`** - ユーティリティ機能ページ
 - **`CustomLoginView`** - 認証
 - **`apiView.py` (`*ApiView`)** - JSONを返すAPIエンドポイント（すべて `/api/` プレフィックスを持つ）
 
 ### フォーム（`forms.py`）
 
-- **DataForm** - データ入力フォーム
-- **PeriodicDataForm** - 定期取引設定フォーム
-- **IntraMoveForm** - 内部移動フォーム
+- データ入力フォーム
 - 検索フォーム
 - 各種バリデーション
 
@@ -180,86 +177,6 @@ MoneyBookの中核となるデータモデル：
 - 日付処理関数
 - 集計計算
 - データ変換
-
----
-
-## 定期取引機能（Periodic）
-
-### 概要
-
-家賃やサブスク支払い、貯金など、毎月定期的に発生する取引を一括登録する機能です。
-
-### 機能詳細
-
-#### 1. 一覧表示（`/periodic`）
-
-- 設定済みの定期取引を表形式で一覧表示（tbl-dataスタイル）
-- 年月を指定して「追加」ボタンで一括登録を実行
-- 年月のデフォルト値は来月（未入力時に使用、placeholderに表示）
-- 「編集」ボタンで編集画面に遷移
-
-#### 2. 編集画面（`/periodic/edit`）
-
-- 定期取引データの追加・編集・削除
-- tbl-commonスタイルを使用したテーブル形式で全項目を編集可能
-- 各入力フィールド:
-  - 日付・金額: type="text"、黄色背景（#fffacd）、spinnerなし
-  - 品目: type="text"、黄色背景
-  - select box: 緑色（#a1b91d）、オプションはhoverで緑（.select-greenクラス）
-- 「行を追加」ボタンで新規行を追加（中央配置）
-- 「削除」ボタンで行を削除（confirmダイアログなし、DOM上で即座に削除）
-- 「更新」ボタンで保存して一覧画面に戻る（form POST + リダイレクト）
-- 「キャンセル」ボタンで変更を破棄して一覧画面に戻る
-
-#### 3. 一括登録処理
-
-- 既存の`/api/add`エンドポイントを1件ずつ呼び出し
-- async/awaitとfor文による実装
-- 100ms間隔で順次登録
-- 日付の早いものから順に登録
-- 重複チェックなし（常に登録）
-- 月の日数を超える日付は最終日に自動調整
-- 成功時: `Success!`メッセージ（showResultMsg使用）
-- エラー時: `Error...`メッセージ（showResultMsg使用）
-
-### データモデル
-
-```python
-class PeriodicData(models.Model):
-    day = models.IntegerField()           # 日（1-31）
-    item = models.CharField(max_length=255)  # 品目
-    price = models.IntegerField()         # 金額
-    direction = models.ForeignKey(Direction, on_delete=models.PROTECT)  # 方向（収入/支出）
-    method = models.ForeignKey(Method, on_delete=models.PROTECT)     # 支払い方法
-    category = models.ForeignKey(Category, on_delete=models.PROTECT) # 分類
-    temp = models.BooleanField(default=False)  # 立替フラグ
-
-    class Meta:
-        ordering = ['day']  # 日の昇順でソート
-```
-
-### URL設計
-
-- `/moneybook/periodic` - 一覧表示（GETのみ）
-- `/moneybook/periodic/edit` - 編集画面（GET/POST）
-
-### ビュー構成
-
-- **PeriodicView** (`periodicView.py`): 一覧表示（GETのみ）
-- **PeriodicEditView** (`periodicEditView.py`): 編集画面（GET/POST）
-  - GET: periodic_data_list、directions、methods、categoriesをcontextに渡す
-  - POST: フォームデータからPeriodicDataを全削除→再作成、periodicにリダイレクト
-
-### テスト
-
-- **モデルテスト**: modelsTests.pyに統合
-  - モデルのCRUD操作、ソート順の確認
-- **ビューテスト**: 
-  - periodicViewTests.py: 一覧表示、未認証時302リダイレクト
-  - periodicEditViewTests.py: 編集画面表示（GET）、フォームPOST更新処理（POST）
-    - 正常な更新、未認証時302リダイレクト、必須フィールド欠落、バリデーションエラー
-- **E2Eテスト**:
-  - 一覧アクセス、ナビゲーション、編集ページ遷移、CRUD、一括登録、デフォルト値、キャンセル動作、重複登録
 
 ---
 
@@ -395,30 +312,6 @@ python manage.py test moneybook.e2e --settings config.settings.test --verbosity 
    - `{% static %}`タグを使用してパスを生成
    - キャッシュバスティング: ビルドごとに生成されるバージョン番号がパスに自動挿入される（`/static/{STATIC_VERSION}/...`）
    - 開発環境では`STATIC_VERSION='dev'`がデフォルト値として使用される
-
-### CSS/スタイル規約
-
-1. **共通スタイルの使用**:
-   - 基本的なスタイルは`static/style.css`に定義し、全ページで共有する
-   - ボタン（`.btn-green`, `.btn-blue`, `.btn-red`）
-   - テーブル（`.tbl-periodic`, `.tbl-periodic-config`）
-   - コンテンツエリア（`.main-content`, `.control-panel`）
-   - 進捗表示（`#progress_area`, `.progress-item`）
-   - レスポンシブデザイン（メディアクエリ）
-
-2. **ページ固有CSSファイル**:
-   - 各ページ専用のCSSファイル（例: `periodic.css`, `tools.css`）には、そのページ固有のスタイルのみを記載
-   - 共通スタイルの重複定義は避ける
-   - ページ固有の例: 特定の入力フィールドの幅調整、特殊なレイアウト調整
-
-3. **CSS読み込み**:
-   - `style.css`は`_base.html`で自動的に読み込まれる
-   - ページ固有のCSSは各テンプレートの`{% block header %}`内で読み込む
-   ```html
-   {% block header %}
-   <link rel="stylesheet" type="text/css" href="{% static 'periodic.css' %}" />
-   {% endblock %}
-   ```
 
 ### レビュー規則
 

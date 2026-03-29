@@ -1,7 +1,61 @@
 from datetime import date
 
-from moneybook.models import Category, Data, Direction, Method
+from moneybook.models import BankBalance, Category, CheckedDate, CreditCheckedDate, Data, Direction, Method, SeveralCosts
 from moneybook.tests.base import BaseTestCase
+
+
+class DirectionTestCase(BaseTestCase):
+    def test_get(self):
+        self.assertEqual(str(Direction.get(1)), '収入')
+        self.assertEqual(str(Direction.get(2)), '支出')
+
+    def test_list(self):
+        ls = Direction.list()
+        self.assertEqual(ls.count(), 2)
+        self.assertEqual(str(ls[0]), '収入')
+        self.assertEqual(str(ls[1]), '支出')
+
+
+class MethodTestCase(BaseTestCase):
+    def test_get(self):
+        self.assertEqual(str(Method.get(1)), '現金')
+        self.assertEqual(str(Method.get(4)), 'nanaco')
+
+    def test_list(self):
+        ls = Method.list()
+        expects = ['銀行', '現金', 'Kyash', 'PayPay']
+        self._assert_list(ls, expects)
+
+    def test_unused_list(self):
+        ls = Method.un_used_list()
+        expects = ['nanaco', 'Edy']
+        self._assert_list(ls, expects)
+
+    def test_chargeable_list(self):
+        ls = Method.chargeable_list()
+        expects = ['Kyash', 'PayPay']
+        self._assert_list(ls, expects)
+
+
+class CategoryTestCase(BaseTestCase):
+    def test_get(self):
+        self.assertEqual(str(Category.get(1)), '食費')
+        self.assertEqual(str(Category.get(4)), '内部移動')
+
+    def test_list(self):
+        ls = Category.list()
+        expects = ['収入', '計算外', '貯金', '内部移動', 'その他', '食費', '必需品', '交通費']
+        self._assert_list(ls, expects)
+
+    def test_first_list(self):
+        ls = Category.first_list()
+        expects = ['食費', '必需品', '交通費']
+        self._assert_list(ls, expects)
+
+    def test_latter_list(self):
+        ls = Category.latter_list()
+        expects = ['その他', '内部移動', '貯金', '計算外', '収入']
+        self._assert_list(ls, expects)
 
 
 class DataTestCase(BaseTestCase):
@@ -622,3 +676,112 @@ class DataTestCase(BaseTestCase):
         base_data = Data.get_month_data(1999, 1)
         data = Data.filter_checkeds(base_data, [True])
         self.assertEqual(data.count(), 0)
+
+
+class CheckedDateTestCase(BaseTestCase):
+    def test_str(self):
+        self.assertEqual(str(CheckedDate.get(1)), '現金')
+        self.assertEqual(str(CheckedDate.get(2)), '銀行')
+
+    def test_get(self):
+        self.assertEqual(CheckedDate.get(1).date, date(2000, 1, 2))
+        self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
+        self.assertEqual(CheckedDate.get(3).date, date(2000, 2, 2))
+
+    def test_set(self):
+        CheckedDate.set(1, date(2001, 1, 1))
+        self.assertEqual(CheckedDate.get(1).date, date(2001, 1, 1))
+
+
+class CreditCheckedDateTestCase(BaseTestCase):
+    def test_get_all(self):
+        data = CreditCheckedDate.get_all()
+        self.assertEqual(data[0].name, 'AmexGold')
+        self.assertEqual(data[0].date, date(2000, 2, 4))
+        self.assertEqual(data[0].price, 2000)
+        self.assertEqual(data[1].name, 'センチュリオン')
+        self.assertEqual(data[1].date, date(3000, 1, 1))
+        self.assertEqual(data[1].price, 30000)
+
+    def test_get_price(self):
+        self.assertEqual(CreditCheckedDate.get_price(1), 30000)
+        self.assertEqual(CreditCheckedDate.get_price(2), 2000)
+
+    def test_get_price_invalid_pk(self):
+        self.assertEqual(CreditCheckedDate.get_price(10000), 0)
+
+    def test_set_date(self):
+        CreditCheckedDate.set_date(2, date(2001, 1, 2))
+        data = CreditCheckedDate.get_all()
+        self.assertEqual(data[0].name, 'AmexGold')
+        self.assertEqual(data[0].date, date(2001, 1, 2))
+
+    def test_set_price(self):
+        CreditCheckedDate.set_price(2, 2001)
+        data = CreditCheckedDate.get_all()
+        self.assertEqual(data[0].name, 'AmexGold')
+        self.assertEqual(data[0].price, 2001)
+
+
+class BankBalanceTestCase(BaseTestCase):
+    def test_str(self):
+        self.assertEqual(str(BankBalance.objects.get(pk=1)), 'みずほ')
+        self.assertEqual(str(BankBalance.objects.get(pk=2)), '三井住友')
+
+    def test_get_all(self):
+        data = BankBalance.get_all()
+        self.assertEqual(data[0].name, '三井住友')
+        self.assertEqual(data[0].price, 20000)
+        self.assertEqual(data[1].name, 'みずほ')
+        self.assertEqual(data[1].price, 40000)
+
+    def test_get_price(self):
+        self.assertEqual(BankBalance.get_price(1), 40000)
+        self.assertEqual(BankBalance.get_price(2), 20000)
+
+    def test_get_price_invalid_pk(self):
+        self.assertEqual(BankBalance.get_price(10000), 0)
+
+    def test_set(self):
+        BankBalance.set(2, 10001)
+        data = BankBalance.get_all()
+        self.assertEqual(data[0].name, '三井住友')
+        self.assertEqual(data[0].price, 10001)
+
+
+class SeveralCostsTestCase(BaseTestCase):
+    def test_str(self):
+        self.assertEqual(str(SeveralCosts.objects.get(name='LivingCostMark')), 'LivingCostMark')
+        self.assertEqual(str(SeveralCosts.objects.get(name='ActualCashBalance')), 'ActualCashBalance')
+
+    def test_get_living_cost_mark(self):
+        self.assertEqual(SeveralCosts.get_living_cost_mark(), 1000)
+
+    def test_get_living_cost_mark_nothing(self):
+        SeveralCosts.objects.get(name='LivingCostMark').delete()
+        self.assertEqual(SeveralCosts.get_living_cost_mark(), 0)
+
+    def test_set_living_cost_mark(self):
+        SeveralCosts.set_living_cost_mark(1001)
+        self.assertEqual(SeveralCosts.get_living_cost_mark(), 1001)
+
+    def test_set_living_cost_mark_nothing(self):
+        SeveralCosts.objects.get(name='LivingCostMark').delete()
+        SeveralCosts.set_living_cost_mark(1001)
+        self.assertEqual(SeveralCosts.get_living_cost_mark(), 1001)
+
+    def test_get_actual_cash_balance(self):
+        self.assertEqual(SeveralCosts.get_actual_cash_balance(), 2000)
+
+    def test_get_actual_cash_balance_nothing(self):
+        SeveralCosts.objects.get(name='ActualCashBalance').delete()
+        self.assertEqual(SeveralCosts.get_actual_cash_balance(), 0)
+
+    def test_set_actual_cash_balance(self):
+        SeveralCosts.set_actual_cash_balance(2001)
+        self.assertEqual(SeveralCosts.get_actual_cash_balance(), 2001)
+
+    def test_set_actual_cash_balance_nothing(self):
+        SeveralCosts.objects.get(name='ActualCashBalance').delete()
+        SeveralCosts.set_actual_cash_balance(2001)
+        self.assertEqual(SeveralCosts.get_actual_cash_balance(), 2001)

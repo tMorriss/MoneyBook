@@ -1,7 +1,8 @@
 import http
-from datetime import date
+from datetime import date, datetime
 
 from django.http import JsonResponse
+from django.shortcuts import render
 from django.views import View
 from moneybook.models import BankBalance, CheckedDate, CreditCheckedDate, Data, Method, SeveralCosts
 
@@ -69,6 +70,36 @@ class CheckedDateApiView(View):
         return JsonResponse({})
 
 
+class SeveralCheckedDateApiView(View):
+    def get(self, request, *args, **kwargs):
+        now = datetime.now()
+        # 全データ
+        all_data = Data.get_all_data()
+        # 現在銀行
+        banks = BankBalance.get_all()
+        # クレカ確認日
+        credit_checked_date = CreditCheckedDate.get_all()
+        today = date.today()
+        for c in credit_checked_date:
+            # 日付が過ぎていたらpriceを0にする
+            if c.date <= today:
+                c.price = 0
+
+        # 銀行残高
+        all_bank_data = Data.get_bank_data(all_data)
+        checked_bank_data = Data.get_checked_data(all_bank_data)
+        bank_written = Data.get_income_sum(
+            checked_bank_data) - Data.get_outgo_sum(checked_bank_data)
+
+        context = {
+            'year': now.year,
+            'banks': banks,
+            'credit_checked_date': credit_checked_date,
+            'bank_written': bank_written,
+        }
+        return render(request, '_several_checked_date.html', context)
+
+
 class CreditCheckedDateApiView(View):
     def post(self, request, *args, **kwargs):
         if 'year' not in request.POST or 'month' not in request.POST or 'day' not in request.POST or 'pk' not in request.POST:
@@ -101,7 +132,36 @@ class LivingCostMarkApiView(View):
             return JsonResponse({'message': 'price must be int'}, status=http.HTTPStatus.BAD_REQUEST)
 
         SeveralCosts.set_living_cost_mark(price)
-        return HttpResponse(json.dumps({'message': 'success'}))
+        return JsonResponse({'message': 'success'})
+
+
+class UncheckedDataApiView(View):
+    def get(self, request, *args, **kwargs):
+        # 全データ
+        all_data = Data.get_all_data()
+        # 未承認トランザクション
+        unchecked_data = Data.get_unchecked_data(all_data)
+        context = {
+            'unchecked_data': unchecked_data,
+        }
+        return render(request, '_unchecked_data.html', context)
+
+
+class PreCheckedSummaryApiView(View):
+    def get(self, request, *args, **kwargs):
+        # 全データ
+        all_data = Data.get_all_data()
+        # 未承認トランザクション
+        unchecked_data = Data.get_unchecked_data(all_data)
+        pre_checked_data = Data.get_pre_checked_data(unchecked_data)
+
+        context = {
+            'income_sum': Data.get_income_sum(pre_checked_data),
+            'outgo_sum': Data.get_outgo_sum(pre_checked_data),
+            'income_count': len(Data.get_income(pre_checked_data)),
+            'outgo_count': len(Data.get_outgo(pre_checked_data)),
+        }
+        return render(request, '_pre_checked_summary.html', context)
 
 
 class NowBankApiView(View):

@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Data, PeriodicData
+from .models import Data
 
 
 class DataForm(forms.ModelForm):
@@ -17,9 +17,3 @@ class IntraMoveForm(forms.Form):
     price = forms.IntegerField()
     before_method = forms.IntegerField()
     after_method = forms.IntegerField()
-
-
-class PeriodicDataForm(forms.ModelForm):
-    class Meta:
-        model = PeriodicData
-        exclude = []

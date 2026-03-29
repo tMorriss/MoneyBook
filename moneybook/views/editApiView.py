@@ -12,7 +12,7 @@ class EditApiView(View):
 
         try:
             data = Data.get(pk)
-        except Data.DoesNotExist:
+        except:
             return JsonResponse({'message': 'Data does not exist'}, status=http.HTTPStatus.BAD_REQUEST)
 
         new_data = DataForm(request.POST)
@@ -59,7 +59,7 @@ class PreCheckApiView(View):
 
         try:
             data = Data.get(pk)
-        except Data.DoesNotExist:
+        except:
             res = {'message': 'Data does not exist'}
             return JsonResponse(res, status=http.HTTPStatus.BAD_REQUEST)
 

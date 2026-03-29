@@ -60,7 +60,7 @@ class AddIntraMoveApiView(View):
                 # 成功レスポンス
                 return JsonResponse({})
 
-            except Exception:
+            except:
                 return JsonResponse({}, status=http.HTTPStatus.BAD_REQUEST)
         else:
             return JsonResponse({}, status=http.HTTPStatus.BAD_REQUEST)

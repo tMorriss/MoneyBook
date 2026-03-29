@@ -10,13 +10,13 @@
 <script type="text/javascript">
     actual_cash_api_url = "{% url 'moneybook:actual_cash_api' %}";
     checked_date_api_url = "{% url 'moneybook:checked_date_api' %}";
-    several_checked_date_url = "{% url 'moneybook:several_checked_date' %}";
+    several_checked_date_api_url = "{% url 'moneybook:several_checked_date_api' %}";
     living_cost_mark_api_url = "{% url 'moneybook:living_cost_mark_api' %}";
     apply_check_api_url = "{% url 'moneybook:apply_check_api' %}";
     pre_check_api_url = "{% url 'moneybook:pre_check_api' %}";
     now_bank_api_url = "{% url 'moneybook:now_bank_api' %}";
-    unchecked_data_url = "{% url 'moneybook:unchecked_data' %}";
-    pre_checked_summary_url = "{% url 'moneybook:pre_checked_summary' %}";
+    unchecked_data_api_url = "{% url 'moneybook:unchecked_data_api' %}";
+    pre_checked_summary_api_url = "{% url 'moneybook:pre_checked_summary_api' %}";
     credit_checked_date_api_url = "{% url 'moneybook:credit_checked_date_api' %}";
 
     window.onload = function () {
@@ -31,7 +31,6 @@
 
 {% block content %}
 {% csrf_token %}
-{% include "_tools_task_bar.html" %}
 <section>
     <h1>現金差額計算</h1>
     <table class="tbl-common fcs-blue">
