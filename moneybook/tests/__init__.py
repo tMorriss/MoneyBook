@@ -1,4 +1,5 @@
 from .addIntraMoveViewTests import *
+from .addPeriodicApiViewTests import *
 from .addViewTests import *
 from .base import *
 from .deleteApiViewTests import *
