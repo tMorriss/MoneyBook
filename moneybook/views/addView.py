@@ -1,12 +1,9 @@
-import json
 from datetime import datetime
 
 from django.conf import settings
-from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render
 from django.views import View
-from moneybook.forms import DataForm
-from moneybook.models import Category, Data, Direction, Method
+from moneybook.models import Category, Direction, Method
 
 
 class AddView(View):
@@ -31,37 +28,3 @@ class AddView(View):
             'income_pk': Category.get_income().pk,
         }
         return render(request, 'add.html', context)
-
-    def post(self, request, *args, **kwargs):
-        new_data = DataForm(request.POST)
-        if new_data.is_valid():
-            # データ追加
-            new_data.save()
-            # 成功レスポンス
-            return HttpResponse()
-
-        else:
-            error_list = []
-            for a in new_data.errors:
-                error_list.append(a)
-            res_data = {
-                'ErrorList': error_list,
-            }
-            return HttpResponseBadRequest(json.dumps(res_data))
-
-
-class SuggestView(View):
-    def get(self, request, *args, **kwargs):
-        if 'item' not in request.GET:
-            res = {'message': 'missing item'}
-            return HttpResponseBadRequest(json.dumps(res))
-
-        item = request.GET.get('item')
-        if item == '':
-            res = {'message': 'empty item'}
-            return HttpResponseBadRequest(json.dumps(res))
-
-        data = Data.sort_descending(Data.get_startswith_keyword_data(Data.get_all_data(), item))
-        suggests = [{'date': v.date.strftime('%Y-%m-%d'), 'item': v.item, 'price': v.price} for v in data]
-
-        return HttpResponse(json.dumps({'suggests': suggests}))

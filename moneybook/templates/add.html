@@ -6,9 +6,9 @@
 {% block header %}
 <script type="text/javascript" src="{% static 'add.js' %}"></script>
 <script type="text/javascript">
-    add_url = "{% url 'moneybook:add' %}";
-    intra_move_url = "{% url 'moneybook:add_intra_move' %}";
-    suggest_url = "{% url 'moneybook:suggest' %}";
+    add_api_url = "{% url 'moneybook:add_api' %}";
+    intra_move_api_url = "{% url 'moneybook:add_intra_move_api' %}";
+    suggest_api_url = "{% url 'moneybook:suggest_api' %}";
 
     direction_first = "{{ directions.first.pk }}"
     method_first = "{{ methods.first.pk }}";

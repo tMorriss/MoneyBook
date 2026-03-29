@@ -1,24 +1,41 @@
+import json
 from datetime import date
 
 from django.db import transaction
 from django.http import HttpResponse, HttpResponseBadRequest
-from django.shortcuts import redirect
 from django.views import View
-from moneybook.forms import IntraMoveForm
+from moneybook.forms import DataForm, IntraMoveForm
 from moneybook.models import Category, Data, Direction, Method
 
 
-class AddIntraMoveView(View):
-    def get(self, request, *args, **kwargs):
-        return redirect('moneybook:add')
+class AddApiView(View):
+    def post(self, request, *args, **kwargs):
+        new_data = DataForm(request.POST)
+        if new_data.is_valid():
+            # データ追加
+            new_data.save()
+            # 成功レスポンス
+            return HttpResponse()
 
+        else:
+            error_list = []
+            for a in new_data.errors:
+                error_list.append(a)
+            res_data = {
+                'ErrorList': error_list,
+            }
+            return HttpResponseBadRequest(json.dumps(res_data))
+
+
+class AddIntraMoveApiView(View):
     @transaction.atomic
     def post(self, request, *args, **kwargs):
         form = IntraMoveForm(request.POST)
         if form.is_valid():
             try:
                 out_data = Data()
-                out_data.date = date(int(request.POST.get('year')), int(request.POST.get('month')), int(request.POST.get('day')))
+                out_data.date = date(int(request.POST.get('year')), int(
+                    request.POST.get('month')), int(request.POST.get('day')))
                 out_data.price = request.POST.get('price')
                 out_data.direction = Direction.get(2)
                 out_data.method = Method.get(request.POST.get('before_method'))
@@ -47,3 +64,22 @@ class AddIntraMoveView(View):
                 return HttpResponseBadRequest()
         else:
             return HttpResponseBadRequest()
+
+
+class SuggestApiView(View):
+    def get(self, request, *args, **kwargs):
+        if 'item' not in request.GET:
+            res = {'message': 'missing item'}
+            return HttpResponseBadRequest(json.dumps(res))
+
+        item = request.GET.get('item')
+        if item == '':
+            res = {'message': 'empty item'}
+            return HttpResponseBadRequest(json.dumps(res))
+
+        data = Data.sort_descending(
+            Data.get_startswith_keyword_data(Data.get_all_data(), item))
+        suggests = [{'date': v.date.strftime(
+            '%Y-%m-%d'), 'item': v.item, 'price': v.price} for v in data]
+
+        return HttpResponse(json.dumps({'suggests': suggests}))

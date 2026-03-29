@@ -20,7 +20,7 @@ function updateDiff() {
 
     var value = written - actual;
     $.post({
-        url: actual_cash_url,
+        url: actual_cash_api_url,
         data: {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
             "price": actual,
@@ -52,7 +52,7 @@ function showDiff() {
 
 function getCheckedDate() {
     $.get({
-        url: checked_date_url,
+        url: checked_date_api_url,
     }).done((data) => {
         let dataJson = JSON.parse(data);
 
@@ -79,7 +79,7 @@ function getCheckedDate() {
 
 function getSeveralCheckedDate() {
     $.get({
-        url: several_checked_date_url,
+        url: several_checked_date_api_url,
     }).done((data) => {
         $("#several-checked-date").html(data);
         calculateNowBank(false);
@@ -88,7 +88,7 @@ function getSeveralCheckedDate() {
 
 function updateCheckedDate(method_id, checkAll) {
     $.post({
-        url: checked_date_url,
+        url: checked_date_api_url,
         data: {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
             "year": $("#check_year").val(),
@@ -108,7 +108,7 @@ function updateCheckedDate(method_id, checkAll) {
 
 function updateSeveralCheckedDate(id) {
     $.post({
-        url: credit_checked_date_url,
+        url: credit_checked_date_api_url,
         data: {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
             "year": $("#credit_check_year").val(),
@@ -134,7 +134,7 @@ function keyPressUpdateSeveralCheckedDate(code, id) {
 
 function updateLivingCostMark() {
     $.post({
-        url: living_cost_mark_url,
+        url: living_cost_mark_api_url,
         data: {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
             "price": Number($("#txt_living_cost").val().replace(",", "")),
@@ -155,7 +155,7 @@ function keyPressLiving(code) {
 
 function applyCheck() {
     $.post({
-        url: edit_apply_check_url,
+        url: apply_check_api_url,
         data: {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
         }
@@ -183,7 +183,7 @@ function preCheck(pk) {
     }
 
     $.post({
-        url: edit_pre_check_url,
+        url: pre_check_api_url,
         data: {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
             "id": pk,
@@ -206,7 +206,7 @@ function preCheck(pk) {
 
 function getUncheckedTransaction() {
     $.get({
-        url: unchecked_data_url
+        url: unchecked_data_api_url
     }).done((data) => {
         $("#unchecked-transaction").html(data);
     })
@@ -214,7 +214,7 @@ function getUncheckedTransaction() {
 
 function getPreCheckedSummary() {
     $.get({
-        url: pre_checked_summary_url
+        url: pre_checked_summary_api_url
     }).done((data) => {
         $("#pre-checked-summary").html(data);
     })
@@ -237,7 +237,7 @@ function calculateNowBank(isAllUpdate) {
     });
 
     $.post({
-        url: now_bank_url,
+        url: now_bank_api_url,
         data: data
     }).done((data) => {
         result = JSON.parse(data);
