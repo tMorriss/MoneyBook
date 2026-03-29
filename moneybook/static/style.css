@@ -315,12 +315,6 @@ section h2 {
     max-width: 90%;
 }
 
-.empty-message {
-    text-align: center;
-    color: #999;
-    font-style: italic;
-}
-
 /* スマホ */
 @media screen and (max-width: 980px) {
 

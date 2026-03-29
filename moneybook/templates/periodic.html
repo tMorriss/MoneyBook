@@ -46,10 +46,6 @@
                 <td>{{ pd.category }}</td>
                 <td>{% if pd.temp %}Yes{% else %}No{% endif %}</td>
             </tr>
-            {% empty %}
-            <tr>
-                <td colspan="7" class="empty-message">定期取引が設定されていません</td>
-            </tr>
             {% endfor %}
         </tbody>
     </table>
