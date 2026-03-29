@@ -1,4 +1,6 @@
-from django.http import HttpResponseBadRequest
+import http
+
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.views import View
 from moneybook.models import Category, Data, InOutBalance, Method, SeveralCosts
@@ -12,9 +14,9 @@ class IndexBalanceStatisticMiniApiView(View):
             year = request.GET.get('year')
             month = request.GET.get('month')
             if not is_valid_date(year, month):
-                return HttpResponseBadRequest('parameter error')
+                return JsonResponse({'message': 'parameter error'}, status=http.HTTPStatus.BAD_REQUEST)
         else:
-            return HttpResponseBadRequest('parameter error')
+            return JsonResponse({'message': 'parameter error'}, status=http.HTTPStatus.BAD_REQUEST)
 
         # 全データ
         all_data = Data.get_all_data()
@@ -83,9 +85,9 @@ class IndexChartDataApiView(View):
             year = request.GET.get('year')
             month = request.GET.get('month')
             if not is_valid_date(year, month):
-                return HttpResponseBadRequest('parameter error')
+                return JsonResponse({'message': 'parameter error'}, status=http.HTTPStatus.BAD_REQUEST)
         else:
-            return HttpResponseBadRequest('parameter error')
+            return JsonResponse({'message': 'parameter error'}, status=http.HTTPStatus.BAD_REQUEST)
 
         # 今月のデータ
         monthly_data = Data.get_month_data(int(year), int(month))
@@ -109,9 +111,9 @@ class DataTableApiView(View):
             year = request.GET.get('year')
             month = request.GET.get('month')
             if not is_valid_date(year, month):
-                return HttpResponseBadRequest('parameter error')
+                return JsonResponse({'message': 'parameter error'}, status=http.HTTPStatus.BAD_REQUEST)
         else:
-            return HttpResponseBadRequest('parameter error')
+            return JsonResponse({'message': 'parameter error'}, status=http.HTTPStatus.BAD_REQUEST)
 
         # 今月のデータ
         monthly_data = Data.sort_descending(
