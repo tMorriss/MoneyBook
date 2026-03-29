@@ -85,6 +85,11 @@ class Periodic(SeleniumBase):
         price_input = last_row.find_element(By.CSS_SELECTOR, 'input[name^="price_new_"]')
         price_input.send_keys('5000')
 
+        # 立替を「なし」に設定
+        temp_select = last_row.find_element(By.CSS_SELECTOR, 'select[name^="temp_new_"]')
+        from selenium.webdriver.support.select import Select
+        Select(temp_select).select_by_value('0')
+
         # 更新ボタンをクリック
         self.driver.find_element(By.XPATH, '//button[@type="submit"]').click()
         time.sleep(1.5)
@@ -95,6 +100,13 @@ class Periodic(SeleniumBase):
         # 追加した定期取引が表示されていること
         self.assertIn('テスト定期取引', self.driver.page_source)
         self.assertIn('5,000', self.driver.page_source)
+        self.assertIn('No', self.driver.page_source)  # 立替がNoになっていること
+
+        # DBの内容を確認
+        new_periodic = PeriodicData.objects.get(item='テスト定期取引')
+        self.assertEqual(new_periodic.day, 15)
+        self.assertEqual(new_periodic.price, 5000)
+        self.assertFalse(new_periodic.temp)
 
     def test_periodic_bulk_add(self):
         """定期取引を一括登録できること"""
