@@ -27,16 +27,9 @@ class PeriodicEditView(View):
         # 既存のデータを全削除
         PeriodicData.objects.all().delete()
 
-        # POSTデータから新しいデータを登録
-        processed_ids = set()
-
         for key in request.POST.keys():
             if key.startswith('day_') and not key.startswith('csrfmiddlewaretoken'):
                 id_part = key[4:]  # 'day_' を除く
-
-                if id_part in processed_ids:
-                    continue
-                processed_ids.add(id_part)
 
                 day = request.POST.get(f'day_{id_part}')
                 item = request.POST.get(f'item_{id_part}')
