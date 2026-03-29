@@ -7,14 +7,13 @@
 <script type="text/javascript" src="{% static 'periodic_edit.js' %}"></script>
 <script type="text/javascript">
     periodic_url = "{% url 'moneybook:periodic' %}";
-    periodic_edit_api_url = "{% url 'moneybook:periodic_edit_api' %}";
 </script>
 {% endblock %}
 
 {% block content %}
 <section>
     <h2>定期取引設定</h2>
-    <form id="periodic_edit_form">
+    <form method="post" action="{% url 'moneybook:periodic_edit' %}">
         {% csrf_token %}
         <table class="tbl-common tbl-boarder">
             <thead>
@@ -113,7 +112,7 @@
                 <td colspan="2" style="text-align: center;"><button type="button" id="btn_add_row" class="btn-green">行を追加</button></td>
             </tr>
             <tr>
-                <td><button type="button" id="btn_update" class="btn-green">更新</button></td>
+                <td><button type="submit" class="btn-green">更新</button></td>
                 <td><button type="button" class="btn-blue" onclick="location.href=periodic_url">キャンセル</button></td>
             </tr>
         </table>
