@@ -252,13 +252,13 @@ class PeriodicData(models.Model):
 
 ### テスト
 
-- **モデルテスト**: 5個のテストケース（modelsTests.pyに統合）
+- **モデルテスト**: modelsTests.pyに統合
   - モデルのCRUD操作、ソート順の確認
 - **ビューテスト**: 
-  - periodicViewTests.py: 2ケース（一覧表示、未認証時302リダイレクト）
-  - periodicEditViewTests.py: 7ケース（GET 2ケース、POST 5ケース）
+  - periodicViewTests.py: 一覧表示、未認証時302リダイレクト
+  - periodicEditViewTests.py: 編集画面表示（GET）、フォームPOST更新処理（POST）
     - 正常な更新、未認証時302リダイレクト、必須フィールド欠落、バリデーションエラー
-- **E2Eテスト**: 10個のテストケース
+- **E2Eテスト**:
   - 一覧アクセス、ナビゲーション、編集ページ遷移、CRUD、一括登録、デフォルト値、キャンセル動作、重複登録
 
 ---
