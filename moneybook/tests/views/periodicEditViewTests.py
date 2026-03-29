@@ -95,8 +95,19 @@ class PeriodicEditViewPostTestCase(BaseTestCase):
         data = PeriodicData.get_all()
         self.assertEqual(data[0].day, 5)
         self.assertEqual(data[0].item, '新規定期取引')
+        self.assertEqual(data[0].price, 10000)
+        self.assertEqual(data[0].direction.pk, 2)
+        self.assertEqual(data[0].method.pk, 2)
+        self.assertEqual(data[0].category.pk, 2)
+        self.assertEqual(data[0].temp, True)
+
         self.assertEqual(data[1].day, 10)
         self.assertEqual(data[1].item, '別の定期取引')
+        self.assertEqual(data[1].price, 20000)
+        self.assertEqual(data[1].direction.pk, 1)
+        self.assertEqual(data[1].method.pk, 1)
+        self.assertEqual(data[1].category.pk, 3)
+        self.assertEqual(data[1].temp, False)
 
     def test_post_guest(self):
         """ログインしていない場合はログインページにリダイレクトされること"""
@@ -126,7 +137,7 @@ class PeriodicEditViewPostTestCase(BaseTestCase):
     def test_post_temp_zero(self):
         """立替「なし」が正しく保存されること"""
         from django.contrib.auth.models import User
-        self.client.force_login(User.objects.create_user("temp_test_user"))
+        self.client.force_login(User.objects.create_user('temp_test_user'))
 
         # 立替「なし」(0)を送信
         post_data = {
@@ -143,7 +154,12 @@ class PeriodicEditViewPostTestCase(BaseTestCase):
 
         # 登録されたデータを確認
         pd = PeriodicData.objects.get(item='立替なしテスト')
-        self.assertFalse(pd.temp, "temp should be False when '0' is submitted")
+        self.assertEqual(pd.day, 10)
+        self.assertEqual(pd.price, 1000)
+        self.assertEqual(pd.direction.pk, 2)
+        self.assertEqual(pd.method.pk, 1)
+        self.assertEqual(pd.category.pk, 1)
+        self.assertFalse(pd.temp, 'temp should be False when \'0\' is submitted')
 
     def test_post_invalid_form(self):
         """フォームバリデーションエラー時は行をスキップしてperiodicにリダイレクト"""
