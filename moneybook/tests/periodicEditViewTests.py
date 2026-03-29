@@ -146,3 +146,40 @@ class PeriodicEditViewPostTestCase(BaseTestCase):
 
         # データが登録されていないこと
         self.assertEqual(PeriodicData.objects.count(), 0)
+
+    def test_post_duplicate_id_part(self):
+        """id_partが重複している場合は最初のもののみが処理されること"""
+        self.client.force_login(User.objects.create_user(self.username))
+
+        # 同じid_partを持つ重複データ
+        # Pythonの辞書では後のキーが前のキーを上書きするため、
+        # 'day_1': '15'と'item_1': '2番目のデータ'が実際の値になる
+        post_data = {
+            'day_1': '5',
+            'item_1': '最初のデータ',
+            'price_1': '10000',
+            'direction_1': '1',
+            'method_1': '1',
+            'category_1': '1',
+            'temp_1': '0',
+            # 同じid_part '1'で別のデータ（辞書で上書き）
+            'day_1': '15',
+            'item_1': '2番目のデータ',
+            'price_1': '20000',
+        }
+
+        response = self.client.post(reverse('moneybook:periodic_edit'), data=post_data)
+
+        # periodicにリダイレクトされること
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('moneybook:periodic'))
+
+        # 1件のみ登録されていること（重複チェックにより1度のみ処理）
+        self.assertEqual(PeriodicData.objects.count(), 1)
+
+        # processed_idsによって最初の処理のみが実行される
+        # ただし辞書の上書きにより、実際には2番目の値がPOSTデータに含まれる
+        data = PeriodicData.get_all()
+        self.assertEqual(data[0].day, 15)
+        self.assertEqual(data[0].item, '2番目のデータ')
+        self.assertEqual(data[0].price, 20000)
