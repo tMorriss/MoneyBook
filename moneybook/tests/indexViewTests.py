@@ -73,10 +73,10 @@ class IndexMonthViewTestCase(BaseTestCase):
         self.assertEqual(response.url, reverse('moneybook:login'))
 
 
-class IndexBalanceStatisticMiniApiViewTestCase(BaseTestCase):
+class IndexBalanceStatisticMiniViewTestCase(BaseTestCase):
     def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
-        response = self.client.get(reverse('moneybook:balance_statistic_mini_api'), {'year': 2000, 'month': 1})
+        response = self.client.get(reverse('moneybook:balance_statistic_mini'), {'year': 2000, 'month': 1})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['total_balance'], 46694)
         self.assertEqual(response.context['monthly_income'], 32993)
@@ -119,33 +119,34 @@ class IndexBalanceStatisticMiniApiViewTestCase(BaseTestCase):
 
     def test_get_without_year(self):
         self.client.force_login(User.objects.create_user(self.username))
-        response = self.client.get(reverse('moneybook:balance_statistic_mini_api'), {'month': 1})
+        response = self.client.get(reverse('moneybook:balance_statistic_mini'), {'month': 1})
         self.assertEqual(response.status_code, 400)
 
     def test_get_without_month(self):
         self.client.force_login(User.objects.create_user(self.username))
-        response = self.client.get(reverse('moneybook:balance_statistic_mini_api'), {'year': 2000})
+        response = self.client.get(reverse('moneybook:balance_statistic_mini'), {'year': 2000})
         self.assertEqual(response.status_code, 400)
 
     def test_get_out_of_range(self):
         self.client.force_login(User.objects.create_user(self.username))
-        response = self.client.get(reverse('moneybook:balance_statistic_mini_api'), {'year': 2000, 'month': 13})
+        response = self.client.get(reverse('moneybook:balance_statistic_mini'), {'year': 2000, 'month': 13})
         self.assertEqual(response.status_code, 400)
 
     def test_get_without_parameters(self):
         self.client.force_login(User.objects.create_user(self.username))
-        response = self.client.get(reverse('moneybook:balance_statistic_mini_api'))
+        response = self.client.get(reverse('moneybook:balance_statistic_mini'))
         self.assertEqual(response.status_code, 400)
 
     def test_get_guest(self):
-        response = self.client.get(reverse('moneybook:balance_statistic_mini_api'), {'year': 2000, 'month': 1})
-        self.assertEqual(response.status_code, 403)
+        response = self.client.get(reverse('moneybook:balance_statistic_mini'), {'year': 2000, 'month': 1})
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('moneybook:login'))
 
 
-class IndexChartDataApiViewTestCase(BaseTestCase):
+class IndexChartDataViewTestCase(BaseTestCase):
     def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
-        response = self.client.get(reverse('moneybook:chart_container_data_api'), {'year': 2000, 'month': 1})
+        response = self.client.get(reverse('moneybook:chart_container_data'), {'year': 2000, 'month': 1})
         self.assertEqual(response.status_code, 200)
         positive_categories_outgo = response.context['categories_outgo']
         actials = [
@@ -163,33 +164,34 @@ class IndexChartDataApiViewTestCase(BaseTestCase):
 
     def test_get_wituout_year(self):
         self.client.force_login(User.objects.create_user(self.username))
-        response = self.client.get(reverse('moneybook:chart_container_data_api'), {'month': 1})
+        response = self.client.get(reverse('moneybook:chart_container_data'), {'month': 1})
         self.assertEqual(response.status_code, 400)
 
     def test_get_wituout_month(self):
         self.client.force_login(User.objects.create_user(self.username))
-        response = self.client.get(reverse('moneybook:chart_container_data_api'), {'year': 2000})
+        response = self.client.get(reverse('moneybook:chart_container_data'), {'year': 2000})
         self.assertEqual(response.status_code, 400)
 
     def test_get_without_parameters(self):
         self.client.force_login(User.objects.create_user(self.username))
-        response = self.client.get(reverse('moneybook:chart_container_data_api'))
+        response = self.client.get(reverse('moneybook:chart_container_data'))
         self.assertEqual(response.status_code, 400)
 
     def test_get_out_of_range(self):
         self.client.force_login(User.objects.create_user(self.username))
-        response = self.client.get(reverse('moneybook:chart_container_data_api'), {'year': 2000, 'month': 13})
+        response = self.client.get(reverse('moneybook:chart_container_data'), {'year': 2000, 'month': 13})
         self.assertEqual(response.status_code, 400)
 
     def test_get_guest(self):
-        response = self.client.get(reverse('moneybook:chart_container_data_api'), {'year': 2000, 'month': 1})
-        self.assertEqual(response.status_code, 403)
+        response = self.client.get(reverse('moneybook:chart_container_data'), {'year': 2000, 'month': 1})
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('moneybook:login'))
 
 
-class DataTableApiViewTestCase(BaseTestCase):
+class DataTableViewTestCase(BaseTestCase):
     def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
-        response = self.client.get(reverse('moneybook:data_table_api'), {'year': 2000, 'month': 1})
+        response = self.client.get(reverse('moneybook:data_table'), {'year': 2000, 'month': 1})
         self.assertEqual(response.status_code, 200)
         expects = [
             '立替分2',
@@ -215,24 +217,25 @@ class DataTableApiViewTestCase(BaseTestCase):
 
     def test_get_without_year(self):
         self.client.force_login(User.objects.create_user(self.username))
-        response = self.client.get(reverse('moneybook:data_table_api'), {'month': 1})
+        response = self.client.get(reverse('moneybook:data_table'), {'month': 1})
         self.assertEqual(response.status_code, 400)
 
     def test_get_without_month(self):
         self.client.force_login(User.objects.create_user(self.username))
-        response = self.client.get(reverse('moneybook:data_table_api'), {'year': 2000})
+        response = self.client.get(reverse('moneybook:data_table'), {'year': 2000})
         self.assertEqual(response.status_code, 400)
 
     def test_get_without_parameters(self):
         self.client.force_login(User.objects.create_user(self.username))
-        response = self.client.get(reverse('moneybook:data_table_api'))
+        response = self.client.get(reverse('moneybook:data_table'))
         self.assertEqual(response.status_code, 400)
 
     def test_get_out_of_range(self):
         self.client.force_login(User.objects.create_user(self.username))
-        response = self.client.get(reverse('moneybook:data_table_api'), {'year': 2000, 'month': 13})
+        response = self.client.get(reverse('moneybook:data_table'), {'year': 2000, 'month': 13})
         self.assertEqual(response.status_code, 400)
 
     def test_get_guest(self):
-        response = self.client.get(reverse('moneybook:data_table_api'), {'year': 2000, 'month': 1})
-        self.assertEqual(response.status_code, 403)
+        response = self.client.get(reverse('moneybook:data_table'), {'year': 2000, 'month': 1})
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('moneybook:login'))
