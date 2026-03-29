@@ -18,7 +18,7 @@ class DeleteApiViewTestCase(BaseTestCase):
         before_count = Data.get_all_data().count()
         response = self.client.post(reverse('moneybook:delete_api'), {'pk': 1})
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content.decode(), '{}')
+        self.assertEqual(response.content.decode(), '')
         after_count = Data.get_all_data().count()
         self.assertEqual(after_count, before_count - 1)
 
