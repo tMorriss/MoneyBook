@@ -337,9 +337,4 @@ section h2 {
     #is_pc {
         visibility: hidden;
     }
-
-    .control-panel {
-        flex-direction: column;
-        align-items: flex-start;
-    }
 }
