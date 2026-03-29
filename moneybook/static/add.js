@@ -1,6 +1,6 @@
 function sendAddRow() {
     $.post({
-        url: add_api_url,
+        url: add_url,
         data: {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
             "date": $('#a_year').val() + "-" + $('#a_month').val() + "-" + $('#a_day').val(),
@@ -29,7 +29,7 @@ function keyPressAdd(code) {
 
 function sendIntraMove() {
     $.post({
-        url: intra_move_api_url,
+        url: intra_move_url,
         data: {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
             "year": $('#m_year').val(),
@@ -60,7 +60,7 @@ function sendCharge() {
     label_id = $('#lbl_' + method_id).text();
 
     $.post({
-        url: intra_move_api_url,
+        url: intra_move_url,
         data: {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
             "year": $('#c_year').val(),
@@ -95,7 +95,7 @@ function sendSuicaCharge() {
     day = (yearValue == now.getFullYear() && monthValue == (now.getMonth() + 1) && dayValue.length == 0) ? now.getDate() : dayValue;
     price = (priceValue.length == 0) ? 3000 : evaluateFormula(priceValue);
     $.post({
-        url: add_api_url,
+        url: add_url,
         data: {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
             "date": `${yearValue}-${monthValue}-${day}`,

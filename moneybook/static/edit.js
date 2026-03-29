@@ -1,6 +1,6 @@
 function sendUpdateRow() {
     $.post({
-        url: edit_api_url,
+        url: edit_url,
         data: {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
             "date": $('#year').val() + "-" + $('#month').val() + "-" + $('#day').val(),
@@ -28,7 +28,7 @@ function keyPressUpdate(code) {
 
 function sendDeleteRow() {
     $.post({
-        url: delete_api_url,
+        url: delete_url,
         data: {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
             "pk": data_pk,

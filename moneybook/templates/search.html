@@ -6,7 +6,7 @@
 
 {% block header %}
 <script type="text/javascript">
-    suggest_api_url = "{% url 'moneybook:suggest_api' %}";
+    suggest_url = "{% url 'moneybook:suggest_api' %}";
 
     function reset_page() {
         window.location.href = "{% url 'moneybook:search' %}";
