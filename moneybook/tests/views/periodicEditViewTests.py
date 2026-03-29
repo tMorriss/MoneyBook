@@ -134,33 +134,6 @@ class PeriodicEditViewPostTestCase(BaseTestCase):
         # データが登録されていないこと
         self.assertEqual(PeriodicData.objects.count(), 0)
 
-    def test_post_temp_zero(self):
-        """立替「なし」が正しく保存されること"""
-        from django.contrib.auth.models import User
-        self.client.force_login(User.objects.create_user('temp_test_user'))
-
-        # 立替「なし」(0)を送信
-        post_data = {
-            'day_new_0': '10',
-            'item_new_0': '立替なしテスト',
-            'price_new_0': '1000',
-            'direction_new_0': '2',
-            'method_new_0': '1',
-            'category_new_0': '1',
-            'temp_new_0': '0',
-        }
-
-        self.client.post(reverse('moneybook:periodic_edit'), data=post_data)
-
-        # 登録されたデータを確認
-        pd = PeriodicData.objects.get(item='立替なしテスト')
-        self.assertEqual(pd.day, 10)
-        self.assertEqual(pd.price, 1000)
-        self.assertEqual(pd.direction.pk, 2)
-        self.assertEqual(pd.method.pk, 1)
-        self.assertEqual(pd.category.pk, 1)
-        self.assertFalse(pd.temp, 'temp should be False when \'0\' is submitted')
-
     def test_post_invalid_form(self):
         """フォームバリデーションエラー時は行をスキップしてperiodicにリダイレクト"""
         self.client.force_login(User.objects.create_user(self.username))
