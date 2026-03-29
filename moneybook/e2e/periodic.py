@@ -289,7 +289,7 @@ class Periodic(SeleniumBase):
         """削除ボタンを押してキャンセルすると保存されないこと"""
         # テスト用の定期取引データを2件作成
         from moneybook.models import Category, Direction, Method
-        pd1 = PeriodicData.objects.create(
+        PeriodicData.objects.create(
             day=1,
             item='削除キャンセルテスト1',
             price=1111,
@@ -298,7 +298,7 @@ class Periodic(SeleniumBase):
             category=Category.get(1),
             temp=False
         )
-        pd2 = PeriodicData.objects.create(
+        PeriodicData.objects.create(
             day=2,
             item='削除キャンセルテスト2',
             price=2222,
