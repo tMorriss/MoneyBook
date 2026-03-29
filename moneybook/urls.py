@@ -17,6 +17,9 @@ app_name = 'moneybook'
 urlpatterns = [
     path('', IndexView.as_view(), name='index'),
     path('<int:year>/<int:month>', IndexMonthView.as_view(), name='index_month'),
+    path('_balance_statistic_mini', IndexBalanceStatisticMiniView.as_view(), name='balance_statistic_mini'),
+    path('_chart_container_data', IndexChartDataView.as_view(), name='chart_container_data'),
+    path('_data_table', DataTableView.as_view(), name='data_table'),
     path('add', AddView.as_view(), name='add'),
     path('statistics', StatisticsView.as_view(), name='statistics'),
     path('statistics/<int:year>', StatisticsMonthView.as_view(),
@@ -24,15 +27,12 @@ urlpatterns = [
     path('period_balances', PeriodBalanceView.as_view(), name='period_balances'),
     path('search', SearchView.as_view(), name='search'),
     path('tools', ToolsView.as_view(), name='tools'),
-    path('edit/<int:pk>', EditView.as_view(), name='edit'),
-    path('login', CustomLoginView.as_view(), name='login'),
-    path('logout', LogoutView.as_view(), name='logout'),
-    path('_balance_statistic_mini', IndexBalanceStatisticMiniView.as_view(), name='balance_statistic_mini'),
-    path('_chart_container_data', IndexChartDataView.as_view(), name='chart_container_data'),
-    path('_data_table', DataTableView.as_view(), name='data_table'),
     path('tools/several_checked_date', SeveralCheckedDateView.as_view(), name='several_checked_date'),
     path('tools/unchecked_data', UncheckedDataView.as_view(), name='unchecked_data'),
     path('tools/pre_checked_summary', PreCheckedSummaryView.as_view(), name='pre_checked_summary'),
+    path('edit/<int:pk>', EditView.as_view(), name='edit'),
+    path('login', CustomLoginView.as_view(), name='login'),
+    path('logout', LogoutView.as_view(), name='logout'),
 
     # API
     path('api/add', AddApiView.as_view(), name='add_api'),
