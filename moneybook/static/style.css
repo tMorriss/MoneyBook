@@ -203,7 +203,7 @@ section h2 {
 .radio-green input[type="radio"]:checked+label,
 .radio-green input[type="checkbox"]:checked+label,
 .ui-widget-content .ui-state-active,
-.select-green option:checked {
+.select-green option:hover {
     border-style: solid;
     border-color: #a1b91d;
     background-color: #a1b91d;
