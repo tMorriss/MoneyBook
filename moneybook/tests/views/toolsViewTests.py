@@ -23,7 +23,7 @@ class ToolsViewTestCase(BaseTestCase):
         self.assertEqual(response.context['actual_cash_balance'], 2000)
         self._assert_list(response.context['credit_checked_date'], ['AmexGold', 'センチュリオン'])
         self.assertEqual(response.context['living_cost_mark'], 1000)
-        self._assert_templates(response.templates, ['tools.html', '_base.html', '_result_message.html'])
+        self._assert_templates(response.templates, ['tools.html', '_base.html', '_tools_task_bar.html', '_result_message.html'])
 
     def test_get_guest(self):
         response = self.client.get(reverse('moneybook:tools'))
@@ -298,11 +298,11 @@ class CheckedDateApiViewTestCase(BaseTestCase):
         self._assert_list(unchecked_data, expects)
 
 
-class SeveralCheckedDateApiViewTestCase(BaseTestCase):
+class SeveralCheckedDateViewTestCase(BaseTestCase):
     def test_get(self):
         now = datetime.now()
         self.client.force_login(User.objects.create_user(self.username))
-        response = self.client.get(reverse('moneybook:several_checked_date_api'))
+        response = self.client.get(reverse('moneybook:several_checked_date'))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['year'], now.year)
 
@@ -332,8 +332,9 @@ class SeveralCheckedDateApiViewTestCase(BaseTestCase):
         )
 
     def test_get_guest(self):
-        response = self.client.get(reverse('moneybook:several_checked_date_api'))
-        self.assertEqual(response.status_code, 403)
+        response = self.client.get(reverse('moneybook:several_checked_date'))
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('moneybook:login'))
 
 
 class CreditCheckedDateApiViewTestCase(BaseTestCase):
@@ -501,10 +502,10 @@ class LivingCostMarkApiViewTestCase(BaseTestCase):
         self.assertEqual(SeveralCosts.get_living_cost_mark(), 1000)
 
 
-class UncheckedDataApiViewTestCase(BaseTestCase):
+class UncheckedDataViewTestCase(BaseTestCase):
     def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
-        response = self.client.get(reverse('moneybook:unchecked_data_api'))
+        response = self.client.get(reverse('moneybook:unchecked_data'))
         self.assertEqual(response.status_code, 200)
         expects = ['必需品1', 'スーパー', '計算外', '貯金', 'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
         self._assert_list(response.context['unchecked_data'], expects)
@@ -514,8 +515,9 @@ class UncheckedDataApiViewTestCase(BaseTestCase):
         )
 
     def test_get_guest(self):
-        response = self.client.get(reverse('moneybook:unchecked_data_api'))
-        self.assertEqual(response.status_code, 403)
+        response = self.client.get(reverse('moneybook:unchecked_data'))
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('moneybook:login'))
 
 
 class NowBankApiViewTestCase(BaseTestCase):
@@ -618,7 +620,7 @@ class NowBankApiViewTestCase(BaseTestCase):
         self.assertEqual(CreditCheckedDate.get_price(2), 2000)
 
 
-class PreCheckedSummaryApiViewTestCase(BaseTestCase):
+class PreCheckedSummaryViewTestCase(BaseTestCase):
     def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
         # まず事前チェック済みデータを作成
@@ -628,7 +630,7 @@ class PreCheckedSummaryApiViewTestCase(BaseTestCase):
             data.pre_checked = True
             data.save()
 
-        response = self.client.get(reverse('moneybook:pre_checked_summary_api'))
+        response = self.client.get(reverse('moneybook:pre_checked_summary'))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['income_sum'], 400)
         self.assertEqual(response.context['outgo_sum'], 3800)
@@ -640,5 +642,6 @@ class PreCheckedSummaryApiViewTestCase(BaseTestCase):
         )
 
     def test_get_guest(self):
-        response = self.client.get(reverse('moneybook:pre_checked_summary_api'))
-        self.assertEqual(response.status_code, 403)
+        response = self.client.get(reverse('moneybook:pre_checked_summary'))
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('moneybook:login'))

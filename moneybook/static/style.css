@@ -189,7 +189,8 @@ section h2 {
 }
 
 .radio-green label,
-.ui-autocomplete li {
+.ui-autocomplete li,
+.select-green option {
     border-color: #bdc3c7;
     background: #bdc3c7;
     color: #869198;
@@ -201,11 +202,23 @@ section h2 {
 
 .radio-green input[type="radio"]:checked+label,
 .radio-green input[type="checkbox"]:checked+label,
-.ui-widget-content .ui-state-active {
+.ui-widget-content .ui-state-active,
+.select-green option:hover {
     border-style: solid;
     border-color: #a1b91d;
     background-color: #a1b91d;
     color: #fff;
+}
+
+/* セレクトボックス - radio-greenと同じカラースキーム */
+.select-green {
+    border: 3px solid #a1b91d;
+    background-color: #a1b91d;
+    color: #fff;
+    padding: 2px 7px;
+    cursor: pointer;
+    border-radius: 3px;
+    outline: none;
 }
 
 .fcs-blue input[type="text"]:focus,

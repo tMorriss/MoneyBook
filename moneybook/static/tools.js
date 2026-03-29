@@ -79,7 +79,7 @@ function getCheckedDate() {
 
 function getSeveralCheckedDate() {
     $.get({
-        url: several_checked_date_api_url,
+        url: several_checked_date_url,
     }).done((data) => {
         $("#several-checked-date").html(data);
         calculateNowBank(false);
@@ -206,7 +206,7 @@ function preCheck(pk) {
 
 function getUncheckedTransaction() {
     $.get({
-        url: unchecked_data_api_url
+        url: unchecked_data_url
     }).done((data) => {
         $("#unchecked-transaction").html(data);
     })
@@ -214,7 +214,7 @@ function getUncheckedTransaction() {
 
 function getPreCheckedSummary() {
     $.get({
-        url: pre_checked_summary_api_url
+        url: pre_checked_summary_url
     }).done((data) => {
         $("#pre-checked-summary").html(data);
     })
