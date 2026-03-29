@@ -7,7 +7,7 @@ from moneybook.models import BankBalance, CheckedDate, CreditCheckedDate, Data, 
 from moneybook.tests.base import BaseTestCase
 
 
-class ToolsViewTests(BaseTestCase):
+class ToolsViewTestCase(BaseTestCase):
     def test_get(self):
         now = datetime.now()
 
@@ -31,7 +31,7 @@ class ToolsViewTests(BaseTestCase):
         self.assertEqual(response.url, reverse('moneybook:login'))
 
 
-class ActualCashApiViewTests(BaseTestCase):
+class ActualCashApiViewTestCase(BaseTestCase):
     def test_post(self):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(SeveralCosts.get_actual_cash_balance(), 2000)
@@ -60,7 +60,7 @@ class ActualCashApiViewTests(BaseTestCase):
         self.assertEqual(SeveralCosts.get_actual_cash_balance(), 2000)
 
 
-class CheckedDateApiViewTests(BaseTestCase):
+class CheckedDateApiViewTestCase(BaseTestCase):
     def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:checked_date_api'))
@@ -297,7 +297,7 @@ class CheckedDateApiViewTests(BaseTestCase):
         self._assert_list(unchecked_data, expects)
 
 
-class SeveralCheckedDateApiViewTests(BaseTestCase):
+class SeveralCheckedDateApiViewTestCase(BaseTestCase):
     def test_get(self):
         now = datetime.now()
         self.client.force_login(User.objects.create_user(self.username))
@@ -335,7 +335,7 @@ class SeveralCheckedDateApiViewTests(BaseTestCase):
         self.assertEqual(response.status_code, 403)
 
 
-class CreditCheckedDateApiViewTests(BaseTestCase):
+class CreditCheckedDateApiViewTestCase(BaseTestCase):
     def test_post(self):
         self.client.force_login(User.objects.create_user(self.username))
         d = CreditCheckedDate.objects.get(pk=2)
@@ -462,7 +462,7 @@ class CreditCheckedDateApiViewTests(BaseTestCase):
         self.assertEqual(d.price, 2000)
 
 
-class LivingCostMarkApiViewTests(BaseTestCase):
+class LivingCostMarkApiViewTestCase(BaseTestCase):
     def test_post(self):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(SeveralCosts.get_living_cost_mark(), 1000)
@@ -500,7 +500,7 @@ class LivingCostMarkApiViewTests(BaseTestCase):
         self.assertEqual(SeveralCosts.get_living_cost_mark(), 1000)
 
 
-class UncheckedDataApiViewTests(BaseTestCase):
+class UncheckedDataApiViewTestCase(BaseTestCase):
     def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:unchecked_data_api'))
@@ -517,7 +517,7 @@ class UncheckedDataApiViewTests(BaseTestCase):
         self.assertEqual(response.status_code, 403)
 
 
-class NowBankApiViewTests(BaseTestCase):
+class NowBankApiViewTestCase(BaseTestCase):
     def test_post(self):
         self.assertEqual(BankBalance.get_price(1), 40000)
         self.assertEqual(BankBalance.get_price(2), 20000)
@@ -617,7 +617,7 @@ class NowBankApiViewTests(BaseTestCase):
         self.assertEqual(CreditCheckedDate.get_price(2), 2000)
 
 
-class PreCheckedSummaryApiViewTests(BaseTestCase):
+class PreCheckedSummaryApiViewTestCase(BaseTestCase):
     def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
         # まず事前チェック済みデータを作成
