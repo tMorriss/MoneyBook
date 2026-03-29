@@ -7,29 +7,44 @@ scp createDataYaml.py createOtherYaml.py yaml_utils.py mars:~/
 # プロジェクトルートの fixture ディレクトリを使用するように修正
 mkdir -p ../fixture
 
-# 1Passwordからデータベース認証情報を読み込む（1回のみ）
-DB_HOSTNAME=$(op read "op://Personal/Mariadb_MoneyBook/hostname")
-DB_PORT=$(op read "op://Personal/Mariadb_MoneyBook/port")
-DB_USER=$(op read "op://Personal/Mariadb_MoneyBook/username")
-DB_PASSWORD=$(op read "op://Personal/Mariadb_MoneyBook/password")
-DB_DATABASE=$(op read "op://Personal/Mariadb_MoneyBook/database")
-
-# コマンドライン引数ではなく標準入力経由でデータベース認証情報を渡す
+# 1Passwordからデータベース認証情報を一括で読み込む（1回のみ）
+# テンプレートを使用して1回のop injectで全ての情報を取得し、
+# IFS= read -r を用いて各変数に安全に代入する。
 {
-  echo "$DB_HOSTNAME"
-  echo "$DB_PORT"
-  echo "$DB_USER"
-  echo "$DB_PASSWORD"
-  echo "$DB_DATABASE"
-} | ssh mars python3 /home/tmorriss/createDataYaml.py > ../fixture/data_all.yaml
+  cat <<EOT | op inject
+{{op://Personal/Mariadb_MoneyBook/hostname}}
+{{op://Personal/Mariadb_MoneyBook/port}}
+{{op://Personal/Mariadb_MoneyBook/username}}
+{{op://Personal/Mariadb_MoneyBook/password}}
+{{op://Personal/Mariadb_MoneyBook/database}}
+EOT
+} | {
+  IFS= read -r DB_HOSTNAME
+  IFS= read -r DB_PORT
+  IFS= read -r DB_USER
+  IFS= read -r DB_PASSWORD
+  IFS= read -r DB_DATABASE
 
-{
-  echo "$DB_HOSTNAME"
-  echo "$DB_PORT"
-  echo "$DB_USER"
-  echo "$DB_PASSWORD"
-  echo "$DB_DATABASE"
-} | ssh mars python3 /home/tmorriss/createOtherYaml.py > ../fixture/initial_data.yaml
+  # 変数に代入された後、それらを使用して後続の処理を行う必要があるため、
+  # 中括弧ブロック内でコマンドを実行する。
+
+  # コマンドライン引数ではなく標準入力経由でデータベース認証情報を渡す
+  {
+    echo "$DB_HOSTNAME"
+    echo "$DB_PORT"
+    echo "$DB_USER"
+    echo "$DB_PASSWORD"
+    echo "$DB_DATABASE"
+  } | ssh mars python3 /home/tmorriss/createDataYaml.py > ../fixture/data_all.yaml
+
+  {
+    echo "$DB_HOSTNAME"
+    echo "$DB_PORT"
+    echo "$DB_USER"
+    echo "$DB_PASSWORD"
+    echo "$DB_DATABASE"
+  } | ssh mars python3 /home/tmorriss/createOtherYaml.py > ../fixture/initial_data.yaml
+}
 
 # プロジェクトルートの manage.py を実行
 python3 ../manage.py loaddata ../fixture/initial_data.yaml
