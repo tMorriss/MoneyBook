@@ -1,6 +1,6 @@
-from http import HTTPStatus
+import json
 
-from django.http import JsonResponse
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.views import View
 from moneybook.forms import DataForm
 from moneybook.models import Category, Data, Direction, Method
@@ -13,7 +13,7 @@ class EditApiView(View):
         try:
             data = Data.get(pk)
         except:
-            return JsonResponse({'message': 'Data does not exist'}, status=HTTPStatus.BAD_REQUEST)
+            return HttpResponseBadRequest(json.dumps({'message': 'Data does not exist'}))
 
         new_data = DataForm(request.POST)
         if new_data.is_valid():
@@ -28,14 +28,14 @@ class EditApiView(View):
             data.checked = request.POST.get('checked')
             data.save()
 
-            return JsonResponse({})
+            return HttpResponse()
         else:
             res_data = {}
             error_list = []
             for a in new_data.errors:
                 error_list.append(a)
             res_data['ErrorList'] = error_list
-            return JsonResponse(res_data, status=HTTPStatus.BAD_REQUEST)
+            return HttpResponseBadRequest(json.dumps(res_data))
 
 
 class ApplyCheckApiView(View):
@@ -49,7 +49,7 @@ class ApplyCheckApiView(View):
             data.checked = True
             data.save()
 
-        return JsonResponse({})
+        return HttpResponse()
 
 
 class PreCheckApiView(View):
@@ -61,11 +61,11 @@ class PreCheckApiView(View):
             data = Data.get(pk)
         except:
             res = {'message': 'Data does not exist'}
-            return JsonResponse(res, status=HTTPStatus.BAD_REQUEST)
+            return HttpResponseBadRequest(json.dumps(res))
 
         if status == '1':
             data.pre_checked = True
         else:
             data.pre_checked = False
         data.save()
-        return JsonResponse({})
+        return HttpResponse()
