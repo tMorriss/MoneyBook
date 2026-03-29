@@ -1,7 +1,8 @@
 from django.contrib.auth.models import User
 from django.urls import reverse
-from moneybook.models import Category, Direction, Method, PeriodicData
+from moneybook.models import PeriodicData
 from moneybook.tests.base import BaseTestCase
+
 
 class PeriodicPriceTestCase(BaseTestCase):
     def test_post_price_without_comma(self):
