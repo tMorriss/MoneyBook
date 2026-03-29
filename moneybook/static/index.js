@@ -16,7 +16,7 @@ function sendAddRow() {
     now = new Date();
     day = (yearValue == now.getFullYear() && monthValue == (now.getMonth() + 1) && dayValue.length == 0) ? now.getDate() : dayValue;
     $.post({
-        url: add_url,
+        url: add_api_url,
         data: {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
             "date": `${yearValue}-${monthValue}-${day}`,

@@ -67,6 +67,7 @@ class EditApiViewTestCase(BaseTestCase):
             }
         )
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content.decode(), '{}')
 
         # 更新されていることを確認
         data = Data.get(1)
@@ -193,6 +194,7 @@ class ApplyCheckApiViewTestCase(BaseTestCase):
         # ApplyCheckApiViewを実行
         response = self.client.post(reverse('moneybook:apply_check_api'))
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content.decode(), '{}')
 
         # 事前チェック済みデータがチェック済みになっていることを確認
         for pk in test_pks:
@@ -218,6 +220,7 @@ class PreCheckApiViewTestCase(BaseTestCase):
             {'id': 4, 'status': '1'}
         )
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content.decode(), '{}')
 
         data = Data.get(4)
         self.assertEqual(data.pre_checked, True)
@@ -234,6 +237,7 @@ class PreCheckApiViewTestCase(BaseTestCase):
             {'id': 4, 'status': '0'}
         )
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content.decode(), '{}')
 
         data = Data.get(4)
         self.assertEqual(data.pre_checked, False)

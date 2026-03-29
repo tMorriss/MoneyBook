@@ -54,7 +54,7 @@ function getCheckedDate() {
     $.get({
         url: checked_date_url,
     }).done((data) => {
-        let dataJson = JSON.parse(data);
+        let dataJson = data.checked_dates;
 
         // 既存を削除
         $(".checked-date-row").remove();
@@ -240,8 +240,7 @@ function calculateNowBank(isAllUpdate) {
         url: now_bank_url,
         data: data
     }).done((data) => {
-        result = JSON.parse(data);
-        $("#now_bank_balance").text(separate(result["balance"]));
+        $("#now_bank_balance").text(separate(data["balance"]));
         document.activeElement.blur();
 
         if (isAllUpdate) {

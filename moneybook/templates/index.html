@@ -12,12 +12,12 @@
 <script src="{% static 'amcharts4/kelly.js' %}"></script>
 <script type="text/javascript">
     index_url = "{% url 'moneybook:index' %}";
-    add_url = "{% url 'moneybook:add_api' %}";
-    add_intra_move_url = "{% url 'moneybook:add_intra_move_api' %}";
+    add_api_url = "{% url 'moneybook:add_api' %}";
+    add_intra_move_api_url = "{% url 'moneybook:add_intra_move_api' %}";
     data_table_url = "{% url 'moneybook:data_table_api' %}";
     balance_statistic_mini_url = "{% url 'moneybook:balance_statistic_mini_api' %}";
     chart_container_data_url = "{% url 'moneybook:chart_container_data_api' %}";
-    suggest_url = "{% url 'moneybook:suggest_api' %}";
+    suggest_api_url = "{% url 'moneybook:suggest_api' %}";
 
     year = "{{ year }}";
     month = "{{ month }}";
