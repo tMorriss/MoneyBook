@@ -34,6 +34,8 @@ class PeriodicEditView(View):
                 day = request.POST.get(f'day_{id_part}')
                 item = request.POST.get(f'item_{id_part}')
                 price = request.POST.get(f'price_{id_part}')
+                if price:
+                    price = price.replace(',', '')
                 direction = request.POST.get(f'direction_{id_part}')
                 method = request.POST.get(f'method_{id_part}')
                 category = request.POST.get(f'category_{id_part}')
