@@ -16,7 +16,7 @@ function sendAddRow() {
     now = new Date();
     day = (yearValue == now.getFullYear() && monthValue == (now.getMonth() + 1) && dayValue.length == 0) ? now.getDate() : dayValue;
     $.post({
-        url: add_api_url,
+        url: add_url,
         data: {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
             "date": `${yearValue}-${monthValue}-${day}`,
@@ -57,7 +57,7 @@ function key_press_move(code) {
 function fetchData() {
     $.when(
         $.get({
-            url: data_table_api_url,
+            url: data_table_url,
             data: {
                 "year": year,
                 "month": month,
@@ -68,7 +68,7 @@ function fetchData() {
         }),
 
         $.get({
-            url: balance_statistic_mini_api_url,
+            url: balance_statistic_mini_url,
             data: {
                 "year": year,
                 "month": month,
@@ -78,7 +78,7 @@ function fetchData() {
         }),
 
         $.get({
-            url: chart_container_data_api_url,
+            url: chart_container_data_url,
             data: {
                 "year": year,
                 "month": month,
