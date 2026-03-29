@@ -7,6 +7,7 @@ from .editView import *
 from .indexApiView import *
 from .indexView import *
 from .periodBalanceView import *
+from .periodicEditApiView import *
 from .periodicEditView import *
 from .periodicView import *
 from .searchView import *

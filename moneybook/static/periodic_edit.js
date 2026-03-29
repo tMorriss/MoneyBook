@@ -26,4 +26,17 @@ $(document).ready(function() {
     $(document).on('click', '.btn-delete-row', function() {
         $(this).closest('tr').remove();
     });
+
+    // 更新ボタン
+    $('#btn_update').on('click', function() {
+        const formData = $('#periodic_edit_form').serialize();
+        $.post({
+            url: periodic_edit_api_url,
+            data: formData
+        }).done(() => {
+            location.href = periodic_url;
+        }).fail(() => {
+            showResultMsg('Error...', empty);
+        });
+    });
 });
