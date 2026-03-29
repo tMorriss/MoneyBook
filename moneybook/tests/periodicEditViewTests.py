@@ -103,8 +103,8 @@ class PeriodicEditViewPostTestCase(BaseTestCase):
         response = self.client.post(reverse('moneybook:periodic_edit'), data={})
         self.assertEqual(response.status_code, 302)
 
-    def test_post_exception(self):
-        """例外が発生した場合は400エラー"""
+    def test_post_missing_required_field(self):
+        """必須フィールド欠落時は行をスキップしてperiodicにリダイレクト"""
         self.client.force_login(User.objects.create_user(self.username))
 
         # 不正なデータ（必須フィールド欠落）
@@ -116,6 +116,33 @@ class PeriodicEditViewPostTestCase(BaseTestCase):
 
         response = self.client.post(reverse('moneybook:periodic_edit'), data=post_data)
 
-        # 必須フィールドがないので何も登録されず、リダイレクト
-        # （実装は寛容なので、400ではなく302が返る可能性がある）
-        self.assertIn(response.status_code, [302, 400])
+        # 必須フィールドがないので何も登録されず、periodicにリダイレクト
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('moneybook:periodic'))
+
+        # データが登録されていないこと
+        self.assertEqual(PeriodicData.objects.count(), 0)
+
+    def test_post_invalid_form(self):
+        """フォームバリデーションエラー時は行をスキップしてperiodicにリダイレクト"""
+        self.client.force_login(User.objects.create_user(self.username))
+
+        # 不正なデータ（日付が範囲外）
+        post_data = {
+            'day_1': '99',  # 1-31の範囲外
+            'item_1': 'テスト',
+            'price_1': '1000',
+            'direction_1': '1',
+            'method_1': '1',
+            'category_1': '1',
+            'temp_1': '0',
+        }
+
+        response = self.client.post(reverse('moneybook:periodic_edit'), data=post_data)
+
+        # フォームがinvalidなので何も登録されず、periodicにリダイレクト
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('moneybook:periodic'))
+
+        # データが登録されていないこと
+        self.assertEqual(PeriodicData.objects.count(), 0)
