@@ -127,12 +127,12 @@ class PeriodicEditViewPostTestCase(BaseTestCase):
         """フォームバリデーションエラー時は行をスキップしてperiodicにリダイレクト"""
         self.client.force_login(User.objects.create_user(self.username))
 
-        # 不正なデータ（日付が範囲外）
+        # 不正なデータ（存在しない外部キー参照）
         post_data = {
-            'day_1': '99',  # 1-31の範囲外
+            'day_1': '1',
             'item_1': 'テスト',
             'price_1': '1000',
-            'direction_1': '1',
+            'direction_1': '999',  # 存在しないdirection_id
             'method_1': '1',
             'category_1': '1',
             'temp_1': '0',
