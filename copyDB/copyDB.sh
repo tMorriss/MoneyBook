@@ -29,21 +29,10 @@ EOT
   # 中括弧ブロック内でコマンドを実行する。
 
   # コマンドライン引数ではなく標準入力経由でデータベース認証情報を渡す
-  {
-    echo "$DB_HOSTNAME"
-    echo "$DB_PORT"
-    echo "$DB_USER"
-    echo "$DB_PASSWORD"
-    echo "$DB_DATABASE"
-  } | ssh mars python3 /home/tmorriss/createDataYaml.py > ../fixture/data_all.yaml
+  db_creds=$(printf "%s\n" "$DB_HOSTNAME" "$DB_PORT" "$DB_USER" "$DB_PASSWORD" "$DB_DATABASE")
+  echo "$db_creds" | ssh mars python3 /home/tmorriss/createDataYaml.py > ../fixture/data_all.yaml
 
-  {
-    echo "$DB_HOSTNAME"
-    echo "$DB_PORT"
-    echo "$DB_USER"
-    echo "$DB_PASSWORD"
-    echo "$DB_DATABASE"
-  } | ssh mars python3 /home/tmorriss/createOtherYaml.py > ../fixture/initial_data.yaml
+  echo "$db_creds" | ssh mars python3 /home/tmorriss/createOtherYaml.py > ../fixture/initial_data.yaml
 }
 
 # プロジェクトルートの manage.py を実行
