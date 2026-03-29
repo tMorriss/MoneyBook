@@ -28,7 +28,7 @@ $(document).ready(function() {
     });
 
     // フォーム送信時に金額を計算
-    $('form').on('submit', function() {
+    $('#periodic_edit_form').on('submit', function() {
         $(this).find('input[name^="price_"]').each(function() {
             const evaluated = evaluateFormula($(this).val());
             $(this).val(evaluated);
