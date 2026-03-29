@@ -239,8 +239,8 @@ function calculateNowBank(isAllUpdate) {
     $.post({
         url: now_bank_url,
         data: data
-    }).done((result) => {
-        $("#now_bank_balance").text(separate(result["balance"]));
+    }).done((data) => {
+        $("#now_bank_balance").text(separate(data["balance"]));
         document.activeElement.blur();
 
         if (isAllUpdate) {
