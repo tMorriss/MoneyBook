@@ -11,6 +11,7 @@
 {% endblock %}
 
 {% block content %}
+{% include "_tools_task_bar.html" %}
 <section>
     <h2>定期取引設定</h2>
     <form method="post" action="{% url 'moneybook:periodic_edit' %}">
