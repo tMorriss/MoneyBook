@@ -40,7 +40,7 @@ class Periodic(SeleniumBase):
         self._location(self.live_server_url + reverse('moneybook:tools'))
 
         # 定期取引リンクをクリック
-        periodic_link = self.driver.find_element(By.LINK_TEXT, '定期取引')
+        periodic_link = self.driver.find_element(By.LINK_TEXT, '定額取引')
         periodic_link.click()
         time.sleep(0.5)
 
