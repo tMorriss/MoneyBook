@@ -1,7 +1,6 @@
+import http
 import json
 from datetime import date
-
-import http
 
 from django.db import transaction
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
