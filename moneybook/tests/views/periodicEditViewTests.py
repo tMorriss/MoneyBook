@@ -36,6 +36,11 @@ class PeriodicEditViewGetTestCase(BaseTestCase):
         self.assertIn('first_categories', response.context)
         self.assertIn('latter_categories', response.context)
 
+        self._assert_templates(
+            response.templates,
+            ['periodic_edit.html', '_base.html', '_tools_task_bar.html', '_result_message.html']
+        )
+
     def test_get_guest(self):
         """ログインしていない場合はログインページにリダイレクトされること"""
         response = self.client.get(reverse('moneybook:periodic_edit'))
