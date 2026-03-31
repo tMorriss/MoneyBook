@@ -116,6 +116,10 @@ function applyFilter() {
 
     // 履歴表のtr
     var rows = $('.data-row');
+    var count = 0;
+    var incomeSum = 0;
+    var outgoSum = 0;
+
     for (var i = 0; i < rows.length; i++) {
         // 検索
         wordShowing = true;
@@ -148,11 +152,24 @@ function applyFilter() {
         }
         if (wordShowing && directionShowing && methodShowing && classShowing) {
             $(rows[i]).removeClass("hidden-row");
+
+            // 合計計算
+            count++;
+            var price = parseInt($(rows[i]).find('.data-price').attr('data-price'));
+            if ($(rows[i]).hasClass('filter-direction-1')) {
+                incomeSum += price;
+            } else if ($(rows[i]).hasClass('filter-direction-2')) {
+                outgoSum += price;
+            }
         }
         else {
             $(rows[i]).addClass("hidden-row");
         }
     }
+    // 集計表示更新
+    $('#summary-count').text(count + '件');
+    $('#summary-income').text('収入: ' + separate(incomeSum) + '円');
+    $('#summary-outgo').text('支出: ' + separate(outgoSum) + '円');
 }
 
 function resetAddForm() {
