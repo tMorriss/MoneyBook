@@ -27,6 +27,7 @@ class PeriodicEditView(View):
         # 既存のデータを全削除
         PeriodicData.objects.all().delete()
 
+        show_order = 0
         for key in request.POST.keys():
             if key.startswith('day_') and not key.startswith('csrfmiddlewaretoken'):
                 id_part = key[4:]  # 'day_' を除く
@@ -47,10 +48,12 @@ class PeriodicEditView(View):
                         'direction': direction,
                         'method': method,
                         'category': category,
-                        'temp': temp == '1'
+                        'temp': temp == '1',
+                        'show_order': show_order,
                     }
                     form = PeriodicDataForm(form_data)
                     if form.is_valid():
                         form.save()
+                        show_order += 1
 
         return HttpResponseRedirect(reverse('moneybook:periodic'))

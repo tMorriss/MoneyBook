@@ -29,7 +29,7 @@ class PeriodicDataTestCase(BaseTestCase):
         """全ての定期取引データを取得できること"""
         data = PeriodicData.get_all()
         self.assertEqual(data.count(), 2)
-        # day順にソートされていること
+        # day順にソートされていること（show_orderがすべて0の場合、day順）
         self.assertEqual(data[0].day, 1)
         self.assertEqual(data[1].day, 15)
 
@@ -58,20 +58,32 @@ class PeriodicDataTestCase(BaseTestCase):
         self.assertEqual(pd.temp, False)
 
     def test_ordering(self):
-        """データがday順にソートされること"""
-        # 追加のデータを作成（日付が小さい順）
+        """データがshow_order順にソートされること"""
+        # show_orderを指定してデータを作成
         PeriodicData.objects.create(
             day=5,
-            item='中間',
+            item='後回し',
             price=500,
             direction=Direction.get(1),
             method=Method.get(1),
             category=Category.get(1),
-            temp=False
+            temp=False,
+            show_order=2
+        )
+        PeriodicData.objects.create(
+            day=30,
+            item='最優先',
+            price=5000,
+            direction=Direction.get(1),
+            method=Method.get(1),
+            category=Category.get(1),
+            temp=False,
+            show_order=-1
         )
 
         data = PeriodicData.get_all()
-        self.assertEqual(data.count(), 3)
-        self.assertEqual(data[0].day, 1)
-        self.assertEqual(data[1].day, 5)
+        self.assertEqual(data.count(), 4)
+        self.assertEqual(data[0].item, '最優先')
+        self.assertEqual(data[1].day, 1)
         self.assertEqual(data[2].day, 15)
+        self.assertEqual(data[3].item, '後回し')

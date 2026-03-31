@@ -338,3 +338,16 @@ section h2 {
         visibility: hidden;
     }
 }
+.drag-handle {
+    cursor: move;
+    background: #eee !important;
+    color: #666;
+    padding: 0 5px !important;
+    user-select: none;
+}
+
+.ui-state-highlight {
+    height: 2em;
+    background: #f0f0f0;
+    border: 1px dashed #ccc;
+}

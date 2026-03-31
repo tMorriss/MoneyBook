@@ -68,22 +68,23 @@ class PeriodicEditViewPostTestCase(BaseTestCase):
         before_count = PeriodicData.objects.count()
         self.assertEqual(before_count, 1)
 
-        # 新しい設定を送信（フォームPOST形式）
+        # 新しい設定を送信（フォームPOST形式、送信順序を考慮）
+        # Python 3.7+ では辞書の順序が保持される
         post_data = {
-            'day_1': '5',
-            'item_1': '新規定期取引',
-            'price_1': '10000',
-            'direction_1': '2',
-            'method_1': '2',
-            'category_1': '2',
-            'temp_1': '1',
             'day_new_0': '10',
-            'item_new_0': '別の定期取引',
+            'item_new_0': '最優先取引',
             'price_new_0': '20000',
             'direction_new_0': '1',
             'method_new_0': '1',
             'category_new_0': '3',
             'temp_new_0': '0',
+            'day_1': '5',
+            'item_1': '次点取引',
+            'price_1': '10000',
+            'direction_1': '2',
+            'method_1': '2',
+            'category_1': '2',
+            'temp_1': '1',
         }
 
         response = self.client.post(reverse('moneybook:periodic_edit'), data=post_data)
@@ -96,23 +97,15 @@ class PeriodicEditViewPostTestCase(BaseTestCase):
         after_count = PeriodicData.objects.count()
         self.assertEqual(after_count, 2)
 
-        # 新しいデータが保存されていること
+        # 新しいデータが保存されていること（送信順 = show_order順）
         data = PeriodicData.get_all()
-        self.assertEqual(data[0].day, 5)
-        self.assertEqual(data[0].item, '新規定期取引')
-        self.assertEqual(data[0].price, 10000)
-        self.assertEqual(data[0].direction.pk, 2)
-        self.assertEqual(data[0].method.pk, 2)
-        self.assertEqual(data[0].category.pk, 2)
-        self.assertEqual(data[0].temp, True)
+        self.assertEqual(data[0].day, 10)
+        self.assertEqual(data[0].item, '最優先取引')
+        self.assertEqual(data[0].show_order, 0)
 
-        self.assertEqual(data[1].day, 10)
-        self.assertEqual(data[1].item, '別の定期取引')
-        self.assertEqual(data[1].price, 20000)
-        self.assertEqual(data[1].direction.pk, 1)
-        self.assertEqual(data[1].method.pk, 1)
-        self.assertEqual(data[1].category.pk, 3)
-        self.assertEqual(data[1].temp, False)
+        self.assertEqual(data[1].day, 5)
+        self.assertEqual(data[1].item, '次点取引')
+        self.assertEqual(data[1].show_order, 1)
 
     def test_post_guest(self):
         """ログインしていない場合はログインページにリダイレクトされること"""

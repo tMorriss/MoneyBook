@@ -1,6 +1,13 @@
 $(document).ready(function() {
     let newRowCounter = 0;
 
+    // 並び替えを有効化
+    $('#periodic_table').sortable({
+        handle: '.drag-handle',
+        placeholder: 'ui-state-highlight',
+        axis: 'y'
+    });
+
     // 行を追加
     $('#btn_add_row').on('click', function() {
         const template = $('#new_row_template');

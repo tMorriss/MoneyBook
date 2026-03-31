@@ -13,6 +13,7 @@ class PeriodicData(models.Model):
     method = models.ForeignKey(Method, on_delete=models.RESTRICT)
     category = models.ForeignKey(Category, on_delete=models.RESTRICT)
     temp = models.BooleanField()
+    show_order = models.IntegerField(default=0)
 
     def __str__(self):
         return self.item
@@ -20,7 +21,7 @@ class PeriodicData(models.Model):
     @staticmethod
     def get_all():
         """全データを取得"""
-        return PeriodicData.objects.all().order_by('day', 'id')
+        return PeriodicData.objects.all().order_by('show_order', 'day', 'id')
 
     @staticmethod
     def get(pk):

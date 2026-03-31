@@ -59,9 +59,6 @@ $(document).ready(function() {
             return;
         }
 
-        // 日付順にソート
-        periodicDataList.sort((a, b) => a.day - b.day);
-
         // ボタンを無効化
         $('#btn_add_bulk').prop('disabled', true);
 

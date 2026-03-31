@@ -19,6 +19,7 @@
         <table class="tbl-common tbl-boarder">
             <thead>
                 <tr>
+                    <th></th>
                     <th>日</th>
                     <th>品目</th>
                     <th>金額</th>
@@ -32,6 +33,7 @@
             <tbody id="periodic_table">
                 {% for pd in periodic_data_list %}
                 <tr data-id="{{ pd.pk }}">
+                    <td class="drag-handle">☰</td>
                     <td><input type="text" name="day_{{ pd.pk }}" value="{{ pd.day }}" style="width:6ex" class="righter"></td>
                     <td><input type="text" name="item_{{ pd.pk }}" value="{{ pd.item }}" size="20"></td>
                     <td><input type="text" name="price_{{ pd.pk }}" value="{{ pd.price }}" style="width:12ex" class="righter"></td>
@@ -70,6 +72,7 @@
                 {% endfor %}
                 <!-- 新規行テンプレート（JavaScriptで複製） -->
                 <tr id="new_row_template" style="display:none;">
+                    <td class="drag-handle">☰</td>
                     <td><input type="text" name="day_new" value="" style="width:6ex" class="righter"></td>
                     <td><input type="text" name="item_new" value="" size="20"></td>
                     <td><input type="text" name="price_new" value="" style="width:12ex" class="righter"></td>
