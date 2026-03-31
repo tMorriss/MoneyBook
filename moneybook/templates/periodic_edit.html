@@ -7,6 +7,7 @@
 <script type="text/javascript" src="{% static 'periodic_edit.js' %}"></script>
 <script type="text/javascript">
     periodic_url = "{% url 'moneybook:periodic' %}";
+    suggest_api_url = "{% url 'moneybook:suggest_api' %}";
 </script>
 {% endblock %}
 
@@ -33,7 +34,7 @@
                 {% for pd in periodic_data_list %}
                 <tr data-id="{{ pd.pk }}">
                     <td><input type="text" name="day_{{ pd.pk }}" value="{{ pd.day }}" style="width:6ex" class="righter"></td>
-                    <td><input type="text" name="item_{{ pd.pk }}" value="{{ pd.item }}" size="20"></td>
+                    <td><input type="text" name="item_{{ pd.pk }}" value="{{ pd.item }}" size="20" class="add_item"></td>
                     <td><input type="text" name="price_{{ pd.pk }}" value="{{ pd.price }}" style="width:12ex" class="righter"></td>
                     <td>
                         <select name="direction_{{ pd.pk }}" class="select-green">
@@ -71,7 +72,7 @@
                 <!-- 新規行テンプレート（JavaScriptで複製） -->
                 <tr id="new_row_template" style="display:none;">
                     <td><input type="text" name="day_new" value="" style="width:6ex" class="righter"></td>
-                    <td><input type="text" name="item_new" value="" size="20"></td>
+                    <td><input type="text" name="item_new" value="" size="20" class="add_item"></td>
                     <td><input type="text" name="price_new" value="" style="width:12ex" class="righter"></td>
                     <td>
                         <select name="direction_new" class="select-green">

@@ -20,6 +20,9 @@ $(document).ready(function() {
         newRowCounter++;
 
         $('#periodic_table').append(newRow);
+
+        // 新規行の品目入力欄にautocompleteを適用
+        initItemAutocomplete(newRow.find('.add_item'));
     });
 
     // 削除ボタン

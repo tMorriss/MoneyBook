@@ -1,8 +1,10 @@
 import json
 from datetime import date
 
+import http
+
 from django.db import transaction
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.views import View
 from moneybook.forms import DataForm, IntraMoveForm
 from moneybook.models import Category, Data, Direction, Method
@@ -70,16 +72,16 @@ class SuggestApiView(View):
     def get(self, request, *args, **kwargs):
         if 'item' not in request.GET:
             res = {'message': 'missing item'}
-            return HttpResponseBadRequest(json.dumps(res))
+            return JsonResponse(res, status=http.HTTPStatus.BAD_REQUEST)
 
         item = request.GET.get('item')
         if item == '':
             res = {'message': 'empty item'}
-            return HttpResponseBadRequest(json.dumps(res))
+            return JsonResponse(res, status=http.HTTPStatus.BAD_REQUEST)
 
         data = Data.sort_descending(
             Data.get_startswith_keyword_data(Data.get_all_data(), item))
         suggests = [{'date': v.date.strftime(
             '%Y-%m-%d'), 'item': v.item, 'price': v.price} for v in data]
 
-        return HttpResponse(json.dumps({'suggests': suggests}))
+        return JsonResponse({'suggests': suggests})

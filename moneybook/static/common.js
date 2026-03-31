@@ -109,45 +109,48 @@ function removeBlueFocus(id) {
     $(id).removeClass('on-fcs-blue');
 }
 
-$(() => {
-    $('.add_item').autocomplete({
+function initItemAutocomplete(selector) {
+    $(selector).autocomplete({
         source: (request, response) => {
             $.get({
                 url: suggest_api_url,
                 data: {
                     "item": request.term,
                 }
-            }).done((data) => {
-                const dataJson = JSON.parse(data);
+            }).done((dataJson) => {
                 const items = dataJson.suggests.map(suggest => suggest.item);
                 response([...new Set(items)]);
             })
         },
-    })
-});
+    });
+}
 
-$(() => {
-    $('.add_price').autocomplete({
+function initPriceAutocomplete(selector) {
+    $(selector).autocomplete({
         source: (request, response) => {
             $.get({
                 url: suggest_api_url,
                 data: {
                     "item": $(".add_item").val(),
                 }
-            }).done((data) => {
-                const dataJson = JSON.parse(data);
+            }).done((dataJson) => {
                 const prices = dataJson.suggests.map(suggest => suggest.price);
                 const recentPrice = prices.slice(0, 10);
                 response([...new Set(recentPrice)].map(String));
             })
         },
         focus: (event, ui) => {
-            $(this).val(ui.item.label);
+            $(event.target).val(ui.item.label);
             return false;
         },
         minLength: 0,
         delay: 0,
-    })
+    });
+}
+
+$(() => {
+    initItemAutocomplete('.add_item');
+    initPriceAutocomplete('.add_price');
 });
 
 function zeroPadding(num, length) {
