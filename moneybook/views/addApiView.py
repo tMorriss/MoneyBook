@@ -98,16 +98,17 @@ class AddPeriodicApiView(View):
         try:
             year = int(year)
             month = int(month)
+            if not 1 <= month <= 12:
+                raise ValueError
         except ValueError:
             return JsonResponse({'error': 'invalid year or month'}, status=HTTPStatus.BAD_REQUEST)
 
         periodic_data = PeriodicData.get_all()
         last_day = calendar.monthrange(year, month)[1]
 
-        for pd in periodic_data:
-            day = min(pd.day, last_day)
-            Data.objects.create(
-                date=date(year, month, day),
+        data_to_create = [
+            Data(
+                date=date(year, month, min(pd.day, last_day)),
                 item=pd.item,
                 price=pd.price,
                 direction=pd.direction,
@@ -115,7 +116,11 @@ class AddPeriodicApiView(View):
                 category=pd.category,
                 temp=pd.temp,
                 checked=False,
-                pre_checked=False
+                pre_checked=False,
             )
+            for pd in periodic_data
+        ]
+        if data_to_create:
+            Data.objects.bulk_create(data_to_create)
 
         return JsonResponse({})
