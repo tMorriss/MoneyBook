@@ -720,7 +720,7 @@ class Index(SeleniumBase):
         self.driver.find_element(By.ID, 'a_item').send_keys('Test Income')
         self.driver.find_element(By.ID, 'a_price').send_keys('1000')
         # 収入カテゴリ (pk=7)
-        self.driver.find_element(By.ID, 'a_category-7').click()
+        self.driver.find_element(By.ID, 'lbl_a_category-7').click()
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/input[@value="追加"]').click()
         time.sleep(2)
 
@@ -729,7 +729,7 @@ class Index(SeleniumBase):
         self.driver.find_element(By.ID, 'a_item').send_keys('Test Outgo')
         self.driver.find_element(By.ID, 'a_price').send_keys('500')
         # 食費カテゴリ (pk=1)
-        self.driver.find_element(By.ID, 'a_category-1').click()
+        self.driver.find_element(By.ID, 'lbl_a_category-1').click()
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/input[@value="追加"]').click()
         time.sleep(2)
 
