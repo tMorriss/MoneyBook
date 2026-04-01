@@ -750,7 +750,7 @@ class Index(SeleniumBase):
         # フィルタリング解除
         # clear()だけではoninputイベントが発生しない場合があるので、CONTROL+A & BACKSPACE等で確実にイベントを発生させる
         filter_input = self.driver.find_element(By.ID, 'filter-item')
-        filter_input.send_keys(Keys.CONTROL + "a")
+        filter_input.send_keys(Keys.CONTROL + 'a')
         filter_input.send_keys(Keys.BACKSPACE)
         time.sleep(1)
         self.assertEqual(self.driver.find_element(By.ID, 'summary-count').text, '2件')
