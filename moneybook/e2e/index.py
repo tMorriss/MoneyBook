@@ -708,9 +708,11 @@ class Index(SeleniumBase):
     def test_summary_table(self):
         """フィルタの下のサマリーテーブルが正しく表示・更新されることを確認"""
         self._login()
-        self._location(self.live_server_url + reverse('moneybook:index'))
+        now = datetime.now()
+        self._location(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': now.year, 'month': now.month}))
 
-        # 初期状態（データなし）
+        # 初期状態
+        # data_test_case.yamlには現在年月のデータはないはず
         self.assertEqual(self.driver.find_element(By.ID, 'summary-count').text, '0件')
         self.assertEqual(self.driver.find_element(By.ID, 'summary-income').text, '収入: 0円')
         self.assertEqual(self.driver.find_element(By.ID, 'summary-outgo').text, '支出: 0円')
@@ -746,7 +748,9 @@ class Index(SeleniumBase):
         self.assertEqual(self.driver.find_element(By.ID, 'summary-outgo').text, '支出: 500円')
 
         # フィルタリング解除
-        self.driver.find_element(By.ID, 'filter-item').clear()
-        self.driver.find_element(By.ID, 'filter-item').send_keys(Keys.BACKSPACE)
+        # clear()だけではoninputイベントが発生しない場合があるので、CONTROL+A & BACKSPACE等で確実にイベントを発生させる
+        filter_input = self.driver.find_element(By.ID, 'filter-item')
+        filter_input.send_keys(Keys.CONTROL + "a")
+        filter_input.send_keys(Keys.BACKSPACE)
         time.sleep(1)
         self.assertEqual(self.driver.find_element(By.ID, 'summary-count').text, '2件')
