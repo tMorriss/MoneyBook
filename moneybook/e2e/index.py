@@ -704,3 +704,49 @@ class Index(SeleniumBase):
         tds = rows[1].find_elements(By.TAG_NAME, 'td')
         self.assertEqual(tds[1].text, '数式テスト')
         self.assertEqual(tds[2].text, '3,000')
+
+    def test_summary_table(self):
+        """フィルタの下のサマリーテーブルが正しく表示・更新されることを確認"""
+        self._login()
+        self._location(self.live_server_url + reverse('moneybook:index'))
+
+        # 初期状態（データなし）
+        self.assertEqual(self.driver.find_element(By.ID, 'summary-count').text, '0件')
+        self.assertEqual(self.driver.find_element(By.ID, 'summary-income').text, '収入: 0円')
+        self.assertEqual(self.driver.find_element(By.ID, 'summary-outgo').text, '支出: 0円')
+
+        # 収入データ追加
+        self.driver.find_element(By.ID, 'a_day').send_keys('1')
+        self.driver.find_element(By.ID, 'a_item').send_keys('Test Income')
+        self.driver.find_element(By.ID, 'a_price').send_keys('1000')
+        # 収入カテゴリ (pk=7)
+        self.driver.find_element(By.ID, 'a_category-7').click()
+        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/input[@value="追加"]').click()
+        time.sleep(2)
+
+        # 支出データ追加
+        self.driver.find_element(By.ID, 'a_day').send_keys('2')
+        self.driver.find_element(By.ID, 'a_item').send_keys('Test Outgo')
+        self.driver.find_element(By.ID, 'a_price').send_keys('500')
+        # 食費カテゴリ (pk=1)
+        self.driver.find_element(By.ID, 'a_category-1').click()
+        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/input[@value="追加"]').click()
+        time.sleep(2)
+
+        # サマリー確認
+        self.assertEqual(self.driver.find_element(By.ID, 'summary-count').text, '2件')
+        self.assertEqual(self.driver.find_element(By.ID, 'summary-income').text, '収入: 1,000円')
+        self.assertEqual(self.driver.find_element(By.ID, 'summary-outgo').text, '支出: 500円')
+
+        # フィルタリング (Outgoのみ)
+        self.driver.find_element(By.ID, 'filter-item').send_keys('Outgo')
+        time.sleep(1)
+        self.assertEqual(self.driver.find_element(By.ID, 'summary-count').text, '1件')
+        self.assertEqual(self.driver.find_element(By.ID, 'summary-income').text, '収入: 0円')
+        self.assertEqual(self.driver.find_element(By.ID, 'summary-outgo').text, '支出: 500円')
+
+        # フィルタリング解除
+        self.driver.find_element(By.ID, 'filter-item').clear()
+        self.driver.find_element(By.ID, 'filter-item').send_keys(Keys.BACKSPACE)
+        time.sleep(1)
+        self.assertEqual(self.driver.find_element(By.ID, 'summary-count').text, '2件')
