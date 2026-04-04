@@ -517,7 +517,8 @@ docker run -p 80:80 moneybook_nginx:$STATIC_VERSION
 8. **ブランチの最新化（必須）**
    - **git pushする前に、必ずPRのマージ先ブランチ（通常は`master`）を取り込んで最新化すること**
    - 他の開発者による更新がある場合、マージ先のブランチを自身のブランチに取り込む
-   - マージ作業によって発生した差分は、自身のPRにおける修正分として扱う
+    - ユーザが作業用ブランチを更新（GitHub上の「Update branch」実行など）した場合も同様とする
+    - マージ作業やユーザによる更新によって発生した差分は、自身のPRにおける修正分として扱う
    - 取り込み後、PRとして実質的な差分がない場合はそのままpushしてよい
    - コンフリクトがある場合は解決してからpushする
    - 例: `git fetch origin && git merge origin/master` または `git pull origin master`
