@@ -22,7 +22,6 @@ class ToolsViewTestCase(BaseTestCase):
         self.assertEqual(response.context['day'], now.day)
         self.assertEqual(response.context['actual_cash_balance'], 2000)
         self._assert_list(response.context['credit_checked_date'], ['AmexGold', 'センチュリオン'])
-        self.assertEqual(response.context['living_cost_mark'], 1000)
         self._assert_templates(response.templates, ['tools.html', '_base.html', '_tools_task_bar.html', '_result_message.html'])
 
     def test_get_guest(self):
@@ -462,44 +461,6 @@ class CreditCheckedDateApiViewTestCase(BaseTestCase):
         self.assertEqual(d.name, 'AmexGold')
         self.assertEqual(d.date, date(2000, 2, 4))
         self.assertEqual(d.price, 2000)
-
-
-class LivingCostMarkApiViewTestCase(BaseTestCase):
-    def test_post(self):
-        self.client.force_login(User.objects.create_user(self.username))
-        self.assertEqual(SeveralCosts.get_living_cost_mark(), 1000)
-        response = self.client.post(
-            reverse('moneybook:living_cost_mark_api'),
-            {'price': 2000}
-        )
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(SeveralCosts.get_living_cost_mark(), 2000)
-
-    def test_post_missing_price(self):
-        self.client.force_login(User.objects.create_user(self.username))
-        self.assertEqual(SeveralCosts.get_living_cost_mark(), 1000)
-        response = self.client.post(reverse('moneybook:living_cost_mark_api'))
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(SeveralCosts.get_living_cost_mark(), 1000)
-
-    def test_post_str_price(self):
-        self.client.force_login(User.objects.create_user(self.username))
-        self.assertEqual(SeveralCosts.get_living_cost_mark(), 1000)
-        response = self.client.post(
-            reverse('moneybook:living_cost_mark_api'),
-            {'price': 'a'}
-        )
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(SeveralCosts.get_living_cost_mark(), 1000)
-
-    def test_post_guest(self):
-        self.assertEqual(SeveralCosts.get_living_cost_mark(), 1000)
-        response = self.client.post(
-            reverse('moneybook:living_cost_mark_api'),
-            {'price': 2000}
-        )
-        self.assertEqual(response.status_code, 403)
-        self.assertEqual(SeveralCosts.get_living_cost_mark(), 1000)
 
 
 class UncheckedDataViewTestCase(BaseTestCase):

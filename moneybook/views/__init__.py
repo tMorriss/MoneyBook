@@ -5,6 +5,8 @@ from .deleteApiView import *
 from .editApiView import *
 from .editView import *
 from .indexView import *
+from .livingCostMarkView import *
+from .livingCostMarkEditView import *
 from .periodBalanceView import *
 from .periodicEditView import *
 from .periodicView import *
