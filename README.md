@@ -79,7 +79,7 @@ deactivate
 # 作成
 git worktree add -b new-branch ../MoneyBook_new-branch master
 
-# clone
+# 既存ブランチの追加
 git worktree add ../MoneyBook_new-branch new-branch
 
 
