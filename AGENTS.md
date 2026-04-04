@@ -124,8 +124,8 @@ MoneyBook/
 ├── tox.ini                     # Tox設定（lint、テスト実行）
 ├── check_e2e_matrix.sh         # e2e Matrix検証スクリプト（CI用）
 ├── check_init_py.sh            # __init__.py記載漏れ検証スクリプト（CI用）
-├── createDataYaml.py           # データYAML生成スクリプト
-├── createOtherYaml.py          # その他YAML生成スクリプト
+├── create_data_yaml.py         # データYAML生成スクリプト
+├── create_other_yaml.py        # その他YAML生成スクリプト
 ├── generate_secretkey_setting.py # シークレットキー生成
 ├── yaml_utils.py               # YAML処理ユーティリティ
 ├── copyDB.cmd                  # データベースコピースクリプト（Windows）
