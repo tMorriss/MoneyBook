@@ -1,3 +1,4 @@
+from .addApiViewTests import *
 from .addIntraMoveViewTests import *
 from .addViewTests import *
 from .deleteApiViewTests import *
