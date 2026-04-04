@@ -364,6 +364,7 @@ python manage.py test moneybook.e2e --settings config.settings.test --verbosity 
 ### Pythonコードスタイル
 
 1. **PEP 8準拠** - ただし、一部カスタマイズあり
+   - **ファイル名**: すべてスネークケース（`snake_case.py`）で統一する。キャメルケースは使用しない。
 2. **最大行長**: 140文字
 3. **インポート順序**: smarketsスタイル
    - 標準ライブラリ
