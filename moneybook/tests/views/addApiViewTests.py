@@ -238,3 +238,12 @@ class AddPeriodicApiViewTestCase(BaseTestCase):
             'month': 2
         })
         self.assertEqual(response.status_code, 400)
+
+    def test_add_periodic_guest(self):
+        """未認証でエラーになること"""
+        self.client.logout()
+        response = self.client.post(reverse('moneybook:add_periodic_api'), {
+            'year': 2024,
+            'month': 4
+        })
+        self.assertEqual(response.status_code, 403)
