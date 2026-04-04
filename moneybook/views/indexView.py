@@ -1,8 +1,9 @@
+import http
 from datetime import datetime
 
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
-from django.http import HttpResponseBadRequest
+from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.views import View
 from moneybook.models import Category, Data, Direction, InOutBalance, Method, SeveralCosts
@@ -65,9 +66,9 @@ class IndexBalanceStatisticMiniView(View):
             year = request.GET.get('year')
             month = request.GET.get('month')
             if not is_valid_date(year, month):
-                return HttpResponseBadRequest('parameter error')
+                return JsonResponse({'message': 'parameter error'}, status=http.HTTPStatus.BAD_REQUEST)
         else:
-            return HttpResponseBadRequest('parameter error')
+            return JsonResponse({'message': 'parameter error'}, status=http.HTTPStatus.BAD_REQUEST)
 
         # 全データ
         all_data = Data.get_all_data()
@@ -136,9 +137,9 @@ class IndexChartDataView(View):
             year = request.GET.get('year')
             month = request.GET.get('month')
             if not is_valid_date(year, month):
-                return HttpResponseBadRequest('parameter error')
+                return JsonResponse({'message': 'parameter error'}, status=http.HTTPStatus.BAD_REQUEST)
         else:
-            return HttpResponseBadRequest('parameter error')
+            return JsonResponse({'message': 'parameter error'}, status=http.HTTPStatus.BAD_REQUEST)
 
         # 今月のデータ
         monthly_data = Data.get_month_data(int(year), int(month))
@@ -162,9 +163,9 @@ class DataTableView(View):
             year = request.GET.get('year')
             month = request.GET.get('month')
             if not is_valid_date(year, month):
-                return HttpResponseBadRequest('parameter error')
+                return JsonResponse({'message': 'parameter error'}, status=http.HTTPStatus.BAD_REQUEST)
         else:
-            return HttpResponseBadRequest('parameter error')
+            return JsonResponse({'message': 'parameter error'}, status=http.HTTPStatus.BAD_REQUEST)
 
         # 今月のデータ
         monthly_data = Data.sort_descending(

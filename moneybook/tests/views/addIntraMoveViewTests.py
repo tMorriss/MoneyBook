@@ -23,7 +23,7 @@ class AddIntraMoveApiViewTestCase(BaseTestCase):
             }
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content.decode(), '')
+        self.assertEqual(response.content.decode(), '{}')
         after_count = Data.get_all_data().count()
         self.assertEqual(after_count, before_count + 2)
         before = Data.get_all_data()[after_count - 2]
@@ -61,7 +61,7 @@ class AddIntraMoveApiViewTestCase(BaseTestCase):
             }
         )
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.content.decode(), '')
+        self.assertEqual(response.content.decode(), '{}')
         after_count = Data.get_all_data().count()
         self.assertEqual(after_count, before_count)
 
@@ -81,7 +81,7 @@ class AddIntraMoveApiViewTestCase(BaseTestCase):
             }
         )
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.content.decode(), '')
+        self.assertEqual(response.content.decode(), '{}')
         after_count = Data.get_all_data().count()
         self.assertEqual(after_count, before_count)
 
@@ -100,7 +100,7 @@ class AddIntraMoveApiViewTestCase(BaseTestCase):
             }
         )
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.content.decode(), '')
+        self.assertEqual(response.content.decode(), '{}')
         after_count = Data.get_all_data().count()
         self.assertEqual(after_count, before_count)
 
@@ -119,7 +119,7 @@ class AddIntraMoveApiViewTestCase(BaseTestCase):
             }
         )
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.content.decode(), '')
+        self.assertEqual(response.content.decode(), '{}')
         after_count = Data.get_all_data().count()
         self.assertEqual(after_count, before_count)
 
@@ -138,7 +138,7 @@ class AddIntraMoveApiViewTestCase(BaseTestCase):
             }
         )
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.content.decode(), '')
+        self.assertEqual(response.content.decode(), '{}')
         after_count = Data.get_all_data().count()
         self.assertEqual(after_count, before_count)
 
@@ -157,7 +157,7 @@ class AddIntraMoveApiViewTestCase(BaseTestCase):
             }
         )
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.content.decode(), '')
+        self.assertEqual(response.content.decode(), '{}')
         after_count = Data.get_all_data().count()
         self.assertEqual(after_count, before_count)
 

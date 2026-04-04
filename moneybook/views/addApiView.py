@@ -1,10 +1,10 @@
 import calendar
-import json
+import http
 from datetime import date
 from http import HTTPStatus
 
 from django.db import transaction
-from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
+from django.http import JsonResponse
 from django.views import View
 from moneybook.forms import DataForm, IntraMoveForm
 from moneybook.models import Category, Data, Direction, Method, PeriodicData
@@ -17,7 +17,7 @@ class AddApiView(View):
             # データ追加
             new_data.save()
             # 成功レスポンス
-            return HttpResponse()
+            return JsonResponse({})
 
         else:
             error_list = []
@@ -26,7 +26,7 @@ class AddApiView(View):
             res_data = {
                 'ErrorList': error_list,
             }
-            return HttpResponseBadRequest(json.dumps(res_data))
+            return JsonResponse(res_data, status=http.HTTPStatus.BAD_REQUEST)
 
 
 class AddIntraMoveApiView(View):
@@ -60,31 +60,31 @@ class AddIntraMoveApiView(View):
                 in_data.save()
 
                 # 成功レスポンス
-                return HttpResponse()
+                return JsonResponse({})
 
             except:
-                return HttpResponseBadRequest()
+                return JsonResponse({}, status=http.HTTPStatus.BAD_REQUEST)
         else:
-            return HttpResponseBadRequest()
+            return JsonResponse({}, status=http.HTTPStatus.BAD_REQUEST)
 
 
 class SuggestApiView(View):
     def get(self, request, *args, **kwargs):
         if 'item' not in request.GET:
             res = {'message': 'missing item'}
-            return HttpResponseBadRequest(json.dumps(res))
+            return JsonResponse(res, status=http.HTTPStatus.BAD_REQUEST)
 
         item = request.GET.get('item')
         if item == '':
             res = {'message': 'empty item'}
-            return HttpResponseBadRequest(json.dumps(res))
+            return JsonResponse(res, status=http.HTTPStatus.BAD_REQUEST)
 
         data = Data.sort_descending(
             Data.get_startswith_keyword_data(Data.get_all_data(), item))
         suggests = [{'date': v.date.strftime(
             '%Y-%m-%d'), 'item': v.item, 'price': v.price} for v in data]
 
-        return HttpResponse(json.dumps({'suggests': suggests}))
+        return JsonResponse({'suggests': suggests})
 
 
 class AddPeriodicApiView(View):

@@ -25,7 +25,7 @@ class AddApiViewTestCase(BaseTestCase):
             }
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content.decode(), '')
+        self.assertEqual(response.content.decode(), '{}')
         after_count = Data.get_all_data().count()
         self.assertEqual(after_count, before_count + 1)
 
