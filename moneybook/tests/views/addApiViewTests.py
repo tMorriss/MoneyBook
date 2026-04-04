@@ -135,19 +135,19 @@ class AddPeriodicApiViewTestCase(BaseTestCase):
             temp=False
         )
         PeriodicData.objects.create(
-            day=31,
-            item='月末払い',
-            price=1000,
-            direction=Direction.get(2),
-            method=Method.get(1),
-            category=Category.get(1),
-            temp=False
+            day=15,
+            item='お小遣い',
+            price=10000,
+            direction=Direction.get(1),
+            method=Method.get(2),
+            category=Category.get(5),
+            temp=True
         )
 
     def test_add_periodic(self):
         """定期取引データが一括で追加されること"""
         year = 2024
-        month = 2
+        month = 4
 
         # 実行前のデータ数
         initial_count = Data.objects.count()
@@ -162,13 +162,49 @@ class AddPeriodicApiViewTestCase(BaseTestCase):
         # データが2件追加されていること
         self.assertEqual(Data.objects.count(), initial_count + 2)
 
-        # 追加されたデータの内容確認
-        # 2024年2月は29日までなので、31日は29日に調整される
-        data1 = Data.objects.get(item='家賃', date=date(2024, 2, 1))
+        # 追加されたデータの内容確認（全パラメータ）
+        data1 = Data.objects.get(item='家賃', date=date(2024, 4, 1))
         self.assertEqual(data1.price, 50000)
+        self.assertEqual(data1.direction.pk, 2)
+        self.assertEqual(data1.method.pk, 1)
+        self.assertEqual(data1.category.pk, 1)
+        self.assertEqual(data1.temp, False)
+        self.assertEqual(data1.checked, False)
+        self.assertEqual(data1.pre_checked, False)
 
-        data2 = Data.objects.get(item='月末払い', date=date(2024, 2, 29))
-        self.assertEqual(data2.price, 1000)
+        data2 = Data.objects.get(item='お小遣い', date=date(2024, 4, 15))
+        self.assertEqual(data2.price, 10000)
+        self.assertEqual(data2.direction.pk, 1)
+        self.assertEqual(data2.method.pk, 2)
+        self.assertEqual(data2.category.pk, 5)
+        self.assertEqual(data2.temp, True)
+        self.assertEqual(data2.checked, False)
+        self.assertEqual(data2.pre_checked, False)
+
+    def test_add_periodic_day_clamping(self):
+        """月の日数を超える日付が最終日に調整されること"""
+        PeriodicData.objects.create(
+            day=31,
+            item='月末払い',
+            price=1000,
+            direction=Direction.get(2),
+            method=Method.get(1),
+            category=Category.get(1),
+            temp=False
+        )
+
+        year = 2024
+        month = 2  # 2024年2月は29日まで
+
+        response = self.client.post(reverse('moneybook:add_periodic_api'), {
+            'year': year,
+            'month': month
+        })
+        self.assertEqual(response.status_code, 200)
+
+        # 31日が29日に調整されていること
+        data = Data.objects.get(item='月末払い', date=date(2024, 2, 29))
+        self.assertEqual(data.price, 1000)
 
     def test_add_periodic_invalid_date(self):
         """不正な年月でエラーになること"""

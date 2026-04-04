@@ -95,6 +95,8 @@ MoneyBook/
 │   ├── static/                # CSS、JS、画像
 │   ├── migrations/            # DBスキーママイグレーション
 │   ├── tests/                 # ユニットテスト
+│   │   ├── models/            # モデルテスト
+│   │   └── views/             # ビューテスト
 │   ├── e2e/                   # e2eテスト（Selenium）
 │   ├── fixtures/              # テストデータ
 │   ├── admin.py               # Django管理画面設定
@@ -514,7 +516,10 @@ docker run -p 80:80 moneybook_nginx:$STATIC_VERSION
    - CI上で新しいe2eテストが自動実行されるようになる
    - ⚠️ GitHub Actionsの`check-e2e-matrix`ジョブが自動的にmatrix設定の漏れを検出し、CIをエラーにする
 
-6. **マイグレーション**
+6. **ユニットテストの配置**
+   - `models` および `views` のテストは、それぞれ `moneybook/tests/models/` および `moneybook/tests/views/` 子ディレクトリ内に配置してください。
+
+7. **マイグレーション**
    - モデル変更時は`makemigrations`を実行
    - マイグレーションファイルをレビュー
 

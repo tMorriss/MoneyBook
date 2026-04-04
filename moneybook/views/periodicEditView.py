@@ -47,7 +47,7 @@ class PeriodicEditView(View):
                         'direction': direction,
                         'method': method,
                         'category': category,
-                        'temp': temp == '1'
+                        'temp': temp
                     }
                     form = PeriodicDataForm(form_data)
                     if form.is_valid():
