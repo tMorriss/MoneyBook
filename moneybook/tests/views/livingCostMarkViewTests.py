@@ -1,4 +1,5 @@
 from datetime import date
+
 from django.contrib.auth.models import User
 from django.urls import reverse
 from moneybook.models import LivingCostMark

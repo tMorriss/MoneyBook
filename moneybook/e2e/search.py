@@ -169,7 +169,7 @@ class Search(SeleniumBase):
         self._location(self.live_server_url + reverse('moneybook:search'))
 
         # 銀行のみで検索
-        self.driver.find_element(By.XPATH, '//form/table/tbody/tr[5]/td/label[1]').click()  # 銀行をチェック
+        self.driver.find_element(By.XPATH, '//form/table/tbody/tr[4]/td/label[1]').click()  # 銀行をチェック
         self.driver.find_element(By.XPATH, '//input[@value="検索"]').click()
         time.sleep(2)
 
@@ -203,7 +203,7 @@ class Search(SeleniumBase):
         self._location(self.live_server_url + reverse('moneybook:search'))
 
         # 食費のみで検索
-        self.driver.find_element(By.XPATH, '//form/table/tbody/tr[6]/td/label[1]').click()  # 食費をチェック
+        self.driver.find_element(By.XPATH, '//form/table/tbody/tr[5]/td/label[1]').click()  # 食費をチェック
         self.driver.find_element(By.XPATH, '//input[@value="検索"]').click()
         time.sleep(2)
 
@@ -240,8 +240,8 @@ class Search(SeleniumBase):
 
         # 項目名に「スーパー」を含み、銀行、食費で検索
         self.driver.find_element(By.NAME, 'item').send_keys('スーパー')
-        self.driver.find_element(By.XPATH, '//form/table/tbody/tr[6]/td/label[1]').click()  # 銀行
-        self.driver.find_element(By.XPATH, '//form/table/tbody/tr[7]/td/label[1]').click()  # 食費
+        self.driver.find_element(By.XPATH, '//form/table/tbody/tr[4]/td/label[1]').click()  # 銀行
+        self.driver.find_element(By.XPATH, '//form/table/tbody/tr[5]/td/label[1]').click()  # 食費
         self.driver.find_element(By.XPATH, '//input[@value="検索"]').click()
         time.sleep(2)
 

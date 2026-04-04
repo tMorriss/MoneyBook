@@ -4,6 +4,7 @@ from .checkedDateTests import *
 from .creditCheckedDateTests import *
 from .dataTests import *
 from .directionTests import *
+from .livingCostMarkTests import *
 from .methodTests import *
 from .periodicDataTests import *
 from .severalCostsTests import *

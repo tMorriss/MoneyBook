@@ -4,6 +4,7 @@ from .addViewTests import *
 from .deleteApiViewTests import *
 from .editViewTests import *
 from .indexViewTests import *
+from .livingCostMarkViewTests import *
 from .periodBalanceViewTests import *
 from .periodicEditViewTests import *
 from .periodicViewTests import *

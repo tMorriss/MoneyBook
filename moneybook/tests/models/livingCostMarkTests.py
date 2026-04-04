@@ -1,4 +1,5 @@
 from datetime import date
+
 from moneybook.models import LivingCostMark
 from moneybook.tests.base import BaseTestCase
 

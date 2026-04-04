@@ -1,5 +1,6 @@
-from django.db import models
 from datetime import date
+
+from django.db import models
 
 
 class LivingCostMark(models.Model):

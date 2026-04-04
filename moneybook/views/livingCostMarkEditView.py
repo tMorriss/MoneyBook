@@ -1,5 +1,5 @@
 import calendar
-from datetime import date, datetime
+from datetime import datetime
 
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
@@ -67,7 +67,7 @@ class LivingCostMarkEditView(LoginRequiredMixin, View):
 
             # 連続性のチェック
             if i > 0:
-                prev_mark = new_marks[i-1]
+                prev_mark = new_marks[i - 1]
                 if prev_mark.end_date is None:
                     error_message = '途中のデータの終了年月は必須です'
                     break
