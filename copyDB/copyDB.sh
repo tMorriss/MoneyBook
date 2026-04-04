@@ -4,18 +4,18 @@ cd `dirname $0`
 
 scp createDataYaml.py createOtherYaml.py yaml_utils.py mars:~/
 
-# プロジェクトルート Gen fixture ディレクトリを使用するように修正
+# プロジェクトルートの fixture ディレクトリを使用するように修正
 mkdir -p ../fixture
 
 # 1Passwordからデータベース認証情報を一括で読み込む（1回のみ）
 # op item get ... --format json と jq を使用して安全に変数へ代入する
 eval "$(op item get "Mariadb_MoneyBook" --vault "Personal" --format json | jq -r '
   .fields | map({key: .label, value: .value}) | from_entries |
-  "DB_HOSTNAME=\(.hostname|@sh)
-   DB_PORT=\(.port|@sh)
-   DB_USER=\(.username|@sh)
-   DB_PASSWORD=\(.password|@sh)
-   DB_DATABASE=\(.database|@sh)"
+  "DB_HOSTNAME=\(.hostname|@sh)\n" +
+  "DB_PORT=\(.port|@sh)\n" +
+  "DB_USER=\(.username|@sh)\n" +
+  "DB_PASSWORD=\(.password|@sh)\n" +
+  "DB_DATABASE=\(.database|@sh)"
 ')"
 
 # コマンドライン引数ではなく標準入力経由でデータベース認証情報を渡す
