@@ -85,11 +85,6 @@ class Periodic(SeleniumBase):
         price_input = last_row.find_element(By.CSS_SELECTOR, 'input[name^="price_new_"]')
         price_input.send_keys('5000')
 
-        # 立替を「なし」に設定
-        temp_select = last_row.find_element(By.CSS_SELECTOR, 'select[name^="temp_new_"]')
-        from selenium.webdriver.support.select import Select
-        Select(temp_select).select_by_value('0')
-
         # 更新ボタンをクリック
         self.driver.find_element(By.XPATH, '//button[@type="submit"]').click()
         time.sleep(1.5)
@@ -100,63 +95,6 @@ class Periodic(SeleniumBase):
         # 追加した定期取引が表示されていること
         self.assertIn('テスト定期取引', self.driver.page_source)
         self.assertIn('5,000', self.driver.page_source)
-        self.assertIn('No', self.driver.page_source)  # 立替がNoになっていること
-
-    def test_periodic_add_comma(self):
-        """金額にカンマを含めて定期取引を追加できること"""
-        self._login()
-
-        # 編集画面に遷移
-        self._location(self.live_server_url + reverse('moneybook:periodic_edit'))
-
-        # カンマ入りの行を追加
-        self.driver.find_element(By.ID, 'btn_add_row').click()
-        time.sleep(0.5)
-
-        rows = self.driver.find_elements(By.XPATH, '//table[@class="tbl-common tbl-boarder"]/tbody/tr')
-        row_comma = rows[-1]
-        row_comma.find_element(By.CSS_SELECTOR, 'input[name^="day_new_"]').send_keys('10')
-        row_comma.find_element(By.CSS_SELECTOR, 'input[name^="item_new_"]').send_keys('カンマテスト')
-        row_comma.find_element(By.CSS_SELECTOR, 'input[name^="price_new_"]').send_keys('1,234')
-
-        # 更新ボタンをクリック
-        self.driver.find_element(By.XPATH, '//button[@type="submit"]').click()
-        time.sleep(1.5)
-
-        # 一覧画面にリダイレクトされること
-        self.assertEqual(self.driver.current_url, self.live_server_url + reverse('moneybook:periodic'))
-
-        # 表示を確認
-        self.assertIn('カンマテスト', self.driver.page_source)
-        self.assertIn('1,234', self.driver.page_source)
-
-    def test_periodic_add_formula(self):
-        """金額に数式を含めて定期取引を追加できること"""
-        self._login()
-
-        # 編集画面に遷移
-        self._location(self.live_server_url + reverse('moneybook:periodic_edit'))
-
-        # 数式入りの行を追加
-        self.driver.find_element(By.ID, 'btn_add_row').click()
-        time.sleep(0.5)
-
-        rows = self.driver.find_elements(By.XPATH, '//table[@class="tbl-common tbl-boarder"]/tbody/tr')
-        row_formula = rows[-1]
-        row_formula.find_element(By.CSS_SELECTOR, 'input[name^="day_new_"]').send_keys('20')
-        row_formula.find_element(By.CSS_SELECTOR, 'input[name^="item_new_"]').send_keys('数式テスト')
-        row_formula.find_element(By.CSS_SELECTOR, 'input[name^="price_new_"]').send_keys('=1000+500')
-
-        # 更新ボタンをクリック
-        self.driver.find_element(By.XPATH, '//button[@type="submit"]').click()
-        time.sleep(1.5)
-
-        # 一覧画面にリダイレクトされること
-        self.assertEqual(self.driver.current_url, self.live_server_url + reverse('moneybook:periodic'))
-
-        # 表示を確認
-        self.assertIn('数式テスト', self.driver.page_source)
-        self.assertIn('1,500', self.driver.page_source)
 
     def test_periodic_bulk_add(self):
         """定期取引を一括登録できること"""

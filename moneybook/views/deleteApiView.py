@@ -13,6 +13,6 @@ class DeleteApiView(View):
             Data.get(pk).delete()
         except:
             res = {'message': 'Data does not exist'}
-            return JsonResponse(res, status=http.HTTPStatus.BAD_REQUEST)
+            return JsonResponse(res, status=http.HTTPStatus.NOT_FOUND)
 
         return JsonResponse({})

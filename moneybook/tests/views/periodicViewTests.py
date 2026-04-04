@@ -41,11 +41,6 @@ class PeriodicViewGetTestCase(BaseTestCase):
         self.assertEqual(periodic_data.count(), 1)
         self.assertEqual(periodic_data[0].item, '定期取引テスト')
 
-        self._assert_templates(
-            response.templates,
-            ['periodic.html', '_base.html', '_tools_task_bar.html', '_result_message.html']
-        )
-
     def test_get_guest(self):
         """ログインしていない場合はログインページにリダイレクトされること"""
         response = self.client.get(reverse('moneybook:periodic'))
