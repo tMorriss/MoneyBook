@@ -7,7 +7,7 @@ on: [pull_request]
 
 jobs:
   lint:
-    name: Lint
+    name: lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -23,7 +23,7 @@ jobs:
         run: |
           tox -e lint
   check-init-py:
-    name: Check __init__.py
+    name: check __init__.py
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -34,7 +34,7 @@ jobs:
           chmod +x check_init_py.sh
           ./check_init_py.sh
   check-e2e-matrix:
-    name: Check e2e Matrix Configuration
+    name: check e2e matrix configuration
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -47,7 +47,7 @@ jobs:
           chmod +x check_e2e_matrix.sh
           ./check_e2e_matrix.sh
   unittest:
-    name: Unit Test
+    name: unit test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -67,12 +67,23 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
   e2e:
-    name: e2e - ${{ matrix.test-module }}
+    name: e2e-${{ matrix.test-module }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        test-module: [index, add, login, delete, edit, period_balances, periodic, search, tools]
+        test-module:
+          [
+            index,
+            add,
+            login,
+            delete,
+            edit,
+            period_balances,
+            periodic,
+            search,
+            tools,
+          ]
     env:
       TEST_MODULE: moneybook.e2e.${{ matrix.test-module }}
     steps:
