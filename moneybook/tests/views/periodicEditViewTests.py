@@ -36,6 +36,11 @@ class PeriodicEditViewGetTestCase(BaseTestCase):
         self.assertIn('first_categories', response.context)
         self.assertIn('latter_categories', response.context)
 
+        self._assert_templates(
+            response.templates,
+            ['periodic_edit.html', '_base.html', '_tools_task_bar.html', '_result_message.html']
+        )
+
     def test_get_guest(self):
         """ログインしていない場合はログインページにリダイレクトされること"""
         response = self.client.get(reverse('moneybook:periodic_edit'))
@@ -95,8 +100,19 @@ class PeriodicEditViewPostTestCase(BaseTestCase):
         data = PeriodicData.get_all()
         self.assertEqual(data[0].day, 5)
         self.assertEqual(data[0].item, '新規定期取引')
+        self.assertEqual(data[0].price, 10000)
+        self.assertEqual(data[0].direction.pk, 2)
+        self.assertEqual(data[0].method.pk, 2)
+        self.assertEqual(data[0].category.pk, 2)
+        self.assertEqual(data[0].temp, True)
+
         self.assertEqual(data[1].day, 10)
         self.assertEqual(data[1].item, '別の定期取引')
+        self.assertEqual(data[1].price, 20000)
+        self.assertEqual(data[1].direction.pk, 1)
+        self.assertEqual(data[1].method.pk, 1)
+        self.assertEqual(data[1].category.pk, 3)
+        self.assertEqual(data[1].temp, False)
 
     def test_post_guest(self):
         """ログインしていない場合はログインページにリダイレクトされること"""
