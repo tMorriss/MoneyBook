@@ -121,15 +121,16 @@ function applyFilter() {
     var outgoSum = 0;
 
     for (var i = 0; i < rows.length; i++) {
+        var $row = $(rows[i]);
         // 検索
         wordShowing = true;
-        if (keyword.length >= 0 && $(rows[i]).children('.data_item').html().indexOf(keyword) < 0) {
+        if (keyword.length >= 0 && $row.children('.data_item').html().indexOf(keyword) < 0) {
             wordShowing = false;
         }
         // direction
         directionShowing = false;
         for (var j = 0; j < directionList.length; j++) {
-            if (directionList[j].checked && $(rows[i]).hasClass(directionList[j].id)) {
+            if (directionList[j].checked && $row.hasClass(directionList[j].id)) {
                 directionShowing = true;
                 break;
             }
@@ -137,7 +138,7 @@ function applyFilter() {
         // method
         methodShowing = false;
         for (var j = 0; j < methodList.length; j++) {
-            if (methodList[j].checked && $(rows[i]).hasClass(methodList[j].id)) {
+            if (methodList[j].checked && $row.hasClass(methodList[j].id)) {
                 methodShowing = true;
                 break;
             }
@@ -145,25 +146,25 @@ function applyFilter() {
         // class
         classShowing = false;
         for (var j = 0; j < classList.length; j++) {
-            if (classList[j].checked && $(rows[i]).hasClass(classList[j].id)) {
+            if (classList[j].checked && $row.hasClass(classList[j].id)) {
                 classShowing = true;
                 break;
             }
         }
         if (wordShowing && directionShowing && methodShowing && classShowing) {
-            $(rows[i]).removeClass("hidden-row");
+            $row.removeClass('hidden-row');
 
             // 合計計算
             count++;
-            var price = parseInt($(rows[i]).find('.data-price').attr('data-price'));
-            if ($(rows[i]).hasClass('filter-direction-1')) {
+            var price = parseInt($row.find('.data-price').attr('data-price'), 10);
+            if ($row.hasClass('filter-direction-1')) {
                 incomeSum += price;
-            } else if ($(rows[i]).hasClass('filter-direction-2')) {
+            } else if ($row.hasClass('filter-direction-2')) {
                 outgoSum += price;
             }
         }
         else {
-            $(rows[i]).addClass("hidden-row");
+            $row.addClass('hidden-row');
         }
     }
     // 集計表示更新
