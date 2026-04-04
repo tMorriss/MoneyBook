@@ -462,7 +462,7 @@ docker run -p 80:80 moneybook_nginx:$STATIC_VERSION
 
 #### GitHub Actions
 
-- **ワークフロー**: `.github/workflows/python-lint-test.yml`
+- **ワークフロー**: `.github/workflows/ci.yml`
 - **トリガー**: Pull Request時に自動実行
 - **ジョブ構成**:
   - `lint`: コード品質チェック（flake8）
@@ -495,7 +495,7 @@ docker run -p 80:80 moneybook_nginx:$STATIC_VERSION
 
 5. **e2eテストファイル追加時の手順**
    - `moneybook/e2e/` ディレクトリに新しいテストファイルを追加した場合
-   - **必ず** `.github/workflows/python-lint-test.yml` のe2eジョブのmatrixを更新する
+   - **必ず** `.github/workflows/ci.yml` のe2eジョブのmatrixを更新する
    - 具体的には、以下の箇所に新しいテストモジュール名を追加：
      ```yaml
      strategy:
