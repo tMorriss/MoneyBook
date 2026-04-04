@@ -22,7 +22,7 @@ $(document).ready(function() {
         $('#periodic_table').append(newRow);
 
         // 新規行の品目入力欄にautocompleteを適用
-        initItemAutocomplete(newRow.find('.add_item'));
+        initItemAutocomplete(newRow.find('.suggest_item'));
     });
 
     // 削除ボタン

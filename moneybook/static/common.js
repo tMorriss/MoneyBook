@@ -127,11 +127,24 @@ function initItemAutocomplete(selector) {
 
 function initPriceAutocomplete(selector) {
     $(selector).autocomplete({
-        source: (request, response) => {
+        source: function(request, response) {
+            // 現在の要素と同じ行または同じフォーム内の .suggest_item を探す
+            let itemVal = '';
+            const row = $(this.element).closest('tr, td, form');
+            if (row.length) {
+                itemVal = row.find('.suggest_item').val();
+                if (!itemVal) {
+                    itemVal = row.parent().find('.suggest_item').val();
+                }
+            }
+            if (!itemVal) {
+                itemVal = $(".suggest_item").val();
+            }
+
             $.get({
                 url: suggest_api_url,
                 data: {
-                    "item": $(".add_item").val(),
+                    "item": itemVal,
                 }
             }).done((dataJson) => {
                 const prices = dataJson.suggests.map(suggest => suggest.price);
@@ -149,8 +162,8 @@ function initPriceAutocomplete(selector) {
 }
 
 $(() => {
-    initItemAutocomplete('.add_item');
-    initPriceAutocomplete('.add_price');
+    initItemAutocomplete('.suggest_item');
+    initPriceAutocomplete('.suggest_price');
 });
 
 function zeroPadding(num, length) {
