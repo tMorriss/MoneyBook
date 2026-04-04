@@ -1,11 +1,13 @@
+import calendar
 import http
 from datetime import date
+from http import HTTPStatus
 
 from django.db import transaction
 from django.http import JsonResponse
 from django.views import View
 from moneybook.forms import DataForm, IntraMoveForm
-from moneybook.models import Category, Data, Direction, Method
+from moneybook.models import Category, Data, Direction, Method, PeriodicData
 
 
 class AddApiView(View):
@@ -83,3 +85,42 @@ class SuggestApiView(View):
             '%Y-%m-%d'), 'item': v.item, 'price': v.price} for v in data]
 
         return JsonResponse({'suggests': suggests})
+
+
+class AddPeriodicApiView(View):
+    @transaction.atomic
+    def post(self, request, *args, **kwargs):
+        year = request.POST.get('year')
+        month = request.POST.get('month')
+        if not year or not month:
+            return JsonResponse({'error': 'year and month are required'}, status=HTTPStatus.BAD_REQUEST)
+
+        try:
+            year = int(year)
+            month = int(month)
+            if not 1 <= month <= 12:
+                raise ValueError
+        except ValueError:
+            return JsonResponse({'error': 'invalid year or month'}, status=HTTPStatus.BAD_REQUEST)
+
+        periodic_data = PeriodicData.get_all()
+        last_day = calendar.monthrange(year, month)[1]
+
+        data_to_create = [
+            Data(
+                date=date(year, month, min(pd.day, last_day)),
+                item=pd.item,
+                price=pd.price,
+                direction=pd.direction,
+                method=pd.method,
+                category=pd.category,
+                temp=pd.temp,
+                checked=False,
+                pre_checked=False,
+            )
+            for pd in periodic_data
+        ]
+        if data_to_create:
+            Data.objects.bulk_create(data_to_create)
+
+        return JsonResponse({})
