@@ -117,8 +117,8 @@ function initItemAutocomplete(selector) {
                 data: {
                     "item": request.term,
                 }
-            }).done((dataJson) => {
-                const items = dataJson.suggests.map(suggest => suggest.item);
+            }).done((data) => {
+                const items = data.suggests.map(suggest => suggest.item);
                 response([...new Set(items)]);
             })
         },
@@ -146,15 +146,14 @@ function initPriceAutocomplete(selector) {
             if (!itemVal) {
                 itemVal = $(".suggest_item").val();
             }
-            console.log("Item value for price suggestion:", itemVal);
 
             $.get({
                 url: suggest_api_url,
                 data: {
                     "item": itemVal,
                 }
-            }).done((dataJson) => {
-                const prices = dataJson.suggests.map(suggest => suggest.price);
+            }).done((data) => {
+                const prices = data.suggests.map(suggest => suggest.price);
                 const recentPrice = prices.slice(0, 10);
                 response([...new Set(recentPrice)].map(String));
             })

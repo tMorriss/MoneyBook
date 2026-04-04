@@ -35,7 +35,7 @@
                 <tr data-id="{{ pd.pk }}">
                     <td><input type="text" name="day_{{ pd.pk }}" value="{{ pd.day }}" style="width:6ex" class="righter"></td>
                     <td><input type="text" name="item_{{ pd.pk }}" value="{{ pd.item }}" size="20" class="suggest_item"></td>
-                    <td><input type="text" name="price_{{ pd.pk }}" value="{{ pd.price }}" style="width:12ex" class="righter"></td>
+                    <td><input type="text" name="price_{{ pd.pk }}" value="{{ pd.price }}" style="width:12ex" class="suggest_price righter"></td>
                     <td>
                         <select name="direction_{{ pd.pk }}" class="select-green">
                             {% for d in directions %}
@@ -73,7 +73,7 @@
                 <tr id="new_row_template" style="display:none;">
                     <td><input type="text" name="day_new" value="" style="width:6ex" class="righter"></td>
                     <td><input type="text" name="item_new" value="" size="20" class="suggest_item"></td>
-                    <td><input type="text" name="price_new" value="" style="width:12ex" class="righter"></td>
+                    <td><input type="text" name="price_new" value="" style="width:12ex" class="suggest_price righter"></td>
                     <td>
                         <select name="direction_new" class="select-green">
                             {% for d in directions %}
