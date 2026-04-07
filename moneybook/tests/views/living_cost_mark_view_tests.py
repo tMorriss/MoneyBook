@@ -74,3 +74,56 @@ class LivingCostMarkEditViewTestCase(BaseTestCase):
         response = self.client.post(reverse('moneybook:living_cost_mark_edit'), data)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, '期間に隙間または重複があります')
+
+    def test_post_invalid_end_day(self):
+        self.client.force_login(User.objects.create_user(self.username))
+        data = {
+            'start_date_1': '2024-01-01',
+            'end_date_1': '2024-01-30',  # 31日ではない
+            'price_1': '100,000',
+        }
+        response = self.client.post(reverse('moneybook:living_cost_mark_edit'), data)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, '終了日は月末に設定してください')
+
+    def test_post_start_gte_end(self):
+        self.client.force_login(User.objects.create_user(self.username))
+        data = {
+            'start_date_1': '2024-02-01',
+            'end_date_1': '2024-01-31',
+            'price_1': '100,000',
+        }
+        response = self.client.post(reverse('moneybook:living_cost_mark_edit'), data)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, '開始日は終了日より前に設定してください')
+
+    def test_post_middle_no_end_date(self):
+        self.client.force_login(User.objects.create_user(self.username))
+        data = {
+            'start_date_1': '2024-01-01',
+            'end_date_1': '',  # 途中のデータなのに終了日がない
+            'price_1': '100,000',
+            'start_date_2': '2024-02-01',
+            'price_2': '120,000',
+        }
+        response = self.client.post(reverse('moneybook:living_cost_mark_edit'), data)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, '途中のデータの終了年月は必須です')
+
+    def test_post_last_no_end_date(self):
+        """最後のデータは終了日がなくても保存できる"""
+        self.client.force_login(User.objects.create_user(self.username))
+        data = {
+            'start_date_1': '2024-01-01',
+            'end_date_1': '2024-01-31',
+            'price_1': '100,000',
+            'start_date_2': '2024-02-01',
+            'price_2': '120,000',
+        }
+        response = self.client.post(reverse('moneybook:living_cost_mark_edit'), data)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(LivingCostMark.objects.count(), 2)
+
+    def test_str(self):
+        mark = LivingCostMark(start_date=date(2024, 1, 1), price=100000)
+        self.assertEqual(str(mark), '2024-01-01 - None: 100000')

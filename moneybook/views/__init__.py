@@ -5,8 +5,8 @@ from .delete_api_view import *
 from .edit_api_view import *
 from .edit_view import *
 from .index_view import *
-from .livingCostMarkView import *
-from .livingCostMarkEditView import *
+from .living_cost_mark_edit_view import *
+from .living_cost_mark_view import *
 from .period_balance_view import *
 from .periodic_edit_view import *
 from .periodic_view import *

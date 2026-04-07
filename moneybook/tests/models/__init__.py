@@ -4,7 +4,7 @@ from .checked_date_tests import *
 from .credit_checked_date_tests import *
 from .data_tests import *
 from .direction_tests import *
-from .livingCostMarkTests import *
+from .living_cost_mark_tests import *
 from .method_tests import *
 from .periodic_data_tests import *
 from .several_costs_tests import *
