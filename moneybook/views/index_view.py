@@ -6,7 +6,7 @@ from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.views import View
-from moneybook.models import Category, Data, Direction, InOutBalance, LivingCostMark, Method, SeveralCosts
+from moneybook.models import Category, Data, Direction, InOutBalance, LivingCostMark, Method
 from moneybook.utils import is_valid_date
 
 

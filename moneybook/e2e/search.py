@@ -148,6 +148,10 @@ class Search(SeleniumBase):
     def test_search_by_method(self):
         """支払い方法で検索できることを確認"""
         self._login()
+        # 全データ削除（既存のfixtureデータが邪魔をしないように）
+        from moneybook.models import Data
+        Data.objects.all().delete()
+
         # テストデータを追加（銀行）
         self._location(self.live_server_url + reverse('moneybook:index'))
         self.driver.find_element(By.ID, 'a_day').send_keys('10')
@@ -182,6 +186,10 @@ class Search(SeleniumBase):
     def test_search_by_category(self):
         """カテゴリーで検索できることを確認"""
         self._login()
+        # 全データ削除
+        from moneybook.models import Data
+        Data.objects.all().delete()
+
         # テストデータを追加（食費）
         self._location(self.live_server_url + reverse('moneybook:index'))
         self.driver.find_element(By.ID, 'a_day').send_keys('10')
@@ -216,6 +224,9 @@ class Search(SeleniumBase):
     def test_search_combined_conditions(self):
         """複数の条件を組み合わせて検索できることを確認"""
         self._login()
+        # 全データ削除
+        from moneybook.models import Data
+        Data.objects.all().delete()
 
         # テストデータを追加
         self._location(self.live_server_url + reverse('moneybook:index'))

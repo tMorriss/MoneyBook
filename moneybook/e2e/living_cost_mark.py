@@ -51,7 +51,12 @@ class LivingCostMark(SeleniumBase):
         # 全ての行を削除（クリーンな状態からテスト）
         delete_buttons = self.driver.find_elements(By.CLASS_NAME, 'btn-delete-row')
         for btn in reversed(delete_buttons):
-            btn.click()
+            try:
+                btn.click()
+            except:
+                # 画面外などにある場合はスクロールしてクリック
+                self.driver.execute_script('arguments[0].scrollIntoView();', btn)
+                btn.click()
 
         # 行を追加して入力
         self.driver.find_element(By.ID, 'btn_add_row').click()

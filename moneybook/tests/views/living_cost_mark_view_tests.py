@@ -9,6 +9,7 @@ from moneybook.tests.base import BaseTestCase
 class LivingCostMarkViewTestCase(BaseTestCase):
     def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
+        LivingCostMark.objects.all().delete()
         LivingCostMark.objects.create(start_date=date(2024, 1, 1), price=100000)
 
         response = self.client.get(reverse('moneybook:living_cost_mark'))
@@ -53,6 +54,7 @@ class LivingCostMarkEditViewTestCase(BaseTestCase):
 
     def test_post_invalid_start_day(self):
         self.client.force_login(User.objects.create_user(self.username))
+        LivingCostMark.objects.all().delete()
         data = {
             'start_date_1': '2024-01-02',
             'price_1': '100,000',

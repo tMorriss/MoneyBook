@@ -4,7 +4,6 @@ from moneybook.tests.base import BaseTestCase
 
 class SeveralCostsTestCase(BaseTestCase):
     def test_str(self):
-        self.assertEqual(str(SeveralCosts.objects.get(name='LivingCostMark')), 'LivingCostMark')
         self.assertEqual(str(SeveralCosts.objects.get(name='ActualCashBalance')), 'ActualCashBalance')
 
     def test_get_actual_cash_balance(self):
