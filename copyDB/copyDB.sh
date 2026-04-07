@@ -2,7 +2,7 @@
 
 cd `dirname $0`
 
-scp createDataYaml.py createOtherYaml.py yaml_utils.py mars:~/
+scp create_data_yaml.py create_other_yaml.py yaml_utils.py mars:~/
 
 # プロジェクトルートの fixture ディレクトリを使用するように修正
 mkdir -p ../fixture
@@ -21,7 +21,7 @@ DB_DATABASE=$(op read "op://Personal/Mariadb_MoneyBook/database")
   echo "$DB_USER"
   echo "$DB_PASSWORD"
   echo "$DB_DATABASE"
-} | ssh mars python3 /home/tmorriss/createDataYaml.py > ../fixture/data_all.yaml
+} | ssh mars python3 /home/tmorriss/create_data_yaml.py > ../fixture/data_all.yaml
 
 {
   echo "$DB_HOSTNAME"
@@ -29,7 +29,7 @@ DB_DATABASE=$(op read "op://Personal/Mariadb_MoneyBook/database")
   echo "$DB_USER"
   echo "$DB_PASSWORD"
   echo "$DB_DATABASE"
-} | ssh mars python3 /home/tmorriss/createOtherYaml.py > ../fixture/initial_data.yaml
+} | ssh mars python3 /home/tmorriss/create_other_yaml.py > ../fixture/initial_data.yaml
 
 # プロジェクトルートの manage.py を実行
 python3 ../manage.py loaddata ../fixture/initial_data.yaml
