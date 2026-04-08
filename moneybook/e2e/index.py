@@ -199,6 +199,7 @@ class Index(SeleniumBase):
         self._assert_texts(actuals, expects)
 
         # 統計
+        time.sleep(2)  # 統計データの読み込みを待つ
         actuals = self.driver.find_elements(By.XPATH, '//*[@id="chart_container_data"]/ul[@id="chart_data"]/li')
         expects = [
             {'name': 'その他', 'price': '30'},
