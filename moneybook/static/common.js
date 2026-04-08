@@ -118,8 +118,7 @@ $(() => {
                     "item": request.term,
                 }
             }).done((data) => {
-                const dataJson = JSON.parse(data);
-                const items = dataJson.suggests.map(suggest => suggest.item);
+                const items = data.suggests.map(suggest => suggest.item);
                 response([...new Set(items)]);
             })
         },
@@ -135,8 +134,7 @@ $(() => {
                     "item": $(".add_item").val(),
                 }
             }).done((data) => {
-                const dataJson = JSON.parse(data);
-                const prices = dataJson.suggests.map(suggest => suggest.price);
+                const prices = data.suggests.map(suggest => suggest.price);
                 const recentPrice = prices.slice(0, 10);
                 response([...new Set(recentPrice)].map(String));
             })

@@ -54,23 +54,23 @@ function getCheckedDate() {
     $.get({
         url: checked_date_api_url,
     }).done((data) => {
-        let dataJson = JSON.parse(data);
+        let methods_bd = data.methods_bd;
 
         // 既存を削除
         $(".checked-date-row").remove();
 
         // 現在の値を追加
-        for (var i = 0; i < dataJson.length; i++) {
+        for (var i = 0; i < methods_bd.length; i++) {
             var checkAll = 1;
-            if (dataJson[i].pk == 2) {
+            if (methods_bd[i].pk == 2) {
                 checkAll = 0;
             }
             var rowText = '<tr class="checked-date-row">';
             rowText += '<td>';
-            rowText += '<input type="button" class="btn-green" value="' + dataJson[i].name + '" onclick="updateCheckedDate(' + dataJson[i].pk + ', ' + checkAll + ')">'
+            rowText += '<input type="button" class="btn-green" value="' + methods_bd[i].name + '" onclick="updateCheckedDate(' + methods_bd[i].pk + ', ' + checkAll + ')">'
             rowText += '</td>';
-            rowText += '<td>現在: ' + zeroPadding(dataJson[i].year, 4) + '年' + zeroPadding(dataJson[i].month, 2) + '月' + zeroPadding(dataJson[i].day, 2) + '日</td>';
-            rowText += '<td class="righter">' + separate(dataJson[i].balance) + '円</td>';
+            rowText += '<td>現在: ' + zeroPadding(methods_bd[i].year, 4) + '年' + zeroPadding(methods_bd[i].month, 2) + '月' + zeroPadding(methods_bd[i].day, 2) + '日</td>';
+            rowText += '<td class="righter">' + separate(methods_bd[i].balance) + '円</td>';
             rowText += '</tr>';
             $("#checked-date").append(rowText);
         }
@@ -240,8 +240,7 @@ function calculateNowBank(isAllUpdate) {
         url: now_bank_api_url,
         data: data
     }).done((data) => {
-        result = JSON.parse(data);
-        $("#now_bank_balance").text(separate(result["balance"]));
+        $("#now_bank_balance").text(separate(data["balance"]));
         document.activeElement.blur();
 
         if (isAllUpdate) {
