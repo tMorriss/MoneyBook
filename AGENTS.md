@@ -126,8 +126,9 @@ MoneyBook/
 ├── createOtherYaml.py          # その他YAML生成スクリプト
 ├── generate_secretkey_setting.py # シークレットキー生成
 ├── yaml_utils.py               # YAML処理ユーティリティ
-├── copyDB.cmd                  # データベースコピースクリプト（Windows）
-├── copyDB.sh                   # データベースコピースクリプト（Unix）
+├── copyDB/                     # データベースコピー関連
+│   ├── copyDB.ps1             # データベースコピースクリプト（Windows PowerShell）
+│   ├── copyDB.sh              # データベースコピースクリプト（Unix）
 ├── AGENTS.md                   # エージェント向けガイド
 ├── CLAUDE.md                   # AGENTS.mdへのシンボリックリンク
 └── README.md                   # プロジェクトREADME
