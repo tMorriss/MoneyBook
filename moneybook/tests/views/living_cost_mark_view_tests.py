@@ -64,19 +64,6 @@ class LivingCostMarkEditViewTestCase(BaseTestCase):
         self.assertContains(response, '開始日は1日に設定してください')
         self.assertEqual(LivingCostMark.objects.count(), 0)
 
-    def test_post_gap(self):
-        self.client.force_login(User.objects.create_user(self.username))
-        data = {
-            'start_date_1': '2024-01-01',
-            'end_date_1': '2024-01-31',
-            'price_1': '100,000',
-            'start_date_2': '2024-03-01',
-            'price_2': '120,000',
-        }
-        response = self.client.post(reverse('moneybook:living_cost_mark_edit'), data)
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, '期間に隙間または重複があります')
-
     def test_post_invalid_end_day(self):
         self.client.force_login(User.objects.create_user(self.username))
         data = {
@@ -112,19 +99,33 @@ class LivingCostMarkEditViewTestCase(BaseTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, '途中のデータの終了年月は必須です')
 
-    def test_post_last_no_end_date(self):
-        """最後のデータは終了日がなくても保存できる"""
+    def test_post_overlap(self):
+        """期間が重複している場合はエラー"""
+        self.client.force_login(User.objects.create_user(self.username))
+        data = {
+            'start_date_1': '2024-01-01',
+            'end_date_1': '2024-02-29',  # 2月まで
+            'price_1': '100,000',
+            'start_date_2': '2024-02-01',  # 重複
+            'price_2': '120,000',
+        }
+        response = self.client.post(reverse('moneybook:living_cost_mark_edit'), data)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, '期間に隙間または重複があります')
+
+    def test_post_gap(self):
+        """期間に隙間がある場合はエラー"""
         self.client.force_login(User.objects.create_user(self.username))
         data = {
             'start_date_1': '2024-01-01',
             'end_date_1': '2024-01-31',
             'price_1': '100,000',
-            'start_date_2': '2024-02-01',
+            'start_date_2': '2024-03-01',  # 2月が抜けている
             'price_2': '120,000',
         }
         response = self.client.post(reverse('moneybook:living_cost_mark_edit'), data)
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(LivingCostMark.objects.count(), 2)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, '期間に隙間または重複があります')
 
     def test_str(self):
         mark = LivingCostMark(start_date=date(2024, 1, 1), price=100000)

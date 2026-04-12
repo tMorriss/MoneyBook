@@ -68,10 +68,6 @@ class LivingCostMarkEditView(LoginRequiredMixin, View):
             # 連続性のチェック
             if i > 0:
                 prev_mark = new_marks[i - 1]
-                if prev_mark.end_date is None:
-                    error_message = '途中のデータの終了年月は必須です'
-                    break
-
                 if prev_mark.end_date + relativedelta(days=1) != mark.start_date:
                     error_message = f'期間に隙間または重複があります: {prev_mark.end_date} と {mark.start_date}'
                     break
