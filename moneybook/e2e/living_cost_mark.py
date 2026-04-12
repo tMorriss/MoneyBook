@@ -1,12 +1,9 @@
-import time
-
 from django.urls import reverse
 from moneybook.e2e.base import SeleniumBase
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as ec
+from selenium.webdriver.support.ui import WebDriverWait
 
 
 class LivingCostMark(SeleniumBase):
@@ -20,7 +17,7 @@ class LivingCostMark(SeleniumBase):
 
         # データの表示確認 (fixtureから)
         cells = WebDriverWait(self.driver, 10).until(
-            EC.presence_of_all_elements_located((By.XPATH, '//table[@class="tbl-data tbl-boarder"]/tbody/tr[1]/td'))
+            ec.presence_of_all_elements_located((By.XPATH, '//table[@class="tbl-data tbl-boarder"]/tbody/tr[1]/td'))
         )
         self.assertEqual(cells[0].text, '2000/01')
         self.assertEqual(cells[2].text, '1,000')
@@ -32,13 +29,13 @@ class LivingCostMark(SeleniumBase):
 
         # 編集ボタンをクリック
         edit_btn = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((By.XPATH, '//input[@value="編集"]'))
+            ec.element_to_be_clickable((By.XPATH, '//input[@value="編集"]'))
         )
         self.driver.execute_script('arguments[0].click();', edit_btn)
 
         # 編集画面に遷移したことを確認
         WebDriverWait(self.driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, '//h1[text()="生活費目標編集"]'))
+            ec.presence_of_element_located((By.XPATH, '//h1[text()="生活費目標編集"]'))
         )
         self.assertEqual(self.driver.current_url, self.live_server_url + reverse('moneybook:living_cost_mark_edit'))
 
@@ -52,7 +49,7 @@ class LivingCostMark(SeleniumBase):
 
         # 行を追加ボタンをクリック
         add_btn = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((By.ID, 'btn_add_row'))
+            ec.element_to_be_clickable((By.ID, 'btn_add_row'))
         )
         self.driver.execute_script('arguments[0].click();', add_btn)
 
@@ -80,7 +77,7 @@ class LivingCostMark(SeleniumBase):
 
         # 行が表示されるまで待機
         WebDriverWait(self.driver, 10).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, '#mark_table_body tr'))
+            ec.presence_of_element_located((By.CSS_SELECTOR, '#mark_table_body tr'))
         )
 
         rows = self.driver.find_elements(By.CSS_SELECTOR, '#mark_table_body tr')
@@ -101,19 +98,19 @@ class LivingCostMark(SeleniumBase):
         # 一覧画面に戻り、値が反映されていることを確認
         try:
             WebDriverWait(self.driver, 20).until(
-                EC.url_to_be(self.live_server_url + reverse('moneybook:living_cost_mark'))
+                ec.url_to_be(self.live_server_url + reverse('moneybook:living_cost_mark'))
             )
         except TimeoutException:
             # 失敗した場合はエラーメッセージを確認して表示する
-            error_msg = ""
+            error_msg = ''
             errors = self.driver.find_elements(By.CSS_SELECTOR, 'p[style="color: red;"]')
             if errors:
-                error_msg = f" Validation Error on page: {errors[0].text}"
-            raise TimeoutException(f"Timed out waiting for redirect to list page. Current URL: {self.driver.current_url}.{error_msg}")
+                error_msg = f' Validation Error on page: {errors[0].text}'
+            raise TimeoutException(f'Timed out waiting for redirect to list page. Current URL: {self.driver.current_url}.{error_msg}')
 
         # 反映された値を確認
         cells = WebDriverWait(self.driver, 10).until(
-            EC.presence_of_all_elements_located((By.XPATH, '//table[@class="tbl-data tbl-boarder"]/tbody/tr[1]/td'))
+            ec.presence_of_all_elements_located((By.XPATH, '//table[@class="tbl-data tbl-boarder"]/tbody/tr[1]/td'))
         )
         self.assertEqual(cells[0].text, '2024/01')
         self.assertEqual(cells[2].text, '150,000')
