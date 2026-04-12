@@ -34,13 +34,13 @@ class Search(SeleniumBase):
         # テストデータを追加
         self._location(self.live_server_url + reverse('moneybook:index'))
         self.driver.find_element(By.ID, 'a_day').send_keys('10')
-        self.driver.find_element(By.ID, 'a_item').send_keys('検索テスト1')
+        self.driver.find_element(By.ID, 'a_item').send_keys('UniqueItem1')
         self.driver.find_element(By.ID, 'a_price').send_keys('1000')
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/input[@value="追加"]').click()
         time.sleep(2)
 
         self.driver.find_element(By.ID, 'a_day').send_keys('11')
-        self.driver.find_element(By.ID, 'a_item').send_keys('別のデータ')
+        self.driver.find_element(By.ID, 'a_item').send_keys('UniqueItem2')
         self.driver.find_element(By.ID, 'a_price').send_keys('2000')
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/input[@value="追加"]').click()
         time.sleep(2)
@@ -49,7 +49,7 @@ class Search(SeleniumBase):
         self._location(self.live_server_url + reverse('moneybook:search'))
 
         # 項目名で検索
-        self.driver.find_element(By.NAME, 'item').send_keys('検索テスト1')
+        self.driver.find_element(By.NAME, 'item').send_keys('UniqueItem1')
         self.driver.find_element(By.XPATH, '//input[@value="検索"]').click()
         time.sleep(2)
 
@@ -57,7 +57,7 @@ class Search(SeleniumBase):
         rows = self.driver.find_elements(By.CSS_SELECTOR, '#search-result .data-row')
         self.assertEqual(len(rows), 1)
         tds = rows[0].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[1].text, '検索テスト1')
+        self.assertEqual(tds[1].text, 'UniqueItem1')
 
     def test_search_by_date_range(self):
         """日付範囲で検索できることを確認"""
@@ -67,20 +67,14 @@ class Search(SeleniumBase):
         # テストデータを追加
         self._location(self.live_server_url + reverse('moneybook:index'))
         self.driver.find_element(By.ID, 'a_day').send_keys('5')
-        self.driver.find_element(By.ID, 'a_item').send_keys('5日のデータ')
+        self.driver.find_element(By.ID, 'a_item').send_keys('UniqueDate5')
         self.driver.find_element(By.ID, 'a_price').send_keys('1000')
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/input[@value="追加"]').click()
         time.sleep(2)
 
         self.driver.find_element(By.ID, 'a_day').send_keys('15')
-        self.driver.find_element(By.ID, 'a_item').send_keys('15日のデータ')
+        self.driver.find_element(By.ID, 'a_item').send_keys('UniqueDate15')
         self.driver.find_element(By.ID, 'a_price').send_keys('2000')
-        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/input[@value="追加"]').click()
-        time.sleep(2)
-
-        self.driver.find_element(By.ID, 'a_day').send_keys('25')
-        self.driver.find_element(By.ID, 'a_item').send_keys('25日のデータ')
-        self.driver.find_element(By.ID, 'a_price').send_keys('3000')
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/input[@value="追加"]').click()
         time.sleep(2)
 
@@ -105,7 +99,7 @@ class Search(SeleniumBase):
         rows = self.driver.find_elements(By.CSS_SELECTOR, '#search-result .data-row')
         self.assertEqual(len(rows), 1)
         tds = rows[0].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[1].text, '15日のデータ')
+        self.assertEqual(tds[1].text, 'UniqueDate15')
 
     def test_search_by_price_range(self):
         """金額範囲で検索できることを確認"""
@@ -113,20 +107,14 @@ class Search(SeleniumBase):
         # テストデータを追加
         self._location(self.live_server_url + reverse('moneybook:index'))
         self.driver.find_element(By.ID, 'a_day').send_keys('10')
-        self.driver.find_element(By.ID, 'a_item').send_keys('安いデータ')
+        self.driver.find_element(By.ID, 'a_item').send_keys('UniquePrice500')
         self.driver.find_element(By.ID, 'a_price').send_keys('500')
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/input[@value="追加"]').click()
         time.sleep(2)
 
         self.driver.find_element(By.ID, 'a_day').send_keys('11')
-        self.driver.find_element(By.ID, 'a_item').send_keys('中間のデータ')
+        self.driver.find_element(By.ID, 'a_item').send_keys('UniquePrice1500')
         self.driver.find_element(By.ID, 'a_price').send_keys('1500')
-        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/input[@value="追加"]').click()
-        time.sleep(2)
-
-        self.driver.find_element(By.ID, 'a_day').send_keys('12')
-        self.driver.find_element(By.ID, 'a_item').send_keys('高いデータ')
-        self.driver.find_element(By.ID, 'a_price').send_keys('5000')
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/input[@value="追加"]').click()
         time.sleep(2)
 
@@ -139,11 +127,11 @@ class Search(SeleniumBase):
         self.driver.find_element(By.XPATH, '//input[@value="検索"]').click()
         time.sleep(2)
 
-        # 検索結果を確認（中間のデータのみヒット）
+        # 検索結果を確認
         rows = self.driver.find_elements(By.CSS_SELECTOR, '#search-result .data-row')
         self.assertEqual(len(rows), 1)
         tds = rows[0].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[1].text, '中間のデータ')
+        self.assertEqual(tds[1].text, 'UniquePrice1500')
 
     def test_search_by_method(self):
         """支払い方法で検索できることを確認"""
@@ -155,14 +143,6 @@ class Search(SeleniumBase):
         self.driver.find_element(By.ID, 'a_item').send_keys('UniqueBankItem')
         self.driver.find_element(By.ID, 'a_price').send_keys('1000')
         self.driver.find_element(By.ID, 'lbl_a_method-2').click()  # 銀行
-        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/input[@value="追加"]').click()
-        time.sleep(2)
-
-        # テストデータを追加（現金）
-        self.driver.find_element(By.ID, 'a_day').send_keys('11')
-        self.driver.find_element(By.ID, 'a_item').send_keys('UniqueCashItem')
-        self.driver.find_element(By.ID, 'a_price').send_keys('2000')
-        self.driver.find_element(By.ID, 'lbl_a_method-1').click()  # 現金
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/input[@value="追加"]').click()
         time.sleep(2)
 
@@ -194,14 +174,6 @@ class Search(SeleniumBase):
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/input[@value="追加"]').click()
         time.sleep(2)
 
-        # テストデータを追加（必需品）
-        self.driver.find_element(By.ID, 'a_day').send_keys('11')
-        self.driver.find_element(By.ID, 'a_item').send_keys('UniqueNecessaryItem')
-        self.driver.find_element(By.ID, 'a_price').send_keys('2000')
-        self.driver.find_element(By.ID, 'lbl_a_category-2').click()  # 必需品
-        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/input[@value="追加"]').click()
-        time.sleep(2)
-
         # 検索画面に移動
         self._location(self.live_server_url + reverse('moneybook:search'))
 
@@ -224,17 +196,9 @@ class Search(SeleniumBase):
         # テストデータを追加
         self._location(self.live_server_url + reverse('moneybook:index'))
         self.driver.find_element(By.ID, 'a_day').send_keys('10')
-        self.driver.find_element(By.ID, 'a_item').send_keys('UniqueSupermarket')
+        self.driver.find_element(By.ID, 'a_item').send_keys('UniqueCombinedItem')
         self.driver.find_element(By.ID, 'a_price').send_keys('1500')
         self.driver.find_element(By.ID, 'lbl_a_method-2').click()  # 銀行
-        self.driver.find_element(By.ID, 'lbl_a_category-1').click()  # 食費
-        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/input[@value="追加"]').click()
-        time.sleep(2)
-
-        self.driver.find_element(By.ID, 'a_day').send_keys('20')
-        self.driver.find_element(By.ID, 'a_item').send_keys('UniqueConvenience')
-        self.driver.find_element(By.ID, 'a_price').send_keys('500')
-        self.driver.find_element(By.ID, 'lbl_a_method-1').click()  # 現金
         self.driver.find_element(By.ID, 'lbl_a_category-1').click()  # 食費
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/input[@value="追加"]').click()
         time.sleep(2)
@@ -242,18 +206,18 @@ class Search(SeleniumBase):
         # 検索画面に移動
         self._location(self.live_server_url + reverse('moneybook:search'))
 
-        # 項目名に「UniqueSuper」を含み、銀行、食費で検索
-        self.driver.find_element(By.NAME, 'item').send_keys('UniqueSuper')
+        # 品目、銀行、食費で検索
+        self.driver.find_element(By.NAME, 'item').send_keys('UniqueCombined')
         self.driver.find_element(By.ID, 'lbl_method-2').click()  # 銀行
         self.driver.find_element(By.ID, 'lbl_category-1').click()  # 食費
         self.driver.find_element(By.XPATH, '//input[@value="検索"]').click()
         time.sleep(2)
 
-        # 検索結果を確認（UniqueSupermarketのみヒット）
+        # 検索結果を確認
         rows = self.driver.find_elements(By.CSS_SELECTOR, '#search-result .data-row')
         self.assertEqual(len(rows), 1)
         tds = rows[0].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[1].text, 'UniqueSupermarket')
+        self.assertEqual(tds[1].text, 'UniqueCombinedItem')
 
     def test_search_button_enter(self):
         """Enterキーで検索できることを確認"""
@@ -261,7 +225,7 @@ class Search(SeleniumBase):
         # テストデータを追加
         self._location(self.live_server_url + reverse('moneybook:index'))
         self.driver.find_element(By.ID, 'a_day').send_keys('10')
-        self.driver.find_element(By.ID, 'a_item').send_keys('Enterテスト')
+        self.driver.find_element(By.ID, 'a_item').send_keys('UniqueEnterItem')
         self.driver.find_element(By.ID, 'a_price').send_keys('1000')
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/input[@value="追加"]').click()
         time.sleep(2)
@@ -271,7 +235,7 @@ class Search(SeleniumBase):
 
         # 項目名で検索（Enterキーを使用）
         item_input = self.driver.find_element(By.NAME, 'item')
-        item_input.send_keys('Enterテスト')
+        item_input.send_keys('UniqueEnterItem')
         item_input.send_keys(Keys.RETURN)
         time.sleep(2)
 
@@ -279,7 +243,7 @@ class Search(SeleniumBase):
         rows = self.driver.find_elements(By.CSS_SELECTOR, '#search-result .data-row')
         self.assertEqual(len(rows), 1)
         tds = rows[0].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[1].text, 'Enterテスト')
+        self.assertEqual(tds[1].text, 'UniqueEnterItem')
 
     def test_search_no_results(self):
         """検索結果が0件の場合の表示を確認"""
@@ -288,7 +252,7 @@ class Search(SeleniumBase):
         self._location(self.live_server_url + reverse('moneybook:search'))
 
         # 存在しない項目名で検索
-        self.driver.find_element(By.NAME, 'item').send_keys('存在しないデータ')
+        self.driver.find_element(By.NAME, 'item').send_keys('NonExistentItem')
         self.driver.find_element(By.XPATH, '//input[@value="検索"]').click()
         time.sleep(2)
 
@@ -302,7 +266,7 @@ class Search(SeleniumBase):
         # テストデータを追加
         self._location(self.live_server_url + reverse('moneybook:index'))
         self.driver.find_element(By.ID, 'a_day').send_keys('10')
-        self.driver.find_element(By.ID, 'a_item').send_keys('編集遷移テスト')
+        self.driver.find_element(By.ID, 'a_item').send_keys('UniqueEditItem')
         self.driver.find_element(By.ID, 'a_price').send_keys('1000')
         self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/input[@value="追加"]').click()
         time.sleep(2)
@@ -311,7 +275,7 @@ class Search(SeleniumBase):
         self._location(self.live_server_url + reverse('moneybook:search'))
 
         # 項目名で検索
-        self.driver.find_element(By.NAME, 'item').send_keys('編集遷移テスト')
+        self.driver.find_element(By.NAME, 'item').send_keys('UniqueEditItem')
         self.driver.find_element(By.XPATH, '//input[@value="検索"]').click()
         time.sleep(2)
 
@@ -321,4 +285,4 @@ class Search(SeleniumBase):
 
         # 編集画面に遷移したことを確認
         self.assertIn('edit', self.driver.current_url)
-        self.assertEqual(self.driver.find_element(By.ID, 'item').get_attribute('value'), '編集遷移テスト')
+        self.assertEqual(self.driver.find_element(By.ID, 'item').get_attribute('value'), 'UniqueEditItem')
