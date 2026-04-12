@@ -199,6 +199,7 @@ class Index(SeleniumBase):
         self._assert_texts(actuals, expects)
 
         # 統計
+        time.sleep(2)  # 統計データの読み込みを待つ
         actuals = self.driver.find_elements(By.XPATH, '//*[@id="chart_container_data"]/ul[@id="chart_data"]/li')
         expects = [
             {'name': 'その他', 'price': '30'},
@@ -219,6 +220,7 @@ class Index(SeleniumBase):
             {'title': '支出合計', 'value': '7,920'},
             {'title': '収支', 'value': '+25,073'},
             {'title': '貯金額', 'value': '130'},
+            {'title': '生活費目標額', 'value': '1,000'},
             {'title': '生活費', 'value': '2,500'},
             {'title': '変動費', 'value': '5,390'},
             {'title': '生活費残額', 'value': '-1,500'},
@@ -226,7 +228,7 @@ class Index(SeleniumBase):
             {'title': '全収入', 'value': '34,123'},
             {'title': '全支出', 'value': '9,550'}
         ]
-        for i in range(len(actuals)):
+        for i in range(len(expects)):
             with self.subTest(i=i):
                 self.assertEqual(actuals[i].find_element(By.TAG_NAME, 'th').text, expects[i]['title'])
                 self.assertEqual(actuals[i].find_element(By.TAG_NAME, 'td').text, expects[i]['value'])

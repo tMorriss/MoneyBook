@@ -90,20 +90,6 @@ class CreditCheckedDateApiView(View):
         return JsonResponse({})
 
 
-class LivingCostMarkApiView(View):
-    def post(self, request, *args, **kwargs):
-        if 'price' not in request.POST:
-            return JsonResponse({'message': 'missing parameter'}, status=http.HTTPStatus.BAD_REQUEST)
-
-        try:
-            price = int(request.POST.get('price'))
-        except ValueError:
-            return JsonResponse({'message': 'price must be int'}, status=http.HTTPStatus.BAD_REQUEST)
-
-        SeveralCosts.set_living_cost_mark(price)
-        return JsonResponse({'message': 'success'})
-
-
 class NowBankApiView(View):
     def post(self, request, *args, **kwargs):
         written_bank_data = Data.get_checked_data(

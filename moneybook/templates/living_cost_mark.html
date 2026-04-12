@@ -1,0 +1,37 @@
+{% extends "_base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}生活費目標設定 - {{ app_name }}{% endblock %}
+
+{% block content %}
+{% include "_tools_task_bar.html" %}
+<section>
+    <h1>生活費目標一覧</h1>
+
+    <table class="tbl-data tbl-boarder">
+        <thead>
+            <tr>
+                <th>開始年月</th>
+                <th>終了年月</th>
+                <th>金額</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for mark in living_cost_marks %}
+            <tr>
+                <td>{{ mark.start_date|date:"Y/m" }}</td>
+                <td>{% if mark.end_date %}{{ mark.end_date|date:"Y/m" }}{% else %}-{% endif %}</td>
+                <td class="righter">{{ mark.price|intcomma }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <table class="tbl-buttons">
+        <tr>
+            <td><input type="button" value="編集" class="btn-blue" onclick="location.href='{% url 'moneybook:living_cost_mark_edit' %}'"></td>
+        </tr>
+    </table>
+</section>
+{% endblock %}
