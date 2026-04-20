@@ -1,6 +1,6 @@
-import http
+import json
 
-from django.http import JsonResponse
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.views import View
 from moneybook.models import Data
 
@@ -13,6 +13,6 @@ class DeleteApiView(View):
             Data.get(pk).delete()
         except:
             res = {'message': 'Data does not exist'}
-            return JsonResponse(res, status=http.HTTPStatus.NOT_FOUND)
+            return HttpResponseBadRequest(json.dumps(res))
 
-        return JsonResponse({})
+        return HttpResponse()

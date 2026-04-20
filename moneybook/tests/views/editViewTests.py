@@ -133,7 +133,7 @@ class EditApiViewTestCase(BaseTestCase):
                 'checked': False
             }
         )
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 400)
 
     def test_post_guest(self):
         # 更新前の値を確認
@@ -244,7 +244,7 @@ class PreCheckApiViewTestCase(BaseTestCase):
             reverse('moneybook:pre_check_api'),
             {'id': 99999, 'status': '1'}
         )
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 400)
 
     def test_post_guest(self):
         response = self.client.post(

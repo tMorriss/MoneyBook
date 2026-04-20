@@ -7,7 +7,7 @@
 
 set -e
 
-WORKFLOW_FILE=".github/workflows/ci.yml"
+WORKFLOW_FILE=".github/workflows/python-lint-test.yml"
 E2E_DIR="moneybook/e2e"
 
 echo "e2e Matrix Validation"

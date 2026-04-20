@@ -713,6 +713,7 @@ class Index(SeleniumBase):
 
         # 初期状態
         # data_test_case.yamlには現在年月のデータはないはず
+        # fetchData()により直ちにapplyFilter()が呼ばれるため、初期表示は0になるはず
         self.assertEqual(self.driver.find_element(By.ID, 'summary-count').text, '0件')
         self.assertEqual(self.driver.find_element(By.ID, 'summary-income').text, '収入: 0円')
         self.assertEqual(self.driver.find_element(By.ID, 'summary-outgo').text, '支出: 0円')

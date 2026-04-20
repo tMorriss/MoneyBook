@@ -66,7 +66,6 @@ class CheckedDateApiViewTestCase(BaseTestCase):
         response = self.client.get(reverse('moneybook:checked_date_api'))
         self.assertEqual(response.status_code, 200)
         content_json = json.loads(response.content.decode())
-        methods_bd = content_json['methods_bd']
         expects = [
             {
                 'name': '銀行',
@@ -97,14 +96,14 @@ class CheckedDateApiViewTestCase(BaseTestCase):
                 'day': 2
             },
         ]
-        self.assertEqual(len(methods_bd), len(expects))
+        self.assertEqual(len(content_json), len(expects))
         for i in range(len(expects)):
             with self.subTest(i=i):
-                self.assertEqual(methods_bd[i]['name'], expects[i]['name'])
-                self.assertEqual(methods_bd[i]['balance'], expects[i]['balance'])
-                self.assertEqual(methods_bd[i]['year'], expects[i]['year'])
-                self.assertEqual(methods_bd[i]['month'], expects[i]['month'])
-                self.assertEqual(methods_bd[i]['day'], expects[i]['day'])
+                self.assertEqual(content_json[i]['name'], expects[i]['name'])
+                self.assertEqual(content_json[i]['balance'], expects[i]['balance'])
+                self.assertEqual(content_json[i]['year'], expects[i]['year'])
+                self.assertEqual(content_json[i]['month'], expects[i]['month'])
+                self.assertEqual(content_json[i]['day'], expects[i]['day'])
 
     def test_post(self):
         self.client.force_login(User.objects.create_user(self.username))
