@@ -86,7 +86,7 @@ function keyPressCharge(code) {
     }
 }
 
-function sendSuicaCharge() {
+function sendTrafficCostShortcut(item) {
     yearValue = $('#s_year').val();
     monthValue = $('#s_month').val();
     dayValue = $('#s_day').val();
@@ -99,37 +99,7 @@ function sendSuicaCharge() {
         data: {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
             "date": `${yearValue}-${monthValue}-${day}`,
-            "item": "Suicaチャージ",
-            "price": price,
-            "direction": 2,
-            "method": bank_pk,
-            "category": traffic_cost_pk,
-            "temp": "False",
-            "checked": "False",
-        }
-    }).done(() => {
-        resetForShortcut();
-        showResultMsg("Success!", empty);
-    }).fail(() => {
-        // メッセージ表示
-        showResultMsg("Error...", empty);
-    });
-}
-
-function sendTrainFare() {
-    yearValue = $('#s_year').val();
-    monthValue = $('#s_month').val();
-    dayValue = $('#s_day').val();
-    priceValue = $('#s_price').val();
-    now = new Date();
-    day = (yearValue == now.getFullYear() && monthValue == (now.getMonth() + 1) && dayValue.length == 0) ? now.getDate() : dayValue;
-    price = (priceValue.length == 0) ? 3000 : evaluateFormula(priceValue);
-    $.post({
-        url: add_api_url,
-        data: {
-            "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
-            "date": `${yearValue}-${monthValue}-${day}`,
-            "item": "電車代",
+            "item": item,
             "price": price,
             "direction": 2,
             "method": bank_pk,
