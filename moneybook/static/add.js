@@ -86,7 +86,7 @@ function keyPressCharge(code) {
     }
 }
 
-function sendSuicaCharge() {
+function sendTrafficCostShortcut(item) {
     yearValue = $('#s_year').val();
     monthValue = $('#s_month').val();
     dayValue = $('#s_day').val();
@@ -99,7 +99,7 @@ function sendSuicaCharge() {
         data: {
             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
             "date": `${yearValue}-${monthValue}-${day}`,
-            "item": "Suicaチャージ",
+            "item": item,
             "price": price,
             "direction": 2,
             "method": bank_pk,

@@ -443,6 +443,92 @@ class Add(SeleniumBase):
         self.assertEqual(tds[3].text, '銀行')
         self.assertEqual(tds[4].text, '交通費')
 
+    def test_train_fare_shortcut(self):
+        now = datetime.now()
+        # 前処理
+        self._login()
+        self._location(self.live_server_url + reverse('moneybook:add'))
+
+        # テスト
+        self.driver.find_element(By.ID, 's_day').send_keys('6')
+        self.driver.find_element(By.ID, 's_price').send_keys('600')
+        self.driver.find_element(By.XPATH, '//form[3]/table/tbody/tr[3]/td/input[@type="button"][2]').click()
+
+        self._location(self.live_server_url + reverse('moneybook:index'))
+        rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
+        self.assertEqual(len(rows), 2)
+        tds = rows[1].find_elements(By.TAG_NAME, 'td')
+        self.assertEqual(tds[0].text, str(now.year) + '/' + str.zfill(str(now.month), 2) + '/' + '06')
+        self.assertEqual(tds[1].text, '電車代')
+        self.assertEqual(tds[2].text, '600')
+        self.assertEqual(tds[3].text, '銀行')
+        self.assertEqual(tds[4].text, '交通費')
+        # direction確認
+        tds[5].find_element(By.TAG_NAME, 'a').click()
+        self.assertEqual(self.driver.find_element(By.XPATH, '//form/table[1]/tbody/tr[4]/td[1]/input[2]').is_selected(), True)
+
+    def test_train_fare_shortcut_default_day(self):
+        now = datetime.now()
+        # 前処理
+        self._login()
+        self._location(self.live_server_url + reverse('moneybook:add'))
+
+        # テスト - 日付を空にして送信
+        self.driver.find_element(By.ID, 's_price').send_keys('600')
+        self.driver.find_element(By.XPATH, '//form[3]/table/tbody/tr[3]/td/input[@type="button"][2]').click()
+
+        self._location(self.live_server_url + reverse('moneybook:index'))
+        rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
+        self.assertEqual(len(rows), 2)
+        tds = rows[1].find_elements(By.TAG_NAME, 'td')
+        # 今日の日付が使われていることを確認
+        self.assertEqual(tds[0].text, str(now.year) + '/' + str.zfill(str(now.month), 2) + '/' + str.zfill(str(now.day), 2))
+        self.assertEqual(tds[1].text, '電車代')
+        self.assertEqual(tds[2].text, '600')
+        self.assertEqual(tds[3].text, '銀行')
+        self.assertEqual(tds[4].text, '交通費')
+
+    def test_train_fare_shortcut_default_price(self):
+        now = datetime.now()
+        # 前処理
+        self._login()
+        self._location(self.live_server_url + reverse('moneybook:add'))
+
+        # テスト - 金額を空にして送信
+        self.driver.find_element(By.ID, 's_day').send_keys('7')
+        self.driver.find_element(By.XPATH, '//form[3]/table/tbody/tr[3]/td/input[@type="button"][2]').click()
+
+        self._location(self.live_server_url + reverse('moneybook:index'))
+        rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
+        self.assertEqual(len(rows), 2)
+        tds = rows[1].find_elements(By.TAG_NAME, 'td')
+        self.assertEqual(tds[0].text, str(now.year) + '/' + str.zfill(str(now.month), 2) + '/' + '07')
+        self.assertEqual(tds[1].text, '電車代')
+        # デフォルトの3000円が使われていることを確認
+        self.assertEqual(tds[2].text, '3,000')
+        self.assertEqual(tds[3].text, '銀行')
+        self.assertEqual(tds[4].text, '交通費')
+
+    def test_train_fare_shortcut_all_defaults(self):
+        now = datetime.now()
+        # 前処理
+        self._login()
+        self._location(self.live_server_url + reverse('moneybook:add'))
+
+        # テスト - 日付も金額も空で送信
+        self.driver.find_element(By.XPATH, '//form[3]/table/tbody/tr[3]/td/input[@type="button"][2]').click()
+
+        self._location(self.live_server_url + reverse('moneybook:index'))
+        rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
+        self.assertEqual(len(rows), 2)
+        tds = rows[1].find_elements(By.TAG_NAME, 'td')
+        # 今日の日付とデフォルトの3000円が使われていることを確認
+        self.assertEqual(tds[0].text, str(now.year) + '/' + str.zfill(str(now.month), 2) + '/' + str.zfill(str(now.day), 2))
+        self.assertEqual(tds[1].text, '電車代')
+        self.assertEqual(tds[2].text, '3,000')
+        self.assertEqual(tds[3].text, '銀行')
+        self.assertEqual(tds[4].text, '交通費')
+
     def test_manual_add_click(self):
         now = datetime.now()
         # 前処理
