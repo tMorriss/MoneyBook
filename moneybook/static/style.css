@@ -290,6 +290,11 @@ section h2 {
     background: #f68;
 }
 
+.tbl-summary {
+    margin-top: 15px;
+    margin-bottom: 20px;
+}
+
 .tbl-summary th,
 .tbl-summary td {
     font-size: 120%;
