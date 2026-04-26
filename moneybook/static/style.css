@@ -342,4 +342,9 @@ section h2 {
     #is_pc {
         visibility: hidden;
     }
+
+    .tbl-summary {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
 }
