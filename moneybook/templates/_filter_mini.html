@@ -70,7 +70,7 @@
                         {% for g in latter_categories %}
                         <input type="checkbox" class="check_filter" onChange="applyFilter()" name="filter-class[]"
                             id="filter-class-{{ g.pk }}" value="{{ g.pk }}" onfocus="addBlueFocus('#lbl-filter-class-{{ g.pk }}')"
-                            onblur="removeBlueFocus('#lbl-filter-class-{{ g.pk }}')" checked>';
+                            onblur="removeBlueFocus('#lbl-filter-class-{{ g.pk }}')" checked>
                         <label for="filter-class-{{ g.pk }}" id="lbl-filter-class-{{ g.pk }}">{{ g.name }}</label>
                         {% endfor %}
                     </td>
@@ -83,5 +83,13 @@
             <input type="button" value="全選択" class="btn-green" onclick="selectAll()">
             <input type="button" value="全解除" class="btn-blue" onclick="clearFilter()">
         </td>
+    </tr>
+</table>
+
+<table class="tbl-summary" style="margin-top: 15px;">
+    <tr>
+        <td class="summary-count" id="summary-count">件</td>
+        <td class="summary-income" id="summary-income">収入: 円</td>
+        <td class="summary-outgo" id="summary-outgo">支出: 円</td>
     </tr>
 </table>
