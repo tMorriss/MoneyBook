@@ -75,9 +75,15 @@
             </tr>
             <tr>
                 <td><button type="submit" class="btn-green">更新</button></td>
-                <td><button type="button" class="btn-blue" onclick="location.href='{% url 'moneybook:living_cost_mark' %}'">キャンセル</button></td>
+                <td><button type="button" class="btn-blue" id="btn_cancel">キャンセル</button></td>
             </tr>
         </table>
     </form>
 </section>
+
+<script type="text/javascript">
+    document.getElementById('btn_cancel').addEventListener('click', function() {
+        location.href = "{% url 'moneybook:living_cost_mark' %}";
+    });
+</script>
 {% endblock %}

@@ -30,8 +30,14 @@
 
     <table class="tbl-buttons">
         <tr>
-            <td><input type="button" value="編集" class="btn-blue" onclick="location.href='{% url 'moneybook:living_cost_mark_edit' %}'"></td>
+            <td><input type="button" value="編集" class="btn-blue" id="btn_edit"></td>
         </tr>
     </table>
 </section>
+
+<script type="text/javascript">
+    document.getElementById('btn_edit').addEventListener('click', function() {
+        location.href = "{% url 'moneybook:living_cost_mark_edit' %}";
+    });
+</script>
 {% endblock %}
