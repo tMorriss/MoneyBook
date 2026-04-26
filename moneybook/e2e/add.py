@@ -9,6 +9,12 @@ from selenium.webdriver.support.color import Color
 
 
 class Add(SeleniumBase):
+    def setUp(self):
+        super().setUp()
+        # Ensure no residual data from other tests if using the same DB
+        from moneybook.models import Data
+        Data.objects.all().delete()
+
     def _assert_bank_charge_kyash(self, method):
         now = datetime.now()
         self._location(self.live_server_url + reverse('moneybook:index'))

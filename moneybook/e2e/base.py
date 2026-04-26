@@ -5,12 +5,13 @@ import chromedriver_binary  # noqa: F401
 from django.contrib.auth.models import User
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.urls import reverse
+from moneybook.tests.mixins import DataFactoryMixin
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
 
-class SeleniumBase(StaticLiveServerTestCase):
-    fixtures = ['test_case', 'data_test_case']
+class SeleniumBase(DataFactoryMixin, StaticLiveServerTestCase):
+    fixtures = ['test_case']
     username = 'tester'
     password = 'GZK-kva_yfj1ahr0tcr'  # Chromeで警告が出ちゃうので複雑なパスワードを使う
 

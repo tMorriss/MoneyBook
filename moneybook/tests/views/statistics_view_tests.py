@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 from unittest.mock import patch
 
 from django.contrib.auth.models import User
@@ -26,6 +26,21 @@ class StatisticsViewTestCase(BaseTestCase):
 class StatisticsMonthViewTestCase(BaseTestCase):
     def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
+        # January
+        self._create_data(date=date(2000, 1, 1), item='給与', price=25123, direction_id=1, category_id=3)
+        self._create_data(date=date(2000, 1, 5), item='食費1', price=2500, direction_id=2, category_id=1)
+        self._create_data(date=date(2000, 1, 28), item='電気代', price=630, direction_id=2, category_id=2)
+        self._create_data(date=date(2000, 1, 28), item='ガス代', price=260, direction_id=2, category_id=2)
+        self._create_data(date=date(2000, 1, 28), item='水道代', price=600, direction_id=2, category_id=2)
+
+        # February
+        self._create_data(date=date(2000, 2, 1), item='給与', price=24321, direction_id=1, category_id=3)
+        self._create_data(date=date(2000, 2, 28), item='水道代', price=500, direction_id=2, category_id=2)
+
+        # March
+        self._create_data(date=date(2000, 3, 1), item='Outgo', price=500, direction_id=2, category_id=2)
+        self._create_data(date=date(2000, 3, 28), item='水道代', price=500, direction_id=2, category_id=2)
+
         response = self.client.get(
             reverse('moneybook:statistics_month', kwargs={'year': 2000}))
 
@@ -39,9 +54,9 @@ class StatisticsMonthViewTestCase(BaseTestCase):
 
         january = monthly_context[0]
         self.assertEqual(january['label'], 1)
-        self.assertEqual(january['income'], 33993)
-        self.assertEqual(january['outgo'], 8920)
-        self.assertEqual(january['balance'], 33993 - 8920)
+        self.assertEqual(january['income'], 25123)
+        self.assertEqual(january['outgo'], 3990)
+        self.assertEqual(january['balance'], 25123 - 3990)
         self.assertEqual(january['salary'], 25123)
         self.assertEqual(january['living_cost'], 2500)
         self.assertEqual(january['electricity_cost'], 630)
@@ -49,15 +64,16 @@ class StatisticsMonthViewTestCase(BaseTestCase):
         self.assertEqual(january['water_cost'], 300)
         self.assertEqual(january['infra_cost'], 1190)
         self.assertEqual(january['food_cost'], 2500)
-        self.assertEqual(january['all_income'], 33123)
-        self.assertEqual(january['all_outgo'], 8550)
-        self.assertEqual(january['all_balance'], 33123 - 8550)
-        self.assertEqual(january['period_balance'], 24073)
+        self.assertEqual(january['all_income'], 25123)
+        self.assertEqual(january['all_outgo'], 3990)
+        self.assertEqual(january['all_balance'], 25123 - 3990)
+        self.assertEqual(january['period_balance'], 21133)
+
         february = monthly_context[1]
         self.assertEqual(february['label'], 2)
         self.assertEqual(february['income'], 24321)
-        self.assertEqual(february['outgo'], 400)
-        self.assertEqual(february['balance'], 24321 - 400)
+        self.assertEqual(february['outgo'], 500)
+        self.assertEqual(february['balance'], 24321 - 500)
         self.assertEqual(february['salary'], 24321)
         self.assertEqual(february['living_cost'], 0)
         self.assertEqual(february['electricity_cost'], 0)
@@ -66,14 +82,15 @@ class StatisticsMonthViewTestCase(BaseTestCase):
         self.assertEqual(february['infra_cost'], 250)
         self.assertEqual(february['food_cost'], 0)
         self.assertEqual(february['all_income'], 24321)
-        self.assertEqual(february['all_outgo'], 400)
-        self.assertEqual(february['all_balance'], 24321 - 400)
-        self.assertEqual(february['period_balance'], 47994)
+        self.assertEqual(february['all_outgo'], 500)
+        self.assertEqual(february['all_balance'], 24321 - 500)
+        self.assertEqual(february['period_balance'], 21133 + (24321 - 500))
+
         march = monthly_context[2]
         self.assertEqual(march['label'], 3)
         self.assertEqual(march['income'], 0)
-        self.assertEqual(march['outgo'], 500)
-        self.assertEqual(march['balance'], -500)
+        self.assertEqual(march['outgo'], 1000)
+        self.assertEqual(march['balance'], -1000)
         self.assertEqual(march['salary'], 0)
         self.assertEqual(march['living_cost'], 0)
         self.assertEqual(march['electricity_cost'], 0)
@@ -82,9 +99,11 @@ class StatisticsMonthViewTestCase(BaseTestCase):
         self.assertEqual(march['infra_cost'], 250)
         self.assertEqual(march['food_cost'], 0)
         self.assertEqual(march['all_income'], 0)
-        self.assertEqual(march['all_outgo'], 500)
-        self.assertEqual(march['all_balance'], -500)
-        self.assertEqual(march['period_balance'], 47094)
+        self.assertEqual(march['all_outgo'], 1000)
+        self.assertEqual(march['all_balance'], -1000)
+        expected_march_period_balance = 21133 + (24321 - 500) - 1000
+        self.assertEqual(march['period_balance'], expected_march_period_balance)
+
         zero_list = list(range(3, 12))
         for i in zero_list:
             with self.subTest(i=i):
@@ -103,7 +122,7 @@ class StatisticsMonthViewTestCase(BaseTestCase):
                 self.assertEqual(m['all_income'], 0)
                 self.assertEqual(m['all_outgo'], 0)
                 self.assertEqual(m['all_balance'], 0)
-                self.assertEqual(m['period_balance'], 46694)
+                self.assertEqual(m['period_balance'], expected_march_period_balance)
 
         expects = [
             'statistics.html',
@@ -114,6 +133,8 @@ class StatisticsMonthViewTestCase(BaseTestCase):
 
     def test_get_december_water(self):
         self.client.force_login(User.objects.create_user(self.username))
+        self._create_data(date=date(1999, 12, 28), item='水道代', price=600, direction_id=2, category_id=2)
+        # StatisticsMonthView checks next month if water is 0, so we create it for 1999-12
         response = self.client.get(reverse('moneybook:statistics_month', kwargs={'year': 1999}))
         self.assertEqual(response.status_code, 200)
 

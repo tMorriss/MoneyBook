@@ -1,8 +1,9 @@
 from django.test import TestCase
+from moneybook.tests.mixins import DataFactoryMixin
 
 
-class BaseTestCase(TestCase):
-    fixtures = ['test_case', 'data_test_case']
+class BaseTestCase(DataFactoryMixin, TestCase):
+    fixtures = ['test_case']
     username = 'tester'
 
     def _assert_list(self, data, expects):

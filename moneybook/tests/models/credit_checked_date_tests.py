@@ -5,12 +5,18 @@ from moneybook.tests.base import BaseTestCase
 
 
 class CreditCheckedDateTestCase(BaseTestCase):
+    def setUp(self):
+        super().setUp()
+        CreditCheckedDate.objects.all().delete()
+        CreditCheckedDate.objects.create(pk=1, name='C1', date='3000-01-01', price=30000, show_order=2)
+        CreditCheckedDate.objects.create(pk=2, name='C2', date='2000-02-04', price=2000, show_order=1)
+
     def test_get_all(self):
         data = CreditCheckedDate.get_all()
-        self.assertEqual(data[0].name, 'AmexGold')
+        self.assertEqual(data[0].name, 'C2')
         self.assertEqual(data[0].date, date(2000, 2, 4))
         self.assertEqual(data[0].price, 2000)
-        self.assertEqual(data[1].name, 'センチュリオン')
+        self.assertEqual(data[1].name, 'C1')
         self.assertEqual(data[1].date, date(3000, 1, 1))
         self.assertEqual(data[1].price, 30000)
 
@@ -24,11 +30,11 @@ class CreditCheckedDateTestCase(BaseTestCase):
     def test_set_date(self):
         CreditCheckedDate.set_date(2, date(2001, 1, 2))
         data = CreditCheckedDate.get_all()
-        self.assertEqual(data[0].name, 'AmexGold')
+        self.assertEqual(data[0].name, 'C2')
         self.assertEqual(data[0].date, date(2001, 1, 2))
 
     def test_set_price(self):
         CreditCheckedDate.set_price(2, 2001)
         data = CreditCheckedDate.get_all()
-        self.assertEqual(data[0].name, 'AmexGold')
+        self.assertEqual(data[0].name, 'C2')
         self.assertEqual(data[0].price, 2001)

@@ -7,6 +7,7 @@ from moneybook.tests.base import BaseTestCase
 class DeleteApiViewTestCase(BaseTestCase):
     def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
+        self._create_data(pk=1)
         before_count = Data.get_all_data().count()
         response = self.client.get(reverse('moneybook:delete_api'), {'pk': 1})
         self.assertEqual(response.status_code, 405)
@@ -15,6 +16,7 @@ class DeleteApiViewTestCase(BaseTestCase):
 
     def test_post(self):
         self.client.force_login(User.objects.create_user(self.username))
+        self._create_data(pk=1)
         before_count = Data.get_all_data().count()
         response = self.client.post(reverse('moneybook:delete_api'), {'pk': 1})
         self.assertEqual(response.status_code, 200)
@@ -31,6 +33,7 @@ class DeleteApiViewTestCase(BaseTestCase):
         self.assertEqual(after_count, before_count)
 
     def test_post_guest(self):
+        self._create_data(pk=1)
         before_count = Data.get_all_data().count()
         response = self.client.post(reverse('moneybook:delete_api'), {'pk': 1})
         self.assertEqual(response.status_code, 403)

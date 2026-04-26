@@ -72,6 +72,10 @@ class AddApiViewTestCase(BaseTestCase):
 class SuggestApiViewTestCase(BaseTestCase):
     def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
+        self._create_data(date='2000-01-05', item='必需品1', price=1000)
+        self._create_data(date='2000-01-08', item='必需品2', price=3500)
+        self._create_data(date='2000-02-01', item='必需品3', price=400)
+
         response = self.client.get(
             reverse('moneybook:suggest_api'), {'item': '必需品'})
 
@@ -87,6 +91,9 @@ class SuggestApiViewTestCase(BaseTestCase):
 
     def test_get_distinct(self):
         self.client.force_login(User.objects.create_user(self.username))
+        self._create_data(date='2000-01-25', item='PayPayチャージ', price=1000)
+        self._create_data(date='2000-01-25', item='PayPayチャージ', price=1000)
+
         response = self.client.get(
             reverse('moneybook:suggest_api'), {'item': 'PayPayチャージ'})
 

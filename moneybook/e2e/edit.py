@@ -8,6 +8,11 @@ from selenium.webdriver.common.keys import Keys
 
 
 class Edit(SeleniumBase):
+    def setUp(self):
+        super().setUp()
+        from moneybook.models import Data
+        Data.objects.all().delete()
+
     def test_get(self):
         """編集画面が正しく表示されることを確認"""
         self._login()
