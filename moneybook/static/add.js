@@ -86,14 +86,14 @@ function keyPressCharge(code) {
     }
 }
 
-function sendTrafficCostShortcut(item) {
+function sendTrafficCostShortcut(item, defaultPrice) {
     yearValue = $('#s_year').val();
     monthValue = $('#s_month').val();
     dayValue = $('#s_day').val();
     priceValue = $('#s_price').val();
     now = new Date();
     day = (yearValue == now.getFullYear() && monthValue == (now.getMonth() + 1) && dayValue.length == 0) ? now.getDate() : dayValue;
-    price = (priceValue.length == 0) ? 3000 : evaluateFormula(priceValue);
+    price = (priceValue.length == 0) ? defaultPrice : evaluateFormula(priceValue);
     $.post({
         url: add_api_url,
         data: {
