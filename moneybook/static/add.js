@@ -93,7 +93,7 @@ function sendTrafficCostShortcut(item) {
     priceValue = $('#s_price').val();
     now = new Date();
     day = (yearValue == now.getFullYear() && monthValue == (now.getMonth() + 1) && dayValue.length == 0) ? now.getDate() : dayValue;
-    price = (priceValue.length == 0) ? 1000 : evaluateFormula(priceValue);
+    price = (priceValue.length == 0) ? evaluateFormula($('#s_price').attr('placeholder')) : evaluateFormula(priceValue);
     $.post({
         url: add_api_url,
         data: {
