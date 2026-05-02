@@ -10,8 +10,9 @@ if (-not (Test-Path "..\fixture")) {
 
 # 1Passwordからデータベース認証情報を一括で読み込む（1回のみ）
 # op item get ... --format json と ConvertFrom-Json を使用してオブジェクトとして取得
+# 日本語環境でも正しく取得できるよう、label ではなく id を使用してマッピングする
 $opJson = op item get "Mariadb_MoneyBook" --vault "Personal" --format json | ConvertFrom-Json
-$fields = $opJson.fields | ForEach-Object { $hash = @{} } { $hash[$_.label] = $_.value } { $hash }
+$fields = $opJson.fields | ForEach-Object { $hash = @{} } { $hash[$_.id] = $_.value } { $hash }
 
 $DB_HOSTNAME = $fields["hostname"]
 $DB_PORT = $fields["port"]

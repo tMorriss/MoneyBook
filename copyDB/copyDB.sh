@@ -9,9 +9,9 @@ mkdir -p ../fixture
 
 # 1Passwordからデータベース認証情報を一括で読み込む（1回のみ）
 # op item get ... --format json と jq を使用して安全に変数へ代入する
-# フィールドが存在しない場合は空文字列を返すように // "" を使用
+# 日本語環境でも正しく取得できるよう、label ではなく id を使用してマッピングする
 eval "$(op item get "Mariadb_MoneyBook" --vault "Personal" --format json | jq -r '
-  .fields | map({key: .label, value: .value}) | from_entries |
+  .fields | map({key: .id, value: .value}) | from_entries |
   "DB_HOSTNAME=\((.hostname // "") | @sh)\n" +
   "DB_PORT=\((.port // "") | @sh)\n" +
   "DB_USER=\((.username // "") | @sh)\n" +
