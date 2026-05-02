@@ -13,8 +13,6 @@ class ToolsView(View):
         actual_cash_balance = SeveralCosts.get_actual_cash_balance()
         # クレカ確認日
         credit_checked_date = CreditCheckedDate.get_all()
-        # 生活費目標額
-        living_cost_mark = SeveralCosts.get_living_cost_mark()
 
         context = {
             'app_name': settings.APP_NAME,
@@ -27,7 +25,6 @@ class ToolsView(View):
             'day': now.day,
             'actual_cash_balance': actual_cash_balance,
             'credit_checked_date': credit_checked_date,
-            'living_cost_mark': living_cost_mark,
         }
         return render(request, 'tools.html', context)
 

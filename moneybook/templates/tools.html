@@ -11,7 +11,6 @@
     actual_cash_api_url = "{% url 'moneybook:actual_cash_api' %}";
     checked_date_api_url = "{% url 'moneybook:checked_date_api' %}";
     several_checked_date_url = "{% url 'moneybook:several_checked_date' %}";
-    living_cost_mark_api_url = "{% url 'moneybook:living_cost_mark_api' %}";
     apply_check_api_url = "{% url 'moneybook:apply_check_api' %}";
     pre_check_api_url = "{% url 'moneybook:pre_check_api' %}";
     now_bank_api_url = "{% url 'moneybook:now_bank_api' %}";
@@ -64,17 +63,6 @@
     </table>
 
     <div id="several-checked-date"></div>
-
-    <h1>生活費目標額</h1>
-    <table class="tbl-common fcs-blue">
-        <tr>
-            <td><input type="text" class="righter" id="txt_living_cost" style="width:10ex" onfocus="unseparateValue('#txt_living_cost')"
-                    onblur="separateValue('#txt_living_cost')" onkeypress="keyPressLiving(event.keyCode)"
-                    value="{{ living_cost_mark| intcomma }}"></td>
-            <td><input type="button" value="更新" class="btn-green" onclick="updateLivingCostMark()"
-                    onkeypress="keyPressLiving(event.keyCode)"></td>
-        </tr>
-    </table>
 
     <h1>未承認トランザクション</h1>
     <div id="unchecked-transaction"></div>

@@ -79,6 +79,7 @@ jobs:
             login,
             delete,
             edit,
+            living_cost_mark,
             period_balances,
             periodic,
             search,
