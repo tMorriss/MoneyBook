@@ -9,6 +9,7 @@ from playwright.sync_api import sync_playwright
 class PlaywrightBase(StaticLiveServerTestCase):
     fixtures = ['test_case', 'data_test_case']
     username = 'tester'
+    # Chromeで警告が出ないように複雑なパスワードを使う
     password = 'GZK-kva_yfj1ahr0tcr'
 
     def setUp(self):
