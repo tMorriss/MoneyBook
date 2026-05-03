@@ -51,7 +51,7 @@ class PlaywrightBase(StaticLiveServerTestCase):
             {'href': reverse('moneybook:search'), 'text': '検索'},
             {'href': reverse('moneybook:tools'), 'text': 'ツール'}
         ]
-        links = self.page.query_selector_all('nav.task_bar > ul > li > a')
+        links = self.page.locator('nav.task_bar > ul > li > a').all()
         self.assertEqual(len(links), len(expects))
         for i in range(len(links)):
             with self.subTest(i=i):
