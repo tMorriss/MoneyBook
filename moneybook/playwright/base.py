@@ -28,17 +28,13 @@ class PlaywrightBase(StaticLiveServerTestCase):
         super().tearDown()
 
     def _location(self, url):
-        self.page.goto(url)
-        # Selenium had time.sleep(1) here, adding a small wait for stability
-        self.page.wait_for_timeout(1000)
+        self.page.goto(url, wait_until='load')
 
     def _login(self):
         self._location(self.live_server_url + reverse('moneybook:login'))
         self.page.fill('#id_username', self.username)
         self.page.fill('#id_password', self.password)
-        self.page.wait_for_timeout(500)
         self.page.click('.btn-green')
-        self.page.wait_for_timeout(500)
 
     def _assert_common(self):
         # アプリ名
