@@ -59,6 +59,4 @@ class PlaywrightBase(StaticLiveServerTestCase):
 
     def _assert_texts(self, actual_elements, expected_texts):
         # actual_elements が Locator の場合を想定
-        expect(actual_elements).to_have_count(len(expected_texts))
-        for i in range(len(expected_texts)):
-            expect(actual_elements.nth(i)).to_have_text(expected_texts[i])
+        expect(actual_elements).to_have_text(expected_texts)
