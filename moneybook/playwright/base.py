@@ -3,7 +3,7 @@ import os
 from django.contrib.auth.models import User
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.urls import reverse
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import expect, sync_playwright
 
 
 class PlaywrightBase(StaticLiveServerTestCase):
@@ -62,29 +62,24 @@ class PlaywrightBase(StaticLiveServerTestCase):
 
     def _assert_common(self):
         # アプリ名
-        self.assertEqual(self.page.inner_text('.header-cont1'), 'test-MoneyBook')
+        expect(self.page.locator('.header-cont1')).to_have_text('test-MoneyBook')
         # 名前表示
-        header_cont2_text = self.page.inner_text('.header-cont2')
-        self.assertTrue(self.username + 'さん' in header_cont2_text, header_cont2_text)
+        expect(self.page.locator('.header-cont2')).to_contain_text(self.username + 'さん')
 
         # タスクバー
-        expects = [
+        expected_links = [
             {'href': reverse('moneybook:index'), 'text': 'ホーム'},
             {'href': reverse('moneybook:add'), 'text': '追加'},
             {'href': reverse('moneybook:statistics'), 'text': '統計'},
             {'href': reverse('moneybook:search'), 'text': '検索'},
             {'href': reverse('moneybook:tools'), 'text': 'ツール'}
         ]
-        links = self.page.locator('nav.task_bar > ul > li > a').all()
-        self.assertEqual(len(links), len(expects))
-        for i in range(len(links)):
-            with self.subTest(i=i):
-                href = links[i].get_attribute('href')
-                self.assertEqual(href, self.live_server_url + expects[i]['href'])
-                self.assertEqual(links[i].inner_text(), expects[i]['text'])
+        links = self.page.locator('nav.task_bar > ul > li > a')
+        expect(links).to_have_count(len(expected_links))
+        for i in range(len(expected_links)):
+            expect(links.nth(i)).to_have_attribute('href', self.live_server_url + expected_links[i]['href'])
+            expect(links.nth(i)).to_have_text(expected_links[i]['text'])
 
-    def _assert_texts(self, actual_elements, expects):
-        self.assertEqual(len(actual_elements), len(expects))
-        for i in range(len(actual_elements)):
-            with self.subTest(i=i):
-                self.assertEqual(actual_elements[i].inner_text(), expects[i])
+    def _assert_texts(self, actual_elements, expected_texts):
+        # actual_elements が Locator の場合を想定
+        expect(actual_elements).to_have_text(expected_texts)

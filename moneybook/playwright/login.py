@@ -1,14 +1,14 @@
 from django.urls import reverse
 from moneybook.playwright.base import PlaywrightBase
+from playwright.sync_api import expect
 
 
 class Login(PlaywrightBase):
     def _assert_login_success(self):
         # ログインできたらトップに移動
-        self.assertEqual(self.page.url, self.live_server_url + reverse('moneybook:index'))
+        expect(self.page).to_have_url(self.live_server_url + reverse('moneybook:index'))
         # 名前表示
-        header_cont2_text = self.page.inner_text('.header-cont2')
-        self.assertTrue(self.username + 'さん' in header_cont2_text, header_cont2_text)
+        expect(self.page.locator('.header-cont2')).to_contain_text(self.username + 'さん')
 
     def test_login_button(self):
         self._login()
