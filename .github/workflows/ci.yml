@@ -132,3 +132,10 @@ jobs:
       - name: Test with tox
         run: |
           tox -e playwright
+      - name: Upload Playwright artifacts
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-artifacts-${{ matrix.test-module }}
+          path: playwright-artifact/
+          retention-days: 7
