@@ -53,12 +53,10 @@ class PlaywrightBase(StaticLiveServerTestCase):
         ]
         links = self.page.locator('nav.task_bar > ul > li > a')
         expect(links).to_have_count(len(expected_links))
+        expect(links).to_have_text([link['text'] for link in expected_links])
         for i in range(len(expected_links)):
             expect(links.nth(i)).to_have_attribute('href', self.live_server_url + expected_links[i]['href'])
-            expect(links.nth(i)).to_have_text(expected_links[i]['text'])
 
     def _assert_texts(self, actual_elements, expected_texts):
         # actual_elements が Locator の場合を想定
-        expect(actual_elements).to_have_count(len(expected_texts))
-        for i in range(len(expected_texts)):
-            expect(actual_elements.nth(i)).to_have_text(expected_texts[i])
+        expect(actual_elements).to_have_text(expected_texts)
