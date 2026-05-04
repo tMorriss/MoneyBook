@@ -1,252 +1,320 @@
+let roots = {};
+
+function disposeRoot(divId) {
+    if (roots[divId]) {
+        roots[divId].dispose();
+        delete roots[divId];
+    }
+}
+
 function drawGraph() {
     // 収入・支出・生活費・給与・食費
-    am4core.ready(function () {
-        // テーマ
-        am4core.useTheme(am4themes_animated);
-        am4core.useTheme(am4themes_kelly);
-
-        var chart = am4core.create("barplot_inout", am4charts.XYChart);
+    (function () {
+        const divId = "barplot_inout";
+        disposeRoot(divId);
 
         // データ収集
-        monthData = {};
+        let monthData = {};
         let monthIoList = $("#month_io_list li");
         for (var i = 0; i < monthIoList.length; i++) {
             let data = monthIoList[i].textContent.split(',');
-            monthData[data[0]] = { month: data[0], income: data[1], outgo: data[2] };
+            monthData[data[0]] = { month: data[0], income: Number(data[1]), outgo: Number(data[2]) };
         }
         let livingCostsList = $("#living_costs li");
         for (var i = 0; i < livingCostsList.length; i++) {
             let data = livingCostsList[i].textContent.split(',');
-            monthData[data[0]]["living"] = data[1];
+            monthData[data[0]]["living"] = Number(data[1]);
         }
         let salaryList = $("#salary li");
         for (var i = 0; i < salaryList.length; i++) {
             let data = salaryList[i].textContent.split(',');
-            monthData[data[0]]["salary"] = data[1];
+            monthData[data[0]]["salary"] = Number(data[1]);
         }
         let foodList = $("#food_costs li");
         for (var i = 0; i < foodList.length; i++) {
             let data = foodList[i].textContent.split(',');
-            monthData[data[0]]["food"] = data[1];
+            monthData[data[0]]["food"] = Number(data[1]);
         }
-        chart.data = [];
+        let chartData = [];
         for (let i in monthData) {
-            chart.data.push(monthData[i]);
+            chartData.push(monthData[i]);
         }
-        drawIOGraph(chart);
 
-        let livingSeries = chart.series.push(new am4charts.LineSeries());
-        livingSeries.stroke = am4core.color("#0f0");
-        livingSeries.strokeWidth = 3;
-        livingSeries.dataFields.valueY = "living";
-        livingSeries.dataFields.categoryX = "month";
-        livingSeries.name = "生活費";
-        let livingBullet = livingSeries.bullets.push(new am4charts.Bullet());
-        livingBullet.fill = livingSeries.stroke;
-        livingBullet.tooltipText = livingSeries.name + ": {valueY}円";
-        let livingCircle = livingBullet.createChild(am4core.Circle);
-        livingCircle.radius = 5;
-        livingCircle.fill = livingSeries.stroke;
+        let root = am5.Root.new(divId);
+        roots[divId] = root;
+        root.setThemes([am5themes_Animated.new(root), am5themes_Kelly.new(root)]);
 
-        let salarySeries = chart.series.push(new am4charts.LineSeries());
-        salarySeries.stroke = am4core.color("#ff0");
-        salarySeries.strokeWidth = 3;
-        salarySeries.dataFields.valueY = "salary";
-        salarySeries.dataFields.categoryX = "month";
-        salarySeries.name = "給与";
-        let salaryBullet = salarySeries.bullets.push(new am4charts.Bullet());
-        salaryBullet.fill = salarySeries.stroke;
-        salaryBullet.tooltipText = salarySeries.name + ": {valueY}円";
-        let salaryCircle = salaryBullet.createChild(am4core.Circle);
-        salaryCircle.radius = 5;
-        salaryCircle.fill = salarySeries.stroke;
+        let chart = root.container.children.push(am5xy.XYChart.new(root, {
+            panX: false,
+            panY: false,
+            wheelX: "none",
+            wheelY: "none",
+            layout: root.verticalLayout
+        }));
 
-        let foodSeries = chart.series.push(new am4charts.LineSeries());
-        foodSeries.stroke = am4core.color("#e70");
-        foodSeries.strokeWidth = 3;
-        foodSeries.dataFields.valueY = "food";
-        foodSeries.dataFields.categoryX = "month";
-        foodSeries.name = "食費";
-        let foodBullet = foodSeries.bullets.push(new am4charts.Bullet());
-        foodBullet.fill = foodSeries.stroke;
-        foodBullet.tooltipText = foodSeries.name + ": {valueY}円";
-        let foodCircle = foodBullet.createChild(am4core.Circle);
-        foodCircle.radius = 5;
-        foodCircle.fill = foodSeries.stroke;
+        let xAxis = chart.xAxes.push(am5xy.CategoryAxis.new(root, {
+            categoryField: "month",
+            renderer: am5xy.AxisRendererX.new(root, {
+                minGridDistance: 30
+            })
+        }));
+        xAxis.data.setAll(chartData);
 
-        chart.legend = new am4charts.Legend();
-        chart.legend.position = "bottom";
-    });
+        let yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
+            min: 0,
+            renderer: am5xy.AxisRendererY.new(root, {})
+        }));
+
+        drawIOGraph(root, chart, xAxis, yAxis, chartData);
+
+        let configLines = [
+            { value: "living", name: "生活費", color: "#0f0" },
+            { value: "salary", name: "給与", color: "#ff0" },
+            { value: "food", name: "食費", color: "#e70" }
+        ];
+
+        configLines.forEach(function (conf) {
+            let series = chart.series.push(am5xy.LineSeries.new(root, {
+                name: conf.name,
+                xAxis: xAxis,
+                yAxis: yAxis,
+                valueYField: conf.value,
+                categoryXField: "month",
+                stroke: am5.color(conf.color),
+                tooltip: am5.Tooltip.new(root, {
+                    labelText: "{name}: {valueY}円"
+                })
+            }));
+            series.strokes.template.setAll({ strokeWidth: 3 });
+            series.data.setAll(chartData);
+
+            series.bullets.push(function () {
+                return am5.Bullet.new(root, {
+                    sprite: am5.Circle.new(root, {
+                        radius: 5,
+                        fill: am5.color(conf.color)
+                    })
+                });
+            });
+        });
+
+        chart.set("legend", am5.Legend.new(root, {
+            centerX: am5.p50,
+            x: am5.p50
+        }));
+        chart.get("legend").data.setAll(chart.series.values);
+    })();
 
     // インフラ
-    am4core.ready(function () {
-        // テーマ
-        am4core.useTheme(am4themes_animated);
-        am4core.useTheme(am4themes_kelly);
+    (function () {
+        const divId = "lineplot_infra";
+        disposeRoot(divId);
 
-        var chart = am4core.create("lineplot_infra", am4charts.XYChart);
-
-        // データ収集
         let infraList = $("#infra_costs li");
-        chart.data = [];
+        let chartData = [];
         for (var i = 0; i < infraList.length; i++) {
-            data = infraList[i].textContent.split(',');
-            chart.data.push({ month: data[0], electricity: data[1], gus: data[2], water: data[3], total: data[4] });
+            let data = infraList[i].textContent.split(',');
+            chartData.push({
+                month: data[0],
+                electricity: Number(data[1]),
+                gus: Number(data[2]),
+                water: Number(data[3]),
+                total: Number(data[4])
+            });
         }
 
-        let categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
-        categoryAxis.dataFields.category = "month";
-        categoryAxis.renderer.minGridDistance = 1;
+        let root = am5.Root.new(divId);
+        roots[divId] = root;
+        root.setThemes([am5themes_Animated.new(root), am5themes_Kelly.new(root)]);
 
-        let valueAxis = new am4charts.ValueAxis();
-        valueAxis.min = 0;
-        chart.yAxes.push(valueAxis);
+        let chart = root.container.children.push(am5xy.XYChart.new(root, {
+            layout: root.verticalLayout
+        }));
+
+        let xAxis = chart.xAxes.push(am5xy.CategoryAxis.new(root, {
+            categoryField: "month",
+            renderer: am5xy.AxisRendererX.new(root, { minGridDistance: 30 })
+        }));
+        xAxis.data.setAll(chartData);
+
+        let yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
+            min: 0,
+            renderer: am5xy.AxisRendererY.new(root, {})
+        }));
 
         let config = [
             { value: "electricity", name: "電気代", color: "#ff0" },
             { value: "gus", name: "ガス代", color: "#f00" },
             { value: "water", name: "水道代", color: "#00f" },
             { value: "total", name: "合計", color: "#000" },
-        ]
-        for (var c in config) {
-            var series = chart.series.push(new am4charts.LineSeries());
-            series.stroke = am4core.color(config[c].color);
-            series.strokeWidth = 3;
-            series.dataFields.valueY = config[c].value;
-            series.dataFields.categoryX = "month";
-            series.name = config[c].name;
+        ];
 
-            var bullet = series.bullets.push(new am4charts.Bullet());
-            bullet.fill = series.stroke;
-            bullet.tooltipText = config[c].name + ": {valueY}円";
-            var circle = bullet.createChild(am4core.Circle);
-            circle.radius = 5;
-            circle.fill = series.stroke;
-        }
-        chart.legend = new am4charts.Legend();
-        chart.legend.position = "bottom";
-    });
+        config.forEach(function (conf) {
+            let series = chart.series.push(am5xy.LineSeries.new(root, {
+                name: conf.name,
+                xAxis: xAxis,
+                yAxis: yAxis,
+                valueYField: conf.value,
+                categoryXField: "month",
+                stroke: am5.color(conf.color),
+                tooltip: am5.Tooltip.new(root, {
+                    labelText: "{name}: {valueY}円"
+                })
+            }));
+            series.strokes.template.setAll({ strokeWidth: 3 });
+            series.data.setAll(chartData);
 
-    am4core.ready(function () {
-        // テーマ
-        am4core.useTheme(am4themes_animated);
-        am4core.useTheme(am4themes_kelly);
+            series.bullets.push(function () {
+                return am5.Bullet.new(root, {
+                    sprite: am5.Circle.new(root, {
+                        radius: 5,
+                        fill: am5.color(conf.color)
+                    })
+                });
+            });
+        });
 
-        var chart = am4core.create("lineplot_food", am4charts.XYChart);
-
-        // データ収集
-
-        let categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
-        categoryAxis.dataFields.category = "month";
-        categoryAxis.renderer.minGridDistance = 1;
-
-        let valueAxis = new am4charts.ValueAxis();
-        valueAxis.min = 0;
-        chart.yAxes.push(valueAxis);
-
-        var series = chart.series.push(new am4charts.ColumnSeries());
-        series.dataFields.valueY = "food";
-        series.dataFields.categoryX = "month";
-        series.columns.template.tooltipText = "{valueY}円";
-        series.columns.template.fill = am4core.color("#ee7700");
-        series.columns.template.strokeWidth = 0;
-        series.columns.template.width = am4core.percent(90);
-        series.name = "食費";
-    });
+        chart.set("legend", am5.Legend.new(root, {
+            centerX: am5.p50,
+            x: am5.p50
+        }));
+        chart.get("legend").data.setAll(chart.series.values);
+    })();
 
     // 全収入・支出
-    am4core.ready(function () {
-        // テーマ
-        am4core.useTheme(am4themes_animated);
-        am4core.useTheme(am4themes_kelly);
+    (function () {
+        const divId = "barplot_inout_all";
+        disposeRoot(divId);
 
-        var chart = am4core.create("barplot_inout_all", am4charts.XYChart);
-
-        // データ収集
         let allIOList = $("#month_all_io_list li");
-        chart.data = [];
+        let chartData = [];
         for (var i = 0; i < allIOList.length; i++) {
-            data = allIOList[i].textContent.split(',');
-            chart.data.push({ month: data[0], income: data[1], outgo: data[2] });
+            let data = allIOList[i].textContent.split(',');
+            chartData.push({ month: data[0], income: Number(data[1]), outgo: Number(data[2]) });
         }
 
-        drawIOGraph(chart);
-    });
+        let root = am5.Root.new(divId);
+        roots[divId] = root;
+        root.setThemes([am5themes_Animated.new(root), am5themes_Kelly.new(root)]);
+
+        let chart = root.container.children.push(am5xy.XYChart.new(root, {
+            layout: root.verticalLayout
+        }));
+
+        let xAxis = chart.xAxes.push(am5xy.CategoryAxis.new(root, {
+            categoryField: "month",
+            renderer: am5xy.AxisRendererX.new(root, { minGridDistance: 30 })
+        }));
+        xAxis.data.setAll(chartData);
+
+        let yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
+            min: 0,
+            renderer: am5xy.AxisRendererY.new(root, {})
+        }));
+
+        drawIOGraph(root, chart, xAxis, yAxis, chartData);
+
+        chart.set("legend", am5.Legend.new(root, {
+            centerX: am5.p50,
+            x: am5.p50
+        }));
+        chart.get("legend").data.setAll(chart.series.values);
+    })();
 
     // 途中残高
-    am4core.ready(function () {
-        // テーマ
-        am4core.useTheme(am4themes_animated);
-        am4core.useTheme(am4themes_kelly);
+    (function () {
+        const divId = "lineplot_monthly_balance";
+        disposeRoot(divId);
 
-        var chart = am4core.create("lineplot_monthly_balance", am4charts.XYChart);
-
-        // データ収集
         let balanceList = $("#monthly_balance li");
-        chart.data = [];
-        minValue = null;
+        let chartData = [];
+        let minValue = null;
         for (var i = 0; i < balanceList.length; i++) {
-            data = balanceList[i].textContent.split(',');
-            chart.data.push({ month: data[0], balance: data[1] });
-            if (minValue == null || minValue > Number(data[1])) {
-                minValue = Number(data[1])
+            let data = balanceList[i].textContent.split(',');
+            let val = Number(data[1]);
+            chartData.push({ month: data[0], balance: val });
+            if (minValue == null || minValue > val) {
+                minValue = val;
             }
         }
 
-        let categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
-        categoryAxis.dataFields.category = "month";
-        categoryAxis.renderer.minGridDistance = 1;
+        let root = am5.Root.new(divId);
+        roots[divId] = root;
+        root.setThemes([am5themes_Animated.new(root), am5themes_Kelly.new(root)]);
 
-        let valueAxis = new am4charts.ValueAxis();
-        if (minValue > 0) {
-            valueAxis.min = 0;
-        }
-        chart.yAxes.push(valueAxis);
+        let chart = root.container.children.push(am5xy.XYChart.new(root, {
+            layout: root.verticalLayout
+        }));
 
-        let series = chart.series.push(new am4charts.LineSeries());
-        series.stroke = am4core.color("#0f0");
-        series.strokeWidth = 3;
-        series.dataFields.valueY = "balance";
-        series.dataFields.categoryX = "month";
-        series.name = "残高"
+        let xAxis = chart.xAxes.push(am5xy.CategoryAxis.new(root, {
+            categoryField: "month",
+            renderer: am5xy.AxisRendererX.new(root, { minGridDistance: 30 })
+        }));
+        xAxis.data.setAll(chartData);
 
-        let bullet = series.bullets.push(new am4charts.Bullet());
-        bullet.fill = series.stroke;
-        bullet.tooltipText = "{valueY}円";
-        let circle = bullet.createChild(am4core.Circle);
-        circle.radius = 5;
-        circle.fill = series.stroke;
-    });
+        let yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
+            min: (minValue > 0) ? 0 : undefined,
+            renderer: am5xy.AxisRendererY.new(root, {})
+        }));
+
+        let series = chart.series.push(am5xy.LineSeries.new(root, {
+            name: "残高",
+            xAxis: xAxis,
+            yAxis: yAxis,
+            valueYField: "balance",
+            categoryXField: "month",
+            stroke: am5.color("#0f0"),
+            tooltip: am5.Tooltip.new(root, {
+                labelText: "{valueY}円"
+            })
+        }));
+        series.strokes.template.setAll({ strokeWidth: 3 });
+        series.data.setAll(chartData);
+
+        series.bullets.push(function () {
+            return am5.Bullet.new(root, {
+                sprite: am5.Circle.new(root, {
+                    radius: 5,
+                    fill: am5.color("#0f0")
+                })
+            });
+        });
+    })();
 }
 
-function drawIOGraph(chart) {
-    let categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
-    categoryAxis.dataFields.category = "month";
-    categoryAxis.renderer.cellStartLocation = 0.1
-    categoryAxis.renderer.cellEndLocation = 0.9
-    categoryAxis.renderer.grid.template.location = 0;
-    categoryAxis.renderer.grid.template.marginLeft = 0;
-    categoryAxis.renderer.grid.template.marginRight = 0;
-    categoryAxis.renderer.minGridDistance = 1;
-
-    let valueAxis = new am4charts.ValueAxis();
-    valueAxis.min = 0;
-    chart.yAxes.push(valueAxis);
+function drawIOGraph(root, chart, xAxis, yAxis, chartData) {
+    let xRenderer = xAxis.get("renderer");
+    xRenderer.setAll({
+        cellStartLocation: 0.1,
+        cellEndLocation: 0.9
+    });
 
     let config = [
         { value: "income", name: "収入", color: "#00f" },
         { value: "outgo", name: "支出", color: "#f00" },
     ];
-    for (var c in config) {
-        var series = chart.series.push(new am4charts.ColumnSeries())
-        series.dataFields.valueY = config[c].value;
-        series.dataFields.categoryX = 'month';
-        series.columns.template.tooltipText = config[c].name + ": {valueY}円";
-        series.columns.template.fill = am4core.color(config[c].color);
-        series.columns.template.strokeWidth = 0;
-        series.columns.template.width = am4core.percent(100);
-        series.name = config[c].name;
-    }
+
+    config.forEach(function (conf) {
+        let series = chart.series.push(am5xy.ColumnSeries.new(root, {
+            name: conf.name,
+            xAxis: xAxis,
+            yAxis: yAxis,
+            valueYField: conf.value,
+            categoryXField: "month",
+            fill: am5.color(conf.color),
+            stroke: am5.color(conf.color),
+            tooltip: am5.Tooltip.new(root, {
+                labelText: "{name}: {valueY}円"
+            })
+        }));
+
+        series.columns.template.setAll({
+            width: am5.percent(100),
+            strokeOpacity: 0
+        });
+
+        series.data.setAll(chartData);
+    });
 }
 
 function move_year() {
