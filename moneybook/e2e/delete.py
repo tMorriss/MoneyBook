@@ -6,6 +6,11 @@ from selenium.webdriver.common.by import By
 
 
 class Delete(SeleniumBase):
+    def setUp(self):
+        super().setUp()
+        from moneybook.models import Data
+        Data.objects.all().delete()
+
     def test_delete_from_edit_page(self):
         """編集画面から削除できることを確認"""
         self._login()

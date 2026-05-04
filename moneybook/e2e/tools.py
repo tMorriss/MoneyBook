@@ -7,6 +7,15 @@ from selenium.webdriver.common.keys import Keys
 
 
 class Tools(SeleniumBase):
+    def setUp(self):
+        super().setUp()
+        from moneybook.models import BankBalance, CheckedDate, CreditCheckedDate, Data, SeveralCosts
+        Data.objects.all().delete()
+        SeveralCosts.objects.all().delete()
+        BankBalance.objects.all().delete()
+        CreditCheckedDate.objects.all().delete()
+        CheckedDate.objects.all().delete()
+
     def test_get(self):
         """ツール画面が正しく表示されることを確認"""
         self._login()

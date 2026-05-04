@@ -3,6 +3,12 @@ from moneybook.tests.base import BaseTestCase
 
 
 class SeveralCostsTestCase(BaseTestCase):
+    def setUp(self):
+        super().setUp()
+        SeveralCosts.objects.all().delete()
+        SeveralCosts.objects.create(name='LivingCostMark', price=1000)
+        SeveralCosts.objects.create(name='ActualCashBalance', price=2000)
+
     def test_str(self):
         self.assertEqual(str(SeveralCosts.objects.get(name='LivingCostMark')), 'LivingCostMark')
         self.assertEqual(str(SeveralCosts.objects.get(name='ActualCashBalance')), 'ActualCashBalance')

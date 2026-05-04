@@ -10,6 +10,8 @@ from moneybook.tests.base import BaseTestCase
 class EditViewTestCase(BaseTestCase):
     def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
+        self._create_data(pk=1, item='松屋')
+
         response = self.client.get(reverse('moneybook:edit', kwargs={'pk': 1}))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['app_name'], 'test-MoneyBook')
@@ -43,6 +45,9 @@ class EditApiViewTestCase(BaseTestCase):
     def test_post(self):
         self.client.force_login(User.objects.create_user(self.username))
         # 更新前の値を確認
+        self._create_data(
+            pk=1, date='1999-12-31', item='松屋', price=500, direction_id=2,
+            method_id=1, category_id=1, temp=False, checked=True)
         data = Data.get(1)
         self.assertEqual(data.date, date(1999, 12, 31))
         self.assertEqual(data.item, '松屋')
@@ -82,6 +87,9 @@ class EditApiViewTestCase(BaseTestCase):
     def test_post_missing_date_price(self):
         self.client.force_login(User.objects.create_user(self.username))
         # 更新前の値を確認
+        self._create_data(
+            pk=1, date='1999-12-31', item='松屋', price=500, direction_id=2,
+            method_id=1, category_id=1, temp=False, checked=True)
         data = Data.get(1)
         self.assertEqual(data.date, date(1999, 12, 31))
         self.assertEqual(data.item, '松屋')
@@ -137,6 +145,9 @@ class EditApiViewTestCase(BaseTestCase):
 
     def test_post_guest(self):
         # 更新前の値を確認
+        self._create_data(
+            pk=1, date='1999-12-31', item='松屋', price=500, direction_id=2,
+            method_id=1, category_id=1, temp=False, checked=True)
         data = Data.get(1)
         self.assertEqual(data.date, date(1999, 12, 31))
         self.assertEqual(data.item, '松屋')
@@ -177,12 +188,9 @@ class ApplyCheckApiViewTestCase(BaseTestCase):
     def test_post(self):
         self.client.force_login(User.objects.create_user(self.username))
         # まず事前チェック済みデータを作成
-        # pk=4 (必需品1), pk=8 (スーパー) are unchecked items
-        test_pks = [4, 8]  # 必需品1, スーパー
-        for pk in test_pks:
-            data = Data.get(pk)
-            data.pre_checked = True
-            data.save()
+        d1 = self._create_data(pk=4, item='必需品1', checked=False, pre_checked=True)
+        d2 = self._create_data(pk=8, item='スーパー', checked=False, pre_checked=True)
+        test_pks = [d1.pk, d2.pk]
 
         # 事前チェック済みデータを確認
         all_data = Data.get_all_data()
@@ -210,6 +218,7 @@ class PreCheckApiViewTestCase(BaseTestCase):
     def test_post_set_true(self):
         self.client.force_login(User.objects.create_user(self.username))
         # pk=4 (必需品1) is unchecked
+        self._create_data(pk=4, item='必需品1', checked=False, pre_checked=False)
         data = Data.get(4)
         self.assertEqual(data.pre_checked, False)
 
@@ -225,9 +234,7 @@ class PreCheckApiViewTestCase(BaseTestCase):
     def test_post_set_false(self):
         self.client.force_login(User.objects.create_user(self.username))
         # まず事前チェック済みにする
-        data = Data.get(4)
-        data.pre_checked = True
-        data.save()
+        self._create_data(pk=4, item='必需品1', checked=False, pre_checked=True)
 
         response = self.client.post(
             reverse('moneybook:pre_check_api'),
@@ -247,6 +254,7 @@ class PreCheckApiViewTestCase(BaseTestCase):
         self.assertEqual(response.status_code, 404)
 
     def test_post_guest(self):
+        self._create_data(pk=4, item='必需品1', checked=False, pre_checked=False)
         response = self.client.post(
             reverse('moneybook:pre_check_api'),
             {'id': 4, 'status': '1'}

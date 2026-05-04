@@ -9,6 +9,18 @@ from selenium.webdriver.support.color import Color
 
 
 class Index(SeleniumBase):
+    def _create_minimal_data(self):
+        # We only create what's needed for the specific test assertions in index.py
+        from moneybook.models import CheckedDate, CreditCheckedDate, Data, SeveralCosts
+
+        Data.objects.create(pk=2, date='2000-01-01', item='給与', price=25123, temp=0, checked=1, direction_id=1, category_id=3, method_id=2)
+        Data.objects.create(pk=3, date='2000-01-01', item='コンビニ', price=100, temp=0, checked=1, direction_id=2, category_id=1, method_id=1)
+
+        SeveralCosts.objects.create(name='LivingCostMark', price=1000)
+        SeveralCosts.objects.create(name='ActualCashBalance', price=2000)
+        CreditCheckedDate.objects.create(pk=1, name='センチュリオン', date='3000-01-01', price=30000, show_order=2)
+        CheckedDate.objects.create(pk=1, method_id=1, date='2000-01-02')
+
     def _assert_initialized_add_mini(self, year, month):
         """入力欄が初期値であることを確認"""
         self.assertEqual(self.driver.find_element(By.ID, 'a_year').get_attribute('value'), str(year))
@@ -118,6 +130,30 @@ class Index(SeleniumBase):
         self.assertEqual(self.driver.find_element(By.ID, 'a_day').get_attribute('placeholder'), str(now.day))
 
     def test_index_month(self):
+        # Index test needs more data for its assertions
+        from moneybook.models import Data
+        self._create_minimal_data()
+        Data.objects.create(pk=4, date='2000-01-05', item='必需品1', price=1000, temp=0, checked=0, direction_id=2, category_id=2, method_id=2)
+        Data.objects.create(pk=5, date='2000-01-03', item='その他1', price=30, temp=0, checked=1, direction_id=2, category_id=3, method_id=1)
+        Data.objects.create(pk=6, date='2000-01-08', item='必需品2', price=3500, temp=0, checked=1, direction_id=2, category_id=2, method_id=1)
+        Data.objects.create(pk=7, date='2000-01-10', item='現金収入', price=3000, temp=0, checked=1, direction_id=1, category_id=2, method_id=1)
+        Data.objects.create(pk=8, date='2000-01-15', item='スーパー', price=2800, temp=0, checked=0, direction_id=2, category_id=1, method_id=1)
+        Data.objects.create(pk=9, date='2000-01-11', item='銀行収入', price=5000, temp=0, checked=1, direction_id=1, category_id=2, method_id=2)
+        Data.objects.create(pk=10, date='2000-01-20', item='貯金', price=130, temp=0, checked=0, direction_id=2, category_id=5, method_id=2)
+        Data.objects.create(
+            pk=11, date='2000-01-25', item='PayPayチャージ', price=1000,
+            temp=0, checked=1, direction_id=1, category_id=4, method_id=2)
+        Data.objects.create(
+            pk=12, date='2000-01-25', item='PayPayチャージ', price=1000,
+            temp=0, checked=0, direction_id=2, category_id=4, method_id=3)
+        Data.objects.create(pk=13, date='2000-01-19', item='計算外', price=500, temp=0, checked=0, direction_id=2, category_id=6, method_id=2)
+        Data.objects.create(pk=14, date='2000-01-28', item='電気代', price=630, temp=0, checked=1, direction_id=2, category_id=2, method_id=2)
+        Data.objects.create(pk=15, date='2000-01-28', item='ガス代', price=260, temp=0, checked=1, direction_id=2, category_id=2, method_id=2)
+        Data.objects.create(pk=16, date='2000-01-28', item='水道代', price=600, temp=0, checked=1, direction_id=2, category_id=2, method_id=2)
+        Data.objects.create(pk=17, date='2000-01-31', item='立替分1', price=400, temp=1, checked=0, direction_id=1, category_id=1, method_id=3)
+        Data.objects.create(pk=18, date='2000-01-31', item='立替分2', price=600, temp=1, checked=1, direction_id=1, category_id=2, method_id=2)
+        Data.objects.create(pk=1, date='1999-12-31', item='松屋', price=500, temp=0, checked=1, direction_id=2, category_id=1, method_id=1)
+
         self._login()
         self._location(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
         self._assert_common()
@@ -242,6 +278,7 @@ class Index(SeleniumBase):
         self._assert_texts(actuals, expects)
 
     def test_index_month_out_of_range(self):
+        self._create_minimal_data()
         """存在しない日付に飛ぶとtopにリダイレクト"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 13}))
@@ -457,6 +494,7 @@ class Index(SeleniumBase):
         self._assert_index_date(2000, 1)
 
     def test_filter_jump_last(self):
+        self._create_minimal_data()
         self._login()
         self._location(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
         self.driver.find_element(By.XPATH,
@@ -465,6 +503,7 @@ class Index(SeleniumBase):
         self._assert_index_date(1999, 12)
 
     def test_filter_jump_next(self):
+        self._create_minimal_data()
         self._login()
         self._location(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 12}))
         self.driver.find_element(By.XPATH,
@@ -615,6 +654,9 @@ class Index(SeleniumBase):
         self._assert_is_displayed(actuals, expects)
 
     def test_move_edit(self):
+        from moneybook.models import Data
+        self._create_minimal_data()
+        Data.objects.create(pk=18, date='2000-01-31', item='立替分2', price=600, temp=1, checked=1, direction_id=1, category_id=2, method_id=2)
         self._login()
         self._location(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
         self.driver.find_element(By.XPATH, '//*[@id="transactions"]/table/tbody/tr[2]/td[6]/a').click()
