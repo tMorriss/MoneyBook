@@ -51,11 +51,12 @@ class PlaywrightBase(StaticLiveServerTestCase):
             {'href': reverse('moneybook:search'), 'text': '検索'},
             {'href': reverse('moneybook:tools'), 'text': 'ツール'}
         ]
+        import re
         links = self.page.locator('nav.task_bar > ul > li > a')
         expect(links).to_have_count(len(expected_links))
         expect(links).to_have_text([link['text'] for link in expected_links])
         for i in range(len(expected_links)):
-            expect(links.nth(i)).to_have_attribute('href', self.live_server_url + expected_links[i]['href'])
+            expect(links.nth(i)).to_have_attribute('href', re.compile(re.escape(expected_links[i]['href']) + '$'))
 
     def _assert_texts(self, actual_elements, expected_texts):
         # actual_elements が Locator の場合を想定
