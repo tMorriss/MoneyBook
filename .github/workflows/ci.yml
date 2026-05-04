@@ -81,7 +81,6 @@ jobs:
             index,
             add,
             delete,
-            edit,
             period_balances,
             periodic,
             search,
@@ -115,6 +114,7 @@ jobs:
       matrix:
         test-module:
           [
+            edit,
             login,
           ]
     env:
