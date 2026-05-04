@@ -41,8 +41,7 @@ class PlaywrightBase(StaticLiveServerTestCase):
 
         if failed:
             artifact_dir = 'playwright-artifact'
-            if not os.path.exists(artifact_dir):
-                os.makedirs(artifact_dir)
+            os.makedirs(artifact_dir, exist_ok=True)
 
             # 行数を抽出
             lineno = 'unknown'
