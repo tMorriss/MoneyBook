@@ -39,7 +39,11 @@ class EditTest(PlaywrightBase):
         self._login()
         self._add_row_and_goto_edit(day='10', item='編集テスト', price='1000')
 
-        # self._assert_common()  # origin/masterのbase.pyがhrefの比較で失敗するため一旦コメントアウト
+        # アプリ名
+        self.assertEqual(self.page.inner_text('.header-cont1'), 'test-MoneyBook')
+        # 名前表示
+        header_cont2_text = self.page.inner_text('.header-cont2')
+        self.assertTrue(self.username + 'さん' in header_cont2_text, header_cont2_text)
 
         # フォームの値を確認
         now = datetime.now()
