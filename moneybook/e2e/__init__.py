@@ -2,7 +2,6 @@ from .add import *
 from .base import *
 from .delete import *
 from .edit import *
-from .index import *
 from .period_balances import *
 from .periodic import *
 from .search import *
