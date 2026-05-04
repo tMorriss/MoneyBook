@@ -13,6 +13,7 @@ coverage.*
 
 # Tools & Drivers
 chrome*
+playwright-artifact/
 
 # Local Data
 /fixture/

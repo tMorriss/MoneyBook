@@ -1,4 +1,5 @@
 import os
+import re
 
 from django.contrib.auth.models import User
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
@@ -21,9 +22,41 @@ class PlaywrightBase(StaticLiveServerTestCase):
         headless = os.environ.get('HEADLESS') != '0'
         self.browser = self.playwright.chromium.launch(headless=headless)
         self.context = self.browser.new_context(viewport={'width': 1920, 'height': 1080})
+        self.context.tracing.start(screenshots=True, snapshots=True, sources=True)
         self.page = self.context.new_page()
 
     def tearDown(self):
+        # 失敗時にトレースを保存する
+        outcome = self._outcome
+        result = outcome.result
+        failed = False
+        last_failure = None
+        if result.failures and result.failures[-1][0] == self:
+            last_failure = result.failures[-1]
+        elif result.errors and result.errors[-1][0] == self:
+            last_failure = result.errors[-1]
+
+        if last_failure:
+            failed = True
+
+        if failed:
+            artifact_dir = 'playwright-artifact'
+            if not os.path.exists(artifact_dir):
+                os.makedirs(artifact_dir)
+
+            # 行数を抽出
+            lineno = 'unknown'
+            tb_str = last_failure[1]
+            # テストファイル名を含む行を探す
+            matches = re.findall(r'File ".*moneybook/playwright/.*\.py", line (\d+), in', tb_str)
+            if matches:
+                lineno = matches[-1]
+
+            filename = f'{self.__class__.__name__}.{self._testMethodName}_L{lineno}_retry0.zip'
+            self.context.tracing.stop(path=os.path.join(artifact_dir, filename))
+        else:
+            self.context.tracing.stop()
+
         self.browser.close()
         self.playwright.stop()
         super().tearDown()
