@@ -25,6 +25,8 @@ class Index(PlaywrightBase):
         self._login()
         self._location(self.live_server_url + reverse('moneybook:index'))
 
+        # AJAXでテーブルが読み込まれるのを待つ
+        self.page.wait_for_selector('#transactions table')
         expect(self.page.locator('#transactions table tbody tr')).to_have_count(1)
 
         # 1件追加
@@ -37,8 +39,12 @@ class Index(PlaywrightBase):
 
         self.page.click('input[value="追加"]')
 
+        # 成功メッセージが表示されるのを待つ
+        expect(self.page.locator('#result_message')).to_contain_text('Success!')
+
         rows = self.page.locator('#transactions table tbody tr')
-        expect(rows).to_have_count(2)
+        # 追加後の反映を待つ
+        expect(rows).to_have_count(2, timeout=10000)
         tds = rows.nth(1).locator('td')
         expect(tds.nth(0)).to_have_text(f'{now.year}/{str(now.month).zfill(2)}/03')
         expect(tds.nth(1)).to_have_text(item)
@@ -56,6 +62,7 @@ class Index(PlaywrightBase):
         self._login()
         self._location(self.live_server_url + reverse('moneybook:index'))
 
+        self.page.wait_for_selector('#transactions table')
         expect(self.page.locator('#transactions table tbody tr')).to_have_count(1)
 
         # 1件追加
@@ -115,6 +122,10 @@ class Index(PlaywrightBase):
         self._location(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
         self._assert_common()
 
+        # AJAXでの読み込み完了を待つ
+        self.page.wait_for_selector('#transactions table')
+        self.page.wait_for_selector('#statistic-fixed table')
+
         # 追加部分
         self._assert_initialized_add_mini(2000, 1)
 
@@ -124,9 +135,11 @@ class Index(PlaywrightBase):
         categories = ['食費', '必需品', '交通費', 'その他', '内部移動', '貯金', '計算外', '収入']
         expect(self.page.locator('input[name="a_category"] + label')).to_have_text(categories)
 
-        # フィルタ
-        expect(self.page.locator('a[href="' + reverse('moneybook:index_month', kwargs={'year': 1999, 'month': 12}) + '"]')).to_be_visible()
-        expect(self.page.locator('a[href="' + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 2}) + '"]')).to_be_visible()
+        # フィルタ (意図した位置に意図したリンクがあることを確認)
+        expect(self.page.locator('.view-filter table.tbl-common td:nth-child(1) a')) \
+            .to_have_attribute('href', reverse('moneybook:index_month', kwargs={'year': 1999, 'month': 12}))
+        expect(self.page.locator('.view-filter table.tbl-common td:nth-child(3) a')) \
+            .to_have_attribute('href', reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 2}))
 
         expect(self.page.locator('#jump_year')).to_have_value('2000')
         expect(self.page.locator('#jump_month')).to_have_value('1')
@@ -405,18 +418,22 @@ class Index(PlaywrightBase):
     def test_filter_jump_last(self):
         self._login()
         self._location(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
-        self.page.click('a[href="' + reverse('moneybook:index_month', kwargs={'year': 1999, 'month': 12}) + '"]')
+        # 意図した位置（tbl-commonの1番目のセルのaタグ）をクリック
+        self.page.click('.view-filter table.tbl-common td:nth-child(1) a')
         self._assert_index_date(1999, 12)
 
     def test_filter_jump_next(self):
         self._login()
         self._location(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 12}))
-        self.page.click('a[href="' + reverse('moneybook:index_month', kwargs={'year': 2001, 'month': 1}) + '"]')
+        # 意図した位置（tbl-commonの3番目のセルのaタグ）をクリック
+        self.page.click('.view-filter table.tbl-common td:nth-child(3) a')
         self._assert_index_date(2001, 1)
 
     def test_index_filter_inout(self):
         self._login()
         self._location(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+        self.page.wait_for_selector('#transactions table')
+
         is_income = [True, True, False, False, False, False, True, False, False, False, True, True, False, False, False, False, True]
 
         rows = self.page.locator('#transactions table tbody tr')
@@ -437,6 +454,7 @@ class Index(PlaywrightBase):
     def test_index_filter_method_none(self):
         self._login()
         self._location(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+        self.page.wait_for_selector('#transactions table')
 
         # 全部非表示
         labels = self.page.locator('.view-filter input[name="filter-method[]"] + label')
@@ -449,6 +467,7 @@ class Index(PlaywrightBase):
     def test_index_filter_bank(self):
         self._login()
         self._location(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+        self.page.wait_for_selector('#transactions table')
 
         # 銀行のみ表示 (銀行(pk=1)以外をすべてクリックして外す)
         labels = self.page.locator('.view-filter input[name="filter-method[]"] + label')
@@ -463,6 +482,7 @@ class Index(PlaywrightBase):
     def test_index_filter_bank_paypay(self):
         self._login()
         self._location(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+        self.page.wait_for_selector('#transactions table')
 
         # 銀行(pk=1)とPayPay(pk=3)以外をすべて外す
         labels = self.page.locator('.view-filter input[name="filter-method[]"] + label')
@@ -479,6 +499,7 @@ class Index(PlaywrightBase):
     def test_index_filter_category_none(self):
         self._login()
         self._location(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+        self.page.wait_for_selector('#transactions table')
 
         # 全部非表示
         labels = self.page.locator('.view-filter input[name="filter-class[]"] + label')
@@ -491,6 +512,7 @@ class Index(PlaywrightBase):
     def test_index_filter_category_food(self):
         self._login()
         self._location(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+        self.page.wait_for_selector('#transactions table')
 
         # 食費(pk=1)のみ表示
         labels = self.page.locator('.view-filter input[name="filter-class[]"] + label')
@@ -504,6 +526,7 @@ class Index(PlaywrightBase):
     def test_index_filter_category_food_necessary(self):
         self._login()
         self._location(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+        self.page.wait_for_selector('#transactions table')
 
         # 食費(pk=1)と必需品(pk=2)
         labels = self.page.locator('.view-filter input[name="filter-class[]"] + label')
@@ -517,6 +540,7 @@ class Index(PlaywrightBase):
     def test_index_filter_category_food_necessary_intra(self):
         self._login()
         self._location(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+        self.page.wait_for_selector('#transactions table')
 
         # 食費(pk=1)と必需品(pk=2)と内部移動(pk=4)
         labels = self.page.locator('.view-filter input[name="filter-class[]"] + label')
@@ -534,6 +558,7 @@ class Index(PlaywrightBase):
     def test_index_filter_all(self):
         self._login()
         self._location(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+        self.page.wait_for_selector('#transactions table')
 
         # 全解除
         self.page.click('.view-filter input[value="全解除"]')
@@ -547,6 +572,7 @@ class Index(PlaywrightBase):
     def test_move_edit(self):
         self._login()
         self._location(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
+        self.page.wait_for_selector('#transactions table')
         self.page.click('#transactions table tbody tr:nth-child(2) td:nth-child(6) a')
 
         expect(self.page).to_have_url(self.live_server_url + reverse('moneybook:edit', kwargs={'pk': 18}))
@@ -556,7 +582,7 @@ class Index(PlaywrightBase):
         self._login()
         self._location(self.live_server_url + reverse('moneybook:index'))
 
-        # 初期状態: 1件のみ
+        self.page.wait_for_selector('#transactions table')
         expect(self.page.locator('#transactions table tbody tr')).to_have_count(1)
 
         # 簡単な足し算 =100+200 → 300
@@ -576,7 +602,7 @@ class Index(PlaywrightBase):
         self._login()
         self._location(self.live_server_url + reverse('moneybook:index'))
 
-        # 初期状態: 1件のみ
+        self.page.wait_for_selector('#transactions table')
         expect(self.page.locator('#transactions table tbody tr')).to_have_count(1)
 
         # 掛け算と括弧 =(100+200)*3 → 900
@@ -596,7 +622,7 @@ class Index(PlaywrightBase):
         self._login()
         self._location(self.live_server_url + reverse('moneybook:index'))
 
-        # 初期状態: 1件のみ
+        self.page.wait_for_selector('#transactions table')
         expect(self.page.locator('#transactions table tbody tr')).to_have_count(1)
 
         # 割り算 =1000/4 → 250
@@ -616,7 +642,7 @@ class Index(PlaywrightBase):
         self._login()
         self._location(self.live_server_url + reverse('moneybook:index'))
 
-        # 初期状態: 1件のみ
+        self.page.wait_for_selector('#transactions table')
         expect(self.page.locator('#transactions table tbody tr')).to_have_count(1)
 
         # カンマ付き数値 =1,000+2,000 → 3000
@@ -636,6 +662,9 @@ class Index(PlaywrightBase):
         self._login()
         now = datetime.now()
         self._location(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': now.year, 'month': now.month}))
+
+        # AJAX読み込み待ち
+        self.page.wait_for_selector('#summary-count')
 
         # 初期状態
         expect(self.page.locator('#summary-count')).to_have_text('0件')
@@ -657,6 +686,9 @@ class Index(PlaywrightBase):
         # 食費カテゴリ (pk=1)
         self.page.click('#lbl_a_category-1')
         self.page.click('input[value="追加"]')
+
+        # 成功メッセージが表示されるのを待つ
+        expect(self.page.locator('#result_message')).to_contain_text('Success!')
 
         # サマリー確認
         expect(self.page.locator('#summary-count')).to_have_text('2件')
