@@ -79,7 +79,6 @@ jobs:
         test-module:
           [
             add,
-            delete,
             edit,
             period_balances,
             periodic,
@@ -114,6 +113,7 @@ jobs:
       matrix:
         test-module:
           [
+            delete,
             index,
             login,
           ]
