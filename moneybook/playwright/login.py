@@ -1,6 +1,6 @@
 from django.urls import reverse
-from playwright.sync_api import expect
 from moneybook.playwright.base import PlaywrightBase
+from playwright.sync_api import expect
 
 
 class Login(PlaywrightBase):
