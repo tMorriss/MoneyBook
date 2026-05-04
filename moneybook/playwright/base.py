@@ -1,5 +1,4 @@
 import os
-import re
 
 from django.contrib.auth.models import User
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
@@ -43,15 +42,7 @@ class PlaywrightBase(StaticLiveServerTestCase):
             artifact_dir = 'playwright-artifact'
             os.makedirs(artifact_dir, exist_ok=True)
 
-            # 行数を抽出
-            lineno = 'unknown'
-            tb_str = last_failure[1]
-            # テストファイル名を含む行を探す
-            matches = re.findall(r'File ".*moneybook/playwright/.*\.py", line (\d+), in', tb_str)
-            if matches:
-                lineno = matches[-1]
-
-            filename = f'{self.__class__.__name__}.{self._testMethodName}_L{lineno}_retry0.zip'
+            filename = f'{self.__class__.__name__}.{self._testMethodName}_retry0.zip'
             self.context.tracing.stop(path=os.path.join(artifact_dir, filename))
         else:
             self.context.tracing.stop()
