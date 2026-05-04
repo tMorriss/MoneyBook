@@ -78,7 +78,6 @@ jobs:
       matrix:
         test-module:
           [
-            index,
             add,
             delete,
             edit,
@@ -115,6 +114,7 @@ jobs:
       matrix:
         test-module:
           [
+            index,
             login,
           ]
     env:
