@@ -25,7 +25,7 @@ class PlaywrightBase(StaticLiveServerTestCase):
         self.page = self.context.new_page()
 
     def tearDown(self):
-        # 失敗時にトレースを保存する
+        # 失敗時にトレースとスクリーンショットを保存する
         outcome = self._outcome
         result = outcome.result
         failed = False
@@ -41,6 +41,10 @@ class PlaywrightBase(StaticLiveServerTestCase):
         if failed:
             artifact_dir = 'playwright-artifact'
             os.makedirs(artifact_dir, exist_ok=True)
+
+            # スクリーンショット
+            screenshot_path = os.path.join(artifact_dir, f'{self.__class__.__name__}.{self._testMethodName}_failure.png')
+            self.page.screenshot(path=screenshot_path)
 
             filename = f'{self.__class__.__name__}.{self._testMethodName}_retry0.zip'
             self.context.tracing.stop(path=os.path.join(artifact_dir, filename))
@@ -58,7 +62,10 @@ class PlaywrightBase(StaticLiveServerTestCase):
         self._location(self.live_server_url + reverse('moneybook:login'))
         self.page.fill('#id_username', self.username)
         self.page.fill('#id_password', self.password)
-        self.page.click('.btn-green')
+        # ログインボタンをクリック。遷移を待つ。
+        self.page.click('input[value="ログイン"]')
+        # ログイン成功の証拠（ログアウトリンクの存在）を待つ。タイムアウトはデフォルト(30s)
+        self.page.wait_for_selector('a[href="' + reverse('moneybook:logout') + '"]')
 
     def _assert_common(self):
         # アプリ名
