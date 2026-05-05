@@ -23,8 +23,8 @@ class Delete(PlaywrightBase):
         # ヘッダー + 1件。
         expect(rows).to_have_count(2, timeout=10000)
 
-        # 編集画面に移動 (2行目の 6列目)
-        self.page.click('#transactions table tbody tr:nth-child(2) td:nth-child(6) a')
+        # 編集画面に移動
+        self.page.locator('.data-row').filter(has_text='削除テスト').locator('.a-edit a').click()
         expect(self.page).to_have_url(re.compile(r'/edit/\d+'))
 
         # 削除ボタンをクリック
@@ -59,7 +59,7 @@ class Delete(PlaywrightBase):
         expect(self.page.locator('#transactions table tbody tr')).to_have_count(3, timeout=10000)
 
         # 2件目（削除するデータ）の編集画面に移動
-        self.page.click('#transactions table tbody tr:nth-child(2) td:nth-child(6) a')
+        self.page.locator('.data-row').filter(has_text='削除するデータ').locator('.a-edit a').click()
 
         # 削除ボタンをクリック
         self.page.click('input[value="削除"]')
@@ -68,6 +68,5 @@ class Delete(PlaywrightBase):
         self.page.wait_for_url(self.live_server_url + reverse('moneybook:index'))
         self.page.wait_for_selector('#transactions table')
 
-        rows = self.page.locator('#transactions table tbody tr')
-        expect(rows).to_have_count(2)
-        expect(rows.nth(1).locator('td').nth(1)).to_have_text('残すデータ')
+        expect(self.page.locator('.data-row')).to_have_count(1)
+        expect(self.page.locator('.data_item')).to_have_text(['残すデータ'])
