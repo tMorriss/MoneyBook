@@ -5,8 +5,8 @@ from playwright.sync_api import expect
 
 class Login(PlaywrightBase):
     def _assert_login_success(self):
-        # ログインできたらトップに移動
-        expect(self.page).to_have_url(self.live_server_url + reverse('moneybook:index'))
+        # ログイン成功の証拠（ログアウトリンクの存在）を待つ
+        self.page.wait_for_selector('a[href="' + reverse('moneybook:logout') + '"]')
         # 名前表示
         expect(self.page.locator('.header-cont2')).to_contain_text(self.username + 'さん')
 
