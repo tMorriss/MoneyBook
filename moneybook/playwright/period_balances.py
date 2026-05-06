@@ -29,8 +29,8 @@ class PeriodBalances(PlaywrightBase):
 
         # URLパラメータによる指定
         url_with_params = (
-            f"{self.live_server_url}{reverse('moneybook:period_balances')}"
-            f"?start_year={now.year}&start_month=2&end_year={now.year}&end_month={now.month}"
+            f'{self.live_server_url}{reverse("moneybook:period_balances")}'
+            f'?start_year={now.year}&start_month=2&end_year={now.year}&end_month={now.month}'
         )
         self._location(url_with_params)
 
@@ -54,7 +54,7 @@ class PeriodBalances(PlaywrightBase):
         # 2. 期間を変更してEnterキー (年入力欄)
         start_year_input = self.page.locator('#start_year')
         start_year_input.fill(str(now.year))
-        start_year_input.dispatch_event('keypress', {'keyCode': 13})
+        start_year_input.press('Enter')
 
         expect(self.page.locator('#lineplot_monthly_balance')).to_be_visible()
         expect(self.page.locator('#start_year')).to_have_value(str(now.year))
@@ -62,7 +62,7 @@ class PeriodBalances(PlaywrightBase):
         # 3. 期間を変更してEnterキー (月入力欄)
         start_month_input = self.page.locator('#start_month')
         start_month_input.fill('3')
-        start_month_input.dispatch_event('keypress', {'keyCode': 13})
+        start_month_input.press('Enter')
 
         expect(self.page.locator('#lineplot_monthly_balance')).to_be_visible()
         expect(self.page.locator('#start_month')).to_have_value('3')
@@ -86,7 +86,7 @@ class PeriodBalances(PlaywrightBase):
         # 1. データがある状態での表示確認
         self.page.click('input[value="更新"]')
         expect(self.page.locator('#lineplot_monthly_balance')).to_be_visible()
-        # グラフデータ用の隠しリストが空でないことを確認 (サクッとできる範囲の検証)
+        # グラフデータ用の隠しリストが空でないことを確認
         expect(self.page.locator('#monthly_balance li')).not_to_have_count(0)
 
         # 2. 1ヶ月だけの期間を指定

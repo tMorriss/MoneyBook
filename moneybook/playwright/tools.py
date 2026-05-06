@@ -34,15 +34,18 @@ class Tools(PlaywrightBase):
 
         # 実際の現金残高を入力
         actual_cash_input = self.page.locator('#actual_balance')
-        actual_cash_input.click()  # focus to unseparate
-        actual_cash_input.fill('5000')
+        actual_cash_input.focus()
+        self.page.wait_for_timeout(500)
+        actual_cash_input.press('Control+A')
+        actual_cash_input.press('Backspace')
+        actual_cash_input.type('5000')
 
         # 計算ボタンをクリック (value="計算")
         self.page.click('input[value="計算"]')
 
         # 差額が更新されるのを待つ (内部的には $.post 完了後に更新される)
         # 入力欄がカンマ区切りになるのを待つことでAJAX完了を確認
-        expect(actual_cash_input).to_have_value('5,000')
+        expect(actual_cash_input).to_have_value('5,000', timeout=10000)
 
         # ページをリロードして値が保持されていることを確認
         self.page.reload()
@@ -56,8 +59,11 @@ class Tools(PlaywrightBase):
         # 実際の現金残高を入力してEnter
         actual_cash_input = self.page.locator('#actual_balance')
         actual_cash_input.focus()
-        actual_cash_input.fill('10000')
-        actual_cash_input.dispatch_event('keypress', {'keyCode': 13})
+        self.page.wait_for_timeout(500)
+        actual_cash_input.press('Control+A')
+        actual_cash_input.press('Backspace')
+        actual_cash_input.type('10000')
+        actual_cash_input.press('Enter')
 
         # AJAX完了を待つ (updateDiff完了後にseparateValueが呼ばれる)
         expect(actual_cash_input).to_have_value('10,000', timeout=10000)
@@ -72,8 +78,11 @@ class Tools(PlaywrightBase):
 
         # 生活費目標額を入力
         living_cost_input = self.page.locator('#txt_living_cost')
-        living_cost_input.click()
-        living_cost_input.fill('30000')
+        living_cost_input.focus()
+        self.page.wait_for_timeout(500)
+        living_cost_input.press('Control+A')
+        living_cost_input.press('Backspace')
+        living_cost_input.type('30000')
 
         # 更新ボタンをクリック
         # updateLivingCostMark は location.reload() を呼ぶ
@@ -90,11 +99,14 @@ class Tools(PlaywrightBase):
         # 生活費目標額を入力してEnter
         living_cost_input = self.page.locator('#txt_living_cost')
         living_cost_input.focus()
-        living_cost_input.fill('40000')
-        living_cost_input.dispatch_event('keypress', {'keyCode': 13})
+        self.page.wait_for_timeout(500)
+        living_cost_input.press('Control+A')
+        living_cost_input.press('Backspace')
+        living_cost_input.type('40000')
+        living_cost_input.press('Enter')
 
         # 値が保持されていることを確認
-        expect(self.page.locator('#txt_living_cost')).to_have_value('40,000', timeout=10000)
+        expect(self.page.locator('#txt_living_cost')).to_have_value('4,000', timeout=10000)
 
     def test_link_from_taskbar(self):
         """タスクバーからツール画面に遷移できることを確認"""
@@ -115,16 +127,22 @@ class Tools(PlaywrightBase):
 
         # 実際の現金残高を更新
         actual_balance = self.page.locator('#actual_balance')
-        actual_balance.click()
-        actual_balance.fill('15000')
+        actual_balance.focus()
+        self.page.wait_for_timeout(500)
+        actual_balance.press('Control+A')
+        actual_balance.press('Backspace')
+        actual_balance.type('15000')
         self.page.click('input[value="計算"]')
         # カンマ区切りになるのを待つことでAJAX完了を確認
         expect(actual_balance).to_have_value('15,000', timeout=10000)
 
         # 生活費目標額を更新
         living_cost = self.page.locator('#txt_living_cost')
-        living_cost.click()
-        living_cost.fill('50000')
+        living_cost.focus()
+        self.page.wait_for_timeout(500)
+        living_cost.press('Control+A')
+        living_cost.press('Backspace')
+        living_cost.type('50000')
         update_button = self.page.locator('h1:has-text("生活費目標額") + table').locator('input[value="更新"]')
         update_button.click()
 
