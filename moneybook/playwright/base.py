@@ -71,8 +71,8 @@ class PlaywrightBase(StaticLiveServerTestCase):
         self.page.wait_for_selector('a[href="' + reverse('moneybook:logout') + '"]')
 
     def _assert_common(self):
-        # アプリ名
-        expect(self.page.locator('.header-cont1')).to_have_text('test-MoneyBook')
+        # アプリ名 (ヘッダー内のものに限定)
+        expect(self.page.locator('header .header-cont1')).to_have_text('test-MoneyBook')
         # 名前表示
         expect(self.page.locator('.header-cont2')).to_contain_text(self.username + 'さん')
 

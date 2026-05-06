@@ -93,8 +93,8 @@ class PeriodicTest(PlaywrightBase):
         expect(self.page.locator('body')).to_contain_text('数式テスト')
         expect(self.page.locator('body')).to_contain_text('1,500')
 
-    def test_periodic_bulk_add_and_defaults(self):
-        """一括登録、デフォルト年月、重複登録の確認"""
+    def test_periodic_bulk_add(self):
+        """定期取引の一括登録と重複登録の確認"""
         # テストデータの準備
         PeriodicData.objects.create(
             day=10,
@@ -127,19 +127,34 @@ class PeriodicTest(PlaywrightBase):
         expect(self.page.locator('#result_message')).to_contain_text('Success!')
         self.assertEqual(Data.objects.filter(item='E2Eテスト家賃', date__year=2024, date__month=5).count(), 2)
 
-        # 3. デフォルト年月（来月）での登録
+    def test_periodic_bulk_add_default_month(self):
+        """デフォルト年月（来月）での一括登録確認"""
+        # テストデータの準備
+        PeriodicData.objects.create(
+            day=25,
+            item='デフォルト月テスト',
+            price=3000,
+            direction=Direction.objects.get(pk=2),
+            method=Method.objects.get(pk=1),
+            category=Category.objects.get(pk=1),
+            temp=False
+        )
+
+        self._login()
+        self._location(self.live_server_url + reverse('moneybook:periodic'))
+
         next_month = datetime.now() + relativedelta(months=1)
+        # 年月を入力せずに追加ボタンをクリック
         self.page.fill('#target_year', '')
         self.page.fill('#target_month', '')
         self.page.click('#btn_add_bulk')
         expect(self.page.locator('#result_message')).to_contain_text('Success!')
 
-        self.assertEqual(Data.objects.filter(item='E2Eテスト家賃', date__year=next_month.year, date__month=next_month.month).count(), 1)
+        self.assertEqual(Data.objects.filter(item='デフォルト月テスト', date__year=next_month.year, date__month=next_month.month).count(), 1)
 
-    def test_periodic_edit_delete_and_cancel(self):
-        """編集、削除、キャンセルの動作確認"""
-        # テストデータの準備
-        pd = PeriodicData.objects.create(
+    def test_periodic_edit_save(self):
+        """編集して保存できること"""
+        PeriodicData.objects.create(
             day=1,
             item='初期アイテム',
             price=1000,
@@ -150,19 +165,79 @@ class PeriodicTest(PlaywrightBase):
         )
 
         self._login()
-
-        # 1. 編集してキャンセル
         self._location(self.live_server_url + reverse('moneybook:periodic_edit'))
-        self.page.fill(f'input[name="item_{pd.pk}"]', '変更されたアイテム')
-        self.page.click('text=キャンセル')
+
+        # 編集対象のpkを取得
+        pd_pk = PeriodicData.objects.first().pk
+
+        self.page.fill(f'input[name="item_{pd_pk}"]', '変更保存アイテム')
+        self.page.click('button[type="submit"]')
+
         expect(self.page).to_have_url(self.live_server_url + reverse('moneybook:periodic'))
+        # 編集後はpkが変わる可能性があるので、内容で検索
+        self.assertEqual(PeriodicData.objects.filter(item='変更保存アイテム').count(), 1)
+        expect(self.page.locator('body')).to_contain_text('変更保存アイテム')
 
-        pd.refresh_from_db()
-        self.assertEqual(pd.item, '初期アイテム')
-        expect(self.page.locator('body')).to_contain_text('初期アイテム')
+    def test_periodic_edit_cancel(self):
+        """編集してキャンセルすると保存されないこと"""
+        pd = PeriodicData.objects.create(
+            day=1,
+            item='キャンセルアイテム',
+            price=1000,
+            direction=Direction.objects.get(pk=2),
+            method=Method.objects.get(pk=1),
+            category=Category.objects.get(pk=1),
+            temp=False
+        )
 
-        # 2. 削除してキャンセル
+        self._login()
         self._location(self.live_server_url + reverse('moneybook:periodic_edit'))
+
+        self.page.fill(f'input[name="item_{pd.pk}"]', '変更キャンセルアイテム')
+        self.page.click('text=キャンセル')
+
+        expect(self.page).to_have_url(self.live_server_url + reverse('moneybook:periodic'))
+        pd.refresh_from_db()
+        self.assertEqual(pd.item, 'キャンセルアイテム')
+        expect(self.page.locator('body')).to_contain_text('キャンセルアイテム')
+
+    def test_periodic_delete_save(self):
+        """削除して保存できること"""
+        pd = PeriodicData.objects.create(
+            day=1,
+            item='削除アイテム',
+            price=1000,
+            direction=Direction.objects.get(pk=2),
+            method=Method.objects.get(pk=1),
+            category=Category.objects.get(pk=1),
+            temp=False
+        )
+
+        self._login()
+        self._location(self.live_server_url + reverse('moneybook:periodic_edit'))
+
+        self.page.click(f'button.btn-delete-row[data-id="{pd.pk}"]')
+        self.page.click('button[type="submit"]')
+
+        expect(self.page).to_have_url(self.live_server_url + reverse('moneybook:periodic'))
+        self.assertEqual(PeriodicData.objects.filter(item='削除アイテム').count(), 0)
+        expect(self.page.locator('body')).not_to_contain_text('削除アイテム')
+
+    def test_periodic_delete_cancel(self):
+        """削除してキャンセルすると保存されないこと"""
+        pd = PeriodicData.objects.create(
+            day=1,
+            item='削除キャンセルアイテム',
+            price=1000,
+            direction=Direction.objects.get(pk=2),
+            method=Method.objects.get(pk=1),
+            category=Category.objects.get(pk=1),
+            temp=False
+        )
+
+        self._login()
+        self._location(self.live_server_url + reverse('moneybook:periodic_edit'))
+
         self.page.click(f'button.btn-delete-row[data-id="{pd.pk}"]')
         # DOMから消えていることを確認
         expect(self.page.locator(f'input[name="item_{pd.pk}"]')).to_have_count(0)
@@ -170,13 +245,4 @@ class PeriodicTest(PlaywrightBase):
 
         expect(self.page).to_have_url(self.live_server_url + reverse('moneybook:periodic'))
         self.assertEqual(PeriodicData.objects.filter(pk=pd.pk).count(), 1)
-        expect(self.page.locator('body')).to_contain_text('初期アイテム')
-
-        # 3. 削除して保存
-        self._location(self.live_server_url + reverse('moneybook:periodic_edit'))
-        self.page.click(f'button.btn-delete-row[data-id="{pd.pk}"]')
-        self.page.click('button[type="submit"]')
-
-        expect(self.page).to_have_url(self.live_server_url + reverse('moneybook:periodic'))
-        self.assertEqual(PeriodicData.objects.filter(pk=pd.pk).count(), 0)
-        expect(self.page.locator('body')).not_to_contain_text('初期アイテム')
+        expect(self.page.locator('body')).to_contain_text('削除キャンセルアイテム')
