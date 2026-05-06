@@ -3,7 +3,7 @@
 
 name: ci
 
-on: [pull_request]
+on: [ pull_request ]
 
 jobs:
   lint:
@@ -76,16 +76,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        test-module:
-          [
-            delete,
-            edit,
-            index,
-            period_balances,
-            periodic,
-            search,
-            tools,
-          ]
+        test-module: [ edit, period_balances, periodic, search ]
     env:
       TEST_MODULE: moneybook.e2e.${{ matrix.test-module }}
     steps:
@@ -112,11 +103,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        test-module:
-          [
-            add,
-            login,
-          ]
+        test-module: [ add, delete, index, login, tools ]
     env:
       TEST_MODULE: moneybook.playwright.${{ matrix.test-module }}
     steps:
