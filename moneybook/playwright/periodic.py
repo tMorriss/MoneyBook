@@ -174,6 +174,8 @@ class PeriodicTest(PlaywrightBase):
         self.page.click('button[type="submit"]')
 
         expect(self.page).to_have_url(self.live_server_url + reverse('moneybook:periodic'))
+        # 編集後はpkが変わる可能性があるので、内容で検索
+        self.assertEqual(PeriodicData.objects.filter(item='変更保存アイテム').count(), 1)
         expect(self.page.locator('#periodic_table')).to_contain_text('変更保存アイテム')
 
     def test_periodic_edit_cancel(self):
@@ -195,6 +197,8 @@ class PeriodicTest(PlaywrightBase):
         self.page.click('text=キャンセル')
 
         expect(self.page).to_have_url(self.live_server_url + reverse('moneybook:periodic'))
+        pd.refresh_from_db()
+        self.assertEqual(pd.item, 'キャンセルアイテム')
         expect(self.page.locator('#periodic_table')).to_contain_text('キャンセルアイテム')
 
     def test_periodic_delete_save(self):
@@ -216,6 +220,7 @@ class PeriodicTest(PlaywrightBase):
         self.page.click('button[type="submit"]')
 
         expect(self.page).to_have_url(self.live_server_url + reverse('moneybook:periodic'))
+        self.assertEqual(PeriodicData.objects.filter(item='削除アイテム').count(), 0)
         expect(self.page.locator('#periodic_table')).not_to_contain_text('削除アイテム')
 
     def test_periodic_delete_cancel(self):
@@ -239,4 +244,5 @@ class PeriodicTest(PlaywrightBase):
         self.page.click('text=キャンセル')
 
         expect(self.page).to_have_url(self.live_server_url + reverse('moneybook:periodic'))
+        self.assertEqual(PeriodicData.objects.filter(pk=pd.pk).count(), 1)
         expect(self.page.locator('#periodic_table')).to_contain_text('削除キャンセルアイテム')
