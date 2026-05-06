@@ -6,8 +6,8 @@ from playwright.sync_api import expect
 
 
 class PeriodBalances(PlaywrightBase):
-    def test_period_balances_display_and_url_params(self):
-        """期間残高画面の初期表示、デフォルト期間、およびURLパラメータの検証"""
+    def test_period_balances_display(self):
+        """期間残高画面の初期表示、デフォルト期間の検証"""
         self._login()
         now = datetime.now()
 
@@ -26,6 +26,11 @@ class PeriodBalances(PlaywrightBase):
         expect(self.page.locator('#start_month')).to_have_value('1')
         expect(self.page.locator('#end_year')).to_have_value(str(now.year))
         expect(self.page.locator('#end_month')).to_have_value(str(now.month))
+
+    def test_period_balances_url_params(self):
+        """URLパラメータによる期間指定の検証"""
+        self._login()
+        now = datetime.now()
 
         # URLパラメータによる指定
         url_with_params = (
@@ -89,7 +94,7 @@ class PeriodBalances(PlaywrightBase):
         # 1. データがある状態での表示確認
         self.page.click('input[value="更新"]')
         expect(self.page.locator('#lineplot_monthly_balance')).to_be_visible()
-        # グラフデータ用の隠しリストが空でないことを確認 (サクッとできる範囲の検証)
+        # グラフデータ用の隠しリストが空でないことを確認
         expect(self.page.locator('#monthly_balance li')).not_to_have_count(0)
 
         # 2. 1ヶ月だけの期間を指定
