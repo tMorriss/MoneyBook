@@ -36,27 +36,24 @@ $ tox -e unittest
 
 ## e2e テスト
 
+e2e テストはデフォルトでヘッドレスモードで実行されます。
+
 ```
 # 全てのe2eテストを実行
 $ tox -e e2e
 
+## ヘッドレス
 # mac
-# 特定のテストモジュールを実行（例：indexモジュールのみ）
-$ HEADLESS=0 TEST_MODULE=moneybook.e2e.index tox -e e2e
+$ HEADLESS=0 tox -e playwright
+# windows
+$ $env:HEADLESS="0"; tox -e playwright
+
+## 特定のテストモジュールを実行（例：indexモジュールのみ）
+# mac
+$ HEADLESS=0 TEST_MODULE=moneybook.playwright.index tox -e playwright
 
 # windows
-$ $env:HEADLESS="0"; $env:TEST_MODULE="moneybook.e2e.index"; tox -e e2e
-```
-
-### ヘッドレスモード
-
-e2e テストはデフォルトでヘッドレスモードで実行されます。ブラウザを表示して実行する場合は、環境変数`HEADLESS=0`を設定してください。
-
-```
-# mac
-$ HEADLESS=0 tox -e e2e
-# windows
-$ $env:HEADLESS="0"; tox -e e2e
+$ $env:HEADLESS="0"; $env:TEST_MODULE="moneybook.playwright.index"; tox -e playwright
 ```
 
 ## メモ
