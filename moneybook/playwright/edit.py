@@ -15,7 +15,7 @@ class EditTest(PlaywrightBase):
         self._test_counter += 1
         return f'{prefix}_{self._test_counter}_{datetime.now().strftime("%H%M%S")}'
 
-    def _wait_for_ajax(self):
+    def _wait_for_index_ajax(self):
         # jQuery AJAXの完了を待つ
         super()._wait_for_ajax()
         # summary-count が "件" 以外の数字を含む状態になるまで待つ (表示更新待ち)
@@ -35,7 +35,7 @@ class EditTest(PlaywrightBase):
         # ログインしていることを確認
         self.page.wait_for_selector(f'body > header .header-cont2:has-text("{self.username}さん")')
         # AJAXロード待ち
-        self._wait_for_ajax()
+        self._wait_for_index_ajax()
 
         # フォーム入力
         self.page.fill('#a_day', day)
@@ -96,7 +96,7 @@ class EditTest(PlaywrightBase):
         self._login()
         # ログイン後のリダイレクト待ち
         self.page.wait_for_url('**/')
-        self._wait_for_ajax()
+        self._wait_for_index_ajax()
 
         item_name = self._get_unique_item('get')
         self._add_row_and_goto_edit(day='10', item=item_name, price='1000')
@@ -120,7 +120,7 @@ class EditTest(PlaywrightBase):
         """項目名を編集できることを確認"""
         self._login()
         self.page.wait_for_url('**/')
-        self._wait_for_ajax()
+        self._wait_for_index_ajax()
 
         item_before = self._get_unique_item('edit_item_b')
         item_after = self._get_unique_item('edit_item_a')
@@ -132,7 +132,7 @@ class EditTest(PlaywrightBase):
             self.page.click('input[value="更新"]')
 
         # トップに戻って確認
-        self._wait_for_ajax()
+        self._wait_for_index_ajax()
         self._assert_data_row(
             item_text=item_after,
             date=f'{self.test_year}/{str(self.test_month).zfill(2)}/10',
@@ -145,7 +145,7 @@ class EditTest(PlaywrightBase):
         """金額を編集できることを確認"""
         self._login()
         self.page.wait_for_url('**/')
-        self._wait_for_ajax()
+        self._wait_for_index_ajax()
 
         item_name = self._get_unique_item('edit_price')
         self._add_row_and_goto_edit(day='10', item=item_name, price='1000', method_id='2', category_id='1')
@@ -156,7 +156,7 @@ class EditTest(PlaywrightBase):
             self.page.click('input[value="更新"]')
 
         # トップに戻って確認
-        self._wait_for_ajax()
+        self._wait_for_index_ajax()
         self._assert_data_row(
             item_text=item_name,
             date=f'{self.test_year}/{str(self.test_month).zfill(2)}/10',
@@ -169,7 +169,7 @@ class EditTest(PlaywrightBase):
         """日付を編集できることを確認"""
         self._login()
         self.page.wait_for_url('**/')
-        self._wait_for_ajax()
+        self._wait_for_index_ajax()
 
         item_name = self._get_unique_item('edit_date')
         self._add_row_and_goto_edit(day='10', item=item_name, price='1000', method_id='2', category_id='1')
@@ -180,7 +180,7 @@ class EditTest(PlaywrightBase):
             self.page.click('input[value="更新"]')
 
         # トップに戻る
-        self._wait_for_ajax()
+        self._wait_for_index_ajax()
         self._assert_data_row(
             item_text=item_name,
             date=f'{self.test_year}/{str(self.test_month).zfill(2)}/15',
@@ -193,7 +193,7 @@ class EditTest(PlaywrightBase):
         """支払い方法を編集できることを確認"""
         self._login()
         self.page.wait_for_url('**/')
-        self._wait_for_ajax()
+        self._wait_for_index_ajax()
 
         item_name = self._get_unique_item('edit_method')
         self._add_row_and_goto_edit(day='10', item=item_name, price='1000', method_id='2', category_id='1')
@@ -204,7 +204,7 @@ class EditTest(PlaywrightBase):
             self.page.click('input[value="更新"]')
 
         # トップに戻って確認
-        self._wait_for_ajax()
+        self._wait_for_index_ajax()
         self._assert_data_row(
             item_text=item_name,
             date=f'{self.test_year}/{str(self.test_month).zfill(2)}/10',
@@ -217,7 +217,7 @@ class EditTest(PlaywrightBase):
         """カテゴリーを編集できることを確認"""
         self._login()
         self.page.wait_for_url('**/')
-        self._wait_for_ajax()
+        self._wait_for_index_ajax()
 
         item_name = self._get_unique_item('edit_cat')
         self._add_row_and_goto_edit(day='10', item=item_name, price='1000', method_id='2', category_id='1')
@@ -228,7 +228,7 @@ class EditTest(PlaywrightBase):
             self.page.click('input[value="更新"]')
 
         # トップに戻って確認
-        self._wait_for_ajax()
+        self._wait_for_index_ajax()
         self._assert_data_row(
             item_text=item_name,
             date=f'{self.test_year}/{str(self.test_month).zfill(2)}/10',
@@ -241,7 +241,7 @@ class EditTest(PlaywrightBase):
         """編集画面で金額入力欄に数式を入力できることを確認"""
         self._login()
         self.page.wait_for_url('**/')
-        self._wait_for_ajax()
+        self._wait_for_index_ajax()
 
         item_name = self._get_unique_item('edit_formula')
         self._add_row_and_goto_edit(day='10', item=item_name, price='1000', method_id='2', category_id='1')
@@ -252,7 +252,7 @@ class EditTest(PlaywrightBase):
             self.page.click('input[value="更新"]')
 
         # トップに戻って確認
-        self._wait_for_ajax()
+        self._wait_for_index_ajax()
         self._assert_data_row(
             item_text=item_name,
             date=f'{self.test_year}/{str(self.test_month).zfill(2)}/10',
@@ -265,7 +265,7 @@ class EditTest(PlaywrightBase):
         """日付入力欄でEnterキーを押すと更新されることを確認"""
         self._login()
         self.page.wait_for_url('**/')
-        self._wait_for_ajax()
+        self._wait_for_index_ajax()
 
         item_name = self._get_unique_item('enter_date')
         self._add_row_and_goto_edit(day='10', item=item_name, price='1000', method_id='2', category_id='1')
@@ -276,7 +276,7 @@ class EditTest(PlaywrightBase):
             self.page.press('#day', 'Enter')
 
         # トップに戻る
-        self._wait_for_ajax()
+        self._wait_for_index_ajax()
         self._assert_data_row(
             item_text=item_name,
             date=f'{self.test_year}/{str(self.test_month).zfill(2)}/20',
@@ -289,7 +289,7 @@ class EditTest(PlaywrightBase):
         """項目入力欄でEnterキーを押すと更新されることを確認"""
         self._login()
         self.page.wait_for_url('**/')
-        self._wait_for_ajax()
+        self._wait_for_index_ajax()
 
         item_before = self._get_unique_item('enter_item_b')
         item_after = self._get_unique_item('enter_item_a')
@@ -301,7 +301,7 @@ class EditTest(PlaywrightBase):
             self.page.press('#item', 'Enter')
 
         # トップに戻る
-        self._wait_for_ajax()
+        self._wait_for_index_ajax()
         self._assert_data_row(
             item_text=item_after,
             date=f'{self.test_year}/{str(self.test_month).zfill(2)}/10',
@@ -314,7 +314,7 @@ class EditTest(PlaywrightBase):
         """金額入力欄でEnterキーを押すと更新されることを確認"""
         self._login()
         self.page.wait_for_url('**/')
-        self._wait_for_ajax()
+        self._wait_for_index_ajax()
 
         item_name = self._get_unique_item('enter_price')
         self._add_row_and_goto_edit(day='10', item=item_name, price='1000', method_id='2', category_id='1')
@@ -325,7 +325,7 @@ class EditTest(PlaywrightBase):
             self.page.press('#price', 'Enter')
 
         # トップに戻る
-        self._wait_for_ajax()
+        self._wait_for_index_ajax()
         self._assert_data_row(
             item_text=item_name,
             date=f'{self.test_year}/{str(self.test_month).zfill(2)}/10',
