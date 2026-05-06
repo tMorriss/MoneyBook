@@ -17,7 +17,7 @@
             filter-direction-{{ d.direction.pk }} filter-method-{{ d.method.pk }} filter-class-{{ d.category.pk }}">
         <td>{{ d.date|date:"Y/m/d" }}</td>
         <td class="lefter data_item">{{ d.item }}</td>
-        <td class="righter">{{ d.price|intcomma }}</td>
+        <td class="righter data-price" data-price="{{ d.price }}">{{ d.price|intcomma }}</td>
         <td>{{ d.method }}</td>
         <td>{% if d.temp %}立替{% else %}{{ d.category }}{% endif %}</td>
         <td class='a-edit'><a href="{% url 'moneybook:edit' d.pk %}">編集</a></td>

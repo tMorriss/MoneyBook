@@ -126,20 +126,20 @@ function initItemAutocomplete(selector) {
 }
 
 function initPriceAutocomplete(selector) {
-    $(selector).each(function () {
-        const element = $(this);
-        element.autocomplete({
+    $(selector).each((index, element) => {
+        const $el = $(element);
+        $el.autocomplete({
             source: (request, response) => {
                 // 現在の要素と同じ行または同じフォーム内の .suggest_item を探す
                 let itemVal = '';
                 // まずは同じ行(tr)内を探す（定期取引編集など）
-                const row = element.closest('tr');
+                const row = $el.closest('tr');
                 if (row.length) {
                     itemVal = row.find('.suggest_item').val();
                 }
                 // 見つからない場合は、所属するフォーム全体から探す（追加画面など）
                 if (!itemVal) {
-                    const form = element.closest('form');
+                    const form = $el.closest('form');
                     if (form.length) {
                         itemVal = form.find('.suggest_item').val();
                     }
