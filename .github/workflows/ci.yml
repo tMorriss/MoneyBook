@@ -114,8 +114,8 @@ jobs:
             edit,
             index,
             login,
-            periodic,
             tools,
+            periodic,
           ]
     env:
       TEST_MODULE: moneybook.playwright.${{ matrix.test-module }}
