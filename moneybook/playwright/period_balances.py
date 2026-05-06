@@ -80,13 +80,16 @@ class PeriodBalances(PlaywrightBase):
         # インデックスページの追加ボタンは input[value="追加"]
         self.page.click('input[value="追加"]')
 
+        # 成功メッセージ
+        expect(self.page.locator('#result_message')).to_contain_text('Success!')
+
         # 期間残高画面に移動
         self._location(self.live_server_url + reverse('moneybook:period_balances'))
 
         # 1. データがある状態での表示確認
         self.page.click('input[value="更新"]')
         expect(self.page.locator('#lineplot_monthly_balance')).to_be_visible()
-        # グラフデータ用の隠しリストが空でないことを確認
+        # グラフデータ用の隠しリストが空でないことを確認 (サクッとできる範囲の検証)
         expect(self.page.locator('#monthly_balance li')).not_to_have_count(0)
 
         # 2. 1ヶ月だけの期間を指定
