@@ -80,7 +80,6 @@ jobs:
           [
             add,
             edit,
-            period_balances,
             periodic,
             search,
           ]
@@ -115,6 +114,7 @@ jobs:
             delete,
             index,
             login,
+            period_balances,
             tools,
           ]
     env:
