@@ -1,12 +1,12 @@
 import os
 
-# Allow ORM calls from the test thread even though Playwright might be in an async context
-os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
-
 from django.contrib.auth.models import User
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.urls import reverse
 from playwright.sync_api import expect, sync_playwright
+
+# Allow ORM calls from the test thread even though Playwright might be in an async context
+os.environ['DJANGO_ALLOW_ASYNC_UNSAFE'] = 'true'
 
 
 class PlaywrightBase(StaticLiveServerTestCase):
