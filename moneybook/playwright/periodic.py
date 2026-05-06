@@ -37,40 +37,59 @@ class PeriodicTest(PlaywrightBase):
         expect(self.page).to_have_url(self.live_server_url + reverse('moneybook:periodic_edit'))
         expect(self.page.locator('h2')).to_have_text('定期取引設定')
 
-    def test_periodic_add_variations(self):
-        """定期取引の追加（通常、カンマ入り、数式）"""
+    def test_periodic_add_normal(self):
+        """定期取引の追加（通常）"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:periodic_edit'))
 
-        # 1. 通常の追加
         self.page.click('#btn_add_row')
-        # name^="day_new_" は index.js 側で動的に付与される
         self.page.fill('input[name^="day_new_0"]', '15')
         self.page.fill('input[name^="item_new_0"]', 'テスト定期取引')
         self.page.fill('input[name^="price_new_0"]', '5000')
-        self.page.select_option('select[name^="temp_new_0"]', '0')
+        self.page.select_option('select[name^="direction_new_0"]', '2')  # 支出
+        self.page.select_option('select[name^="method_new_0"]', '2')     # 銀行
+        self.page.select_option('select[name^="category_new_0"]', '2')   # 必需品
+        self.page.select_option('select[name^="temp_new_0"]', '1')       # あり
 
-        # 2. カンマ入りの追加
-        self.page.click('#btn_add_row')
-        self.page.fill('input[name^="day_new_1"]', '10')
-        self.page.fill('input[name^="item_new_1"]', 'カンマテスト')
-        self.page.fill('input[name^="price_new_1"]', '1,234')
-
-        # 3. 数式の追加
-        self.page.click('#btn_add_row')
-        self.page.fill('input[name^="day_new_2"]', '20')
-        self.page.fill('input[name^="item_new_2"]', '数式テスト')
-        self.page.fill('input[name^="price_new_2"]', '=1000+500')
-
-        # 更新
         self.page.click('button[type="submit"]')
         expect(self.page).to_have_url(self.live_server_url + reverse('moneybook:periodic'))
 
-        # 表示の確認
         expect(self.page.locator('body')).to_contain_text('テスト定期取引')
         expect(self.page.locator('body')).to_contain_text('5,000')
+        expect(self.page.locator('body')).to_contain_text('支出')
+        expect(self.page.locator('body')).to_contain_text('銀行')
+        expect(self.page.locator('body')).to_contain_text('必需品')
+        expect(self.page.locator('body')).to_contain_text('Yes')
+
+    def test_periodic_add_comma(self):
+        """定期取引の追加（カンマ入り）"""
+        self._login()
+        self._location(self.live_server_url + reverse('moneybook:periodic_edit'))
+
+        self.page.click('#btn_add_row')
+        self.page.fill('input[name^="day_new_0"]', '10')
+        self.page.fill('input[name^="item_new_0"]', 'カンマテスト')
+        self.page.fill('input[name^="price_new_0"]', '1,234')
+
+        self.page.click('button[type="submit"]')
+        expect(self.page).to_have_url(self.live_server_url + reverse('moneybook:periodic'))
+
         expect(self.page.locator('body')).to_contain_text('カンマテスト')
         expect(self.page.locator('body')).to_contain_text('1,234')
+
+    def test_periodic_add_formula(self):
+        """定期取引の追加（数式）"""
+        self._login()
+        self._location(self.live_server_url + reverse('moneybook:periodic_edit'))
+
+        self.page.click('#btn_add_row')
+        self.page.fill('input[name^="day_new_0"]', '20')
+        self.page.fill('input[name^="item_new_0"]', '数式テスト')
+        self.page.fill('input[name^="price_new_0"]', '=1000+500')
+
+        self.page.click('button[type="submit"]')
+        expect(self.page).to_have_url(self.live_server_url + reverse('moneybook:periodic'))
+
         expect(self.page.locator('body')).to_contain_text('数式テスト')
         expect(self.page.locator('body')).to_contain_text('1,500')
 
@@ -81,9 +100,9 @@ class PeriodicTest(PlaywrightBase):
             day=10,
             item='E2Eテスト家賃',
             price=50000,
-            direction=Direction.get(2),
-            method=Method.get(1),
-            category=Category.get(1),
+            direction=Direction.objects.get(pk=2),
+            method=Method.objects.get(pk=1),
+            category=Category.objects.get(pk=1),
             temp=False
         )
 
@@ -124,9 +143,9 @@ class PeriodicTest(PlaywrightBase):
             day=1,
             item='初期アイテム',
             price=1000,
-            direction=Direction.get(2),
-            method=Method.get(1),
-            category=Category.get(1),
+            direction=Direction.objects.get(pk=2),
+            method=Method.objects.get(pk=1),
+            category=Category.objects.get(pk=1),
             temp=False
         )
 
