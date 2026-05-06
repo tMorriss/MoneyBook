@@ -4,16 +4,10 @@ from playwright.sync_api import expect
 
 
 class Tools(PlaywrightBase):
-    def _wait_for_tools_load(self):
-        self._wait_for_ajax()
-        # いずれかのセクションがロードされたことを確認
-        self.page.wait_for_selector('.checked-date-row', state='attached', timeout=20000)
-
     def test_get(self):
         """ツール画面が正しく表示されることを確認"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:tools'))
-        self._wait_for_tools_load()
 
         self._assert_common()
 
@@ -21,7 +15,6 @@ class Tools(PlaywrightBase):
         """各セクションが表示されることを確認"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:tools'))
-        self._wait_for_tools_load()
 
         # 実際の現金残高
         expect(self.page.locator('#actual_balance')).to_be_visible()
@@ -38,7 +31,6 @@ class Tools(PlaywrightBase):
         """実際の現金残高を更新できることを確認 (ボタンクリック)"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:tools'))
-        self._wait_for_tools_load()
 
         # 実際の現金残高を入力
         actual_cash_input = self.page.locator('#actual_balance')
@@ -54,33 +46,29 @@ class Tools(PlaywrightBase):
 
         # ページをリロードして値が保持されていることを確認
         self.page.reload()
-        self._wait_for_tools_load()
         expect(self.page.locator('#actual_balance')).to_have_value('5,000')
 
     def test_update_actual_cash_enter(self):
         """Enterキーで実際の現金残高を更新できることを確認"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:tools'))
-        self._wait_for_tools_load()
 
         # 実際の現金残高を入力してEnter
         actual_cash_input = self.page.locator('#actual_balance')
         actual_cash_input.focus()
         actual_cash_input.fill('10000')
-        actual_cash_input.press('Enter')
+        actual_cash_input.dispatch_event('keypress', {'keyCode': 13})
 
         # AJAX完了を待つ (updateDiff完了後にseparateValueが呼ばれる)
-        expect(actual_cash_input).to_have_value('10,000', timeout=15000)
+        expect(actual_cash_input).to_have_value('10,000', timeout=10000)
 
         self.page.reload()
-        self._wait_for_tools_load()
-        expect(self.page.locator('#actual_balance')).to_have_value('10,000', timeout=15000)
+        expect(self.page.locator('#actual_balance')).to_have_value('10,000')
 
     def test_update_living_cost_mark(self):
         """生活費目標額を更新できることを確認 (ボタンクリック)"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:tools'))
-        self._wait_for_tools_load()
 
         # 生活費目標額を入力
         living_cost_input = self.page.locator('#txt_living_cost')
@@ -89,29 +77,24 @@ class Tools(PlaywrightBase):
 
         # 更新ボタンをクリック
         # updateLivingCostMark は location.reload() を呼ぶ
-        with self.page.expect_navigation():
-            self.page.locator('h1:has-text("生活費目標額") + table').locator('input[value="更新"]').click()
+        self.page.locator('h1:has-text("生活費目標額") + table').locator('input[value="更新"]').click()
 
         # 値が保持されていることを確認 (リロードされるので Playwright が解決し直す)
-        self._wait_for_tools_load()
         expect(self.page.locator('#txt_living_cost')).to_have_value('30,000', timeout=10000)
 
     def test_update_living_cost_mark_enter(self):
         """Enterキーで生活費目標額を更新できることを確認"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:tools'))
-        self._wait_for_tools_load()
 
         # 生活費目標額を入力してEnter
         living_cost_input = self.page.locator('#txt_living_cost')
         living_cost_input.focus()
         living_cost_input.fill('40000')
-        with self.page.expect_navigation():
-            living_cost_input.press('Enter')
+        living_cost_input.dispatch_event('keypress', {'keyCode': 13})
 
         # 値が保持されていることを確認
-        self._wait_for_tools_load()
-        expect(self.page.locator('#txt_living_cost')).to_have_value('40,000', timeout=15000)
+        expect(self.page.locator('#txt_living_cost')).to_have_value('40,000', timeout=10000)
 
     def test_link_from_taskbar(self):
         """タスクバーからツール画面に遷移できることを確認"""
@@ -129,7 +112,6 @@ class Tools(PlaywrightBase):
         """複数の値を連続して更新できることを確認"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:tools'))
-        self._wait_for_tools_load()
 
         # 実際の現金残高を更新
         actual_balance = self.page.locator('#actual_balance')
@@ -147,6 +129,5 @@ class Tools(PlaywrightBase):
         update_button.click()
 
         # ページをリロードして両方の値が保持されていることを確認
-        self._wait_for_tools_load()
         expect(self.page.locator('#actual_balance')).to_have_value('15,000', timeout=10000)
         expect(self.page.locator('#txt_living_cost')).to_have_value('50,000', timeout=10000)
