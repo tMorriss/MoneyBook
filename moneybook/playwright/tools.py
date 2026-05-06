@@ -1,3 +1,5 @@
+import re
+
 from django.urls import reverse
 from moneybook.playwright.base import PlaywrightBase
 from playwright.sync_api import expect
@@ -34,7 +36,7 @@ class Tools(PlaywrightBase):
 
         # 実際の現金残高を入力
         actual_cash_input = self.page.locator('#actual_balance')
-        actual_cash_input.focus()
+        actual_cash_input.click()  # focus to unseparate
         actual_cash_input.fill('5000')
 
         # 計算ボタンをクリック (value="計算")
@@ -72,7 +74,12 @@ class Tools(PlaywrightBase):
 
         # 生活費目標額を入力
         living_cost_input = self.page.locator('#txt_living_cost')
-        living_cost_input.focus()
+        living_cost_input.click()
+        # フォーカスがあたっている（JavaScriptでカンマが消えている）ことを確認
+        expect(living_cost_input).to_have_value(re.compile(r'^[0-9]+$'))
+
+        living_cost_input.press('Control+A')
+        living_cost_input.press('Backspace')
         living_cost_input.fill('30000')
 
         # 更新ボタンをクリック
@@ -89,7 +96,12 @@ class Tools(PlaywrightBase):
 
         # 生活費目標額を入力してEnter
         living_cost_input = self.page.locator('#txt_living_cost')
-        living_cost_input.focus()
+        living_cost_input.click()
+        # フォーカスがあたっている（JavaScriptでカンマが消えている）ことを確認
+        expect(living_cost_input).to_have_value(re.compile(r'^[0-9]+$'))
+
+        living_cost_input.press('Control+A')
+        living_cost_input.press('Backspace')
         living_cost_input.fill('40000')
         living_cost_input.dispatch_event('keypress', {'keyCode': 13})
 
@@ -115,7 +127,7 @@ class Tools(PlaywrightBase):
 
         # 実際の現金残高を更新
         actual_balance = self.page.locator('#actual_balance')
-        actual_balance.focus()
+        actual_balance.click()
         actual_balance.fill('15000')
         self.page.click('input[value="計算"]')
         # カンマ区切りになるのを待つことでAJAX完了を確認
@@ -123,7 +135,7 @@ class Tools(PlaywrightBase):
 
         # 生活費目標額を更新
         living_cost = self.page.locator('#txt_living_cost')
-        living_cost.focus()
+        living_cost.click()
         living_cost.fill('50000')
         update_button = self.page.locator('h1:has-text("生活費目標額") + table').locator('input[value="更新"]')
         update_button.click()
