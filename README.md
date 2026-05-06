@@ -40,8 +40,12 @@ $ tox -e unittest
 # 全てのe2eテストを実行
 $ tox -e e2e
 
+# mac
 # 特定のテストモジュールを実行（例：indexモジュールのみ）
-$ TEST_MODULE=moneybook.e2e.index tox -e e2e
+$ HEADLESS=0 TEST_MODULE=moneybook.e2e.index tox -e e2e
+
+# windows
+$ $env:HEADLESS="0"; $env:TEST_MODULE="moneybook.e2e.index"; tox -e e2e
 ```
 
 ### ヘッドレスモード
