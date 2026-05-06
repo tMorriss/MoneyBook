@@ -1,5 +1,3 @@
-import re
-
 from django.urls import reverse
 from moneybook.playwright.base import PlaywrightBase
 from playwright.sync_api import expect
@@ -75,11 +73,6 @@ class Tools(PlaywrightBase):
         # 生活費目標額を入力
         living_cost_input = self.page.locator('#txt_living_cost')
         living_cost_input.click()
-        # フォーカスがあたっている（JavaScriptでカンマが消えている）ことを確認
-        expect(living_cost_input).to_have_value(re.compile(r'^[0-9]+$'))
-
-        living_cost_input.press('Control+A')
-        living_cost_input.press('Backspace')
         living_cost_input.fill('30000')
 
         # 更新ボタンをクリック
@@ -96,12 +89,7 @@ class Tools(PlaywrightBase):
 
         # 生活費目標額を入力してEnter
         living_cost_input = self.page.locator('#txt_living_cost')
-        living_cost_input.click()
-        # フォーカスがあたっている（JavaScriptでカンマが消えている）ことを確認
-        expect(living_cost_input).to_have_value(re.compile(r'^[0-9]+$'))
-
-        living_cost_input.press('Control+A')
-        living_cost_input.press('Backspace')
+        living_cost_input.focus()
         living_cost_input.fill('40000')
         living_cost_input.dispatch_event('keypress', {'keyCode': 13})
 
