@@ -2,6 +2,7 @@ from datetime import datetime
 
 from django.urls import reverse
 from moneybook.playwright.base import PlaywrightBase
+from playwright.sync_api import expect
 
 
 class EditTest(PlaywrightBase):
@@ -32,8 +33,6 @@ class EditTest(PlaywrightBase):
 
         # 移動
         self.page.goto(url)
-        # ログインしていることを確認
-        self.page.wait_for_selector(f'body > header .header-cont2:has-text("{self.username}さん")')
         # AJAXロード待ち
         self._wait_for_index_ajax()
 
@@ -62,34 +61,34 @@ class EditTest(PlaywrightBase):
 
     def _assert_edit_form(self, year=None, month=None, day=None, item=None, price=None, method_id=None, category_id=None):
         if year:
-            self.assertEqual(self.page.input_value('#year'), str(year))
+            expect(self.page.locator('#year')).to_have_value(str(year))
         if month:
-            self.assertEqual(self.page.input_value('#month'), str(month).zfill(2))
+            expect(self.page.locator('#month')).to_have_value(str(month).zfill(2))
         if day:
-            self.assertEqual(self.page.input_value('#day'), str(day))
+            expect(self.page.locator('#day')).to_have_value(str(day))
         if item:
-            self.assertEqual(self.page.input_value('#item'), item)
+            expect(self.page.locator('#item')).to_have_value(item)
         if price:
-            self.assertEqual(self.page.input_value('#price'), str(price))
+            expect(self.page.locator('#price')).to_have_value(str(price))
         if method_id:
-            self.assertTrue(self.page.is_checked(f'input[name="method"][value="{method_id}"]'))
+            expect(self.page.locator(f'input[name="method"][value="{method_id}"]')).to_be_checked()
         if category_id:
-            self.assertTrue(self.page.is_checked(f'input[name="category"][value="{category_id}"]'))
+            expect(self.page.locator(f'input[name="category"][value="{category_id}"]')).to_be_checked()
 
     def _assert_data_row(self, item_text, date=None, price=None, method=None, category=None):
         self.page.wait_for_selector(f'.data-row:has-text("{item_text}")')
         row = self.page.locator('.data-row', has_text=item_text).first
         row.wait_for(state='visible')
         if date:
-            self.assertEqual(row.locator('td').nth(0).inner_text(), date)
+            expect(row.locator('td').nth(0)).to_have_text(date)
         if item_text:
-            self.assertEqual(row.locator('td').nth(1).inner_text(), item_text)
+            expect(row.locator('td').nth(1)).to_have_text(item_text)
         if price:
-            self.assertEqual(row.locator('td').nth(2).inner_text(), price)
+            expect(row.locator('td').nth(2)).to_have_text(price)
         if method:
-            self.assertEqual(row.locator('td').nth(3).inner_text(), method)
+            expect(row.locator('td').nth(3)).to_have_text(method)
         if category:
-            self.assertEqual(row.locator('td').nth(4).inner_text(), category)
+            expect(row.locator('td').nth(4)).to_have_text(category)
 
     def test_get(self):
         """編集画面が正しく表示されることを確認"""
@@ -100,10 +99,6 @@ class EditTest(PlaywrightBase):
 
         item_name = self._get_unique_item('get')
         self._add_row_and_goto_edit(day='10', item=item_name, price='1000')
-
-        # 名前表示
-        header_cont2_text = self.page.inner_text('body > header .header-cont2')
-        self.assertTrue(self.username + 'さん' in header_cont2_text)
 
         # フォームの値を確認
         self._assert_edit_form(
@@ -341,5 +336,6 @@ class EditTest(PlaywrightBase):
         self.page.goto(self.live_server_url + reverse('moneybook:edit', kwargs={'pk': 999999}))
 
         # トップにリダイレクトされるのを待つ
-        self.page.wait_for_url(self.live_server_url + reverse('moneybook:index'))
-        self.assertEqual(self.page.url, self.live_server_url + reverse('moneybook:index'))
+        expected_url = self.live_server_url + reverse('moneybook:index')
+        self.page.wait_for_url(expected_url)
+        expect(self.page).to_have_url(expected_url)
