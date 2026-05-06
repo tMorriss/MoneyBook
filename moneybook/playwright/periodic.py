@@ -1,7 +1,8 @@
 from datetime import datetime
+
 from dateutil.relativedelta import relativedelta
 from django.urls import reverse
-from moneybook.models import Data, PeriodicData, Category, Direction, Method
+from moneybook.models import Category, Data, Direction, Method, PeriodicData
 from moneybook.playwright.base import PlaywrightBase
 from playwright.sync_api import expect
 
