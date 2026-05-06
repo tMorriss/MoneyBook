@@ -22,7 +22,7 @@ class PeriodicTest(PlaywrightBase):
         expect(self.page.locator('section h1')).to_have_text('定期取引一覧')
 
         # ボタンの存在確認
-        expect(self.page.locator('#btn_add_bulk')).to_be_visible()
+        expect(self.page.locator('input#btn_add_bulk[value="追加"]')).to_be_visible()
         expect(self.page.locator('input[value="編集"]')).to_be_visible()
 
         # 年月入力欄とplaceholderの検証
