@@ -34,24 +34,19 @@ class Tools(PlaywrightBase):
 
         # 実際の現金残高を入力
         actual_cash_input = self.page.locator('#actual_balance')
-        # unseparateValue が focus で発火し、separateValue が blur で発火する。
-        # click だと selectValue が動いてしまうので、focus + evaluate で確実に unseparate する。
         actual_cash_input.focus()
-        self.page.evaluate('elm => unseparateValue(elm)', actual_cash_input.element_handle())
-        # JavaScriptで値を設定し、inputイベントを発火させる
-        js_code = '(elm) => { elm.value = "5000"; elm.dispatchEvent(new Event("input", { bubbles: true })); }'
-        self.page.evaluate(js_code, actual_cash_input.element_handle())
+        actual_cash_input.fill('5000')
 
         # 計算ボタンをクリック (value="計算")
         self.page.click('input[value="計算"]')
 
         # 差額が更新されるのを待つ (内部的には $.post 完了後に更新される)
         # 入力欄がカンマ区切りになるのを待つことでAJAX完了を確認
-        expect(actual_cash_input).to_have_value('5,000', timeout=10000)
+        expect(actual_cash_input).to_have_value('5,000')
 
         # ページをリロードして値が保持されていることを確認
         self.page.reload()
-        expect(self.page.locator('#actual_balance')).to_have_value('5,000', timeout=10000)
+        expect(self.page.locator('#actual_balance')).to_have_value('5,000')
 
     def test_update_actual_cash_enter(self):
         """Enterキーで実際の現金残高を更新できることを確認"""
@@ -61,16 +56,14 @@ class Tools(PlaywrightBase):
         # 実際の現金残高を入力してEnter
         actual_cash_input = self.page.locator('#actual_balance')
         actual_cash_input.focus()
-        self.page.evaluate('elm => unseparateValue(elm)', actual_cash_input.element_handle())
-        js_code = '(elm) => { elm.value = "10000"; elm.dispatchEvent(new Event("input", { bubbles: true })); }'
-        self.page.evaluate(js_code, actual_cash_input.element_handle())
+        actual_cash_input.fill('10000')
         actual_cash_input.dispatch_event('keypress', {'keyCode': 13})
 
         # AJAX完了を待つ (updateDiff完了後にseparateValueが呼ばれる)
         expect(actual_cash_input).to_have_value('10,000', timeout=10000)
 
         self.page.reload()
-        expect(self.page.locator('#actual_balance')).to_have_value('10,000', timeout=10000)
+        expect(self.page.locator('#actual_balance')).to_have_value('10,000')
 
     def test_update_living_cost_mark(self):
         """生活費目標額を更新できることを確認 (ボタンクリック)"""
@@ -80,9 +73,7 @@ class Tools(PlaywrightBase):
         # 生活費目標額を入力
         living_cost_input = self.page.locator('#txt_living_cost')
         living_cost_input.focus()
-        self.page.evaluate('elm => unseparateValue(elm)', living_cost_input.element_handle())
-        js_code = '(elm) => { elm.value = "30000"; elm.dispatchEvent(new Event("input", { bubbles: true })); }'
-        self.page.evaluate(js_code, living_cost_input.element_handle())
+        living_cost_input.fill('30000')
 
         # 更新ボタンをクリック
         # updateLivingCostMark は location.reload() を呼ぶ
@@ -99,9 +90,7 @@ class Tools(PlaywrightBase):
         # 生活費目標額を入力してEnter
         living_cost_input = self.page.locator('#txt_living_cost')
         living_cost_input.focus()
-        self.page.evaluate('elm => unseparateValue(elm)', living_cost_input.element_handle())
-        js_code = '(elm) => { elm.value = "40000"; elm.dispatchEvent(new Event("input", { bubbles: true })); }'
-        self.page.evaluate(js_code, living_cost_input.element_handle())
+        living_cost_input.fill('40000')
         living_cost_input.dispatch_event('keypress', {'keyCode': 13})
 
         # 値が保持されていることを確認
@@ -127,9 +116,7 @@ class Tools(PlaywrightBase):
         # 実際の現金残高を更新
         actual_balance = self.page.locator('#actual_balance')
         actual_balance.focus()
-        self.page.evaluate('elm => unseparateValue(elm)', actual_balance.element_handle())
-        js_code1 = '(elm) => { elm.value = "15000"; elm.dispatchEvent(new Event("input", { bubbles: true })); }'
-        self.page.evaluate(js_code1, actual_balance.element_handle())
+        actual_balance.fill('15000')
         self.page.click('input[value="計算"]')
         # カンマ区切りになるのを待つことでAJAX完了を確認
         expect(actual_balance).to_have_value('15,000', timeout=10000)
@@ -137,9 +124,7 @@ class Tools(PlaywrightBase):
         # 生活費目標額を更新
         living_cost = self.page.locator('#txt_living_cost')
         living_cost.focus()
-        self.page.evaluate('elm => unseparateValue(elm)', living_cost.element_handle())
-        js_code2 = '(elm) => { elm.value = "50000"; elm.dispatchEvent(new Event("input", { bubbles: true })); }'
-        self.page.evaluate(js_code2, living_cost.element_handle())
+        living_cost.fill('50000')
         update_button = self.page.locator('h1:has-text("生活費目標額") + table').locator('input[value="更新"]')
         update_button.click()
 
