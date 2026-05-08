@@ -10,6 +10,7 @@ class Add(PlaywrightBase):
         now = datetime.now()
         self._location(self.live_server_url + reverse('moneybook:index'))
         self._wait_for_ajax()
+        self.page.wait_for_selector('#transactions table tbody tr')
 
         rows = self.page.locator('#transactions table tbody tr')
         expect(rows).to_have_count(3)
@@ -32,6 +33,7 @@ class Add(PlaywrightBase):
         # 再度インデックスへ
         self._location(self.live_server_url + reverse('moneybook:index'))
         self._wait_for_ajax()
+        self.page.wait_for_selector('#transactions table tbody tr')
         rows = self.page.locator('#transactions table tbody tr')
 
         # 2つ目のデータ (移動元からの支出)
@@ -53,6 +55,7 @@ class Add(PlaywrightBase):
         now = datetime.now()
         self._location(self.live_server_url + reverse('moneybook:index'))
         self._wait_for_ajax()
+        self.page.wait_for_selector('#transactions table tbody tr')
 
         rows = self.page.locator('#transactions table tbody tr')
         expect(rows).to_have_count(3)
@@ -74,6 +77,7 @@ class Add(PlaywrightBase):
         # 再度インデックスへ
         self._location(self.live_server_url + reverse('moneybook:index'))
         self._wait_for_ajax()
+        self.page.wait_for_selector('#transactions table tbody tr')
         rows = self.page.locator('#transactions table tbody tr')
 
         # 2つ目のデータ (移動元からの支出)
@@ -342,6 +346,7 @@ class Add(PlaywrightBase):
 
         self._location(self.live_server_url + reverse('moneybook:index'))
         self._wait_for_ajax()
+        self.page.wait_for_selector('#transactions table tbody tr')
         rows = self.page.locator('#transactions table tbody tr')
         expect(rows).to_have_count(2)
         tds = rows.nth(1).locator('td')
@@ -368,6 +373,7 @@ class Add(PlaywrightBase):
 
         self._location(self.live_server_url + reverse('moneybook:index'))
         self._wait_for_ajax()
+        self.page.wait_for_selector('#transactions table tbody tr')
         rows = self.page.locator('#transactions table tbody tr')
         expect(rows).to_have_count(2)
         tds = rows.nth(1).locator('td')
@@ -387,6 +393,7 @@ class Add(PlaywrightBase):
 
         self._location(self.live_server_url + reverse('moneybook:index'))
         self._wait_for_ajax()
+        self.page.wait_for_selector('#transactions table tbody tr')
         rows = self.page.locator('#transactions table tbody tr')
         expect(rows).to_have_count(2)
         tds = rows.nth(1).locator('td')
@@ -405,6 +412,7 @@ class Add(PlaywrightBase):
 
         self._location(self.live_server_url + reverse('moneybook:index'))
         self._wait_for_ajax()
+        self.page.wait_for_selector('#transactions table tbody tr')
         rows = self.page.locator('#transactions table tbody tr')
         expect(rows).to_have_count(2)
         tds = rows.nth(1).locator('td')
@@ -425,6 +433,7 @@ class Add(PlaywrightBase):
 
         self._location(self.live_server_url + reverse('moneybook:index'))
         self._wait_for_ajax()
+        self.page.wait_for_selector('#transactions table tbody tr')
         rows = self.page.locator('#transactions table tbody tr')
         expect(rows).to_have_count(2)
         tds = rows.nth(1).locator('td')
@@ -449,6 +458,7 @@ class Add(PlaywrightBase):
 
         self._location(self.live_server_url + reverse('moneybook:index'))
         self._wait_for_ajax()
+        self.page.wait_for_selector('#transactions table tbody tr')
         rows = self.page.locator('#transactions table tbody tr')
         expect(rows).to_have_count(2)
         tds = rows.nth(1).locator('td')
@@ -468,6 +478,7 @@ class Add(PlaywrightBase):
 
         self._location(self.live_server_url + reverse('moneybook:index'))
         self._wait_for_ajax()
+        self.page.wait_for_selector('#transactions table tbody tr')
         rows = self.page.locator('#transactions table tbody tr')
         expect(rows).to_have_count(2)
         tds = rows.nth(1).locator('td')
@@ -486,6 +497,7 @@ class Add(PlaywrightBase):
 
         self._location(self.live_server_url + reverse('moneybook:index'))
         self._wait_for_ajax()
+        self.page.wait_for_selector('#transactions table tbody tr')
         rows = self.page.locator('#transactions table tbody tr')
         expect(rows).to_have_count(2)
         tds = rows.nth(1).locator('td')
@@ -510,6 +522,7 @@ class Add(PlaywrightBase):
 
         self._location(self.live_server_url + reverse('moneybook:index'))
         self._wait_for_ajax()
+        self.page.wait_for_selector('#transactions table tbody tr')
         rows = self.page.locator('#transactions table tbody tr')
         expect(rows).to_have_count(2)
         tds = rows.nth(1).locator('td')
@@ -537,6 +550,7 @@ class Add(PlaywrightBase):
 
         self._location(self.live_server_url + reverse('moneybook:index'))
         self._wait_for_ajax()
+        self.page.wait_for_selector('#transactions table tbody tr')
         rows = self.page.locator('#transactions table tbody tr')
         expect(rows).to_have_count(2)
         tds = rows.nth(1).locator('td')
@@ -565,6 +579,7 @@ class Add(PlaywrightBase):
 
         self._location(self.live_server_url + reverse('moneybook:index'))
         self._wait_for_ajax()
+        self.page.wait_for_selector('#transactions table tbody tr')
         rows = self.page.locator('#transactions table tbody tr')
         expect(rows).to_have_count(2)
         tds = rows.nth(1).locator('td')
@@ -592,6 +607,7 @@ class Add(PlaywrightBase):
 
         self._location(self.live_server_url + reverse('moneybook:index'))
         self._wait_for_ajax()
+        self.page.wait_for_selector('#transactions table tbody tr')
         rows = self.page.locator('#transactions table tbody tr')
         expect(rows).to_have_count(2)
         tds = rows.nth(1).locator('td')
@@ -619,6 +635,7 @@ class Add(PlaywrightBase):
 
         self._location(self.live_server_url + reverse('moneybook:index'))
         self._wait_for_ajax()
+        self.page.wait_for_selector('#transactions table tbody tr')
         rows = self.page.locator('#transactions table tbody tr')
         expect(rows).to_have_count(2)
         tds = rows.nth(1).locator('td')
@@ -646,6 +663,7 @@ class Add(PlaywrightBase):
 
         self._location(self.live_server_url + reverse('moneybook:index'))
         self._wait_for_ajax()
+        self.page.wait_for_selector('#transactions table tbody tr')
         rows = self.page.locator('#transactions table tbody tr')
         expect(rows).to_have_count(2)
         tds = rows.nth(1).locator('td')
@@ -674,6 +692,7 @@ class Add(PlaywrightBase):
 
         self._location(self.live_server_url + reverse('moneybook:index'))
         self._wait_for_ajax()
+        self.page.wait_for_selector('#transactions table tbody tr')
         rows = self.page.locator('#transactions table tbody tr')
         expect(rows).to_have_count(2)
         tds = rows.nth(1).locator('td')
