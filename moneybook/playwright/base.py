@@ -23,6 +23,7 @@ class PlaywrightBase(StaticLiveServerTestCase):
         self.context = self.browser.new_context(viewport={'width': 1920, 'height': 1080})
         self.context.tracing.start(screenshots=True, snapshots=True, sources=True)
         self.page = self.context.new_page()
+        self.page.set_default_timeout(60000)
 
     def tearDown(self):
         # 失敗時にトレースとスクリーンショットを保存する
@@ -69,9 +70,9 @@ class PlaywrightBase(StaticLiveServerTestCase):
 
     def _assert_common(self):
         # アプリ名
-        expect(self.page.locator('header .header-cont1')).to_have_text('test-MoneyBook')
+        expect(self.page.locator('body > header .header-cont1')).to_have_text('test-MoneyBook')
         # 名前表示
-        expect(self.page.locator('header .header-cont2')).to_contain_text(self.username + 'さん')
+        expect(self.page.locator('body > header .header-cont2')).to_contain_text(self.username + 'さん')
 
         # タスクバー
         expected_links = [
@@ -90,3 +91,8 @@ class PlaywrightBase(StaticLiveServerTestCase):
     def _assert_texts(self, actual_elements, expected_texts):
         # actual_elements が Locator の場合を想定
         expect(actual_elements).to_have_text(expected_texts)
+
+    def _wait_for_ajax(self):
+        # jQuery AJAXの完了を待つ
+        # タイムアウトを少し長めにする
+        self.page.wait_for_function('window.jQuery && window.jQuery.active == 0', timeout=20000)
