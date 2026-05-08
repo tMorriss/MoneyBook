@@ -110,6 +110,7 @@ jobs:
         test-module:
           [
             delete,
+            edit,
             index,
             login,
             period_balances,
