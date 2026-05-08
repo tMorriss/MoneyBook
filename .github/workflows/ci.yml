@@ -79,7 +79,6 @@ jobs:
         test-module:
           [
             add,
-            period_balances,
             search,
           ]
     env:
@@ -114,6 +113,7 @@ jobs:
             edit,
             index,
             login,
+            period_balances,
             tools,
             periodic,
           ]
