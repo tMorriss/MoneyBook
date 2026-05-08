@@ -121,14 +121,14 @@
             </tr>
         </table>
     </form>
-    {% if is_show %}<br>
+    {% if is_show %}
     <table class="tbl-summary">
         <tr>
             <td class="summary-count">{{ show_data| length }}件</td>
             <td class="summary-income">収入: {{ income_sum| intcomma }}円</td>
             <td class="summary-outgo">支出: {{ outgo_sum| intcomma }}円</td>
         </tr>
-    </table><br>
+    </table>
     {% include "_data_table.html" %}{% endif %}
 </section>
 {% endblock %}
