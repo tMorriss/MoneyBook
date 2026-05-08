@@ -306,8 +306,7 @@ class Search(PlaywrightBase):
         self.page.wait_for_selector('#search-result')
 
         # 編集リンクをクリック
-        # 2行目の6番目のセル内のaタグ
-        self.page.locator('table#search-result tr').nth(1).locator('td').nth(5).locator('a').click()
+        self.page.locator('table#search-result tr').nth(1).locator('.a-edit a').click()
 
         # 編集画面に遷移したことを確認
         expect(self.page).to_have_url(re.compile(r'/edit/'))
