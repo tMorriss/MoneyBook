@@ -33,8 +33,8 @@ jobs:
         run: |
           chmod +x check_init_py.sh
           ./check_init_py.sh
-  check-e2e-matrix:
-    name: check e2e matrix configuration
+  check-playwright-matrix:
+    name: check playwright matrix configuration
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -42,10 +42,6 @@ jobs:
         run: |
           sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
           sudo chmod +x /usr/local/bin/yq
-      - name: Validate e2e Matrix
-        run: |
-          chmod +x check_e2e_matrix.sh
-          ./check_e2e_matrix.sh
       - name: Validate playwright Matrix
         run: |
           chmod +x check_playwright_matrix.sh
@@ -70,36 +66,6 @@ jobs:
         uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-  e2e:
-    name: e2e-${{ matrix.test-module }}
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        test-module:
-          [
-            add,
-          ]
-    env:
-      TEST_MODULE: moneybook.e2e.${{ matrix.test-module }}
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python 3.11
-        uses: actions/setup-python@v2
-        with:
-          python-version: "3.11"
-      - name: Install Chrome
-        uses: browser-actions/setup-chrome@latest
-        with:
-          chrome-version: stable
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements/requirements_dev.txt
-      - name: Test with tox
-        run: |
-          tox -e e2e
-
   playwright:
     name: playwright-${{ matrix.test-module }}
     runs-on: ubuntu-latest
@@ -108,6 +74,7 @@ jobs:
       matrix:
         test-module:
           [
+            add,
             delete,
             edit,
             index,
