@@ -53,10 +53,8 @@ class Search(PlaywrightBase):
         self.page.wait_for_selector('#search-result')
 
         # 検索結果を確認
-        # ヘッダー + 1件
-        rows = self.page.locator('table#search-result tr')
-        expect(rows).to_have_count(2)
-        expect(rows.nth(1).locator('td').nth(1)).to_have_text('検索テスト1')
+        expect(self.page.locator('#search-result .data-row')).to_have_count(1)
+        expect(self.page.locator('#search-result .data_item')).to_have_text(['検索テスト1'])
 
     def test_search_by_date_range(self):
         """日付範囲で検索できることを確認"""
@@ -97,9 +95,8 @@ class Search(PlaywrightBase):
         self.page.wait_for_selector('#search-result')
 
         # 検索結果を確認（15日のデータのみヒット）
-        rows = self.page.locator('table#search-result tr')
-        expect(rows).to_have_count(2)  # ヘッダー + 1件
-        expect(rows.nth(1).locator('td').nth(1)).to_have_text('15日のデータ')
+        expect(self.page.locator('#search-result .data-row')).to_have_count(1)
+        expect(self.page.locator('#search-result .data_item')).to_have_text(['15日のデータ'])
 
     def test_search_by_price_range(self):
         """金額範囲で検索できることを確認"""
@@ -134,9 +131,8 @@ class Search(PlaywrightBase):
         self.page.wait_for_selector('#search-result')
 
         # 検索結果を確認（中間のデータのみヒット）
-        rows = self.page.locator('table#search-result tr')
-        expect(rows).to_have_count(2)  # ヘッダー + 1件
-        expect(rows.nth(1).locator('td').nth(1)).to_have_text('中間のデータ')
+        expect(self.page.locator('#search-result .data-row')).to_have_count(1)
+        expect(self.page.locator('#search-result .data_item')).to_have_text(['中間のデータ'])
 
     def test_search_by_method(self):
         """支払い方法で検索できることを確認"""
@@ -170,9 +166,8 @@ class Search(PlaywrightBase):
         self.page.wait_for_selector('#search-result')
 
         # 検索結果を確認（銀行データのみヒット）
-        rows = self.page.locator('table#search-result tr')
-        expect(rows).to_have_count(2)  # ヘッダー + 1件
-        expect(rows.nth(1).locator('td').nth(1)).to_have_text('銀行データ')
+        expect(self.page.locator('#search-result .data-row')).to_have_count(1)
+        expect(self.page.locator('#search-result .data_item')).to_have_text(['銀行データ'])
 
     def test_search_by_category(self):
         """カテゴリーで検索できることを確認"""
@@ -205,9 +200,8 @@ class Search(PlaywrightBase):
         self.page.wait_for_selector('#search-result')
 
         # 検索結果を確認（食費データのみヒット）
-        rows = self.page.locator('table#search-result tr')
-        expect(rows).to_have_count(2)  # ヘッダー + 1件
-        expect(rows.nth(1).locator('td').nth(1)).to_have_text('食費データ')
+        expect(self.page.locator('#search-result .data-row')).to_have_count(1)
+        expect(self.page.locator('#search-result .data_item')).to_have_text(['食費データ'])
 
     def test_search_combined_conditions(self):
         """複数の条件を組み合わせて検索できることを確認"""
@@ -242,9 +236,8 @@ class Search(PlaywrightBase):
         self.page.wait_for_selector('#search-result')
 
         # 検索結果を確認（スーパー買い物のみヒット）
-        rows = self.page.locator('table#search-result tr')
-        expect(rows).to_have_count(2)  # ヘッダー + 1件
-        expect(rows.nth(1).locator('td').nth(1)).to_have_text('スーパー買い物')
+        expect(self.page.locator('#search-result .data-row')).to_have_count(1)
+        expect(self.page.locator('#search-result .data_item')).to_have_text(['スーパー買い物'])
 
     def test_search_button_enter(self):
         """Enterキーで検索できることを確認"""
@@ -267,9 +260,8 @@ class Search(PlaywrightBase):
         self.page.wait_for_selector('#search-result')
 
         # 検索結果を確認
-        rows = self.page.locator('table#search-result tr')
-        expect(rows).to_have_count(2)  # ヘッダー + 1件
-        expect(rows.nth(1).locator('td').nth(1)).to_have_text('Enterテスト')
+        expect(self.page.locator('#search-result .data-row')).to_have_count(1)
+        expect(self.page.locator('#search-result .data_item')).to_have_text(['Enterテスト'])
 
     def test_search_no_results(self):
         """検索結果が0件の場合の表示を確認"""
@@ -282,9 +274,8 @@ class Search(PlaywrightBase):
         self.page.click('input[value="検索"]')
         self.page.wait_for_selector('#search-result')
 
-        # 検索結果を確認（ヘッダーのみ）
-        rows = self.page.locator('table#search-result tr')
-        expect(rows).to_have_count(1)  # ヘッダーのみ
+        # 検索結果を確認
+        expect(self.page.locator('#search-result .data-row')).to_have_count(0)
 
     def test_search_result_link_to_edit(self):
         """検索結果から編集画面に遷移できることを確認"""
@@ -306,7 +297,7 @@ class Search(PlaywrightBase):
         self.page.wait_for_selector('#search-result')
 
         # 編集リンクをクリック
-        self.page.locator('table#search-result tr').nth(1).locator('.a-edit a').click()
+        self.page.locator('#search-result .data-row').filter(has_text='編集遷移テスト').locator('.a-edit a').click()
 
         # 編集画面に遷移したことを確認
         expect(self.page).to_have_url(re.compile(r'/edit/'))
