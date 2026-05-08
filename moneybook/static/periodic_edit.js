@@ -20,6 +20,10 @@ $(document).ready(function() {
         newRowCounter++;
 
         $('#periodic_table').append(newRow);
+
+        // 新規行の入力欄にautocompleteを適用
+        initItemAutocomplete(newRow.find('.suggest_item'));
+        initPriceAutocomplete(newRow.find('.suggest_price'));
     });
 
     // 削除ボタン
