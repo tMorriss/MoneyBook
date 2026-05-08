@@ -80,7 +80,6 @@ jobs:
           [
             add,
             period_balances,
-            periodic,
             search,
           ]
     env:
@@ -116,6 +115,7 @@ jobs:
             index,
             login,
             tools,
+            periodic,
           ]
     env:
       TEST_MODULE: moneybook.playwright.${{ matrix.test-module }}
