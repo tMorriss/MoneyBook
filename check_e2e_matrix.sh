@@ -17,7 +17,7 @@ echo "=================================================="
 e2e_modules=$(grep -rl " def test_" "$E2E_DIR" 2>/dev/null | sed 's/moneybook\/e2e\///g' | sed 's/.py//g' | sort | paste -sd "," - | sed 's/,/, /g')
 
 # Matrix設定からテストモジュールを取得（カンマ+スペース区切り、ソート済み）
-matrix_modules=$(yq eval '.jobs.e2e.strategy.matrix.test-module | sort | join(", ")' "$WORKFLOW_FILE")
+matrix_modules=$(yq '.jobs.e2e.strategy.matrix."test-module" | sort | join(", ")' "$WORKFLOW_FILE")
 
 echo "e2eディレクトリ: $e2e_modules"
 echo "Matrix設定: $matrix_modules"
