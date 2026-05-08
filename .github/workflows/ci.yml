@@ -99,7 +99,7 @@ jobs:
       - name: Test with tox
         run: |
           tox -e e2e
-      - name: Upload Playwright artifacts
+      - name: Upload e2e artifacts
         uses: actions/upload-artifact@v4
         if: failure()
         with:
