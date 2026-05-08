@@ -1,4 +1,3 @@
-import re
 from datetime import datetime
 
 from django.urls import reverse
@@ -17,11 +16,11 @@ class Add(PlaywrightBase):
 
         # 1つ目のデータ (移動先への収入)
         tds1 = rows.nth(1).locator('td')
-        expect(tds1.nth(0)).to_have_text(f"{now.year}/{str(now.month).zfill(2)}/01")
-        expect(tds1.nth(1)).to_have_text(f"{method}チャージ")
-        expect(tds1.nth(2)).to_have_text("100")
+        expect(tds1.nth(0)).to_have_text(f'{now.year}/{str(now.month).zfill(2)}/01')
+        expect(tds1.nth(1)).to_have_text(f'{method}チャージ')
+        expect(tds1.nth(2)).to_have_text('100')
         expect(tds1.nth(3)).to_have_text(method)
-        expect(tds1.nth(4)).to_have_text("内部移動")
+        expect(tds1.nth(4)).to_have_text('内部移動')
         expect(rows.nth(1)).to_have_css('background-color', 'rgba(0, 0, 0, 0)')
 
         # direction確認 (編集画面へ移動して確認)
@@ -37,11 +36,11 @@ class Add(PlaywrightBase):
 
         # 2つ目のデータ (移動元からの支出)
         tds2 = rows.nth(2).locator('td')
-        expect(tds2.nth(0)).to_have_text(f"{now.year}/{str(now.month).zfill(2)}/01")
-        expect(tds2.nth(1)).to_have_text(f"{method}チャージ")
-        expect(tds2.nth(2)).to_have_text("100")
-        expect(tds2.nth(3)).to_have_text("銀行")
-        expect(tds2.nth(4)).to_have_text("内部移動")
+        expect(tds2.nth(0)).to_have_text(f'{now.year}/{str(now.month).zfill(2)}/01')
+        expect(tds2.nth(1)).to_have_text(f'{method}チャージ')
+        expect(tds2.nth(2)).to_have_text('100')
+        expect(tds2.nth(3)).to_have_text('銀行')
+        expect(tds2.nth(4)).to_have_text('内部移動')
         expect(rows.nth(2)).to_have_css('background-color', 'rgba(0, 0, 0, 0)')
 
         # direction確認
@@ -60,11 +59,11 @@ class Add(PlaywrightBase):
 
         # 1つ目のデータ (移動先への収入)
         tds1 = rows.nth(1).locator('td')
-        expect(tds1.nth(0)).to_have_text(f"{now.year}/{str(now.month).zfill(2)}/02")
-        expect(tds1.nth(1)).to_have_text("ないぶいどう")
-        expect(tds1.nth(2)).to_have_text("200")
-        expect(tds1.nth(3)).to_have_text("Kyash")
-        expect(tds1.nth(4)).to_have_text("内部移動")
+        expect(tds1.nth(0)).to_have_text(f'{now.year}/{str(now.month).zfill(2)}/02')
+        expect(tds1.nth(1)).to_have_text('ないぶいどう')
+        expect(tds1.nth(2)).to_have_text('200')
+        expect(tds1.nth(3)).to_have_text('Kyash')
+        expect(tds1.nth(4)).to_have_text('内部移動')
         expect(rows.nth(1)).to_have_css('background-color', 'rgba(0, 0, 0, 0)')
 
         # direction確認
@@ -79,11 +78,11 @@ class Add(PlaywrightBase):
 
         # 2つ目のデータ (移動元からの支出)
         tds2 = rows.nth(2).locator('td')
-        expect(tds2.nth(0)).to_have_text(f"{now.year}/{str(now.month).zfill(2)}/02")
-        expect(tds2.nth(1)).to_have_text("ないぶいどう")
-        expect(tds2.nth(2)).to_have_text("200")
-        expect(tds2.nth(3)).to_have_text("現金")
-        expect(tds2.nth(4)).to_have_text("内部移動")
+        expect(tds2.nth(0)).to_have_text(f'{now.year}/{str(now.month).zfill(2)}/02')
+        expect(tds2.nth(1)).to_have_text('ないぶいどう')
+        expect(tds2.nth(2)).to_have_text('200')
+        expect(tds2.nth(3)).to_have_text('現金')
+        expect(tds2.nth(4)).to_have_text('内部移動')
         expect(rows.nth(2)).to_have_css('background-color', 'rgba(0, 0, 0, 0)')
 
         # direction確認
@@ -218,7 +217,7 @@ class Add(PlaywrightBase):
 
         self.page.fill('#c_day', '1')
         self.page.fill('#c_price', '100')
-        self.page.locator('input[name="c_method"] + label').nth(1).click() # PayPay
+        self.page.locator('input[name="c_method"] + label').nth(1).click()  # PayPay
         self.page.click('h1:has-text("銀行チャージ") + form input[type="button"]')
 
         # 成功後に1番目(Kyash)が選択されていること
@@ -233,8 +232,8 @@ class Add(PlaywrightBase):
         self.page.fill('#m_day', '2')
         self.page.fill('#m_item', 'ないぶいどう')
         self.page.fill('#m_price', '200')
-        self.page.locator('input[name="m_before_method"] + label').nth(1).click() # 現金
-        self.page.locator('input[name="m_after_method"] + label').nth(2).click() # Kyash
+        self.page.locator('input[name="m_before_method"] + label').nth(1).click()  # 現金
+        self.page.locator('input[name="m_after_method"] + label').nth(2).click()  # Kyash
         self.page.click('h1:has-text("内部移動追加") + form input[type="button"]')
 
         self._assert_intra_move()
@@ -346,7 +345,7 @@ class Add(PlaywrightBase):
         rows = self.page.locator('#transactions table tbody tr')
         expect(rows).to_have_count(2)
         tds = rows.nth(1).locator('td')
-        expect(tds.nth(0)).to_have_text(f"{now.year}/{str(now.month).zfill(2)}/04")
+        expect(tds.nth(0)).to_have_text(f'{now.year}/{str(now.month).zfill(2)}/04')
         expect(tds.nth(1)).to_have_text('Suicaチャージ')
         expect(tds.nth(2)).to_have_text('400')
         expect(tds.nth(3)).to_have_text('銀行')
@@ -372,7 +371,7 @@ class Add(PlaywrightBase):
         rows = self.page.locator('#transactions table tbody tr')
         expect(rows).to_have_count(2)
         tds = rows.nth(1).locator('td')
-        expect(tds.nth(0)).to_have_text(f"{now.year}/{str(now.month).zfill(2)}/{str(now.day).zfill(2)}")
+        expect(tds.nth(0)).to_have_text(f'{now.year}/{str(now.month).zfill(2)}/{str(now.day).zfill(2)}')
         expect(tds.nth(1)).to_have_text('Suicaチャージ')
         expect(tds.nth(2)).to_have_text('400')
         expect(tds.nth(3)).to_have_text('銀行')
@@ -391,7 +390,7 @@ class Add(PlaywrightBase):
         rows = self.page.locator('#transactions table tbody tr')
         expect(rows).to_have_count(2)
         tds = rows.nth(1).locator('td')
-        expect(tds.nth(0)).to_have_text(f"{now.year}/{str(now.month).zfill(2)}/05")
+        expect(tds.nth(0)).to_have_text(f'{now.year}/{str(now.month).zfill(2)}/05')
         expect(tds.nth(1)).to_have_text('Suicaチャージ')
         expect(tds.nth(2)).to_have_text('1,000')
         expect(tds.nth(3)).to_have_text('銀行')
@@ -409,7 +408,7 @@ class Add(PlaywrightBase):
         rows = self.page.locator('#transactions table tbody tr')
         expect(rows).to_have_count(2)
         tds = rows.nth(1).locator('td')
-        expect(tds.nth(0)).to_have_text(f"{now.year}/{str(now.month).zfill(2)}/{str(now.day).zfill(2)}")
+        expect(tds.nth(0)).to_have_text(f'{now.year}/{str(now.month).zfill(2)}/{str(now.day).zfill(2)}')
         expect(tds.nth(1)).to_have_text('Suicaチャージ')
         expect(tds.nth(2)).to_have_text('1,000')
         expect(tds.nth(3)).to_have_text('銀行')
@@ -429,7 +428,7 @@ class Add(PlaywrightBase):
         rows = self.page.locator('#transactions table tbody tr')
         expect(rows).to_have_count(2)
         tds = rows.nth(1).locator('td')
-        expect(tds.nth(0)).to_have_text(f"{now.year}/{str(now.month).zfill(2)}/06")
+        expect(tds.nth(0)).to_have_text(f'{now.year}/{str(now.month).zfill(2)}/06')
         expect(tds.nth(1)).to_have_text('電車代')
         expect(tds.nth(2)).to_have_text('600')
         expect(tds.nth(3)).to_have_text('銀行')
@@ -453,7 +452,7 @@ class Add(PlaywrightBase):
         rows = self.page.locator('#transactions table tbody tr')
         expect(rows).to_have_count(2)
         tds = rows.nth(1).locator('td')
-        expect(tds.nth(0)).to_have_text(f"{now.year}/{str(now.month).zfill(2)}/{str(now.day).zfill(2)}")
+        expect(tds.nth(0)).to_have_text(f'{now.year}/{str(now.month).zfill(2)}/{str(now.day).zfill(2)}')
         expect(tds.nth(1)).to_have_text('電車代')
         expect(tds.nth(2)).to_have_text('600')
         expect(tds.nth(3)).to_have_text('銀行')
@@ -472,7 +471,7 @@ class Add(PlaywrightBase):
         rows = self.page.locator('#transactions table tbody tr')
         expect(rows).to_have_count(2)
         tds = rows.nth(1).locator('td')
-        expect(tds.nth(0)).to_have_text(f"{now.year}/{str(now.month).zfill(2)}/07")
+        expect(tds.nth(0)).to_have_text(f'{now.year}/{str(now.month).zfill(2)}/07')
         expect(tds.nth(1)).to_have_text('電車代')
         expect(tds.nth(2)).to_have_text('1,000')
         expect(tds.nth(3)).to_have_text('銀行')
@@ -490,7 +489,7 @@ class Add(PlaywrightBase):
         rows = self.page.locator('#transactions table tbody tr')
         expect(rows).to_have_count(2)
         tds = rows.nth(1).locator('td')
-        expect(tds.nth(0)).to_have_text(f"{now.year}/{str(now.month).zfill(2)}/{str(now.day).zfill(2)}")
+        expect(tds.nth(0)).to_have_text(f'{now.year}/{str(now.month).zfill(2)}/{str(now.day).zfill(2)}')
         expect(tds.nth(1)).to_have_text('電車代')
         expect(tds.nth(2)).to_have_text('1,000')
         expect(tds.nth(3)).to_have_text('銀行')
@@ -504,9 +503,9 @@ class Add(PlaywrightBase):
         self.page.fill('#a_day', '5')
         self.page.fill('#a_item', 'マニュアルテスト')
         self.page.fill('#a_price', '500')
-        self.page.locator('input[name="a_direction"] + label').nth(1).click() # 支出
-        self.page.locator('input[name="a_method"] + label').nth(1).click() # 現金
-        self.page.locator('input[name="a_category"] + label').nth(1).click() # 必需品
+        self.page.locator('input[name="a_direction"] + label').nth(1).click()  # 支出
+        self.page.locator('input[name="a_method"] + label').nth(1).click()  # 現金
+        self.page.locator('input[name="a_category"] + label').nth(1).click()  # 必需品
         self.page.click('h1:has-text("収入支出追加") + form input[type="button"]')
 
         self._location(self.live_server_url + reverse('moneybook:index'))
@@ -514,7 +513,7 @@ class Add(PlaywrightBase):
         rows = self.page.locator('#transactions table tbody tr')
         expect(rows).to_have_count(2)
         tds = rows.nth(1).locator('td')
-        expect(tds.nth(0)).to_have_text(f"{now.year}/{str(now.month).zfill(2)}/05")
+        expect(tds.nth(0)).to_have_text(f'{now.year}/{str(now.month).zfill(2)}/05')
         expect(tds.nth(1)).to_have_text('マニュアルテスト')
         expect(tds.nth(2)).to_have_text('500')
         expect(tds.nth(3)).to_have_text('現金')
@@ -541,11 +540,12 @@ class Add(PlaywrightBase):
         rows = self.page.locator('#transactions table tbody tr')
         expect(rows).to_have_count(2)
         tds = rows.nth(1).locator('td')
-        expect(tds.nth(0)).to_have_text(f"{now.year}/{str(now.month).zfill(2)}/05")
+        expect(tds.nth(0)).to_have_text(f'{now.year}/{str(now.month).zfill(2)}/05')
         expect(tds.nth(1)).to_have_text('マニュアルテスト')
         expect(tds.nth(2)).to_have_text('500')
         expect(tds.nth(3)).to_have_text('銀行')
         expect(tds.nth(4)).to_have_text('食費')
+        expect(rows.nth(1)).to_have_css('background-color', 'rgba(0, 0, 0, 0)')
 
         # direction確認
         tds.nth(5).locator('a').click()
@@ -568,7 +568,7 @@ class Add(PlaywrightBase):
         rows = self.page.locator('#transactions table tbody tr')
         expect(rows).to_have_count(2)
         tds = rows.nth(1).locator('td')
-        expect(tds.nth(0)).to_have_text(f"{now.year}/{str(now.month).zfill(2)}/05")
+        expect(tds.nth(0)).to_have_text(f'{now.year}/{str(now.month).zfill(2)}/05')
         expect(tds.nth(1)).to_have_text('マニュアルテスト')
         expect(tds.nth(2)).to_have_text('500')
         expect(tds.nth(3)).to_have_text('銀行')
@@ -595,7 +595,7 @@ class Add(PlaywrightBase):
         rows = self.page.locator('#transactions table tbody tr')
         expect(rows).to_have_count(2)
         tds = rows.nth(1).locator('td')
-        expect(tds.nth(0)).to_have_text(f"{now.year}/{str(now.month).zfill(2)}/05")
+        expect(tds.nth(0)).to_have_text(f'{now.year}/{str(now.month).zfill(2)}/05')
         expect(tds.nth(1)).to_have_text('マニュアルテスト')
         expect(tds.nth(2)).to_have_text('500')
         expect(tds.nth(3)).to_have_text('銀行')
@@ -622,7 +622,7 @@ class Add(PlaywrightBase):
         rows = self.page.locator('#transactions table tbody tr')
         expect(rows).to_have_count(2)
         tds = rows.nth(1).locator('td')
-        expect(tds.nth(0)).to_have_text(f"{now.year}/{str(now.month).zfill(2)}/05")
+        expect(tds.nth(0)).to_have_text(f'{now.year}/{str(now.month).zfill(2)}/05')
         expect(tds.nth(1)).to_have_text('マニュアルテスト')
         expect(tds.nth(2)).to_have_text('500')
         expect(tds.nth(3)).to_have_text('銀行')
@@ -649,7 +649,7 @@ class Add(PlaywrightBase):
         rows = self.page.locator('#transactions table tbody tr')
         expect(rows).to_have_count(2)
         tds = rows.nth(1).locator('td')
-        expect(tds.nth(0)).to_have_text(f"{now.year}/{str(now.month).zfill(2)}/05")
+        expect(tds.nth(0)).to_have_text(f'{now.year}/{str(now.month).zfill(2)}/05')
         expect(tds.nth(1)).to_have_text('マニュアルテスト')
         expect(tds.nth(2)).to_have_text('500')
         expect(tds.nth(3)).to_have_text('銀行')
@@ -669,7 +669,7 @@ class Add(PlaywrightBase):
         self.page.fill('#a_day', '5')
         self.page.fill('#a_item', 'マニュアルテスト')
         self.page.fill('#a_price', '500')
-        self.page.locator('input[name="a_temp"] + label').nth(1).click() # Yes
+        self.page.locator('input[name="a_temp"] + label').nth(1).click()  # Yes
         self.page.click('h1:has-text("収入支出追加") + form input[type="button"]')
 
         self._location(self.live_server_url + reverse('moneybook:index'))
@@ -677,7 +677,7 @@ class Add(PlaywrightBase):
         rows = self.page.locator('#transactions table tbody tr')
         expect(rows).to_have_count(2)
         tds = rows.nth(1).locator('td')
-        expect(tds.nth(0)).to_have_text(f"{now.year}/{str(now.month).zfill(2)}/05")
+        expect(tds.nth(0)).to_have_text(f'{now.year}/{str(now.month).zfill(2)}/05')
         expect(tds.nth(1)).to_have_text('マニュアルテスト')
         expect(tds.nth(2)).to_have_text('500')
         expect(tds.nth(3)).to_have_text('銀行')
