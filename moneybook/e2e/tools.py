@@ -36,7 +36,7 @@ class Tools(PlaywrightBase):
 
         # 実際の現金残高を入力
         actual_cash_input = self.page.locator('#actual_balance')
-        actual_cash_input.focus()
+        actual_cash_input.click()
         expect(actual_cash_input).not_to_have_value(re.compile(r','))
         actual_cash_input.fill('5000')
 
@@ -58,7 +58,7 @@ class Tools(PlaywrightBase):
 
         # 実際の現金残高を入力してEnter
         actual_cash_input = self.page.locator('#actual_balance')
-        actual_cash_input.focus()
+        actual_cash_input.click()
         expect(actual_cash_input).not_to_have_value(re.compile(r','))
         actual_cash_input.fill('10000')
         actual_cash_input.press('Enter')
@@ -76,7 +76,7 @@ class Tools(PlaywrightBase):
 
         # 生活費目標額を入力
         living_cost_input = self.page.locator('#txt_living_cost')
-        living_cost_input.focus()
+        living_cost_input.click()
         expect(living_cost_input).not_to_have_value(re.compile(r','))
         living_cost_input.fill('30000')
 
@@ -94,7 +94,7 @@ class Tools(PlaywrightBase):
 
         # 生活費目標額を入力してEnter
         living_cost_input = self.page.locator('#txt_living_cost')
-        living_cost_input.focus()
+        living_cost_input.click()
         expect(living_cost_input).not_to_have_value(re.compile(r','))
         living_cost_input.fill('40000')
         living_cost_input.press('Enter')
@@ -121,7 +121,7 @@ class Tools(PlaywrightBase):
 
         # 実際の現金残高を更新
         actual_balance = self.page.locator('#actual_balance')
-        actual_balance.focus()
+        actual_balance.click()
         expect(actual_balance).not_to_have_value(re.compile(r','))
         actual_balance.fill('15000')
         self.page.click('input[value="計算"]')
@@ -130,7 +130,7 @@ class Tools(PlaywrightBase):
 
         # 生活費目標額を更新
         living_cost = self.page.locator('#txt_living_cost')
-        living_cost.focus()
+        living_cost.click()
         expect(living_cost).not_to_have_value(re.compile(r','))
         living_cost.fill('50000')
         update_button = self.page.locator('h1:has-text("生活費目標額") + table').locator('input[value="更新"]')
