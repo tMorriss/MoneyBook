@@ -79,8 +79,6 @@ jobs:
         test-module:
           [
             add,
-            edit,
-            periodic,
             search,
           ]
     env:
@@ -116,6 +114,7 @@ jobs:
             login,
             period_balances,
             tools,
+            periodic,
           ]
     env:
       TEST_MODULE: moneybook.playwright.${{ matrix.test-module }}
