@@ -79,7 +79,6 @@ jobs:
         test-module:
           [
             add,
-            search,
           ]
     env:
       TEST_MODULE: moneybook.e2e.${{ matrix.test-module }}
@@ -116,6 +115,7 @@ jobs:
             period_balances,
             tools,
             periodic,
+            search,
           ]
     env:
       TEST_MODULE: moneybook.playwright.${{ matrix.test-module }}
