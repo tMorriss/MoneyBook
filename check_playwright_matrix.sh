@@ -17,7 +17,7 @@ echo "=================================================="
 playwright_modules=$(grep -rl " def test_" "$PLAYWRIGHT_DIR" 2>/dev/null | sed 's/moneybook\/playwright\///g' | sed 's/.py//g' | sort | paste -sd "," - | sed 's/,/, /g')
 
 # Matrix設定からテストモジュールを取得（カンマ+スペース区切り、ソート済み）
-matrix_modules=$(yq eval '.jobs.playwright.strategy.matrix.test-module | sort | join(", ")' "$WORKFLOW_FILE")
+matrix_modules=$(yq '.jobs.playwright.strategy.matrix."test-module" | sort | join(", ")' "$WORKFLOW_FILE")
 
 echo "playwrightディレクトリ: $playwright_modules"
 echo "Matrix設定: $matrix_modules"

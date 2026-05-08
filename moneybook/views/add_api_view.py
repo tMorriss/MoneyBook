@@ -1,5 +1,4 @@
 import calendar
-import http
 from datetime import date
 from http import HTTPStatus
 
@@ -26,7 +25,7 @@ class AddApiView(View):
             res_data = {
                 'ErrorList': error_list,
             }
-            return JsonResponse(res_data, status=http.HTTPStatus.BAD_REQUEST)
+            return JsonResponse(res_data, status=HTTPStatus.BAD_REQUEST)
 
 
 class AddIntraMoveApiView(View):
@@ -63,21 +62,21 @@ class AddIntraMoveApiView(View):
                 return JsonResponse({})
 
             except:
-                return JsonResponse({}, status=http.HTTPStatus.BAD_REQUEST)
+                return JsonResponse({}, status=HTTPStatus.BAD_REQUEST)
         else:
-            return JsonResponse({}, status=http.HTTPStatus.BAD_REQUEST)
+            return JsonResponse({}, status=HTTPStatus.BAD_REQUEST)
 
 
 class SuggestApiView(View):
     def get(self, request, *args, **kwargs):
         if 'item' not in request.GET:
             res = {'message': 'missing item'}
-            return JsonResponse(res, status=http.HTTPStatus.BAD_REQUEST)
+            return JsonResponse(res, status=HTTPStatus.BAD_REQUEST)
 
         item = request.GET.get('item')
         if item == '':
             res = {'message': 'empty item'}
-            return JsonResponse(res, status=http.HTTPStatus.BAD_REQUEST)
+            return JsonResponse(res, status=HTTPStatus.BAD_REQUEST)
 
         data = Data.sort_descending(
             Data.get_startswith_keyword_data(Data.get_all_data(), item))

@@ -76,10 +76,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        test-module:
-          [
-            search,
-          ]
+        test-module: []
     env:
       TEST_MODULE: moneybook.e2e.${{ matrix.test-module }}
     steps:
@@ -116,6 +113,7 @@ jobs:
             period_balances,
             tools,
             periodic,
+            search,
           ]
     env:
       TEST_MODULE: moneybook.playwright.${{ matrix.test-module }}
