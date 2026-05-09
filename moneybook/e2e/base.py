@@ -70,7 +70,7 @@ class PlaywrightBase(StaticLiveServerTestCase):
 
     def _assert_common(self):
         # アプリ名
-        expect(self.page.locator('body > header .header-cont1')).to_have_text('test-MoneyBook')
+        expect(self.page.locator('body > header .header-cont1')).to_have_text('e2e-MoneyBook')
         # 名前表示
         expect(self.page.locator('body > header .header-cont2')).to_contain_text(self.username + 'さん')
 
