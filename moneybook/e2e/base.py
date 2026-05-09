@@ -23,7 +23,7 @@ class PlaywrightBase(StaticLiveServerTestCase):
         self.context = self.browser.new_context(viewport={'width': 1920, 'height': 1080})
         self.context.tracing.start(screenshots=True, snapshots=True, sources=True)
         self.page = self.context.new_page()
-        self.page.set_default_timeout(60000)
+        self.page.set_default_timeout(10000)
 
     def tearDown(self):
         # 失敗時にトレースとスクリーンショットを保存する
