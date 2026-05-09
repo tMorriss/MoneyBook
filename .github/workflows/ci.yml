@@ -84,8 +84,27 @@ jobs:
             periodic,
             search,
           ]
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_DB: moneybook_e2e
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     env:
       TEST_MODULE: moneybook.e2e.${{ matrix.test-module }}
+      DB_NAME: moneybook_e2e
+      DB_USER: postgres
+      DB_PASS: postgres
+      DB_HOST: localhost
+      DB_PORT: 5432
     steps:
       - uses: actions/checkout@v6
       - name: Set up Python 3.11

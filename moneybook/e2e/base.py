@@ -1,5 +1,6 @@
 import os
 
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.urls import reverse
@@ -70,7 +71,7 @@ class PlaywrightBase(StaticLiveServerTestCase):
 
     def _assert_common(self):
         # アプリ名
-        expect(self.page.locator('body > header .header-cont1')).to_have_text('test-MoneyBook')
+        expect(self.page.locator('body > header .header-cont1')).to_have_text(settings.APP_NAME)
         # 名前表示
         expect(self.page.locator('body > header .header-cont2')).to_contain_text(self.username + 'さん')
 
