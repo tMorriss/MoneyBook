@@ -14,11 +14,10 @@ echo "E2E Matrix Validation"
 echo "=================================================="
 
 # e2eディレクトリ内のテストモジュールを取得（カンマ+スペース区切り、ソート済み）
-e2e_modules=$(grep -rl " def test_" "$E2E_DIR" 2>/dev/null | sed 's/moneybook\/e2e\///g' | sed 's/.py//g' | sort | paste -sd "," - | sed 's/,/, /g')
+e2e_modules=$(grep -rl " def test_" "$E2E_DIR" 2>/dev/null | sed "s|$E2E_DIR/||g" | sed 's/.py//g' | sort | paste -sd "," - | sed 's/,/, /g')
 
 # Matrix設定からテストモジュールを取得（カンマ+スペース区切り、ソート済み）
-# yqの出力は引用符で囲まれる可能性があるため、sedで削除
-matrix_modules=$(yq '.jobs.e2e.strategy.matrix."test-module" | sort | join(", ")' "$WORKFLOW_FILE" | sed 's/"//g')
+matrix_modules=$(yq -r '.jobs.e2e.strategy.matrix."test-module" | sort | join(", ")' "$WORKFLOW_FILE")
 
 echo "e2eディレクトリ: $e2e_modules"
 echo "Matrix設定: $matrix_modules"
