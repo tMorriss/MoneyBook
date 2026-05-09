@@ -1,3 +1,2 @@
-selenium
+playwright
 pyyaml
-chromedriver-binary-auto

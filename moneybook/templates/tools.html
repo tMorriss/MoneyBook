@@ -40,7 +40,7 @@
         </tr>
         <tr>
             <th>実際</th>
-            <td><input type="text" class="righter" id="actual_balance" style="width:10ex" onfocus="selectValue('#actual_balance')"
+            <td><input type="text" class="righter" id="actual_balance" style="width:10ex" onfocus="unseparateValue('#actual_balance');selectValue('#actual_balance')"
                     onblur="separateValue('#actual_balance')" onkeypress="KeyPressDiff(event.keyCode)"
                     value="{{ actual_cash_balance| intcomma }}"></td>
         </tr>

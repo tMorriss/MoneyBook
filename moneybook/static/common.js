@@ -109,8 +109,8 @@ function removeBlueFocus(id) {
     $(id).removeClass('on-fcs-blue');
 }
 
-$(() => {
-    $('.add_item').autocomplete({
+function initItemAutocomplete(selector) {
+    $(selector).autocomplete({
         source: (request, response) => {
             $.get({
                 url: suggest_api_url,
@@ -122,30 +122,57 @@ $(() => {
                 response([...new Set(items)]);
             })
         },
-    })
-});
+    });
+}
+
+function initPriceAutocomplete(selector) {
+    $(selector).each(function () {
+        const element = $(this);
+        element.autocomplete({
+            source: (request, response) => {
+                // 現在の要素と同じ行または同じフォーム内の .suggest_item を探す
+                let itemVal = '';
+                // まずは同じ行(tr)内を探す（定期取引編集など）
+                const row = element.closest('tr');
+                if (row.length) {
+                    itemVal = row.find('.suggest_item').val();
+                }
+                // 見つからない場合は、所属するフォーム全体から探す（追加画面など）
+                if (!itemVal) {
+                    const form = element.closest('form');
+                    if (form.length) {
+                        itemVal = form.find('.suggest_item').val();
+                    }
+                }
+                // それでも見つからない場合は、ページ全体から最初のものを取得
+                if (!itemVal) {
+                    itemVal = $(".suggest_item").val();
+                }
+
+                $.get({
+                    url: suggest_api_url,
+                    data: {
+                        "item": itemVal,
+                    }
+                }).done((data) => {
+                    const prices = data.suggests.map(suggest => suggest.price);
+                    const recentPrice = prices.slice(0, 10);
+                    response([...new Set(recentPrice)].map(String));
+                })
+            },
+            focus: (event, ui) => {
+                $(event.target).val(ui.item.label);
+                return false;
+            },
+            minLength: 0,
+            delay: 0,
+        });
+    });
+}
 
 $(() => {
-    $('.add_price').autocomplete({
-        source: (request, response) => {
-            $.get({
-                url: suggest_api_url,
-                data: {
-                    "item": $(".add_item").val(),
-                }
-            }).done((data) => {
-                const prices = data.suggests.map(suggest => suggest.price);
-                const recentPrice = prices.slice(0, 10);
-                response([...new Set(recentPrice)].map(String));
-            })
-        },
-        focus: (event, ui) => {
-            $(this).val(ui.item.label);
-            return false;
-        },
-        minLength: 0,
-        delay: 0,
-    })
+    initItemAutocomplete('.suggest_item');
+    initPriceAutocomplete('.suggest_price');
 });
 
 function zeroPadding(num, length) {

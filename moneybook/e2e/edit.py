@@ -1,306 +1,341 @@
-import time
 from datetime import datetime
 
 from django.urls import reverse
-from moneybook.e2e.base import SeleniumBase
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
+from moneybook.e2e.base import PlaywrightBase
+from playwright.sync_api import expect
 
 
-class Edit(SeleniumBase):
+class EditTest(PlaywrightBase):
+    def setUp(self):
+        super().setUp()
+        self.test_year = 2000
+        self.test_month = 1
+        self._test_counter = 0
+
+    def _get_unique_item(self, prefix):
+        self._test_counter += 1
+        return f'{prefix}_{self._test_counter}_{datetime.now().strftime("%H%M%S")}'
+
+    def _wait_for_index_ajax(self):
+        # jQuery AJAXの完了を待つ
+        super()._wait_for_ajax()
+        # summary-count が "件" 以外の数字を含む状態になるまで待つ (表示更新待ち)
+        # 稀にデータが0件で "0件" となる場合があるため、それも許容する
+        # ただ初期状態が "件" なので、何らかの数字が入るのを待つ
+        try:
+            self.page.wait_for_selector('#summary-count:not(:text-is("件"))', timeout=10000)
+        except Exception:
+            pass
+
+    def _add_row_and_goto_edit(self, day='10', item='編集テスト', price='1000', method_id='2', category_id='1'):
+        # 指定の年月に移動
+        url = f'{self.live_server_url}/{self.test_year}/{self.test_month}'
+
+        # 移動
+        self.page.goto(url)
+        # AJAXロード待ち
+        self._wait_for_index_ajax()
+
+        # フォーム入力
+        self.page.fill('#a_day', day)
+        self.page.fill('#a_item', item)
+        self.page.fill('#a_price', price)
+
+        if method_id:
+            self.page.click(f'label[for="a_method-{method_id}"]')
+        if category_id:
+            self.page.click(f'label[for="a_category-{category_id}"]')
+
+        # 追加ボタンをクリック。APIのレスポンスを待つ
+        with self.page.expect_response(lambda r: '_data_table' in r.url and r.status == 200):
+            self.page.click('input[value="追加"]')
+
+        # テーブルの更新完了を待つ (追加した品目が表示されるまで)
+        target_row = self.page.locator('.data-row', has_text=item).first
+        target_row.wait_for(state='visible')
+
+        # 編集画面に移動
+        target_row.locator('.a-edit a').click()
+        # 編集画面のロード完了（要素の出現）を待つ
+        self.page.wait_for_selector('#item', state='visible')
+
+    def _assert_edit_form(self, year=None, month=None, day=None, item=None, price=None, method_id=None, category_id=None):
+        if year:
+            expect(self.page.locator('#year')).to_have_value(str(year))
+        if month:
+            expect(self.page.locator('#month')).to_have_value(str(month).zfill(2))
+        if day:
+            expect(self.page.locator('#day')).to_have_value(str(day))
+        if item:
+            expect(self.page.locator('#item')).to_have_value(item)
+        if price:
+            expect(self.page.locator('#price')).to_have_value(str(price))
+        if method_id:
+            expect(self.page.locator(f'input[name="method"][value="{method_id}"]')).to_be_checked()
+        if category_id:
+            expect(self.page.locator(f'input[name="category"][value="{category_id}"]')).to_be_checked()
+
+    def _assert_data_row(self, item_text, date=None, price=None, method=None, category=None):
+        self.page.wait_for_selector(f'.data-row:has-text("{item_text}")')
+        row = self.page.locator('.data-row', has_text=item_text).first
+        row.wait_for(state='visible')
+        if date:
+            expect(row.locator('td').nth(0)).to_have_text(date)
+        if item_text:
+            expect(row.locator('td').nth(1)).to_have_text(item_text)
+        if price:
+            expect(row.locator('td').nth(2)).to_have_text(price)
+        if method:
+            expect(row.locator('td').nth(3)).to_have_text(method)
+        if category:
+            expect(row.locator('td').nth(4)).to_have_text(category)
+
     def test_get(self):
         """編集画面が正しく表示されることを確認"""
         self._login()
-        # まずデータを追加
-        self._location(self.live_server_url + reverse('moneybook:index'))
-        self.driver.find_element(By.ID, 'a_day').send_keys('10')
-        self.driver.find_element(By.ID, 'a_item').send_keys('編集テスト')
-        self.driver.find_element(By.ID, 'a_price').send_keys('1000')
-        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/input[@value="追加"]').click()
-        time.sleep(2)
+        # ログイン後のリダイレクト待ち
+        self.page.wait_for_url('**/')
+        self._wait_for_index_ajax()
 
-        # 編集画面に移動
-        self.driver.find_element(By.XPATH, '//*[@id="transactions"]/table/tbody/tr[2]/td[6]/a').click()
-        time.sleep(1)
-
-        self._assert_common()
+        item_name = self._get_unique_item('get')
+        self._add_row_and_goto_edit(day='10', item=item_name, price='1000')
 
         # フォームの値を確認
-        now = datetime.now()
-        year_value = self.driver.find_element(By.ID, 'year').get_attribute('value')
-        month_value = self.driver.find_element(By.ID, 'month').get_attribute('value')
-        day_value = self.driver.find_element(By.ID, 'day').get_attribute('value')
-        self.assertEqual(year_value, str(now.year))
-        self.assertEqual(month_value, str(now.month).zfill(2))
-        self.assertEqual(day_value, '10')
-        self.assertEqual(self.driver.find_element(By.ID, 'item').get_attribute('value'), '編集テスト')
-        self.assertEqual(self.driver.find_element(By.ID, 'price').get_attribute('value'), '1000')
-
-        # 支払い方法と分類が正しく選択されていることを確認
-        method_selected = self.driver.find_element(By.CSS_SELECTOR, 'input[name="method"]:checked')
-        self.assertIsNotNone(method_selected)
-        self.assertEqual(method_selected.get_attribute('value'), '2')  # 銀行
-        category_selected = self.driver.find_element(By.CSS_SELECTOR, 'input[name="category"]:checked')
-        self.assertIsNotNone(category_selected)
-        self.assertEqual(category_selected.get_attribute('value'), '1')  # 食費
+        self._assert_edit_form(
+            year=self.test_year,
+            month=self.test_month,
+            day=10,
+            item=item_name,
+            price=1000,
+            method_id='2',
+            category_id='1'
+        )
 
     def test_edit_item(self):
         """項目名を編集できることを確認"""
         self._login()
-        # データを追加
-        self._location(self.live_server_url + reverse('moneybook:index'))
-        self.driver.find_element(By.ID, 'a_day').send_keys('10')
-        self.driver.find_element(By.ID, 'a_item').send_keys('編集前')
-        self.driver.find_element(By.ID, 'a_price').send_keys('2000')
-        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/input[@value="追加"]').click()
-        time.sleep(2)
+        self.page.wait_for_url('**/')
+        self._wait_for_index_ajax()
 
-        # 編集画面に移動
-        self.driver.find_element(By.XPATH, '//*[@id="transactions"]/table/tbody/tr[2]/td[6]/a').click()
-        time.sleep(1)
+        item_before = self._get_unique_item('edit_item_b')
+        item_after = self._get_unique_item('edit_item_a')
+        self._add_row_and_goto_edit(day='10', item=item_before, price='1000', method_id='2', category_id='1')
 
         # 項目名を変更
-        item_input = self.driver.find_element(By.ID, 'item')
-        item_input.clear()
-        item_input.send_keys('編集後')
-        self.driver.find_element(By.XPATH, '//input[@value="更新"]').click()
-        time.sleep(2)
+        self.page.fill('#item', item_after)
+        with self.page.expect_navigation():
+            self.page.click('input[value="更新"]')
 
         # トップに戻って確認
-        self._location(self.live_server_url + reverse('moneybook:index'))
-        rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
-        tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[1].text, '編集後')
+        self._wait_for_index_ajax()
+        self._assert_data_row(
+            item_text=item_after,
+            date=f'{self.test_year}/{str(self.test_month).zfill(2)}/10',
+            price='1,000',
+            method='銀行',
+            category='食費'
+        )
 
     def test_edit_price(self):
         """金額を編集できることを確認"""
         self._login()
-        # データを追加
-        self._location(self.live_server_url + reverse('moneybook:index'))
-        self.driver.find_element(By.ID, 'a_day').send_keys('10')
-        self.driver.find_element(By.ID, 'a_item').send_keys('金額変更テスト')
-        self.driver.find_element(By.ID, 'a_price').send_keys('1000')
-        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/input[@value="追加"]').click()
-        time.sleep(2)
+        self.page.wait_for_url('**/')
+        self._wait_for_index_ajax()
 
-        # 編集画面に移動
-        self.driver.find_element(By.XPATH, '//*[@id="transactions"]/table/tbody/tr[2]/td[6]/a').click()
-        time.sleep(1)
+        item_name = self._get_unique_item('edit_price')
+        self._add_row_and_goto_edit(day='10', item=item_name, price='1000', method_id='2', category_id='1')
 
         # 金額を変更
-        price_input = self.driver.find_element(By.ID, 'price')
-        price_input.clear()
-        price_input.send_keys('5000')
-        self.driver.find_element(By.XPATH, '//input[@value="更新"]').click()
-        time.sleep(2)
+        self.page.fill('#price', '5000')
+        with self.page.expect_navigation():
+            self.page.click('input[value="更新"]')
 
         # トップに戻って確認
-        self._location(self.live_server_url + reverse('moneybook:index'))
-        rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
-        tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[2].text, '5,000')
+        self._wait_for_index_ajax()
+        self._assert_data_row(
+            item_text=item_name,
+            date=f'{self.test_year}/{str(self.test_month).zfill(2)}/10',
+            price='5,000',
+            method='銀行',
+            category='食費'
+        )
 
     def test_edit_date(self):
         """日付を編集できることを確認"""
         self._login()
-        # データを追加
-        self._location(self.live_server_url + reverse('moneybook:index'))
-        self.driver.find_element(By.ID, 'a_day').send_keys('10')
-        self.driver.find_element(By.ID, 'a_item').send_keys('日付変更テスト')
-        self.driver.find_element(By.ID, 'a_price').send_keys('3000')
-        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/input[@value="追加"]').click()
-        time.sleep(2)
+        self.page.wait_for_url('**/')
+        self._wait_for_index_ajax()
 
-        # 編集画面に移動
-        self.driver.find_element(By.XPATH, '//*[@id="transactions"]/table/tbody/tr[2]/td[6]/a').click()
-        time.sleep(1)
+        item_name = self._get_unique_item('edit_date')
+        self._add_row_and_goto_edit(day='10', item=item_name, price='1000', method_id='2', category_id='1')
 
         # 日付を変更
-        now = datetime.now()
-        day_input = self.driver.find_element(By.ID, 'day')
-        day_input.clear()
-        day_input.send_keys('15')
-        self.driver.find_element(By.XPATH, '//input[@value="更新"]').click()
-        time.sleep(2)
+        self.page.fill('#day', '15')
+        with self.page.expect_navigation():
+            self.page.click('input[value="更新"]')
 
-        # トップに戻って確認
-        self._location(self.live_server_url + reverse('moneybook:index'))
-        rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
-        tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[0].text, f'{now.year}/{str(now.month).zfill(2)}/15')
+        # トップに戻る
+        self._wait_for_index_ajax()
+        self._assert_data_row(
+            item_text=item_name,
+            date=f'{self.test_year}/{str(self.test_month).zfill(2)}/15',
+            price='1,000',
+            method='銀行',
+            category='食費'
+        )
 
     def test_edit_method(self):
         """支払い方法を編集できることを確認"""
         self._login()
-        # データを追加（銀行で登録）
-        self._location(self.live_server_url + reverse('moneybook:index'))
-        self.driver.find_element(By.ID, 'a_day').send_keys('10')
-        self.driver.find_element(By.ID, 'a_item').send_keys('方法変更テスト')
-        self.driver.find_element(By.ID, 'a_price').send_keys('4000')
-        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/table/tbody/tr[4]/td/label[1]').click()  # 銀行
-        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/input[@value="追加"]').click()
-        time.sleep(2)
+        self.page.wait_for_url('**/')
+        self._wait_for_index_ajax()
 
-        # 編集画面に移動
-        self.driver.find_element(By.XPATH, '//*[@id="transactions"]/table/tbody/tr[2]/td[6]/a').click()
-        time.sleep(1)
+        item_name = self._get_unique_item('edit_method')
+        self._add_row_and_goto_edit(day='10', item=item_name, price='1000', method_id='2', category_id='1')
 
-        # 支払い方法を現金に変更
-        self.driver.find_element(By.XPATH, '//form/table[1]/tbody/tr[5]/td[1]/label[2]').click()
-        self.driver.find_element(By.XPATH, '//input[@value="更新"]').click()
-        time.sleep(2)
+        # 支払い方法を現金:1 に変更
+        self.page.click('label[for="method-1"]')
+        with self.page.expect_navigation():
+            self.page.click('input[value="更新"]')
 
         # トップに戻って確認
-        self._location(self.live_server_url + reverse('moneybook:index'))
-        rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
-        tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[3].text, '現金')
+        self._wait_for_index_ajax()
+        self._assert_data_row(
+            item_text=item_name,
+            date=f'{self.test_year}/{str(self.test_month).zfill(2)}/10',
+            price='1,000',
+            method='現金',
+            category='食費'
+        )
 
     def test_edit_category(self):
         """カテゴリーを編集できることを確認"""
         self._login()
-        # データを追加（食費で登録）
-        self._location(self.live_server_url + reverse('moneybook:index'))
-        self.driver.find_element(By.ID, 'a_day').send_keys('10')
-        self.driver.find_element(By.ID, 'a_item').send_keys('カテゴリー変更テスト')
-        self.driver.find_element(By.ID, 'a_price').send_keys('6000')
-        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/table/tbody/tr[5]/td/table/tbody/tr/td/label[1]').click()  # 食費
-        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/input[@value="追加"]').click()
-        time.sleep(2)
+        self.page.wait_for_url('**/')
+        self._wait_for_index_ajax()
 
-        # 編集画面に移動
-        self.driver.find_element(By.XPATH, '//*[@id="transactions"]/table/tbody/tr[2]/td[6]/a').click()
-        time.sleep(1)
+        item_name = self._get_unique_item('edit_cat')
+        self._add_row_and_goto_edit(day='10', item=item_name, price='1000', method_id='2', category_id='1')
 
-        # カテゴリーを必需品に変更
-        self.driver.find_element(By.XPATH, '//form/table[1]/tbody/tr[6]/td[1]/label[2]').click()
-        self.driver.find_element(By.XPATH, '//input[@value="更新"]').click()
-        time.sleep(2)
+        # カテゴリーを必需品:2 に変更
+        self.page.click('label[for="category-2"]')
+        with self.page.expect_navigation():
+            self.page.click('input[value="更新"]')
 
         # トップに戻って確認
-        self._location(self.live_server_url + reverse('moneybook:index'))
-        rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
-        tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[4].text, '必需品')
+        self._wait_for_index_ajax()
+        self._assert_data_row(
+            item_text=item_name,
+            date=f'{self.test_year}/{str(self.test_month).zfill(2)}/10',
+            price='1,000',
+            method='銀行',
+            category='必需品'
+        )
 
     def test_edit_formula_price(self):
         """編集画面で金額入力欄に数式を入力できることを確認"""
         self._login()
-        # データを追加
-        self._location(self.live_server_url + reverse('moneybook:index'))
-        self.driver.find_element(By.ID, 'a_day').send_keys('10')
-        self.driver.find_element(By.ID, 'a_item').send_keys('数式編集テスト')
-        self.driver.find_element(By.ID, 'a_price').send_keys('1000')
-        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/input[@value="追加"]').click()
-        time.sleep(2)
+        self.page.wait_for_url('**/')
+        self._wait_for_index_ajax()
 
-        # 編集画面に移動
-        self.driver.find_element(By.XPATH, '//*[@id="transactions"]/table/tbody/tr[2]/td[6]/a').click()
-        time.sleep(1)
+        item_name = self._get_unique_item('edit_formula')
+        self._add_row_and_goto_edit(day='10', item=item_name, price='1000', method_id='2', category_id='1')
 
         # 金額を数式で変更 =200*5 → 1000
-        price_input = self.driver.find_element(By.ID, 'price')
-        price_input.clear()
-        price_input.send_keys('=200*5')
-        self.driver.find_element(By.XPATH, '//input[@value="更新"]').click()
-        time.sleep(2)
+        self.page.fill('#price', '=200*5')
+        with self.page.expect_navigation():
+            self.page.click('input[value="更新"]')
 
         # トップに戻って確認
-        self._location(self.live_server_url + reverse('moneybook:index'))
-        rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
-        tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[2].text, '1,000')
+        self._wait_for_index_ajax()
+        self._assert_data_row(
+            item_text=item_name,
+            date=f'{self.test_year}/{str(self.test_month).zfill(2)}/10',
+            price='1,000',
+            method='銀行',
+            category='食費'
+        )
 
     def test_edit_enter_date(self):
         """日付入力欄でEnterキーを押すと更新されることを確認"""
         self._login()
-        # データを追加
-        self._location(self.live_server_url + reverse('moneybook:index'))
-        self.driver.find_element(By.ID, 'a_day').send_keys('10')
-        self.driver.find_element(By.ID, 'a_item').send_keys('Enter日付')
-        self.driver.find_element(By.ID, 'a_price').send_keys('2000')
-        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/input[@value="追加"]').click()
-        time.sleep(2)
+        self.page.wait_for_url('**/')
+        self._wait_for_index_ajax()
 
-        # 編集画面に移動
-        self.driver.find_element(By.XPATH, '//*[@id="transactions"]/table/tbody/tr[2]/td[6]/a').click()
-        time.sleep(1)
+        item_name = self._get_unique_item('enter_date')
+        self._add_row_and_goto_edit(day='10', item=item_name, price='1000', method_id='2', category_id='1')
 
         # 日付を変更してEnter
-        now = datetime.now()
-        day_input = self.driver.find_element(By.ID, 'day')
-        day_input.clear()
-        day_input.send_keys('20')
-        day_input.send_keys(Keys.RETURN)
-        time.sleep(2)
+        self.page.fill('#day', '20')
+        with self.page.expect_navigation():
+            self.page.press('#day', 'Enter')
 
-        # トップに戻って確認
-        self._location(self.live_server_url + reverse('moneybook:index'))
-        rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
-        tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[0].text, f'{now.year}/{str(now.month).zfill(2)}/20')
+        # トップに戻る
+        self._wait_for_index_ajax()
+        self._assert_data_row(
+            item_text=item_name,
+            date=f'{self.test_year}/{str(self.test_month).zfill(2)}/20',
+            price='1,000',
+            method='銀行',
+            category='食費'
+        )
 
     def test_edit_enter_item(self):
         """項目入力欄でEnterキーを押すと更新されることを確認"""
         self._login()
-        # データを追加
-        self._location(self.live_server_url + reverse('moneybook:index'))
-        self.driver.find_element(By.ID, 'a_day').send_keys('10')
-        self.driver.find_element(By.ID, 'a_item').send_keys('Enter項目前')
-        self.driver.find_element(By.ID, 'a_price').send_keys('3000')
-        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/input[@value="追加"]').click()
-        time.sleep(2)
+        self.page.wait_for_url('**/')
+        self._wait_for_index_ajax()
 
-        # 編集画面に移動
-        self.driver.find_element(By.XPATH, '//*[@id="transactions"]/table/tbody/tr[2]/td[6]/a').click()
-        time.sleep(1)
+        item_before = self._get_unique_item('enter_item_b')
+        item_after = self._get_unique_item('enter_item_a')
+        self._add_row_and_goto_edit(day='10', item=item_before, price='1000', method_id='2', category_id='1')
 
         # 項目を変更してEnter
-        item_input = self.driver.find_element(By.ID, 'item')
-        item_input.clear()
-        item_input.send_keys('Enter項目後')
-        item_input.send_keys(Keys.RETURN)
-        time.sleep(2)
+        self.page.fill('#item', item_after)
+        with self.page.expect_navigation():
+            self.page.press('#item', 'Enter')
 
-        # トップに戻って確認
-        self._location(self.live_server_url + reverse('moneybook:index'))
-        rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
-        tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[1].text, 'Enter項目後')
+        # トップに戻る
+        self._wait_for_index_ajax()
+        self._assert_data_row(
+            item_text=item_after,
+            date=f'{self.test_year}/{str(self.test_month).zfill(2)}/10',
+            price='1,000',
+            method='銀行',
+            category='食費'
+        )
 
     def test_edit_enter_price(self):
         """金額入力欄でEnterキーを押すと更新されることを確認"""
         self._login()
-        # データを追加
-        self._location(self.live_server_url + reverse('moneybook:index'))
-        self.driver.find_element(By.ID, 'a_day').send_keys('10')
-        self.driver.find_element(By.ID, 'a_item').send_keys('Enter金額')
-        self.driver.find_element(By.ID, 'a_price').send_keys('4000')
-        self.driver.find_element(By.XPATH, '//*[@id="filter-fixed"]/form/input[@value="追加"]').click()
-        time.sleep(2)
+        self.page.wait_for_url('**/')
+        self._wait_for_index_ajax()
 
-        # 編集画面に移動
-        self.driver.find_element(By.XPATH, '//*[@id="transactions"]/table/tbody/tr[2]/td[6]/a').click()
-        time.sleep(1)
+        item_name = self._get_unique_item('enter_price')
+        self._add_row_and_goto_edit(day='10', item=item_name, price='1000', method_id='2', category_id='1')
 
         # 金額を変更してEnter
-        price_input = self.driver.find_element(By.ID, 'price')
-        price_input.clear()
-        price_input.send_keys('8000')
-        price_input.send_keys(Keys.RETURN)
-        time.sleep(2)
+        self.page.fill('#price', '8000')
+        with self.page.expect_navigation():
+            self.page.press('#price', 'Enter')
 
-        # トップに戻って確認
-        self._location(self.live_server_url + reverse('moneybook:index'))
-        rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
-        tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[2].text, '8,000')
+        # トップに戻る
+        self._wait_for_index_ajax()
+        self._assert_data_row(
+            item_text=item_name,
+            date=f'{self.test_year}/{str(self.test_month).zfill(2)}/10',
+            price='8,000',
+            method='銀行',
+            category='食費'
+        )
 
     def test_edit_invalid_pk(self):
         """存在しないIDで編集画面にアクセスするとトップにリダイレクトされることを確認"""
         self._login()
-        self._location(self.live_server_url + reverse('moneybook:edit', kwargs={'pk': 999999}))
-        time.sleep(1)
+        self.page.wait_for_url('**/')
+        self.page.goto(self.live_server_url + reverse('moneybook:edit', kwargs={'pk': 999999}))
 
-        # トップにリダイレクトされる
-        self.assertEqual(self.driver.current_url, self.live_server_url + reverse('moneybook:index'))
+        # トップにリダイレクトされるのを待つ
+        expected_url = self.live_server_url + reverse('moneybook:index')
+        self.page.wait_for_url(expected_url)
+        expect(self.page).to_have_url(expected_url)

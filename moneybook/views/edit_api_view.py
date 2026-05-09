@@ -1,4 +1,4 @@
-import http
+from http import HTTPStatus
 
 from django.http import JsonResponse
 from django.views import View
@@ -13,7 +13,7 @@ class EditApiView(View):
         try:
             data = Data.get(pk)
         except:
-            return JsonResponse({'message': 'Data does not exist'}, status=http.HTTPStatus.NOT_FOUND)
+            return JsonResponse({'message': 'Data does not exist'}, status=HTTPStatus.NOT_FOUND)
 
         new_data = DataForm(request.POST)
         if new_data.is_valid():
@@ -35,7 +35,7 @@ class EditApiView(View):
             for a in new_data.errors:
                 error_list.append(a)
             res_data['ErrorList'] = error_list
-            return JsonResponse(res_data, status=http.HTTPStatus.BAD_REQUEST)
+            return JsonResponse(res_data, status=HTTPStatus.BAD_REQUEST)
 
 
 class ApplyCheckApiView(View):
@@ -61,7 +61,7 @@ class PreCheckApiView(View):
             data = Data.get(pk)
         except:
             res = {'message': 'Data does not exist'}
-            return JsonResponse(res, status=http.HTTPStatus.NOT_FOUND)
+            return JsonResponse(res, status=HTTPStatus.NOT_FOUND)
 
         if status == '1':
             data.pre_checked = True
