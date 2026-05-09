@@ -56,6 +56,17 @@ $ HEADLESS=0 TEST_MODULE=moneybook.e2e.index tox -e e2e
 $ $env:HEADLESS="0"; $env:TEST_MODULE="moneybook.e2e.index"; tox -e e2e
 ```
 
+### 他
+
+```
+## デバッグログ
+# mac
+$ EXTRA_OPTIONS="-v 2"
+
+# windows
+$env:EXTRA_OPTIONS="-v 2"
+```
+
 ## メモ
 
 ### venv
