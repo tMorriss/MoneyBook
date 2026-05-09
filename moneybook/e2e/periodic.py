@@ -6,7 +6,7 @@ from moneybook.e2e.base import PlaywrightBase
 from playwright.sync_api import expect
 
 
-class PeriodicTest(PlaywrightBase):
+class Periodic(PlaywrightBase):
     def _add_periodic_data_via_ui(self, day, item, price):
         """UI操作で定期取引を追加するヘルパーメソッド"""
         self._location(self.live_server_url + reverse('moneybook:periodic_edit'))

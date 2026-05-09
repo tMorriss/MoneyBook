@@ -10,11 +10,11 @@ jobs:
     name: lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python 3.11
-        uses: actions/setup-python@v2
+      - uses: actions/checkout@v6
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v6
         with:
-          python-version: "3.11"
+          python-version: "3.12"
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -28,7 +28,7 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v6
       - name: Validate __init__.py
         run: |
           chmod +x check_init_py.sh
@@ -37,7 +37,7 @@ jobs:
     name: check e2e matrix configuration
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v6
       - name: Install yq
         run: |
           sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
@@ -50,11 +50,11 @@ jobs:
     name: unit test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python 3.11
-        uses: actions/setup-python@v2
+      - uses: actions/checkout@v6
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v6
         with:
-          python-version: "3.11"
+          python-version: "3.12"
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -63,7 +63,7 @@ jobs:
         run: |
           tox -e unittest
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v6
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
   e2e:
@@ -85,14 +85,33 @@ jobs:
             search,
             tools,
           ]
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_DB: moneybook_e2e
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     env:
       TEST_MODULE: moneybook.e2e.${{ matrix.test-module }}
+      DB_NAME: moneybook_e2e
+      DB_USER: postgres
+      DB_PASS: postgres
+      DB_HOST: localhost
+      DB_PORT: 5432
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python 3.11
-        uses: actions/setup-python@v2
+      - uses: actions/checkout@v6
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v6
         with:
-          python-version: "3.11"
+          python-version: "3.12"
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -101,7 +120,7 @@ jobs:
         run: |
           tox -e e2e
       - name: Upload e2e artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: failure()
         with:
           name: e2e-artifacts-${{ matrix.test-module }}

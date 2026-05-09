@@ -36,6 +36,12 @@ $ tox -e unittest
 
 ## e2e テスト
 
+e2e テストは PostgreSQL を使用します。テストを実行する前に、以下のコマンドで PostgreSQL コンテナを起動してください。
+
+```
+$ docker run --rm -d -p 5432:5432 -e POSTGRES_DB=moneybook_e2e -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres --name moneybook-postgres-e2e postgres:15
+```
+
 e2e テストはデフォルトでヘッドレスモードで実行されます。
 
 ```
@@ -54,6 +60,17 @@ $ HEADLESS=0 TEST_MODULE=moneybook.e2e.index tox -e e2e
 
 # windows
 $ $env:HEADLESS="0"; $env:TEST_MODULE="moneybook.e2e.index"; tox -e e2e
+```
+
+### 他
+
+```
+## デバッグログ
+# mac
+$ EXTRA_OPTIONS="-v 2"
+
+# windows
+$env:EXTRA_OPTIONS="-v 2"
 ```
 
 ## メモ
