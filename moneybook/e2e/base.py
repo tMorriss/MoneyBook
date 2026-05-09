@@ -1,5 +1,6 @@
 import os
 
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.urls import reverse
@@ -47,7 +48,7 @@ class PlaywrightBase(StaticLiveServerTestCase):
             screenshot_path = os.path.join(artifact_dir, f'{self.__class__.__name__}.{self._testMethodName}_failure.png')
             self.page.screenshot(path=screenshot_path)
 
-            filename = f'{self.__class__.__name__}.{self._testMethodName}.zip'
+            filename = f'{self.__class__.__name__}.{self._testMethodName}_retry0.zip'
             self.context.tracing.stop(path=os.path.join(artifact_dir, filename))
         else:
             self.context.tracing.stop()
@@ -65,12 +66,12 @@ class PlaywrightBase(StaticLiveServerTestCase):
         self.page.fill('#id_password', self.password)
         # ログインボタンをクリック。遷移を待つ。
         self.page.click('input[value="ログイン"]')
-        # ログイン成功の証拠（ログアウトリンクの存在）を待つ。
+        # ログイン成功の証拠（ログアウトリンクの存在）を待つ。タイムアウトはデフォルト(30s)
         self.page.wait_for_selector('a[href="' + reverse('moneybook:logout') + '"]')
 
     def _assert_common(self):
         # アプリ名
-        expect(self.page.locator('body > header .header-cont1')).to_have_text('e2e-MoneyBook')
+        expect(self.page.locator('body > header .header-cont1')).to_have_text(settings.APP_NAME)
         # 名前表示
         expect(self.page.locator('body > header .header-cont2')).to_contain_text(self.username + 'さん')
 
