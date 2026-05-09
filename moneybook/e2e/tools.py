@@ -1,15 +1,27 @@
 import re
 
 from django.urls import reverse
-from moneybook.playwright.base import PlaywrightBase
+from moneybook.e2e.base import PlaywrightBase
 from playwright.sync_api import expect
 
 
 class Tools(PlaywrightBase):
+    def _fill_formatted_input(self, locator, value):
+        """カンマ区切りの入力欄に値を入力するヘルパー"""
+        # スクリプトがロードされるのを待つ
+        self.page.wait_for_function('typeof window.unseparateValue === "function"')
+        # フォーカスとクリックで JavaScript イベント (unseparateValue) を確実に発火させる
+        locator.focus()
+        locator.click()
+        # カンマが消えるのを待つ（自動リトライ）
+        expect(locator).not_to_have_value(re.compile(r','))
+        locator.fill(value)
+
     def test_get(self):
         """ツール画面が正しく表示されることを確認"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:tools'))
+        self._wait_for_ajax()
 
         self._assert_common()
 
@@ -17,6 +29,7 @@ class Tools(PlaywrightBase):
         """各セクションが表示されることを確認"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:tools'))
+        self._wait_for_ajax()
 
         # 実際の現金残高
         expect(self.page.locator('#actual_balance')).to_be_visible()
@@ -33,12 +46,11 @@ class Tools(PlaywrightBase):
         """実際の現金残高を更新できることを確認 (ボタンクリック)"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:tools'))
+        self._wait_for_ajax()
 
         # 実際の現金残高を入力
         actual_cash_input = self.page.locator('#actual_balance')
-        actual_cash_input.focus()
-        expect(actual_cash_input).not_to_have_value(re.compile(r','))
-        actual_cash_input.fill('5000')
+        self._fill_formatted_input(actual_cash_input, '5000')
 
         # 計算ボタンをクリック (value="計算")
         self.page.click('input[value="計算"]')
@@ -55,12 +67,11 @@ class Tools(PlaywrightBase):
         """Enterキーで実際の現金残高を更新できることを確認"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:tools'))
+        self._wait_for_ajax()
 
         # 実際の現金残高を入力してEnter
         actual_cash_input = self.page.locator('#actual_balance')
-        actual_cash_input.focus()
-        expect(actual_cash_input).not_to_have_value(re.compile(r','))
-        actual_cash_input.fill('10000')
+        self._fill_formatted_input(actual_cash_input, '10000')
         actual_cash_input.press('Enter')
 
         # AJAX完了を待つ (updateDiff完了後にseparateValueが呼ばれる)
@@ -73,12 +84,11 @@ class Tools(PlaywrightBase):
         """生活費目標額を更新できることを確認 (ボタンクリック)"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:tools'))
+        self._wait_for_ajax()
 
         # 生活費目標額を入力
         living_cost_input = self.page.locator('#txt_living_cost')
-        living_cost_input.focus()
-        expect(living_cost_input).not_to_have_value(re.compile(r','))
-        living_cost_input.fill('30000')
+        self._fill_formatted_input(living_cost_input, '30000')
 
         # 更新ボタンをクリック
         # updateLivingCostMark は location.reload() を呼ぶ
@@ -91,12 +101,11 @@ class Tools(PlaywrightBase):
         """Enterキーで生活費目標額を更新できることを確認"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:tools'))
+        self._wait_for_ajax()
 
         # 生活費目標額を入力してEnter
         living_cost_input = self.page.locator('#txt_living_cost')
-        living_cost_input.focus()
-        expect(living_cost_input).not_to_have_value(re.compile(r','))
-        living_cost_input.fill('40000')
+        self._fill_formatted_input(living_cost_input, '40000')
         living_cost_input.press('Enter')
 
         # 値が保持されていることを確認
@@ -118,21 +127,18 @@ class Tools(PlaywrightBase):
         """複数の値を連続して更新できることを確認"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:tools'))
+        self._wait_for_ajax()
 
         # 実際の現金残高を更新
         actual_balance = self.page.locator('#actual_balance')
-        actual_balance.focus()
-        expect(actual_balance).not_to_have_value(re.compile(r','))
-        actual_balance.fill('15000')
+        self._fill_formatted_input(actual_balance, '15000')
         self.page.click('input[value="計算"]')
         # カンマ区切りになるのを待つことでAJAX完了を確認
         expect(actual_balance).to_have_value('15,000', timeout=10000)
 
         # 生活費目標額を更新
         living_cost = self.page.locator('#txt_living_cost')
-        living_cost.focus()
-        expect(living_cost).not_to_have_value(re.compile(r','))
-        living_cost.fill('50000')
+        self._fill_formatted_input(living_cost, '50000')
         update_button = self.page.locator('h1:has-text("生活費目標額") + table').locator('input[value="更新"]')
         update_button.click()
 

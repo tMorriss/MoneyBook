@@ -2,7 +2,7 @@ import re
 from datetime import datetime
 
 from django.urls import reverse
-from moneybook.playwright.base import expect, PlaywrightBase
+from moneybook.e2e.base import expect, PlaywrightBase
 
 
 class Search(PlaywrightBase):

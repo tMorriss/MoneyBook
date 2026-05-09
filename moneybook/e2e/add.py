@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from django.urls import reverse
-from moneybook.playwright.base import PlaywrightBase
+from moneybook.e2e.base import PlaywrightBase
 from playwright.sync_api import expect
 
 
