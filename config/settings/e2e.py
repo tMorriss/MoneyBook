@@ -1,5 +1,7 @@
 import os
 
+from django.core.management.utils import get_random_secret_key
+
 from .common import *  # NOQA F403
 
 DATABASES = {
@@ -17,4 +19,4 @@ APP_NAME = 'e2e-MoneyBook'
 
 DEBUG = True
 
-SECRET_KEY = 'secret_key_for_e2e_testing'
+SECRET_KEY = get_random_secret_key()
