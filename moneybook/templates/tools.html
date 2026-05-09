@@ -41,7 +41,7 @@
         </tr>
         <tr>
             <th>実際</th>
-            <td><input type="text" class="righter" id="actual_balance" style="width:10ex" onfocus="selectValue('#actual_balance')"
+            <td><input type="text" class="righter" id="actual_balance" style="width:10ex" onfocus="unseparateValue('#actual_balance');selectValue('#actual_balance')"
                     onblur="separateValue('#actual_balance')" onkeypress="KeyPressDiff(event.keyCode)"
                     value="{{ actual_cash_balance| intcomma }}"></td>
         </tr>
@@ -68,7 +68,7 @@
     <h1>生活費目標額</h1>
     <table class="tbl-common fcs-blue">
         <tr>
-            <td><input type="text" class="righter" id="txt_living_cost" style="width:10ex" onfocus="unseparateValue('#txt_living_cost')"
+            <td><input type="text" class="righter" id="txt_living_cost" style="width:10ex" onfocus="unseparateValue('#txt_living_cost');selectValue('#txt_living_cost')"
                     onblur="separateValue('#txt_living_cost')" onkeypress="keyPressLiving(event.keyCode)"
                     value="{{ living_cost_mark| intcomma }}"></td>
             <td><input type="button" value="更新" class="btn-green" onclick="updateLivingCostMark()"

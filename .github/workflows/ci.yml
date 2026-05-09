@@ -46,10 +46,6 @@ jobs:
         run: |
           chmod +x check_e2e_matrix.sh
           ./check_e2e_matrix.sh
-      - name: Validate playwright Matrix
-        run: |
-          chmod +x check_playwright_matrix.sh
-          ./check_playwright_matrix.sh
   unittest:
     name: unit test
     runs-on: ubuntu-latest
@@ -79,6 +75,13 @@ jobs:
         test-module:
           [
             add,
+            delete,
+            edit,
+            index,
+            login,
+            period_balances,
+            tools,
+            periodic,
             search,
           ]
     env:
@@ -89,10 +92,6 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Install Chrome
-        uses: browser-actions/setup-chrome@latest
-        with:
-          chrome-version: stable
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -100,42 +99,10 @@ jobs:
       - name: Test with tox
         run: |
           tox -e e2e
-
-  playwright:
-    name: playwright-${{ matrix.test-module }}
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        test-module:
-          [
-            delete,
-            edit,
-            index,
-            login,
-            period_balances,
-            tools,
-            periodic,
-          ]
-    env:
-      TEST_MODULE: moneybook.playwright.${{ matrix.test-module }}
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python 3.11
-        uses: actions/setup-python@v2
-        with:
-          python-version: "3.11"
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements/requirements_dev.txt
-      - name: Test with tox
-        run: |
-          tox -e playwright
-      - name: Upload Playwright artifacts
+      - name: Upload e2e artifacts
         uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: playwright-artifacts-${{ matrix.test-module }}
+          name: e2e-artifacts-${{ matrix.test-module }}
           path: playwright-artifact/
           retention-days: 7

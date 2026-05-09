@@ -1,71 +1,98 @@
-import time
 from datetime import datetime
 
 from django.urls import reverse
-from moneybook.e2e.base import SeleniumBase
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.color import Color
+from moneybook.e2e.base import PlaywrightBase
+from playwright.sync_api import expect
 
 
-class Add(SeleniumBase):
+class Add(PlaywrightBase):
     def _assert_bank_charge_kyash(self, method):
         now = datetime.now()
         self._location(self.live_server_url + reverse('moneybook:index'))
-        rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
-        self.assertEqual(len(rows), 3)
-        tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[0].text, str(now.year) + '/' + str.zfill(str(now.month), 2) + '/' + '01')
-        self.assertEqual(tds[1].text, method + 'チャージ')
-        self.assertEqual(tds[2].text, '100')
-        self.assertEqual(tds[3].text, method)
-        self.assertEqual(tds[4].text, '内部移動')
-        self.assertEqual(Color.from_string(rows[1].value_of_css_property('background-color')), Color.from_string('rgba(0, 0, 0, 0)'))
-        # direction確認
-        tds[5].find_element(By.TAG_NAME, 'a').click()
-        self.assertEqual(self.driver.find_element(By.XPATH, '//form/table[1]/tbody/tr[4]/td[1]/input[1]').is_selected(), True)
+        self._wait_for_ajax()
+        self.page.wait_for_selector('#transactions table tbody tr')
 
+        rows = self.page.locator('#transactions table tbody tr')
+        expect(rows).to_have_count(3)
+
+        # 1つ目のデータ (移動先への収入)
+        tds1 = rows.nth(1).locator('td')
+        expect(tds1.nth(0)).to_have_text(f'{now.year}/{str(now.month).zfill(2)}/01')
+        expect(tds1.nth(1)).to_have_text(f'{method}チャージ')
+        expect(tds1.nth(2)).to_have_text('100')
+        expect(tds1.nth(3)).to_have_text(method)
+        expect(tds1.nth(4)).to_have_text('内部移動')
+        expect(rows.nth(1)).to_have_css('background-color', 'rgba(0, 0, 0, 0)')
+
+        # direction確認 (編集画面へ移動して確認)
+        tds1.nth(5).locator('a').click()
+        self.page.wait_for_load_state('load')
+        # 収入(1つ目のラジオボタン)が選択されていること
+        expect(self.page.locator('input[name="direction"]').nth(0)).to_be_checked()
+
+        # 再度インデックスへ
         self._location(self.live_server_url + reverse('moneybook:index'))
-        rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
-        tds = rows[2].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[0].text, str(now.year) + '/' + str.zfill(str(now.month), 2) + '/' + '01')
-        self.assertEqual(tds[1].text, method + 'チャージ')
-        self.assertEqual(tds[2].text, '100')
-        self.assertEqual(tds[3].text, '銀行')
-        self.assertEqual(tds[4].text, '内部移動')
-        self.assertEqual(Color.from_string(rows[2].value_of_css_property('background-color')), Color.from_string('rgba(0, 0, 0, 0)'))
+        self._wait_for_ajax()
+        self.page.wait_for_selector('#transactions table tbody tr')
+        rows = self.page.locator('#transactions table tbody tr')
+
+        # 2つ目のデータ (移動元からの支出)
+        tds2 = rows.nth(2).locator('td')
+        expect(tds2.nth(0)).to_have_text(f'{now.year}/{str(now.month).zfill(2)}/01')
+        expect(tds2.nth(1)).to_have_text(f'{method}チャージ')
+        expect(tds2.nth(2)).to_have_text('100')
+        expect(tds2.nth(3)).to_have_text('銀行')
+        expect(tds2.nth(4)).to_have_text('内部移動')
+        expect(rows.nth(2)).to_have_css('background-color', 'rgba(0, 0, 0, 0)')
+
         # direction確認
-        tds[5].find_element(By.TAG_NAME, 'a').click()
-        self.assertEqual(self.driver.find_element(By.XPATH, '//form/table[1]/tbody/tr[4]/td[1]/input[2]').is_selected(), True)
+        tds2.nth(5).locator('a').click()
+        self.page.wait_for_load_state('load')
+        # 支出(2つ目のラジオボタン)が選択されていること
+        expect(self.page.locator('input[name="direction"]').nth(1)).to_be_checked()
 
     def _assert_intra_move(self):
         now = datetime.now()
         self._location(self.live_server_url + reverse('moneybook:index'))
-        rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
-        self.assertEqual(len(rows), 3)
-        tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[0].text, str(now.year) + '/' + str.zfill(str(now.month), 2) + '/' + '02')
-        self.assertEqual(tds[1].text, 'ないぶいどう')
-        self.assertEqual(tds[2].text, '200')
-        self.assertEqual(tds[3].text, 'Kyash')
-        self.assertEqual(tds[4].text, '内部移動')
-        self.assertEqual(Color.from_string(rows[1].value_of_css_property('background-color')), Color.from_string('rgba(0, 0, 0, 0)'))
-        # direction確認
-        tds[5].find_element(By.TAG_NAME, 'a').click()
-        self.assertEqual(self.driver.find_element(By.XPATH, '//form/table[1]/tbody/tr[4]/td[1]/input[1]').is_selected(), True)
+        self._wait_for_ajax()
+        self.page.wait_for_selector('#transactions table tbody tr')
 
-        self._location(self.live_server_url + reverse('moneybook:index'))
-        rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
-        tds = rows[2].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[0].text, str(now.year) + '/' + str.zfill(str(now.month), 2) + '/' + '02')
-        self.assertEqual(tds[1].text, 'ないぶいどう')
-        self.assertEqual(tds[2].text, '200')
-        self.assertEqual(tds[3].text, '現金')
-        self.assertEqual(tds[4].text, '内部移動')
-        self.assertEqual(Color.from_string(rows[2].value_of_css_property('background-color')), Color.from_string('rgba(0, 0, 0, 0)'))
+        rows = self.page.locator('#transactions table tbody tr')
+        expect(rows).to_have_count(3)
+
+        # 1つ目のデータ (移動先への収入)
+        tds1 = rows.nth(1).locator('td')
+        expect(tds1.nth(0)).to_have_text(f'{now.year}/{str(now.month).zfill(2)}/02')
+        expect(tds1.nth(1)).to_have_text('ないぶいどう')
+        expect(tds1.nth(2)).to_have_text('200')
+        expect(tds1.nth(3)).to_have_text('Kyash')
+        expect(tds1.nth(4)).to_have_text('内部移動')
+        expect(rows.nth(1)).to_have_css('background-color', 'rgba(0, 0, 0, 0)')
+
         # direction確認
-        tds[5].find_element(By.TAG_NAME, 'a').click()
-        self.assertEqual(self.driver.find_element(By.XPATH, '//form/table[1]/tbody/tr[4]/td[1]/input[2]').is_selected(), True)
+        tds1.nth(5).locator('a').click()
+        self.page.wait_for_load_state('load')
+        expect(self.page.locator('input[name="direction"]').nth(0)).to_be_checked()
+
+        # 再度インデックスへ
+        self._location(self.live_server_url + reverse('moneybook:index'))
+        self._wait_for_ajax()
+        self.page.wait_for_selector('#transactions table tbody tr')
+        rows = self.page.locator('#transactions table tbody tr')
+
+        # 2つ目のデータ (移動元からの支出)
+        tds2 = rows.nth(2).locator('td')
+        expect(tds2.nth(0)).to_have_text(f'{now.year}/{str(now.month).zfill(2)}/02')
+        expect(tds2.nth(1)).to_have_text('ないぶいどう')
+        expect(tds2.nth(2)).to_have_text('200')
+        expect(tds2.nth(3)).to_have_text('現金')
+        expect(tds2.nth(4)).to_have_text('内部移動')
+        expect(rows.nth(2)).to_have_css('background-color', 'rgba(0, 0, 0, 0)')
+
+        # direction確認
+        tds2.nth(5).locator('a').click()
+        self.page.wait_for_load_state('load')
+        expect(self.page.locator('input[name="direction"]').nth(1)).to_be_checked()
 
     def test_get(self):
         now = datetime.now()
@@ -74,715 +101,682 @@ class Add(SeleniumBase):
 
         self._assert_common()
 
-        self.assertEqual(self.driver.find_element(By.ID, 'c_year').get_attribute('value'), str(now.year))
-        self.assertEqual(self.driver.find_element(By.ID, 'c_month').get_attribute('value'), str(now.month))
-        self.assertEqual(self.driver.find_element(By.ID, 'c_day').get_attribute('value'), '')
-        self.assertEqual(self.driver.find_element(By.ID, 'c_price').get_attribute('value'), '')
+        # 銀行チャージフォーム
+        expect(self.page.locator('#c_year')).to_have_value(str(now.year))
+        expect(self.page.locator('#c_month')).to_have_value(str(now.month))
+        expect(self.page.locator('#c_day')).to_have_value('')
+        expect(self.page.locator('#c_price')).to_have_value('')
         expects = ['Kyash', 'PayPay']
-        actuals = self.driver.find_elements(By.XPATH, '//section/form[1]/table/tbody/tr[3]/td/label')
-        self._assert_texts(actuals, expects)
+        # labels for c_method
+        actuals = self.page.locator('input[name="c_method"] + label')
+        expect(actuals).to_have_text(expects)
 
-        self.assertEqual(self.driver.find_element(By.ID, 'm_year').get_attribute('value'), str(now.year))
-        self.assertEqual(self.driver.find_element(By.ID, 'm_month').get_attribute('value'), str(now.month))
-        self.assertEqual(self.driver.find_element(By.ID, 'm_day').get_attribute('value'), '')
-        self.assertEqual(self.driver.find_element(By.ID, 'm_item').get_attribute('value'), '')
-        self.assertEqual(self.driver.find_element(By.ID, 'm_price').get_attribute('value'), '')
+        # 内部移動フォーム
+        expect(self.page.locator('#m_year')).to_have_value(str(now.year))
+        expect(self.page.locator('#m_month')).to_have_value(str(now.month))
+        expect(self.page.locator('#m_day')).to_have_value('')
+        expect(self.page.locator('#m_item')).to_have_value('')
+        expect(self.page.locator('#m_price')).to_have_value('')
         expects = ['銀行', '現金', 'Kyash', 'PayPay']
-        actuals = self.driver.find_elements(By.XPATH, '//section/form[2]/table/tbody/tr[4]/td/label')
-        self._assert_texts(actuals, expects)
-        actuals = self.driver.find_elements(By.XPATH, '//section/form[2]/table/tbody/tr[5]/td/label')
-        self._assert_texts(actuals, expects)
+        expect(self.page.locator('input[name="m_before_method"] + label')).to_have_text(expects)
+        expect(self.page.locator('input[name="m_after_method"] + label')).to_have_text(expects)
 
-        self.assertEqual(self.driver.find_element(By.ID, 's_year').get_attribute('value'), str(now.year))
-        self.assertEqual(self.driver.find_element(By.ID, 's_month').get_attribute('value'), str(now.month))
-        self.assertEqual(self.driver.find_element(By.ID, 's_day').get_attribute('value'), '')
-        self.assertEqual(self.driver.find_element(By.ID, 's_day').get_attribute('placeholder'), str(now.day))
-        self.assertEqual(self.driver.find_element(By.ID, 's_price').get_attribute('value'), '')
-        self.assertEqual(self.driver.find_element(By.ID, 's_price').get_attribute('placeholder'), '1000')
-        self.assertEqual(self.driver.find_element(By.XPATH,
-                                                  '//section/form[3]/table/tbody/tr[3]/td/input[1]').get_attribute('value'), 'Suicaチャージ')
+        # ショートカットフォーム
+        expect(self.page.locator('#s_year')).to_have_value(str(now.year))
+        expect(self.page.locator('#s_month')).to_have_value(str(now.month))
+        expect(self.page.locator('#s_day')).to_have_value('')
+        expect(self.page.locator('#s_day')).to_have_attribute('placeholder', str(now.day))
+        expect(self.page.locator('#s_price')).to_have_value('')
+        expect(self.page.locator('#s_price')).to_have_attribute('placeholder', '1000')
+        expect(self.page.locator('input[onclick*="Suicaチャージ"]')).to_have_value('Suicaチャージ')
 
-        self.assertEqual(self.driver.find_element(By.ID, 'a_year').get_attribute('value'), str(now.year))
-        self.assertEqual(self.driver.find_element(By.ID, 'a_month').get_attribute('value'), str(now.month))
-        self.assertEqual(self.driver.find_element(By.ID, 'a_day').get_attribute('value'), '')
-        self.assertEqual(self.driver.find_element(By.ID, 'a_item').get_attribute('value'), '')
-        self.assertEqual(self.driver.find_element(By.ID, 'a_price').get_attribute('value'), '')
-        expects = ['収入', '支出']
-        actuals = self.driver.find_elements(By.XPATH, '//section/form[4]/table/tbody/tr[4]/td/label')
-        self._assert_texts(actuals, expects)
-        expects = ['銀行', '現金', 'Kyash', 'PayPay']
-        actuals = self.driver.find_elements(By.XPATH, '//section/form[4]/table/tbody/tr[5]/td/label')
-        self._assert_texts(actuals, expects)
+        # 収入支出追加フォーム
+        expect(self.page.locator('#a_year')).to_have_value(str(now.year))
+        expect(self.page.locator('#a_month')).to_have_value(str(now.month))
+        expect(self.page.locator('#a_day')).to_have_value('')
+        expect(self.page.locator('#a_item')).to_have_value('')
+        expect(self.page.locator('#a_price')).to_have_value('')
+        expect(self.page.locator('input[name="a_direction"] + label')).to_have_text(['収入', '支出'])
+        expect(self.page.locator('input[name="a_method"] + label')).to_have_text(['銀行', '現金', 'Kyash', 'PayPay'])
         expects = ['食費', '必需品', '交通費', 'その他', '内部移動', '貯金', '計算外', '収入']
-        actuals = self.driver.find_elements(By.XPATH, '//section/form[4]/table/tbody/tr[6]/td/label')
-        self._assert_texts(actuals, expects)
-        expects = ['No', 'Yes']
-        actuals = self.driver.find_elements(By.XPATH, '//section/form[4]/table/tbody/tr[7]/td/label')
-        self._assert_texts(actuals, expects)
+        expect(self.page.locator('input[name="a_category"] + label')).to_have_text(expects)
+        expect(self.page.locator('input[name="a_temp"] + label')).to_have_text(['No', 'Yes'])
 
     def test_bank_charge_click(self):
-        # 前処理
         self._login()
         self._location(self.live_server_url + reverse('moneybook:add'))
 
-        # テスト
-        self.driver.find_element(By.ID, 'c_day').send_keys('1')
-        self.driver.find_element(By.ID, 'c_price').send_keys('100')
-        self.driver.find_element(By.XPATH, '//form[1]/input[@type="button"]').click()
+        self.page.fill('#c_day', '1')
+        self.page.fill('#c_price', '100')
+        self.page.click('h1:has-text("銀行チャージ") + form input[type="button"]')
 
-        # 検証
         self._assert_bank_charge_kyash('Kyash')
 
     def test_bank_charge_year_enter(self):
-        # 前処理
         self._login()
         self._location(self.live_server_url + reverse('moneybook:add'))
 
-        # テスト
-        self.driver.find_element(By.ID, 'c_day').send_keys('1')
-        self.driver.find_element(By.ID, 'c_price').send_keys('100')
-        self.driver.find_element(By.ID, 'c_year').send_keys(Keys.RETURN)
+        self.page.fill('#c_day', '1')
+        self.page.fill('#c_price', '100')
+        self.page.press('#c_year', 'Enter')
 
-        # 検証
         self._assert_bank_charge_kyash('Kyash')
 
     def test_bank_charge_month_enter(self):
-        # 前処理
         self._login()
         self._location(self.live_server_url + reverse('moneybook:add'))
 
-        # テスト
-        self.driver.find_element(By.ID, 'c_day').send_keys('1')
-        self.driver.find_element(By.ID, 'c_price').send_keys('100')
-        self.driver.find_element(By.ID, 'c_month').send_keys(Keys.RETURN)
+        self.page.fill('#c_day', '1')
+        self.page.fill('#c_price', '100')
+        self.page.press('#c_month', 'Enter')
 
-        # 検証
         self._assert_bank_charge_kyash('Kyash')
 
     def test_bank_charge_day_enter(self):
-        # 前処理
         self._login()
         self._location(self.live_server_url + reverse('moneybook:add'))
 
-        # テスト
-        self.driver.find_element(By.ID, 'c_day').send_keys('1')
-        self.driver.find_element(By.ID, 'c_price').send_keys('100')
-        self.driver.find_element(By.ID, 'c_day').send_keys(Keys.RETURN)
+        self.page.fill('#c_day', '1')
+        self.page.fill('#c_price', '100')
+        self.page.press('#c_day', 'Enter')
 
-        # 検証
         self._assert_bank_charge_kyash('Kyash')
 
     def test_bank_charge_price_enter(self):
-        # 前処理
         self._login()
         self._location(self.live_server_url + reverse('moneybook:add'))
 
-        # テスト
-        self.driver.find_element(By.ID, 'c_day').send_keys('1')
-        self.driver.find_element(By.ID, 'c_price').send_keys('100')
-        self.driver.find_element(By.ID, 'c_price').send_keys(Keys.RETURN)
+        self.page.fill('#c_day', '1')
+        self.page.fill('#c_price', '100')
+        self.page.press('#c_price', 'Enter')
 
-        # 検証
         self._assert_bank_charge_kyash('Kyash')
 
     def test_bank_charge_method_enter(self):
-        # 前処理
         self._login()
         self._location(self.live_server_url + reverse('moneybook:add'))
 
-        # テスト
-        self.driver.find_element(By.ID, 'c_day').send_keys('1')
-        self.driver.find_element(By.ID, 'c_price').send_keys('100')
-        self.driver.find_element(By.XPATH, '//form[1]/table/tbody/tr[3]/td/input[1]').send_keys(Keys.RETURN)
+        self.page.fill('#c_day', '1')
+        self.page.fill('#c_price', '100')
+        # 最初のメソッド(Kyash)のinput要素でEnter
+        self.page.locator('input[name="c_method"]').nth(0).press('Enter')
 
-        # 検証
         self._assert_bank_charge_kyash('Kyash')
 
     def test_bank_charge_select(self):
-        # 前処理
         self._login()
         self._location(self.live_server_url + reverse('moneybook:add'))
 
-        # テスト
-        self.driver.find_element(By.ID, 'c_day').send_keys('1')
-        self.driver.find_element(By.ID, 'c_price').send_keys('100')
-        self.driver.find_element(By.XPATH, '//form[1]/table/tbody/tr[3]/td/label[2]').click()
-        self.driver.find_element(By.XPATH, '//form[1]/input[@type="button"]').click()
+        self.page.fill('#c_day', '1')
+        self.page.fill('#c_price', '100')
+        # PayPayを選択 (2番目のラベル)
+        self.page.locator('input[name="c_method"] + label').nth(1).click()
+        self.page.click('h1:has-text("銀行チャージ") + form input[type="button"]')
 
-        # 検証
         self._assert_bank_charge_kyash('PayPay')
 
     def test_bank_charge_reset(self):
-        # 前処理
         self._login()
         self._location(self.live_server_url + reverse('moneybook:add'))
 
-        # テスト: PayPay(2番目のラジオボタン)を選択して追加
-        self.driver.find_element(By.ID, 'c_day').send_keys('1')
-        self.driver.find_element(By.ID, 'c_price').send_keys('100')
-        self.driver.find_element(By.XPATH, '//form[1]/table/tbody/tr[3]/td/label[2]').click()  # PayPayラベル
-        self.driver.find_element(By.XPATH, '//form[1]/input[@type="button"]').click()
+        self.page.fill('#c_day', '1')
+        self.page.fill('#c_price', '100')
+        self.page.locator('input[name="c_method"] + label').nth(1).click()  # PayPay
+        self.page.click('h1:has-text("銀行チャージ") + form input[type="button"]')
 
-        # 検証: 成功後にchargeable_methods.first(Kyash=1番目)が選択されていること
-        time.sleep(1)
-        self.assertEqual(self.driver.find_element(By.XPATH, '//form[1]/table/tbody/tr[3]/td/input[1]').is_selected(), True)   # Kyash
-        self.assertEqual(self.driver.find_element(By.XPATH, '//form[1]/table/tbody/tr[3]/td/input[2]').is_selected(), False)  # PayPay
+        # 成功後に1番目(Kyash)が選択されていること
+        # AJAXでの更新を待つ
+        expect(self.page.locator('input[name="c_method"]').nth(0)).to_be_checked()
+        expect(self.page.locator('input[name="c_method"]').nth(1)).not_to_be_checked()
 
     def test_intra_move_click(self):
-        # 前処理
         self._login()
         self._location(self.live_server_url + reverse('moneybook:add'))
 
-        # テスト
-        self.driver.find_element(By.ID, 'm_day').send_keys('2')
-        self.driver.find_element(By.ID, 'm_item').send_keys('ないぶいどう')
-        self.driver.find_element(By.ID, 'm_price').send_keys('200')
-        self.driver.find_element(By.XPATH, '//form[2]/table/tbody/tr[4]/td/label[2]').click()
-        self.driver.find_element(By.XPATH, '//form[2]/table/tbody/tr[5]/td/label[3]').click()
-        self.driver.find_element(By.XPATH, '//form[2]/input[@type="button"]').click()
+        self.page.fill('#m_day', '2')
+        self.page.fill('#m_item', 'ないぶいどう')
+        self.page.fill('#m_price', '200')
+        self.page.locator('input[name="m_before_method"] + label').nth(1).click()  # 現金
+        self.page.locator('input[name="m_after_method"] + label').nth(2).click()  # Kyash
+        self.page.click('h1:has-text("内部移動追加") + form input[type="button"]')
 
-        # 検証
         self._assert_intra_move()
 
     def test_intra_move_year(self):
-        # 前処理
         self._login()
         self._location(self.live_server_url + reverse('moneybook:add'))
 
-        # テスト
-        self.driver.find_element(By.ID, 'm_day').send_keys('2')
-        self.driver.find_element(By.ID, 'm_item').send_keys('ないぶいどう')
-        self.driver.find_element(By.ID, 'm_price').send_keys('200')
-        self.driver.find_element(By.XPATH, '//form[2]/table/tbody/tr[4]/td/label[2]').click()
-        self.driver.find_element(By.XPATH, '//form[2]/table/tbody/tr[5]/td/label[3]').click()
-        self.driver.find_element(By.ID, 'm_year').send_keys(Keys.RETURN)
+        self.page.fill('#m_day', '2')
+        self.page.fill('#m_item', 'ないぶいどう')
+        self.page.fill('#m_price', '200')
+        self.page.locator('input[name="m_before_method"] + label').nth(1).click()
+        self.page.locator('input[name="m_after_method"] + label').nth(2).click()
+        self.page.press('#m_year', 'Enter')
 
-        # 検証
         self._assert_intra_move()
 
     def test_intra_move_month(self):
-        # 前処理
         self._login()
         self._location(self.live_server_url + reverse('moneybook:add'))
 
-        # テスト
-        self.driver.find_element(By.ID, 'm_day').send_keys('2')
-        self.driver.find_element(By.ID, 'm_item').send_keys('ないぶいどう')
-        self.driver.find_element(By.ID, 'm_price').send_keys('200')
-        self.driver.find_element(By.XPATH, '//form[2]/table/tbody/tr[4]/td/label[2]').click()
-        self.driver.find_element(By.XPATH, '//form[2]/table/tbody/tr[5]/td/label[3]').click()
-        self.driver.find_element(By.ID, 'm_month').send_keys(Keys.RETURN)
+        self.page.fill('#m_day', '2')
+        self.page.fill('#m_item', 'ないぶいどう')
+        self.page.fill('#m_price', '200')
+        self.page.locator('input[name="m_before_method"] + label').nth(1).click()
+        self.page.locator('input[name="m_after_method"] + label').nth(2).click()
+        self.page.press('#m_month', 'Enter')
 
-        # 検証
         self._assert_intra_move()
 
     def test_intra_move_day(self):
-        # 前処理
         self._login()
         self._location(self.live_server_url + reverse('moneybook:add'))
 
-        # テスト
-        self.driver.find_element(By.ID, 'm_day').send_keys('2')
-        self.driver.find_element(By.ID, 'm_item').send_keys('ないぶいどう')
-        self.driver.find_element(By.ID, 'm_price').send_keys('200')
-        self.driver.find_element(By.XPATH, '//form[2]/table/tbody/tr[4]/td/label[2]').click()
-        self.driver.find_element(By.XPATH, '//form[2]/table/tbody/tr[5]/td/label[3]').click()
-        self.driver.find_element(By.ID, 'm_day').send_keys(Keys.RETURN)
+        self.page.fill('#m_day', '2')
+        self.page.fill('#m_item', 'ないぶいどう')
+        self.page.fill('#m_price', '200')
+        self.page.locator('input[name="m_before_method"] + label').nth(1).click()
+        self.page.locator('input[name="m_after_method"] + label').nth(2).click()
+        self.page.press('#m_day', 'Enter')
 
-        # 検証
         self._assert_intra_move()
 
     def test_intra_move_item(self):
-        # 前処理
         self._login()
         self._location(self.live_server_url + reverse('moneybook:add'))
 
-        # テスト
-        self.driver.find_element(By.ID, 'm_day').send_keys('2')
-        self.driver.find_element(By.ID, 'm_item').send_keys('ないぶいどう')
-        self.driver.find_element(By.ID, 'm_price').send_keys('200')
-        self.driver.find_element(By.XPATH, '//form[2]/table/tbody/tr[4]/td/label[2]').click()
-        self.driver.find_element(By.XPATH, '//form[2]/table/tbody/tr[5]/td/label[3]').click()
-        self.driver.find_element(By.ID, 'm_item').send_keys(Keys.RETURN)
+        self.page.fill('#m_day', '2')
+        self.page.fill('#m_item', 'ないぶいどう')
+        self.page.fill('#m_price', '200')
+        self.page.locator('input[name="m_before_method"] + label').nth(1).click()
+        self.page.locator('input[name="m_after_method"] + label').nth(2).click()
+        self.page.press('#m_item', 'Enter')
 
-        # 検証
         self._assert_intra_move()
 
     def test_intra_move_price(self):
-        # 前処理
         self._login()
         self._location(self.live_server_url + reverse('moneybook:add'))
 
-        # テスト
-        self.driver.find_element(By.ID, 'm_day').send_keys('2')
-        self.driver.find_element(By.ID, 'm_item').send_keys('ないぶいどう')
-        self.driver.find_element(By.ID, 'm_price').send_keys('200')
-        self.driver.find_element(By.XPATH, '//form[2]/table/tbody/tr[4]/td/label[2]').click()
-        self.driver.find_element(By.XPATH, '//form[2]/table/tbody/tr[5]/td/label[3]').click()
-        self.driver.find_element(By.ID, 'm_price').send_keys(Keys.RETURN)
+        self.page.fill('#m_day', '2')
+        self.page.fill('#m_item', 'ないぶいどう')
+        self.page.fill('#m_price', '200')
+        self.page.locator('input[name="m_before_method"] + label').nth(1).click()
+        self.page.locator('input[name="m_after_method"] + label').nth(2).click()
+        self.page.press('#m_price', 'Enter')
 
-        # 検証
         self._assert_intra_move()
 
     def test_intra_move_before(self):
-        # 前処理
         self._login()
         self._location(self.live_server_url + reverse('moneybook:add'))
 
-        # テスト
-        self.driver.find_element(By.ID, 'm_day').send_keys('2')
-        self.driver.find_element(By.ID, 'm_item').send_keys('ないぶいどう')
-        self.driver.find_element(By.ID, 'm_price').send_keys('200')
-        self.driver.find_element(By.XPATH, '//form[2]/table/tbody/tr[4]/td/label[2]').click()
-        self.driver.find_element(By.XPATH, '//form[2]/table/tbody/tr[5]/td/label[3]').click()
-        self.driver.find_element(By.XPATH, '//form[2]/table/tbody/tr[4]/td/input[2]').send_keys(Keys.RETURN)
+        self.page.fill('#m_day', '2')
+        self.page.fill('#m_item', 'ないぶいどう')
+        self.page.fill('#m_price', '200')
+        self.page.locator('input[name="m_before_method"] + label').nth(1).click()
+        self.page.locator('input[name="m_after_method"] + label').nth(2).click()
+        # 移動元のinputでEnter
+        self.page.locator('input[name="m_before_method"]').nth(1).press('Enter')
 
-        # 検証
         self._assert_intra_move()
 
     def test_intra_move_after(self):
-        # 前処理
         self._login()
         self._location(self.live_server_url + reverse('moneybook:add'))
 
-        # テスト
-        self.driver.find_element(By.ID, 'm_day').send_keys('2')
-        self.driver.find_element(By.ID, 'm_item').send_keys('ないぶいどう')
-        self.driver.find_element(By.ID, 'm_price').send_keys('200')
-        self.driver.find_element(By.XPATH, '//form[2]/table/tbody/tr[4]/td/label[2]').click()
-        self.driver.find_element(By.XPATH, '//form[2]/table/tbody/tr[5]/td/label[3]').click()
-        self.driver.find_element(By.XPATH, '//form[2]/table/tbody/tr[5]/td/input[3]').send_keys(Keys.RETURN)
+        self.page.fill('#m_day', '2')
+        self.page.fill('#m_item', 'ないぶいどう')
+        self.page.fill('#m_price', '200')
+        self.page.locator('input[name="m_before_method"] + label').nth(1).click()
+        self.page.locator('input[name="m_after_method"] + label').nth(2).click()
+        # 移動先のinputでEnter
+        self.page.locator('input[name="m_after_method"]').nth(2).press('Enter')
 
-        # 検証
         self._assert_intra_move()
 
     def test_suica_charge(self):
         now = datetime.now()
-        # 前処理
         self._login()
         self._location(self.live_server_url + reverse('moneybook:add'))
 
-        # テスト
-        self.driver.find_element(By.ID, 's_day').send_keys('4')
-        self.driver.find_element(By.ID, 's_price').send_keys('400')
-        self.driver.find_element(By.XPATH, '//form[3]/table/tbody/tr[3]/td/input[@type="button"][1]').click()
+        self.page.fill('#s_day', '4')
+        self.page.fill('#s_price', '400')
+        self.page.click('input[value="Suicaチャージ"]')
 
         self._location(self.live_server_url + reverse('moneybook:index'))
-        rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
-        self.assertEqual(len(rows), 2)
-        tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[0].text, str(now.year) + '/' + str.zfill(str(now.month), 2) + '/' + '04')
-        self.assertEqual(tds[1].text, 'Suicaチャージ')
-        self.assertEqual(tds[2].text, '400')
-        self.assertEqual(tds[3].text, '銀行')
-        self.assertEqual(tds[4].text, '交通費')
-        self.assertEqual(Color.from_string(rows[1].value_of_css_property('background-color')), Color.from_string('rgba(0, 0, 0, 0)'))
+        self._wait_for_ajax()
+        self.page.wait_for_selector('#transactions table tbody tr')
+        rows = self.page.locator('#transactions table tbody tr')
+        expect(rows).to_have_count(2)
+        tds = rows.nth(1).locator('td')
+        expect(tds.nth(0)).to_have_text(f'{now.year}/{str(now.month).zfill(2)}/04')
+        expect(tds.nth(1)).to_have_text('Suicaチャージ')
+        expect(tds.nth(2)).to_have_text('400')
+        expect(tds.nth(3)).to_have_text('銀行')
+        expect(tds.nth(4)).to_have_text('交通費')
+        expect(rows.nth(1)).to_have_css('background-color', 'rgba(0, 0, 0, 0)')
+
         # direction確認
-        tds[5].find_element(By.TAG_NAME, 'a').click()
-        self.assertEqual(self.driver.find_element(By.XPATH, '//form/table[1]/tbody/tr[4]/td[1]/input[2]').is_selected(), True)
+        tds.nth(5).locator('a').click()
+        self.page.wait_for_load_state('load')
+        # 支出(2つ目のラジオボタン)が選択されていること
+        expect(self.page.locator('input[name="direction"]').nth(1)).to_be_checked()
 
     def test_suica_charge_default_day(self):
         now = datetime.now()
-        # 前処理
         self._login()
         self._location(self.live_server_url + reverse('moneybook:add'))
 
-        # テスト - 日付を空にして送信
-        self.driver.find_element(By.ID, 's_price').send_keys('400')
-        self.driver.find_element(By.XPATH, '//form[3]/table/tbody/tr[3]/td/input[@type="button"][1]').click()
+        self.page.fill('#s_price', '400')
+        self.page.click('input[value="Suicaチャージ"]')
 
         self._location(self.live_server_url + reverse('moneybook:index'))
-        rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
-        self.assertEqual(len(rows), 2)
-        tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        # 今日の日付が使われていることを確認
-        self.assertEqual(tds[0].text, str(now.year) + '/' + str.zfill(str(now.month), 2) + '/' + str.zfill(str(now.day), 2))
-        self.assertEqual(tds[1].text, 'Suicaチャージ')
-        self.assertEqual(tds[2].text, '400')
-        self.assertEqual(tds[3].text, '銀行')
-        self.assertEqual(tds[4].text, '交通費')
+        self._wait_for_ajax()
+        self.page.wait_for_selector('#transactions table tbody tr')
+        rows = self.page.locator('#transactions table tbody tr')
+        expect(rows).to_have_count(2)
+        tds = rows.nth(1).locator('td')
+        expect(tds.nth(0)).to_have_text(f'{now.year}/{str(now.month).zfill(2)}/{str(now.day).zfill(2)}')
+        expect(tds.nth(1)).to_have_text('Suicaチャージ')
+        expect(tds.nth(2)).to_have_text('400')
+        expect(tds.nth(3)).to_have_text('銀行')
+        expect(tds.nth(4)).to_have_text('交通費')
 
     def test_suica_charge_default_price(self):
         now = datetime.now()
-        # 前処理
         self._login()
         self._location(self.live_server_url + reverse('moneybook:add'))
 
-        # テスト - 金額を空にして送信
-        self.driver.find_element(By.ID, 's_day').send_keys('5')
-        self.driver.find_element(By.XPATH, '//form[3]/table/tbody/tr[3]/td/input[@type="button"][1]').click()
+        self.page.fill('#s_day', '5')
+        self.page.click('input[value="Suicaチャージ"]')
 
         self._location(self.live_server_url + reverse('moneybook:index'))
-        rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
-        self.assertEqual(len(rows), 2)
-        tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[0].text, str(now.year) + '/' + str.zfill(str(now.month), 2) + '/' + '05')
-        self.assertEqual(tds[1].text, 'Suicaチャージ')
-        # デフォルトの1000円が使われていることを確認
-        self.assertEqual(tds[2].text, '1,000')
-        self.assertEqual(tds[3].text, '銀行')
-        self.assertEqual(tds[4].text, '交通費')
+        self._wait_for_ajax()
+        self.page.wait_for_selector('#transactions table tbody tr')
+        rows = self.page.locator('#transactions table tbody tr')
+        expect(rows).to_have_count(2)
+        tds = rows.nth(1).locator('td')
+        expect(tds.nth(0)).to_have_text(f'{now.year}/{str(now.month).zfill(2)}/05')
+        expect(tds.nth(1)).to_have_text('Suicaチャージ')
+        expect(tds.nth(2)).to_have_text('1,000')
+        expect(tds.nth(3)).to_have_text('銀行')
+        expect(tds.nth(4)).to_have_text('交通費')
 
     def test_suica_charge_all_defaults(self):
         now = datetime.now()
-        # 前処理
         self._login()
         self._location(self.live_server_url + reverse('moneybook:add'))
 
-        # テスト - 日付も金額も空で送信
-        self.driver.find_element(By.XPATH, '//form[3]/table/tbody/tr[3]/td/input[@type="button"][1]').click()
+        self.page.click('input[value="Suicaチャージ"]')
 
         self._location(self.live_server_url + reverse('moneybook:index'))
-        rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
-        self.assertEqual(len(rows), 2)
-        tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        # 今日の日付とデフォルトの1000円が使われていることを確認
-        self.assertEqual(tds[0].text, str(now.year) + '/' + str.zfill(str(now.month), 2) + '/' + str.zfill(str(now.day), 2))
-        self.assertEqual(tds[1].text, 'Suicaチャージ')
-        self.assertEqual(tds[2].text, '1,000')
-        self.assertEqual(tds[3].text, '銀行')
-        self.assertEqual(tds[4].text, '交通費')
+        self._wait_for_ajax()
+        self.page.wait_for_selector('#transactions table tbody tr')
+        rows = self.page.locator('#transactions table tbody tr')
+        expect(rows).to_have_count(2)
+        tds = rows.nth(1).locator('td')
+        expect(tds.nth(0)).to_have_text(f'{now.year}/{str(now.month).zfill(2)}/{str(now.day).zfill(2)}')
+        expect(tds.nth(1)).to_have_text('Suicaチャージ')
+        expect(tds.nth(2)).to_have_text('1,000')
+        expect(tds.nth(3)).to_have_text('銀行')
+        expect(tds.nth(4)).to_have_text('交通費')
 
     def test_train_fare_shortcut(self):
         now = datetime.now()
-        # 前処理
         self._login()
         self._location(self.live_server_url + reverse('moneybook:add'))
 
-        # テスト
-        self.driver.find_element(By.ID, 's_day').send_keys('6')
-        self.driver.find_element(By.ID, 's_price').send_keys('600')
-        self.driver.find_element(By.XPATH, '//form[3]/table/tbody/tr[3]/td/input[@type="button"][2]').click()
+        self.page.fill('#s_day', '6')
+        self.page.fill('#s_price', '600')
+        self.page.click('input[value="電車代"]')
 
         self._location(self.live_server_url + reverse('moneybook:index'))
-        rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
-        self.assertEqual(len(rows), 2)
-        tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[0].text, str(now.year) + '/' + str.zfill(str(now.month), 2) + '/' + '06')
-        self.assertEqual(tds[1].text, '電車代')
-        self.assertEqual(tds[2].text, '600')
-        self.assertEqual(tds[3].text, '銀行')
-        self.assertEqual(tds[4].text, '交通費')
+        self._wait_for_ajax()
+        self.page.wait_for_selector('#transactions table tbody tr')
+        rows = self.page.locator('#transactions table tbody tr')
+        expect(rows).to_have_count(2)
+        tds = rows.nth(1).locator('td')
+        expect(tds.nth(0)).to_have_text(f'{now.year}/{str(now.month).zfill(2)}/06')
+        expect(tds.nth(1)).to_have_text('電車代')
+        expect(tds.nth(2)).to_have_text('600')
+        expect(tds.nth(3)).to_have_text('銀行')
+        expect(tds.nth(4)).to_have_text('交通費')
+
         # direction確認
-        tds[5].find_element(By.TAG_NAME, 'a').click()
-        self.assertEqual(self.driver.find_element(By.XPATH, '//form/table[1]/tbody/tr[4]/td[1]/input[2]').is_selected(), True)
+        tds.nth(5).locator('a').click()
+        self.page.wait_for_load_state('load')
+        expect(self.page.locator('input[name="direction"]').nth(1)).to_be_checked()
 
     def test_train_fare_shortcut_default_day(self):
         now = datetime.now()
-        # 前処理
         self._login()
         self._location(self.live_server_url + reverse('moneybook:add'))
 
-        # テスト - 日付を空にして送信
-        self.driver.find_element(By.ID, 's_price').send_keys('600')
-        self.driver.find_element(By.XPATH, '//form[3]/table/tbody/tr[3]/td/input[@type="button"][2]').click()
+        self.page.fill('#s_price', '600')
+        self.page.click('input[value="電車代"]')
 
         self._location(self.live_server_url + reverse('moneybook:index'))
-        rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
-        self.assertEqual(len(rows), 2)
-        tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        # 今日の日付が使われていることを確認
-        self.assertEqual(tds[0].text, str(now.year) + '/' + str.zfill(str(now.month), 2) + '/' + str.zfill(str(now.day), 2))
-        self.assertEqual(tds[1].text, '電車代')
-        self.assertEqual(tds[2].text, '600')
-        self.assertEqual(tds[3].text, '銀行')
-        self.assertEqual(tds[4].text, '交通費')
+        self._wait_for_ajax()
+        self.page.wait_for_selector('#transactions table tbody tr')
+        rows = self.page.locator('#transactions table tbody tr')
+        expect(rows).to_have_count(2)
+        tds = rows.nth(1).locator('td')
+        expect(tds.nth(0)).to_have_text(f'{now.year}/{str(now.month).zfill(2)}/{str(now.day).zfill(2)}')
+        expect(tds.nth(1)).to_have_text('電車代')
+        expect(tds.nth(2)).to_have_text('600')
+        expect(tds.nth(3)).to_have_text('銀行')
+        expect(tds.nth(4)).to_have_text('交通費')
 
     def test_train_fare_shortcut_default_price(self):
         now = datetime.now()
-        # 前処理
         self._login()
         self._location(self.live_server_url + reverse('moneybook:add'))
 
-        # テスト - 金額を空にして送信
-        self.driver.find_element(By.ID, 's_day').send_keys('7')
-        self.driver.find_element(By.XPATH, '//form[3]/table/tbody/tr[3]/td/input[@type="button"][2]').click()
+        self.page.fill('#s_day', '7')
+        self.page.click('input[value="電車代"]')
 
         self._location(self.live_server_url + reverse('moneybook:index'))
-        rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
-        self.assertEqual(len(rows), 2)
-        tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[0].text, str(now.year) + '/' + str.zfill(str(now.month), 2) + '/' + '07')
-        self.assertEqual(tds[1].text, '電車代')
-        # デフォルトの1000円が使われていることを確認
-        self.assertEqual(tds[2].text, '1,000')
-        self.assertEqual(tds[3].text, '銀行')
-        self.assertEqual(tds[4].text, '交通費')
+        self._wait_for_ajax()
+        self.page.wait_for_selector('#transactions table tbody tr')
+        rows = self.page.locator('#transactions table tbody tr')
+        expect(rows).to_have_count(2)
+        tds = rows.nth(1).locator('td')
+        expect(tds.nth(0)).to_have_text(f'{now.year}/{str(now.month).zfill(2)}/07')
+        expect(tds.nth(1)).to_have_text('電車代')
+        expect(tds.nth(2)).to_have_text('1,000')
+        expect(tds.nth(3)).to_have_text('銀行')
+        expect(tds.nth(4)).to_have_text('交通費')
 
     def test_train_fare_shortcut_all_defaults(self):
         now = datetime.now()
-        # 前処理
         self._login()
         self._location(self.live_server_url + reverse('moneybook:add'))
 
-        # テスト - 日付も金額も空で送信
-        self.driver.find_element(By.XPATH, '//form[3]/table/tbody/tr[3]/td/input[@type="button"][2]').click()
+        self.page.click('input[value="電車代"]')
 
         self._location(self.live_server_url + reverse('moneybook:index'))
-        rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
-        self.assertEqual(len(rows), 2)
-        tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        # 今日の日付とデフォルトの1000円が使われていることを確認
-        self.assertEqual(tds[0].text, str(now.year) + '/' + str.zfill(str(now.month), 2) + '/' + str.zfill(str(now.day), 2))
-        self.assertEqual(tds[1].text, '電車代')
-        self.assertEqual(tds[2].text, '1,000')
-        self.assertEqual(tds[3].text, '銀行')
-        self.assertEqual(tds[4].text, '交通費')
+        self._wait_for_ajax()
+        self.page.wait_for_selector('#transactions table tbody tr')
+        rows = self.page.locator('#transactions table tbody tr')
+        expect(rows).to_have_count(2)
+        tds = rows.nth(1).locator('td')
+        expect(tds.nth(0)).to_have_text(f'{now.year}/{str(now.month).zfill(2)}/{str(now.day).zfill(2)}')
+        expect(tds.nth(1)).to_have_text('電車代')
+        expect(tds.nth(2)).to_have_text('1,000')
+        expect(tds.nth(3)).to_have_text('銀行')
+        expect(tds.nth(4)).to_have_text('交通費')
 
     def test_manual_add_click(self):
         now = datetime.now()
-        # 前処理
         self._login()
         self._location(self.live_server_url + reverse('moneybook:add'))
 
-        # テスト
-        self.driver.find_element(By.ID, 'a_day').send_keys('5')
-        self.driver.find_element(By.ID, 'a_item').send_keys('マニュアルテスト')
-        self.driver.find_element(By.ID, 'a_price').send_keys('500')
-        self.driver.find_element(By.XPATH, '//form[4]/table/tbody/tr[4]/td/label[2]').click()
-        self.driver.find_element(By.XPATH, '//form[4]/table/tbody/tr[5]/td/label[2]').click()
-        self.driver.find_element(By.XPATH, '//form[4]/table/tbody/tr[6]/td/label[2]').click()
-        self.driver.find_element(By.XPATH, '//form[4]/input[@type="button"]').click()
+        self.page.fill('#a_day', '5')
+        self.page.fill('#a_item', 'マニュアルテスト')
+        self.page.fill('#a_price', '500')
+        self.page.locator('input[name="a_direction"] + label').nth(1).click()  # 支出
+        self.page.locator('input[name="a_method"] + label').nth(1).click()  # 現金
+        self.page.locator('input[name="a_category"] + label').nth(1).click()  # 必需品
+        self.page.click('h1:has-text("収入支出追加") + form input[type="button"]')
 
         self._location(self.live_server_url + reverse('moneybook:index'))
-        rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
-        self.assertEqual(len(rows), 2)
-        tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[0].text, str(now.year) + '/' + str.zfill(str(now.month), 2) + '/' + '05')
-        self.assertEqual(tds[1].text, 'マニュアルテスト')
-        self.assertEqual(tds[2].text, '500')
-        self.assertEqual(tds[3].text, '現金')
-        self.assertEqual(tds[4].text, '必需品')
-        self.assertEqual(Color.from_string(rows[1].value_of_css_property('background-color')), Color.from_string('rgba(0, 0, 0, 0)'))
+        self._wait_for_ajax()
+        self.page.wait_for_selector('#transactions table tbody tr')
+        rows = self.page.locator('#transactions table tbody tr')
+        expect(rows).to_have_count(2)
+        tds = rows.nth(1).locator('td')
+        expect(tds.nth(0)).to_have_text(f'{now.year}/{str(now.month).zfill(2)}/05')
+        expect(tds.nth(1)).to_have_text('マニュアルテスト')
+        expect(tds.nth(2)).to_have_text('500')
+        expect(tds.nth(3)).to_have_text('現金')
+        expect(tds.nth(4)).to_have_text('必需品')
+        expect(rows.nth(1)).to_have_css('background-color', 'rgba(0, 0, 0, 0)')
+
         # direction確認
-        tds[5].find_element(By.TAG_NAME, 'a').click()
-        self.assertEqual(self.driver.find_element(By.XPATH, '//form/table[1]/tbody/tr[4]/td[1]/input[2]').is_selected(), True)
+        tds.nth(5).locator('a').click()
+        self.page.wait_for_load_state('load')
+        expect(self.page.locator('input[name="direction"]').nth(1)).to_be_checked()
 
     def test_manual_add_year(self):
         now = datetime.now()
-        # 前処理
         self._login()
         self._location(self.live_server_url + reverse('moneybook:add'))
 
-        # テスト
-        self.driver.find_element(By.ID, 'a_day').send_keys('5')
-        self.driver.find_element(By.ID, 'a_item').send_keys('マニュアルテスト')
-        self.driver.find_element(By.ID, 'a_price').send_keys('500')
-        self.driver.find_element(By.ID, 'a_year').send_keys(Keys.RETURN)
+        self.page.fill('#a_day', '5')
+        self.page.fill('#a_item', 'マニュアルテスト')
+        self.page.fill('#a_price', '500')
+        self.page.press('#a_year', 'Enter')
 
         self._location(self.live_server_url + reverse('moneybook:index'))
-        rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
-        self.assertEqual(len(rows), 2)
-        tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[0].text, str(now.year) + '/' + str.zfill(str(now.month), 2) + '/' + '05')
-        self.assertEqual(tds[1].text, 'マニュアルテスト')
-        self.assertEqual(tds[2].text, '500')
-        self.assertEqual(tds[3].text, '銀行')
-        self.assertEqual(tds[4].text, '食費')
-        self.assertEqual(Color.from_string(rows[1].value_of_css_property('background-color')), Color.from_string('rgba(0, 0, 0, 0)'))
+        self._wait_for_ajax()
+        self.page.wait_for_selector('#transactions table tbody tr')
+        rows = self.page.locator('#transactions table tbody tr')
+        expect(rows).to_have_count(2)
+        tds = rows.nth(1).locator('td')
+        expect(tds.nth(0)).to_have_text(f'{now.year}/{str(now.month).zfill(2)}/05')
+        expect(tds.nth(1)).to_have_text('マニュアルテスト')
+        expect(tds.nth(2)).to_have_text('500')
+        expect(tds.nth(3)).to_have_text('銀行')
+        expect(tds.nth(4)).to_have_text('食費')
+        expect(rows.nth(1)).to_have_css('background-color', 'rgba(0, 0, 0, 0)')
+
         # direction確認
-        tds[5].find_element(By.TAG_NAME, 'a').click()
-        self.assertEqual(self.driver.find_element(By.XPATH, '//form/table[1]/tbody/tr[4]/td[1]/input[2]').is_selected(), False)
+        tds.nth(5).locator('a').click()
+        self.page.wait_for_load_state('load')
+        # 収入(1つ目のラジオボタン)が選択されていること
+        expect(self.page.locator('input[name="direction"]').nth(0)).to_be_checked()
 
     def test_manual_add_month(self):
         now = datetime.now()
-        # 前処理
         self._login()
         self._location(self.live_server_url + reverse('moneybook:add'))
 
-        # テスト
-        self.driver.find_element(By.ID, 'a_day').send_keys('5')
-        self.driver.find_element(By.ID, 'a_item').send_keys('マニュアルテスト')
-        self.driver.find_element(By.ID, 'a_price').send_keys('500')
-        self.driver.find_element(By.ID, 'a_month').send_keys(Keys.RETURN)
+        self.page.fill('#a_day', '5')
+        self.page.fill('#a_item', 'マニュアルテスト')
+        self.page.fill('#a_price', '500')
+        self.page.press('#a_month', 'Enter')
 
         self._location(self.live_server_url + reverse('moneybook:index'))
-        rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
-        self.assertEqual(len(rows), 2)
-        tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[0].text, str(now.year) + '/' + str.zfill(str(now.month), 2) + '/' + '05')
-        self.assertEqual(tds[1].text, 'マニュアルテスト')
-        self.assertEqual(tds[2].text, '500')
-        self.assertEqual(tds[3].text, '銀行')
-        self.assertEqual(tds[4].text, '食費')
-        self.assertEqual(Color.from_string(rows[1].value_of_css_property('background-color')), Color.from_string('rgba(0, 0, 0, 0)'))
+        self._wait_for_ajax()
+        self.page.wait_for_selector('#transactions table tbody tr')
+        rows = self.page.locator('#transactions table tbody tr')
+        expect(rows).to_have_count(2)
+        tds = rows.nth(1).locator('td')
+        expect(tds.nth(0)).to_have_text(f'{now.year}/{str(now.month).zfill(2)}/05')
+        expect(tds.nth(1)).to_have_text('マニュアルテスト')
+        expect(tds.nth(2)).to_have_text('500')
+        expect(tds.nth(3)).to_have_text('銀行')
+        expect(tds.nth(4)).to_have_text('食費')
+        expect(rows.nth(1)).to_have_css('background-color', 'rgba(0, 0, 0, 0)')
+
         # direction確認
-        tds[5].find_element(By.TAG_NAME, 'a').click()
-        self.assertEqual(self.driver.find_element(By.XPATH, '//form/table[1]/tbody/tr[4]/td[1]/input[2]').is_selected(), False)
+        tds.nth(5).locator('a').click()
+        self.page.wait_for_load_state('load')
+        expect(self.page.locator('input[name="direction"]').nth(0)).to_be_checked()
 
     def test_manual_add_day(self):
         now = datetime.now()
-        # 前処理
         self._login()
         self._location(self.live_server_url + reverse('moneybook:add'))
 
-        # テスト
-        self.driver.find_element(By.ID, 'a_day').send_keys('5')
-        self.driver.find_element(By.ID, 'a_item').send_keys('マニュアルテスト')
-        self.driver.find_element(By.ID, 'a_price').send_keys('500')
-        self.driver.find_element(By.ID, 'a_day').send_keys(Keys.RETURN)
+        self.page.fill('#a_day', '5')
+        self.page.fill('#a_item', 'マニュアルテスト')
+        self.page.fill('#a_price', '500')
+        self.page.press('#a_day', 'Enter')
 
         self._location(self.live_server_url + reverse('moneybook:index'))
-        rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
-        self.assertEqual(len(rows), 2)
-        tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[0].text, str(now.year) + '/' + str.zfill(str(now.month), 2) + '/' + '05')
-        self.assertEqual(tds[1].text, 'マニュアルテスト')
-        self.assertEqual(tds[2].text, '500')
-        self.assertEqual(tds[3].text, '銀行')
-        self.assertEqual(tds[4].text, '食費')
-        self.assertEqual(Color.from_string(rows[1].value_of_css_property('background-color')), Color.from_string('rgba(0, 0, 0, 0)'))
+        self._wait_for_ajax()
+        self.page.wait_for_selector('#transactions table tbody tr')
+        rows = self.page.locator('#transactions table tbody tr')
+        expect(rows).to_have_count(2)
+        tds = rows.nth(1).locator('td')
+        expect(tds.nth(0)).to_have_text(f'{now.year}/{str(now.month).zfill(2)}/05')
+        expect(tds.nth(1)).to_have_text('マニュアルテスト')
+        expect(tds.nth(2)).to_have_text('500')
+        expect(tds.nth(3)).to_have_text('銀行')
+        expect(tds.nth(4)).to_have_text('食費')
+        expect(rows.nth(1)).to_have_css('background-color', 'rgba(0, 0, 0, 0)')
+
         # direction確認
-        tds[5].find_element(By.TAG_NAME, 'a').click()
-        self.assertEqual(self.driver.find_element(By.XPATH, '//form/table[1]/tbody/tr[4]/td[1]/input[2]').is_selected(), False)
+        tds.nth(5).locator('a').click()
+        self.page.wait_for_load_state('load')
+        expect(self.page.locator('input[name="direction"]').nth(0)).to_be_checked()
 
     def test_manual_add_item(self):
         now = datetime.now()
-        # 前処理
         self._login()
         self._location(self.live_server_url + reverse('moneybook:add'))
 
-        # テスト
-        self.driver.find_element(By.ID, 'a_day').send_keys('5')
-        self.driver.find_element(By.ID, 'a_item').send_keys('マニュアルテスト')
-        self.driver.find_element(By.ID, 'a_price').send_keys('500')
-        self.driver.find_element(By.ID, 'a_item').send_keys(Keys.RETURN)
+        self.page.fill('#a_day', '5')
+        self.page.fill('#a_item', 'マニュアルテスト')
+        self.page.fill('#a_price', '500')
+        self.page.press('#a_item', 'Enter')
 
         self._location(self.live_server_url + reverse('moneybook:index'))
-        rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
-        self.assertEqual(len(rows), 2)
-        tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[0].text, str(now.year) + '/' + str.zfill(str(now.month), 2) + '/' + '05')
-        self.assertEqual(tds[1].text, 'マニュアルテスト')
-        self.assertEqual(tds[2].text, '500')
-        self.assertEqual(tds[3].text, '銀行')
-        self.assertEqual(tds[4].text, '食費')
-        self.assertEqual(Color.from_string(rows[1].value_of_css_property('background-color')), Color.from_string('rgba(0, 0, 0, 0)'))
+        self._wait_for_ajax()
+        self.page.wait_for_selector('#transactions table tbody tr')
+        rows = self.page.locator('#transactions table tbody tr')
+        expect(rows).to_have_count(2)
+        tds = rows.nth(1).locator('td')
+        expect(tds.nth(0)).to_have_text(f'{now.year}/{str(now.month).zfill(2)}/05')
+        expect(tds.nth(1)).to_have_text('マニュアルテスト')
+        expect(tds.nth(2)).to_have_text('500')
+        expect(tds.nth(3)).to_have_text('銀行')
+        expect(tds.nth(4)).to_have_text('食費')
+        expect(rows.nth(1)).to_have_css('background-color', 'rgba(0, 0, 0, 0)')
+
         # direction確認
-        tds[5].find_element(By.TAG_NAME, 'a').click()
-        self.assertEqual(self.driver.find_element(By.XPATH, '//form/table[1]/tbody/tr[4]/td[1]/input[2]').is_selected(), False)
+        tds.nth(5).locator('a').click()
+        self.page.wait_for_load_state('load')
+        expect(self.page.locator('input[name="direction"]').nth(0)).to_be_checked()
 
     def test_manual_add_price(self):
         now = datetime.now()
-        # 前処理
         self._login()
         self._location(self.live_server_url + reverse('moneybook:add'))
 
-        # テスト
-        self.driver.find_element(By.ID, 'a_day').send_keys('5')
-        self.driver.find_element(By.ID, 'a_item').send_keys('マニュアルテスト')
-        self.driver.find_element(By.ID, 'a_price').send_keys('500')
-        self.driver.find_element(By.ID, 'a_price').send_keys(Keys.RETURN)
+        self.page.fill('#a_day', '5')
+        self.page.fill('#a_item', 'マニュアルテスト')
+        self.page.fill('#a_price', '500')
+        self.page.press('#a_price', 'Enter')
 
         self._location(self.live_server_url + reverse('moneybook:index'))
-        rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
-        self.assertEqual(len(rows), 2)
-        tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[0].text, str(now.year) + '/' + str.zfill(str(now.month), 2) + '/' + '05')
-        self.assertEqual(tds[1].text, 'マニュアルテスト')
-        self.assertEqual(tds[2].text, '500')
-        self.assertEqual(tds[3].text, '銀行')
-        self.assertEqual(tds[4].text, '食費')
-        self.assertEqual(Color.from_string(rows[1].value_of_css_property('background-color')), Color.from_string('rgba(0, 0, 0, 0)'))
+        self._wait_for_ajax()
+        self.page.wait_for_selector('#transactions table tbody tr')
+        rows = self.page.locator('#transactions table tbody tr')
+        expect(rows).to_have_count(2)
+        tds = rows.nth(1).locator('td')
+        expect(tds.nth(0)).to_have_text(f'{now.year}/{str(now.month).zfill(2)}/05')
+        expect(tds.nth(1)).to_have_text('マニュアルテスト')
+        expect(tds.nth(2)).to_have_text('500')
+        expect(tds.nth(3)).to_have_text('銀行')
+        expect(tds.nth(4)).to_have_text('食費')
+        expect(rows.nth(1)).to_have_css('background-color', 'rgba(0, 0, 0, 0)')
+
         # direction確認
-        tds[5].find_element(By.TAG_NAME, 'a').click()
-        self.assertEqual(self.driver.find_element(By.XPATH, '//form/table[1]/tbody/tr[4]/td[1]/input[2]').is_selected(), False)
+        tds.nth(5).locator('a').click()
+        self.page.wait_for_load_state('load')
+        expect(self.page.locator('input[name="direction"]').nth(0)).to_be_checked()
 
     def test_manual_add_tmp(self):
         now = datetime.now()
-        # 前処理
         self._login()
         self._location(self.live_server_url + reverse('moneybook:add'))
 
-        # テスト
-        self.driver.find_element(By.ID, 'a_day').send_keys('5')
-        self.driver.find_element(By.ID, 'a_item').send_keys('マニュアルテスト')
-        self.driver.find_element(By.ID, 'a_price').send_keys('500')
-        self.driver.find_element(By.XPATH, '//form[4]/table/tbody/tr[7]/td/label[2]').click()
-        self.driver.find_element(By.XPATH, '//form[4]/input[@type="button"]').click()
+        self.page.fill('#a_day', '5')
+        self.page.fill('#a_item', 'マニュアルテスト')
+        self.page.fill('#a_price', '500')
+        self.page.locator('input[name="a_temp"] + label').nth(1).click()  # Yes
+        self.page.click('h1:has-text("収入支出追加") + form input[type="button"]')
 
         self._location(self.live_server_url + reverse('moneybook:index'))
-        rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
-        self.assertEqual(len(rows), 2)
-        tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[0].text, str(now.year) + '/' + str.zfill(str(now.month), 2) + '/' + '05')
-        self.assertEqual(tds[1].text, 'マニュアルテスト')
-        self.assertEqual(tds[2].text, '500')
-        self.assertEqual(tds[3].text, '銀行')
-        self.assertEqual(tds[4].text, '立替')
-        self.assertEqual(Color.from_string(rows[1].value_of_css_property('background-color')), Color.from_string('rgba(0, 0, 0, 0)'))
+        self._wait_for_ajax()
+        self.page.wait_for_selector('#transactions table tbody tr')
+        rows = self.page.locator('#transactions table tbody tr')
+        expect(rows).to_have_count(2)
+        tds = rows.nth(1).locator('td')
+        expect(tds.nth(0)).to_have_text(f'{now.year}/{str(now.month).zfill(2)}/05')
+        expect(tds.nth(1)).to_have_text('マニュアルテスト')
+        expect(tds.nth(2)).to_have_text('500')
+        expect(tds.nth(3)).to_have_text('銀行')
+        expect(tds.nth(4)).to_have_text('立替')
+        expect(rows.nth(1)).to_have_css('background-color', 'rgba(0, 0, 0, 0)')
+
         # direction確認
-        tds[5].find_element(By.TAG_NAME, 'a').click()
-        self.assertEqual(self.driver.find_element(By.XPATH, '//form/table[1]/tbody/tr[4]/td[1]/input[2]').is_selected(), False)
+        tds.nth(5).locator('a').click()
+        self.page.wait_for_load_state('load')
+        # 収入(1つ目のラジオボタン)が選択されていること (立替Yes + 食費(支出) = 収入)
+        expect(self.page.locator('input[name="direction"]').nth(0)).to_be_checked()
 
     def test_add_formula_normal_form(self):
-        """通常追加フォームで数式を入力できることを確認（addページ）"""
         self._login()
-        self._location(self.live_server_url + reverse('moneybook:add'))
-
-        # 初期確認
         self._location(self.live_server_url + reverse('moneybook:index'))
-        initial_count = len(self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr'))
+        self._wait_for_ajax()
+        # count() は Locator の現在の要素数を即座に返す。
+        # _wait_for_ajax しているが、テーブルがレンダリングされるまで待つ必要がある。
+        self.page.wait_for_selector('#transactions table tbody tr')
+        initial_count = self.page.locator('#transactions table tbody tr').count()
 
-        # 通常追加フォームで数式 =50*3 → 150
         self._location(self.live_server_url + reverse('moneybook:add'))
-        self.driver.find_element(By.ID, 'a_day').send_keys('15')
-        self.driver.find_element(By.ID, 'a_item').send_keys('add数式')
-        self.driver.find_element(By.ID, 'a_price').send_keys('=50*3')
-        self.driver.find_element(By.XPATH, '//section/form[4]/input[@value="追加"]').click()
-        time.sleep(2)
+        self.page.fill('#a_day', '15')
+        self.page.fill('#a_item', 'add数式')
+        self.page.fill('#a_price', '=50*3')
+        self.page.click('h1:has-text("収入支出追加") + form input[type="button"]')
+        # 送信後の待ち。result_messageの出現を待つ
+        expect(self.page.locator('#result_message')).to_be_visible()
 
         self._location(self.live_server_url + reverse('moneybook:index'))
-        rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
-        self.assertEqual(len(rows), initial_count + 1)
-        tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[1].text, 'add数式')
-        self.assertEqual(tds[2].text, '150')
+        self._wait_for_ajax()
+        self.page.wait_for_selector('#transactions table tbody tr')
+        rows = self.page.locator('#transactions table tbody tr')
+        expect(rows).to_have_count(initial_count + 1)
+        tds = rows.nth(1).locator('td')
+        expect(tds.nth(1)).to_have_text('add数式')
+        expect(tds.nth(2)).to_have_text('150')
 
     def test_add_formula_internal_transfer(self):
-        """内部移動フォームで数式を入力できることを確認（addページ）"""
         self._login()
-        self._location(self.live_server_url + reverse('moneybook:add'))
-
-        # 初期確認
         self._location(self.live_server_url + reverse('moneybook:index'))
-        initial_count = len(self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr'))
+        self._wait_for_ajax()
+        self.page.wait_for_selector('#transactions table tbody tr')
+        initial_count = self.page.locator('#transactions table tbody tr').count()
 
-        # 内部移動で数式 =100+200 → 300
         self._location(self.live_server_url + reverse('moneybook:add'))
-        self.driver.find_element(By.ID, 'm_day').send_keys('16')
-        self.driver.find_element(By.ID, 'm_item').send_keys('add数式')
-        self.driver.find_element(By.ID, 'm_price').send_keys('=100+200')
-        self.driver.find_element(By.XPATH, '//section/form[2]/input[@value="追加"]').click()
-        time.sleep(2)
+        self.page.fill('#m_day', '16')
+        self.page.fill('#m_item', 'add数式')
+        self.page.fill('#m_price', '=100+200')
+        self.page.click('h1:has-text("内部移動追加") + form input[type="button"]')
+        expect(self.page.locator('#result_message')).to_be_visible()
 
         self._location(self.live_server_url + reverse('moneybook:index'))
-        rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
+        self._wait_for_ajax()
+        self.page.wait_for_selector('#transactions table tbody tr')
+        rows = self.page.locator('#transactions table tbody tr')
         # 内部移動は2件追加される
-        self.assertEqual(len(rows), initial_count + 2)
-        tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[1].text, 'add数式')
-        self.assertEqual(tds[2].text, '300')
+        expect(rows).to_have_count(initial_count + 2)
+        tds = rows.nth(1).locator('td')
+        expect(tds.nth(1)).to_have_text('add数式')
+        expect(tds.nth(2)).to_have_text('300')
 
     def test_add_formula_charge(self):
-        """チャージフォームで数式を入力できることを確認（addページ）"""
         self._login()
-        self._location(self.live_server_url + reverse('moneybook:add'))
-
-        # 初期確認
         self._location(self.live_server_url + reverse('moneybook:index'))
-        initial_count = len(self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr'))
+        self._wait_for_ajax()
+        self.page.wait_for_selector('#transactions table tbody tr')
+        initial_count = self.page.locator('#transactions table tbody tr').count()
 
-        # チャージで数式 =1000/4 → 250
         self._location(self.live_server_url + reverse('moneybook:add'))
-        self.driver.find_element(By.ID, 'c_day').send_keys('17')
-        self.driver.find_element(By.ID, 'c_price').send_keys('=1000/4')
-        self.driver.find_element(By.XPATH, '//section/form[1]/input[@value="追加"]').click()
-        time.sleep(2)
+        self.page.fill('#c_day', '17')
+        self.page.fill('#c_price', '=1000/4')
+        self.page.click('h1:has-text("銀行チャージ") + form input[type="button"]')
+        expect(self.page.locator('#result_message')).to_be_visible()
 
         self._location(self.live_server_url + reverse('moneybook:index'))
-        rows = self.driver.find_elements(By.XPATH, '//*[@id="transactions"]/table/tbody/tr')
+        self._wait_for_ajax()
+        self.page.wait_for_selector('#transactions table tbody tr')
+        rows = self.page.locator('#transactions table tbody tr')
         # チャージも2件追加される
-        self.assertEqual(len(rows), initial_count + 2)
-        tds = rows[1].find_elements(By.TAG_NAME, 'td')
-        self.assertEqual(tds[2].text, '250')
+        expect(rows).to_have_count(initial_count + 2)
+        tds = rows.nth(1).locator('td')
+        expect(tds.nth(2)).to_have_text('250')
