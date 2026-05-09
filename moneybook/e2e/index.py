@@ -678,6 +678,8 @@ class Index(PlaywrightBase):
         # 収入カテゴリ (pk=7)
         self.page.click('#lbl_a_category-7')
         self.page.click('input[value="追加"]')
+        # 反映待ち
+        expect(self.page.locator('#summary-count')).to_have_text('1件')
 
         # 支出データ追加
         self.page.fill('#a_day', '2')
@@ -686,12 +688,13 @@ class Index(PlaywrightBase):
         # 食費カテゴリ (pk=1)
         self.page.click('#lbl_a_category-1')
         self.page.click('input[value="追加"]')
+        # 反映待ち
+        expect(self.page.locator('#summary-count')).to_have_text('2件')
 
         # 成功メッセージが表示されるのを待つ
         expect(self.page.locator('#result_message')).to_contain_text('Success!')
 
         # サマリー確認
-        expect(self.page.locator('#summary-count')).to_have_text('2件')
         expect(self.page.locator('#summary-income')).to_have_text('収入: 1,000円')
         expect(self.page.locator('#summary-outgo')).to_have_text('支出: 500円')
 
