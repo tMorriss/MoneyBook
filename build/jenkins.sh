@@ -2,10 +2,14 @@
 set -euo pipefail
 
 # 最新コミットメッセージに[skip ci]が含まれているかチェック
+# GitHub push トリガー（新規コミット）の場合のみ適用し、手動実行時などはデプロイを継続する
 COMMIT_MESSAGE=$(git log -1 --pretty=%B)
-if echo "$COMMIT_MESSAGE" | grep -q "\[skip ci\]"; then
-  echo "[INFO] Commit message contains [skip ci]. Skipping deployment."
-  exit 0
+if grep -qiE "\\[(skip ci|ci skip)\\]" <<< "$COMMIT_MESSAGE"; then
+  if [ "${GIT_COMMIT:-}" != "${GIT_PREVIOUS_COMMIT:-}" ]; then
+    echo "[INFO] Commit message contains [skip ci] and it's a new commit. Skipping deployment."
+    exit 0
+  fi
+  echo "[INFO] Commit message contains [skip ci] but it's not a new commit. Proceeding with deployment."
 fi
 
 # 必須環境変数のチェック
@@ -25,7 +29,7 @@ echo "[INFO] Static version: $STATIC_VERSION"
 
 # ベースイメージのpull
 echo "[INFO] Pulling base images..."
-sudo -u "$PODMAN_USER" podman pull python:3.11-slim
+sudo -u "$PODMAN_USER" podman pull python:3.12-slim
 sudo -u "$PODMAN_USER" podman pull nginx:alpine
 
 # sed -i 's/DEBUG = False/DEBUG = True/' config/settings/prod.py

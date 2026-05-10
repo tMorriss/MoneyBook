@@ -6,10 +6,10 @@
 {% block header %}
 <link rel="stylesheet" type="text/css" href="{% static 'statistics.css' %}">
 <script src="{% static 'period_balances.js' %}"></script>
-<script src="{% static 'amcharts4/core.js' %}"></script>
-<script src="{% static 'amcharts4/charts.js' %}"></script>
-<script src="{% static 'amcharts4/animated.js' %}"></script>
-<script src="{% static 'amcharts4/kelly.js' %}"></script>
+<script src="https://cdn.amcharts.com/lib/4/core.js" crossorigin="anonymous"></script>
+<script src="https://cdn.amcharts.com/lib/4/charts.js" crossorigin="anonymous"></script>
+<script src="https://cdn.amcharts.com/lib/4/themes/animated.js" crossorigin="anonymous"></script>
+<script src="https://cdn.amcharts.com/lib/4/themes/kelly.js" crossorigin="anonymous"></script>
 <script type="text/javascript">
     period_balances_url = "{% url 'moneybook:period_balances' %}";
     window.onload = function () {

@@ -1,128 +1,115 @@
-import time
+import re
 
 from django.urls import reverse
-from moneybook.e2e.base import SeleniumBase
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
+from moneybook.e2e.base import PlaywrightBase
+from playwright.sync_api import expect
 
 
-class Tools(SeleniumBase):
+class Tools(PlaywrightBase):
+    def _fill_formatted_input(self, locator, value):
+        """カンマ区切りの入力欄に値を入力するヘルパー"""
+        # スクリプトがロードされるのを待つ
+        self.page.wait_for_function('typeof window.unseparateValue === "function"')
+        # フォーカスとクリックで JavaScript イベント (unseparateValue) を確実に発火させる
+        locator.focus()
+        locator.click()
+        # カンマが消えるのを待つ（自動リトライ）
+        expect(locator).not_to_have_value(re.compile(r','))
+        locator.fill(value)
+
     def test_get(self):
         """ツール画面が正しく表示されることを確認"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:tools'))
+        self._wait_for_ajax()
 
         self._assert_common()
 
-    def test_actual_cash_section(self):
-        """実際の現金残高セクションが表示されることを確認"""
+    def test_sections_display(self):
+        """各セクションが表示されることを確認"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:tools'))
+        self._wait_for_ajax()
 
-        # 実際の現金残高の入力欄が表示されている
-        self.assertTrue(self.driver.find_element(By.ID, 'actual_balance').is_displayed())
+        # 実際の現金残高
+        expect(self.page.locator('#actual_balance')).to_be_visible()
+        # チェック日の表
+        expect(self.page.locator('#checked-date')).to_be_visible()
+        # チェック日の入力フィールド
+        expect(self.page.locator('#check_year')).to_be_visible()
+        expect(self.page.locator('#check_month')).to_be_visible()
+        expect(self.page.locator('#check_day')).to_be_visible()
+        # 生活費目標額
+        expect(self.page.locator('#txt_living_cost')).to_be_visible()
 
     def test_update_actual_cash(self):
-        """実際の現金残高を更新できることを確認"""
+        """実際の現金残高を更新できることを確認 (ボタンクリック)"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:tools'))
+        self._wait_for_ajax()
 
         # 実際の現金残高を入力
-        actual_cash_input = self.driver.find_element(By.ID, 'actual_balance')
-        actual_cash_input.clear()
-        actual_cash_input.send_keys('5000')
+        actual_cash_input = self.page.locator('#actual_balance')
+        self._fill_formatted_input(actual_cash_input, '5000')
 
-        # 計算ボタンをクリック
-        self.driver.find_element(By.XPATH, '//input[@value="計算"]').click()
-        time.sleep(2)
+        # 計算ボタンをクリック (value="計算")
+        self.page.click('input[value="計算"]')
+
+        # 差額が更新されるのを待つ (内部的には $.post 完了後に更新される)
+        # 入力欄がカンマ区切りになるのを待つことでAJAX完了を確認
+        expect(actual_cash_input).to_have_value('5,000')
 
         # ページをリロードして値が保持されていることを確認
-        self._location(self.live_server_url + reverse('moneybook:tools'))
-        actual_cash_value = self.driver.find_element(By.ID, 'actual_balance').get_attribute('value')
-        self.assertEqual(actual_cash_value, '5,000')
+        self.page.reload()
+        expect(self.page.locator('#actual_balance')).to_have_value('5,000')
 
     def test_update_actual_cash_enter(self):
         """Enterキーで実際の現金残高を更新できることを確認"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:tools'))
+        self._wait_for_ajax()
 
         # 実際の現金残高を入力してEnter
-        actual_cash_input = self.driver.find_element(By.ID, 'actual_balance')
-        actual_cash_input.clear()
-        actual_cash_input.send_keys('10000')
-        actual_cash_input.send_keys(Keys.RETURN)
-        time.sleep(2)
+        actual_cash_input = self.page.locator('#actual_balance')
+        self._fill_formatted_input(actual_cash_input, '10000')
+        actual_cash_input.press('Enter')
 
-        # ページをリロードして値が保持されていることを確認
-        self._location(self.live_server_url + reverse('moneybook:tools'))
-        actual_cash_value = self.driver.find_element(By.ID, 'actual_balance').get_attribute('value')
-        self.assertEqual(actual_cash_value, '10,000')
+        # AJAX完了を待つ (updateDiff完了後にseparateValueが呼ばれる)
+        expect(actual_cash_input).to_have_value('10,000', timeout=10000)
 
-    def test_checked_date_section(self):
-        """チェック日セクションが表示されることを確認"""
-        self._login()
-        self._location(self.live_server_url + reverse('moneybook:tools'))
-
-        # チェック日の表が表示されている
-        checked_date_table = self.driver.find_element(By.ID, 'checked-date')
-        self.assertTrue(checked_date_table.is_displayed())
-
-    def test_update_checked_date(self):
-        """チェック日の入力フィールドが表示されることを確認"""
-        self._login()
-
-        self._location(self.live_server_url + reverse('moneybook:tools'))
-
-        # チェック日の入力フィールドが表示されている
-        self.assertTrue(self.driver.find_element(By.ID, 'check_year').is_displayed())
-        self.assertTrue(self.driver.find_element(By.ID, 'check_month').is_displayed())
-        self.assertTrue(self.driver.find_element(By.ID, 'check_day').is_displayed())
-
-    def test_living_cost_mark_section(self):
-        """生活費目標額セクションが表示されることを確認"""
-        self._login()
-        self._location(self.live_server_url + reverse('moneybook:tools'))
-
-        # 生活費目標額の入力欄が表示されている
-        living_cost_input = self.driver.find_element(By.ID, 'txt_living_cost')
-        self.assertTrue(living_cost_input.is_displayed())
+        self.page.reload()
+        expect(self.page.locator('#actual_balance')).to_have_value('10,000')
 
     def test_update_living_cost_mark(self):
-        """生活費目標額を更新できることを確認"""
+        """生活費目標額を更新できることを確認 (ボタンクリック)"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:tools'))
+        self._wait_for_ajax()
 
         # 生活費目標額を入力
-        living_cost_input = self.driver.find_element(By.ID, 'txt_living_cost')
-        living_cost_input.clear()
-        living_cost_input.send_keys('30000')
+        living_cost_input = self.page.locator('#txt_living_cost')
+        self._fill_formatted_input(living_cost_input, '30000')
 
         # 更新ボタンをクリック
-        update_buttons = self.driver.find_elements(By.XPATH, '//input[@value="更新"]')
-        update_buttons[0].click()
-        time.sleep(2)
+        # updateLivingCostMark は location.reload() を呼ぶ
+        self.page.locator('h1:has-text("生活費目標額") + table').locator('input[value="更新"]').click()
 
-        # ページをリロードして値が保持されていることを確認
-        self._location(self.live_server_url + reverse('moneybook:tools'))
-        living_cost_value = self.driver.find_element(By.ID, 'txt_living_cost').get_attribute('value')
-        self.assertEqual(living_cost_value, '30,000')
+        # 値が保持されていることを確認 (リロードされるので Playwright が解決し直す)
+        expect(self.page.locator('#txt_living_cost')).to_have_value('30,000', timeout=10000)
 
     def test_update_living_cost_mark_enter(self):
         """Enterキーで生活費目標額を更新できることを確認"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:tools'))
+        self._wait_for_ajax()
 
         # 生活費目標額を入力してEnter
-        living_cost_input = self.driver.find_element(By.ID, 'txt_living_cost')
-        living_cost_input.clear()
-        living_cost_input.send_keys('40000')
-        living_cost_input.send_keys(Keys.RETURN)
-        time.sleep(2)
+        living_cost_input = self.page.locator('#txt_living_cost')
+        self._fill_formatted_input(living_cost_input, '40000')
+        living_cost_input.press('Enter')
 
-        # ページをリロードして値が保持されていることを確認
-        self._location(self.live_server_url + reverse('moneybook:tools'))
-        living_cost_value = self.driver.find_element(By.ID, 'txt_living_cost').get_attribute('value')
-        self.assertEqual(living_cost_value, '40,000')
+        # 値が保持されていることを確認
+        expect(self.page.locator('#txt_living_cost')).to_have_value('40,000', timeout=10000)
 
     def test_link_from_taskbar(self):
         """タスクバーからツール画面に遷移できることを確認"""
@@ -130,44 +117,31 @@ class Tools(SeleniumBase):
         self._location(self.live_server_url + reverse('moneybook:index'))
 
         # タスクバーのツールリンクをクリック
-        taskbar_links = self.driver.find_elements(By.XPATH, '//nav[@class="task_bar"]/ul/li/a')
-        tools_link = None
-        for link in taskbar_links:
-            if link.text == 'ツール':
-                tools_link = link
-                break
-
-        self.assertIsNotNone(tools_link)
-        tools_link.click()
-        time.sleep(1)
+        # base.py の _assert_common でも確認しているが、実際にクリックして遷移することを確認
+        self.page.locator('nav.task_bar').get_by_role('link', name='ツール').click()
 
         # ツール画面に遷移したことを確認
-        self.assertEqual(self.driver.current_url, self.live_server_url + reverse('moneybook:tools'))
+        expect(self.page).to_have_url(self.live_server_url + reverse('moneybook:tools'))
 
     def test_multiple_updates(self):
         """複数の値を連続して更新できることを確認"""
         self._login()
         self._location(self.live_server_url + reverse('moneybook:tools'))
+        self._wait_for_ajax()
 
         # 実際の現金残高を更新
-        actual_cash_input = self.driver.find_element(By.ID, 'actual_balance')
-        actual_cash_input.clear()
-        actual_cash_input.send_keys('15000')
-        self.driver.find_element(By.XPATH, '//input[@value="計算"]').click()
-        time.sleep(2)
+        actual_balance = self.page.locator('#actual_balance')
+        self._fill_formatted_input(actual_balance, '15000')
+        self.page.click('input[value="計算"]')
+        # カンマ区切りになるのを待つことでAJAX完了を確認
+        expect(actual_balance).to_have_value('15,000', timeout=10000)
 
         # 生活費目標額を更新
-        living_cost_input = self.driver.find_element(By.ID, 'txt_living_cost')
-        living_cost_input.clear()
-        living_cost_input.send_keys('50000')
-        # 生活費の更新ボタンをクリック（現金差額計算の後の2番目の「更新」ボタン）
-        update_buttons = self.driver.find_elements(By.XPATH, '//input[@value="更新"]')
-        update_buttons[0].click()
-        time.sleep(2)
+        living_cost = self.page.locator('#txt_living_cost')
+        self._fill_formatted_input(living_cost, '50000')
+        update_button = self.page.locator('h1:has-text("生活費目標額") + table').locator('input[value="更新"]')
+        update_button.click()
 
         # ページをリロードして両方の値が保持されていることを確認
-        self._location(self.live_server_url + reverse('moneybook:tools'))
-        actual_cash_value = self.driver.find_element(By.ID, 'actual_balance').get_attribute('value')
-        living_cost_value = self.driver.find_element(By.ID, 'txt_living_cost').get_attribute('value')
-        self.assertEqual(actual_cash_value, '15,000')
-        self.assertEqual(living_cost_value, '50,000')
+        expect(self.page.locator('#actual_balance')).to_have_value('15,000', timeout=10000)
+        expect(self.page.locator('#txt_living_cost')).to_have_value('50,000', timeout=10000)
