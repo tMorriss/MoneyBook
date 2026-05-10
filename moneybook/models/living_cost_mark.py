@@ -4,7 +4,7 @@ from django.db import models
 
 
 class LivingCostMark(models.Model):
-    start_date = models.DateField()
+    start_date = models.DateField(null=True, blank=True)
     end_date = models.DateField(null=True, blank=True)
     price = models.IntegerField()
 
@@ -15,7 +15,7 @@ class LivingCostMark(models.Model):
     def get_mark(year, month):
         target_date = date(int(year), int(month), 1)
         mark = LivingCostMark.objects.filter(
-            start_date__lte=target_date
+            models.Q(start_date__isnull=True) | models.Q(start_date__lte=target_date)
         ).filter(
             models.Q(end_date__isnull=True) | models.Q(end_date__gte=target_date)
         ).order_by('-start_date').first()

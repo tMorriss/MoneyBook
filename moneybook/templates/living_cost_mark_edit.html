@@ -38,11 +38,11 @@
 
     <form method="post">
         {% csrf_token %}
-        <table class="tbl-data tbl-boarder">
+        <table class="tbl-common tbl-boarder">
             <thead>
                 <tr>
-                    <th>開始日</th>
-                    <th>終了日</th>
+                    <th>開始年月</th>
+                    <th>終了年月</th>
                     <th>金額</th>
                     <th>操作</th>
                 </tr>
@@ -50,8 +50,14 @@
             <tbody id="mark_table_body">
                 {% for mark in living_cost_marks %}
                 <tr>
-                    <td><input type="date" name="start_date_{{ forloop.index }}" value="{{ mark.start_date|date:'Y-m-d' }}" required></td>
-                    <td><input type="date" name="end_date_{{ forloop.index }}" value="{{ mark.end_date|date:'Y-m-d' }}"></td>
+                    <td>
+                        <input type="text" name="start_year_{{ forloop.index }}" value="{{ mark.start_date.year|default_if_none:'' }}" style="width:6ex" class="righter">年
+                        <input type="text" name="start_month_{{ forloop.index }}" value="{{ mark.start_date.month|default_if_none:'' }}" style="width:3ex" class="righter">月
+                    </td>
+                    <td>
+                        <input type="text" name="end_year_{{ forloop.index }}" value="{{ mark.end_date.year|default_if_none:'' }}" style="width:6ex" class="righter">年
+                        <input type="text" name="end_month_{{ forloop.index }}" value="{{ mark.end_date.month|default_if_none:'' }}" style="width:3ex" class="righter">月
+                    </td>
                     <td><input type="text" name="price_{{ forloop.index }}" value="{{ mark.price }}" class="righter" style="width:12ex"></td>
                     <td><button type="button" class="btn-delete-row btn-red">削除</button></td>
                 </tr>
@@ -62,8 +68,14 @@
         <!-- テンプレート行 -->
         <table style="display: none;">
             <tr id="row_template">
-                <td><input type="date" name="start_date_template" required></td>
-                <td><input type="date" name="end_date_template"></td>
+                <td>
+                    <input type="text" name="start_year_template" value="" style="width:6ex" class="righter">年
+                    <input type="text" name="start_month_template" value="" style="width:3ex" class="righter">月
+                </td>
+                <td>
+                    <input type="text" name="end_year_template" value="" style="width:6ex" class="righter">年
+                    <input type="text" name="end_month_template" value="" style="width:3ex" class="righter">月
+                </td>
                 <td><input type="text" name="price_template" class="righter" style="width:12ex"></td>
                 <td><button type="button" class="btn-delete-row btn-red">削除</button></td>
             </tr>
