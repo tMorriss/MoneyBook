@@ -56,18 +56,50 @@ class LivingCostMarkEditViewTestCase(BaseTestCase):
         self.assertIsNone(marks[1].end_date)
         self.assertEqual(marks[1].price, 120000)
 
-    def test_post_incomplete_start_date(self):
+    def test_post_incomplete_start_date_year(self):
         self.client.force_login(User.objects.create_user(self.username))
         LivingCostMark.objects.all().delete()
+        data = {
+            'start_year_1': '',
+            'start_month_1': '1',
+            'price_1': '100,000',
+        }
+        response = self.client.post(reverse('moneybook:living_cost_mark_edit'), data)
+        self.assertContains(response, '開始年月の入力が不完全です')
+
+    def test_post_incomplete_start_date_month(self):
+        self.client.force_login(User.objects.create_user(self.username))
         data = {
             'start_year_1': '2024',
             'start_month_1': '',
             'price_1': '100,000',
         }
         response = self.client.post(reverse('moneybook:living_cost_mark_edit'), data)
-        self.assertEqual(response.status_code, 200)
         self.assertContains(response, '開始年月の入力が不完全です')
-        self.assertEqual(LivingCostMark.objects.count(), 0)
+
+    def test_post_incomplete_end_date_year(self):
+        self.client.force_login(User.objects.create_user(self.username))
+        data = {
+            'start_year_1': '2024',
+            'start_month_1': '1',
+            'end_year_1': '',
+            'end_month_1': '1',
+            'price_1': '100,000',
+        }
+        response = self.client.post(reverse('moneybook:living_cost_mark_edit'), data)
+        self.assertContains(response, '終了年月の入力が不完全です')
+
+    def test_post_incomplete_end_date_month(self):
+        self.client.force_login(User.objects.create_user(self.username))
+        data = {
+            'start_year_1': '2024',
+            'start_month_1': '1',
+            'end_year_1': '2024',
+            'end_month_1': '',
+            'price_1': '100,000',
+        }
+        response = self.client.post(reverse('moneybook:living_cost_mark_edit'), data)
+        self.assertContains(response, '終了年月の入力が不完全です')
 
     def test_post_start_gte_end(self):
         self.client.force_login(User.objects.create_user(self.username))

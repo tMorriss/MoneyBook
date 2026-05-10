@@ -19,3 +19,7 @@ class LivingCostMarkTestCase(BaseTestCase):
         self.assertEqual(LivingCostMark.get_mark(2024, 3), 100000)
         self.assertEqual(LivingCostMark.get_mark(2024, 4), 120000)
         self.assertEqual(LivingCostMark.get_mark(2024, 12), 120000)
+
+    def test_get_mark_no_data(self):
+        LivingCostMark.objects.all().delete()
+        self.assertEqual(LivingCostMark.get_mark(2024, 1), 0)

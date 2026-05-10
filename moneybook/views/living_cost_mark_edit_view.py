@@ -108,14 +108,10 @@ class LivingCostMarkEditView(LoginRequiredMixin, View):
                         error_message = (
                             f'期間に隙間または重複があります: '
                             f'{prev_mark.end_date.year}/{prev_mark.end_date.month} と '
-                            f'{mark.start_date.year}/{mark.start_date.month if mark.start_date else ""}'
+                            f'{mark.start_date.year if mark.start_date else ""}/'
+                            f'{mark.start_date.month if mark.start_date else ""}'
                         )
                         break
-
-                # 最後のデータ以外は終了日が必須
-                if i < len(new_marks) - 1 and mark.end_date is None:
-                    error_message = '途中のデータの終了年月は必須です'
-                    break
 
         if error_message:
             return self._render_error(request, new_marks, error_message)
