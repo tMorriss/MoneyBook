@@ -1,5 +1,6 @@
 import calendar
 from datetime import datetime
+from http import HTTPStatus
 
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
@@ -77,7 +78,7 @@ class LivingCostMarkEditView(LoginRequiredMixin, View):
                 new_marks.append(LivingCostMark(start_date=start_date, end_date=end_date, price=price))
 
         if error_message:
-            return self._render_error(request, new_marks, error_message)
+            return self._render_error(request, new_marks, error_message, status=HTTPStatus.BAD_REQUEST)
 
         # ソート (Noneは最小として扱う)
         new_marks.sort(key=lambda x: x.start_date if x.start_date else datetime.min.date())
@@ -114,7 +115,7 @@ class LivingCostMarkEditView(LoginRequiredMixin, View):
                         break
 
         if error_message:
-            return self._render_error(request, new_marks, error_message)
+            return self._render_error(request, new_marks, error_message, status=HTTPStatus.BAD_REQUEST)
 
         # 保存
         with transaction.atomic():
@@ -123,11 +124,11 @@ class LivingCostMarkEditView(LoginRequiredMixin, View):
 
         return HttpResponseRedirect(reverse('moneybook:living_cost_mark'))
 
-    def _render_error(self, request, new_marks, error_message):
+    def _render_error(self, request, new_marks, error_message, status=HTTPStatus.OK):
         context = {
             'app_name': settings.APP_NAME,
             'username': request.user,
             'living_cost_marks': new_marks,
             'error_message': error_message,
         }
-        return render(request, 'living_cost_mark_edit.html', context)
+        return render(request, 'living_cost_mark_edit.html', context, status=status)

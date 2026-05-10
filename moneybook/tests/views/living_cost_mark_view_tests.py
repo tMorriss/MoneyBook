@@ -66,7 +66,8 @@ class LivingCostMarkEditViewTestCase(BaseTestCase):
             'price_1': '100,000',
         }
         response = self.client.post(reverse('moneybook:living_cost_mark_edit'), data)
-        self.assertContains(response, '開始年月の入力が不完全です')
+        self.assertEqual(response.status_code, 400)
+        self.assertContains(response, '開始年月の入力が不完全です', status_code=400)
 
     def test_post_incomplete_start_date_month(self):
         self.client.force_login(User.objects.create_user(self.username))
@@ -76,7 +77,8 @@ class LivingCostMarkEditViewTestCase(BaseTestCase):
             'price_1': '100,000',
         }
         response = self.client.post(reverse('moneybook:living_cost_mark_edit'), data)
-        self.assertContains(response, '開始年月の入力が不完全です')
+        self.assertEqual(response.status_code, 400)
+        self.assertContains(response, '開始年月の入力が不完全です', status_code=400)
 
     def test_post_incomplete_end_date_year(self):
         self.client.force_login(User.objects.create_user(self.username))
@@ -88,7 +90,8 @@ class LivingCostMarkEditViewTestCase(BaseTestCase):
             'price_1': '100,000',
         }
         response = self.client.post(reverse('moneybook:living_cost_mark_edit'), data)
-        self.assertContains(response, '終了年月の入力が不完全です')
+        self.assertEqual(response.status_code, 400)
+        self.assertContains(response, '終了年月の入力が不完全です', status_code=400)
 
     def test_post_incomplete_end_date_month(self):
         self.client.force_login(User.objects.create_user(self.username))
@@ -100,7 +103,8 @@ class LivingCostMarkEditViewTestCase(BaseTestCase):
             'price_1': '100,000',
         }
         response = self.client.post(reverse('moneybook:living_cost_mark_edit'), data)
-        self.assertContains(response, '終了年月の入力が不完全です')
+        self.assertEqual(response.status_code, 400)
+        self.assertContains(response, '終了年月の入力が不完全です', status_code=400)
 
     def test_post_start_gte_end(self):
         self.client.force_login(User.objects.create_user(self.username))
@@ -112,8 +116,8 @@ class LivingCostMarkEditViewTestCase(BaseTestCase):
             'price_1': '100,000',
         }
         response = self.client.post(reverse('moneybook:living_cost_mark_edit'), data)
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, '開始年月は終了年月より前に設定してください')
+        self.assertEqual(response.status_code, 400)
+        self.assertContains(response, '開始年月は終了年月より前に設定してください', status_code=400)
 
     def test_post_middle_no_end_date(self):
         self.client.force_login(User.objects.create_user(self.username))
@@ -128,8 +132,8 @@ class LivingCostMarkEditViewTestCase(BaseTestCase):
             'price_2': '120,000',
         }
         response = self.client.post(reverse('moneybook:living_cost_mark_edit'), data)
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, '途中のデータの終了年月は必須です')
+        self.assertEqual(response.status_code, 400)
+        self.assertContains(response, '途中のデータの終了年月は必須です', status_code=400)
 
     def test_post_overlap(self):
         """期間が重複している場合はエラー"""
@@ -145,8 +149,8 @@ class LivingCostMarkEditViewTestCase(BaseTestCase):
             'price_2': '120,000',
         }
         response = self.client.post(reverse('moneybook:living_cost_mark_edit'), data)
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, '期間に隙間または重複があります')
+        self.assertEqual(response.status_code, 400)
+        self.assertContains(response, '期間に隙間または重複があります', status_code=400)
 
     def test_post_gap(self):
         """期間に隙間がある場合はエラー"""
@@ -162,8 +166,8 @@ class LivingCostMarkEditViewTestCase(BaseTestCase):
             'price_2': '120,000',
         }
         response = self.client.post(reverse('moneybook:living_cost_mark_edit'), data)
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, '期間に隙間または重複があります')
+        self.assertEqual(response.status_code, 400)
+        self.assertContains(response, '期間に隙間または重複があります', status_code=400)
 
     def test_post_null_start_multiple(self):
         """開始日がnullのデータが複数ある場合はエラー"""
@@ -177,8 +181,8 @@ class LivingCostMarkEditViewTestCase(BaseTestCase):
             'price_2': '120,000',
         }
         response = self.client.post(reverse('moneybook:living_cost_mark_edit'), data)
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, '開始年月が空のデータは1行だけ指定できます')
+        self.assertEqual(response.status_code, 400)
+        self.assertContains(response, '開始年月が空のデータは1行だけ指定できます', status_code=400)
 
     def test_post_invalid_month_range(self):
         self.client.force_login(User.objects.create_user(self.username))
@@ -188,7 +192,8 @@ class LivingCostMarkEditViewTestCase(BaseTestCase):
             'price_1': '100,000',
         }
         response = self.client.post(reverse('moneybook:living_cost_mark_edit'), data)
-        self.assertContains(response, '開始年月の値が不正です')
+        self.assertEqual(response.status_code, 400)
+        self.assertContains(response, '開始年月の値が不正です', status_code=400)
 
     def test_post_invalid_end_month(self):
         self.client.force_login(User.objects.create_user(self.username))
@@ -200,7 +205,8 @@ class LivingCostMarkEditViewTestCase(BaseTestCase):
             'price_1': '100,000',
         }
         response = self.client.post(reverse('moneybook:living_cost_mark_edit'), data)
-        self.assertContains(response, '終了年月の値が不正です')
+        self.assertEqual(response.status_code, 400)
+        self.assertContains(response, '終了年月の値が不正です', status_code=400)
 
     def test_post_invalid_price(self):
         self.client.force_login(User.objects.create_user(self.username))
@@ -210,7 +216,8 @@ class LivingCostMarkEditViewTestCase(BaseTestCase):
             'price_1': 'abc',
         }
         response = self.client.post(reverse('moneybook:living_cost_mark_edit'), data)
-        self.assertContains(response, '金額が不正です')
+        self.assertEqual(response.status_code, 400)
+        self.assertContains(response, '金額が不正です', status_code=400)
 
     def test_post_empty_price_skip(self):
         self.client.force_login(User.objects.create_user(self.username))
