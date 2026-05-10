@@ -42,6 +42,7 @@ class LivingCostMarkEditViewTestCase(BaseTestCase):
             'end_year_2': '',
             'end_month_2': '',
             'price_2': '120000',
+            'price_template': '',  # To cover id_part == 'template' check
         }
         response = self.client.post(reverse('moneybook:living_cost_mark_edit'), data)
         self.assertEqual(response.status_code, 302)
