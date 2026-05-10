@@ -43,16 +43,33 @@ class PlaywrightBase(StaticLiveServerTestCase):
         if failed:
             artifact_dir = 'playwright-artifact'
             os.makedirs(artifact_dir, exist_ok=True)
+            base_filename = f'{self.__class__.__name__}.{self._testMethodName}'
 
             # スクリーンショット
-            screenshot_path = os.path.join(artifact_dir, f'{self.__class__.__name__}.{self._testMethodName}_failure.png')
-            self.page.screenshot(path=screenshot_path)
+            try:
+                screenshot_path = os.path.join(artifact_dir, f'{base_filename}_failure.png')
+                self.page.screenshot(path=screenshot_path)
+            except Exception as e:
+                print(f'Failed to save screenshot: {e}')
 
-            filename = f'{self.__class__.__name__}.{self._testMethodName}.zip'
-            self.context.tracing.stop(path=os.path.join(artifact_dir, filename))
+            # HTML
+            try:
+                html_path = os.path.join(artifact_dir, f'{base_filename}_failure.html')
+                with open(html_path, 'w', encoding='utf-8') as f:
+                    f.write(self.page.content())
+            except Exception as e:
+                print(f'Failed to save HTML: {e}')
+
+            # トレース
+            try:
+                trace_filename = f'{base_filename}.zip'
+                self.context.tracing.stop(path=os.path.join(artifact_dir, trace_filename))
+            except Exception as e:
+                print(f'Failed to stop tracing: {e}')
         else:
             self.context.tracing.stop()
 
+        self.context.close()
         self.browser.close()
         self.playwright.stop()
         super().tearDown()
