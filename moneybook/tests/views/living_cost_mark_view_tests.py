@@ -147,6 +147,49 @@ class LivingCostMarkEditViewTestCase(BaseTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, '開始年月が空のデータは1行だけ指定できます')
 
+    def test_post_invalid_month_range(self):
+        self.client.force_login(User.objects.create_user(self.username))
+        data = {
+            'start_year_1': '2024',
+            'start_month_1': '13',
+            'price_1': '100,000',
+        }
+        response = self.client.post(reverse('moneybook:living_cost_mark_edit'), data)
+        self.assertContains(response, '開始年月の値が不正です')
+
+    def test_post_invalid_end_month(self):
+        self.client.force_login(User.objects.create_user(self.username))
+        data = {
+            'start_year_1': '2024',
+            'start_month_1': '1',
+            'end_year_1': '2024',
+            'end_month_1': 'abc',
+            'price_1': '100,000',
+        }
+        response = self.client.post(reverse('moneybook:living_cost_mark_edit'), data)
+        self.assertContains(response, '終了年月の値が不正です')
+
+    def test_post_invalid_price(self):
+        self.client.force_login(User.objects.create_user(self.username))
+        data = {
+            'start_year_1': '2024',
+            'start_month_1': '1',
+            'price_1': 'abc',
+        }
+        response = self.client.post(reverse('moneybook:living_cost_mark_edit'), data)
+        self.assertContains(response, '金額が不正です')
+
+    def test_post_empty_price_skip(self):
+        self.client.force_login(User.objects.create_user(self.username))
+        data = {
+            'start_year_1': '2024',
+            'start_month_1': '1',
+            'price_1': '',
+        }
+        response = self.client.post(reverse('moneybook:living_cost_mark_edit'), data)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(LivingCostMark.objects.count(), 0)
+
     def test_str(self):
         mark = LivingCostMark(start_date=date(2024, 1, 1), price=100000)
         self.assertEqual(str(mark), '2024-01-01 - None: 100000')
