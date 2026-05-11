@@ -252,4 +252,3 @@ class LivingCostMarkEditViewTestCase(BaseTestCase):
         response = self.client.post(reverse('moneybook:living_cost_mark_edit'), data)
         self.assertEqual(response.status_code, 400)
         self.assertContains(response, '金額が空の行があります', status_code=400)
-
