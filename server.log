@@ -1,0 +1,24 @@
+Watching for file changes with StatReloader
+[11/May/2026 23:43:16] "GET /login HTTP/1.1" 200 1150
+[11/May/2026 23:43:16] "GET /static/dev/style.css HTTP/1.1" 200 5463
+[11/May/2026 23:43:17] "POST /login HTTP/1.1" 302 0
+[11/May/2026 23:43:17] "GET / HTTP/1.1" 200 8390
+[11/May/2026 23:43:17] "GET /static/dev/common.js HTTP/1.1" 200 5878
+[11/May/2026 23:43:18] "GET /static/dev/index.css HTTP/1.1" 200 1220
+[11/May/2026 23:43:18] "GET /static/dev/index.js HTTP/1.1" 200 7535
+[11/May/2026 23:43:18] "GET /static/dev/images/right.png HTTP/1.1" 200 9133
+[11/May/2026 23:43:18] "GET /living_cost_mark HTTP/1.1" 200 3139
+[11/May/2026 23:43:18] "GET /static/dev/images/left.png HTTP/1.1" 200 26639
+[11/May/2026 23:43:18] "GET /static/dev/common.js HTTP/1.1" 200 5878
+[11/May/2026 23:43:18] "GET /living_cost_mark/edit HTTP/1.1" 200 6554
+[11/May/2026 23:43:18] "GET /static/dev/living_cost_mark_edit.js HTTP/1.1" 200 711
+Performing system checks...
+
+System check identified no issues (0 silenced).
+May 11, 2026 - 23:43:10
+Django version 6.0.5, using settings 'config.settings.dev'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CONTROL-C.
+
+WARNING: This is a development server. Do not use it in a production setting. Use a production WSGI or ASGI server instead.
+For more information on production servers see: https://docs.djangoproject.com/en/6.0/howto/deployment/

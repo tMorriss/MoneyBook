@@ -2,16 +2,17 @@ import re
 from datetime import datetime
 
 from dateutil.relativedelta import relativedelta
+from django.urls import reverse
 from moneybook.e2e.base import PlaywrightBase
 from playwright.sync_api import expect
 
 
 class LivingCostMarkTest(PlaywrightBase):
-    def test_living_cost_mark_flow(self):
+    def test_living_cost_mark_basic_flow(self):
         self._login()
 
         # 1. living_cost_mark画面が表示できる
-        self.page.goto(f'{self.live_server_url}/living_cost_mark')
+        self.page.goto(self.live_server_url + reverse('moneybook:living_cost_mark'))
         expect(self.page.locator('section h1')).to_contain_text('生活費目標')
 
         # 2. 編集ボタンからliving_cost_mark_edit画面に遷移できる
@@ -54,35 +55,51 @@ class LivingCostMarkTest(PlaywrightBase):
 
         # 更新
         self.page.click('button:has-text("更新")')
-        expect(self.page).to_have_url(re.compile(r'/living_cost_mark$'))
+        expect(self.page).to_have_url(re.compile(reverse('moneybook:living_cost_mark') + '$'))
 
-        # 4. living_cost_mark画面上で上記の3データが反映されていることを確認
-        expect(self.page.locator('td:has-text("100,000")')).to_be_visible()
-        expect(self.page.locator('td:has-text("110,000")')).to_be_visible()
-        expect(self.page.locator('td:has-text("120,000")')).to_be_visible()
+        # 4. living_cost_mark画面上で上記の3データが反映されていることを確認 (priceだけでなく開始日、終了日も確認)
+        rows = self.page.locator('table.tbl-data tbody tr')
+        expect(rows).to_have_count(3)
+
+        # Row 1: Start null, End last_month, Price 100,000
+        expect(rows.nth(0).locator('td').nth(0)).to_have_text('')
+        expect(rows.nth(0).locator('td').nth(1)).to_have_text(last_month.strftime('%Y年%-m月'))
+        expect(rows.nth(0).locator('td').nth(2)).to_have_text('100,000')
+
+        # Row 2: Start this_month, End this_month, Price 110,000
+        expect(rows.nth(1).locator('td').nth(0)).to_have_text(this_month.strftime('%Y年%-m月'))
+        expect(rows.nth(1).locator('td').nth(1)).to_have_text(this_month.strftime('%Y年%-m月'))
+        expect(rows.nth(1).locator('td').nth(2)).to_have_text('110,000')
+
+        # Row 3: Start next_month, End null, Price 120,000
+        expect(rows.nth(2).locator('td').nth(0)).to_have_text(next_month.strftime('%Y年%-m月'))
+        expect(rows.nth(2).locator('td').nth(1)).to_have_text('')
+        expect(rows.nth(2).locator('td').nth(2)).to_have_text('120,000')
 
         # 5. 上記で追加した月のindex画面に遷移し、index画面上で設定値が反映されていることを確認
         # 今月の前月
-        self.page.goto(f'{self.live_server_url}/{last_month.year}/{last_month.month}')
+        self.page.goto(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': last_month.year, 'month': last_month.month}))
         self._wait_for_ajax()
         # 統計パネルが出るまで待つ
         self.page.wait_for_selector('#tbl-parameters')
         expect(self.page.locator('#tbl-parameters tr').filter(has_text='生活費目標額').locator('td')).to_have_text('100,000')
 
         # 今月
-        self.page.goto(f'{self.live_server_url}/{this_month.year}/{this_month.month}')
+        self.page.goto(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': this_month.year, 'month': this_month.month}))
         self._wait_for_ajax()
         self.page.wait_for_selector('#tbl-parameters')
         expect(self.page.locator('#tbl-parameters tr').filter(has_text='生活費目標額').locator('td')).to_have_text('110,000')
 
         # 来月
-        self.page.goto(f'{self.live_server_url}/{next_month.year}/{next_month.month}')
+        self.page.goto(self.live_server_url + reverse('moneybook:index_month', kwargs={'year': next_month.year, 'month': next_month.month}))
         self._wait_for_ajax()
         self.page.wait_for_selector('#tbl-parameters')
         expect(self.page.locator('#tbl-parameters tr').filter(has_text='生活費目標額').locator('td')).to_have_text('120,000')
 
+    def test_living_cost_mark_delete_and_add_single(self):
+        self._login()
         # 6. 再度edit画面に遷移し、既存のデータを削除し別のデータを追加。
-        self.page.goto(f'{self.live_server_url}/living_cost_mark/edit')
+        self.page.goto(self.live_server_url + reverse('moneybook:living_cost_mark_edit'))
         while self.page.locator('.btn-delete-row:visible').count() > 0:
             self.page.locator('.btn-delete-row:visible').first.click()
 
@@ -94,8 +111,14 @@ class LivingCostMarkTest(PlaywrightBase):
         expect(self.page.locator('td:has-text("200,000")')).to_be_visible()
         expect(self.page.locator('table.tbl-data tbody tr')).to_have_count(1)
 
+    def test_living_cost_mark_sort_order(self):
+        self._login()
+        now = datetime.now()
+        this_month = now
+        next_month = now + relativedelta(months=1)
+
         # 7. 再度edit画面に遷移し、時系列が逆順でデータを追加
-        self.page.click('#btn_edit')
+        self.page.goto(self.live_server_url + reverse('moneybook:living_cost_mark_edit'))
         while self.page.locator('.btn-delete-row:visible').count() > 0:
             self.page.locator('.btn-delete-row:visible').first.click()
 
@@ -123,11 +146,10 @@ class LivingCostMarkTest(PlaywrightBase):
         expect(rows.nth(0)).to_contain_text('110,000')
         expect(rows.nth(1)).to_contain_text('120,000')
 
-    def test_living_cost_mark_negative_cases(self):
+    def test_error_multiple_null_start_date(self):
         self._login()
-        self.page.goto(f'{self.live_server_url}/living_cost_mark/edit')
+        self.page.goto(self.live_server_url + reverse('moneybook:living_cost_mark_edit'))
 
-        # Multiple rows with null start_date
         while self.page.locator('.btn-delete-row:visible').count() > 0:
             self.page.locator('.btn-delete-row:visible').first.click()
 
@@ -139,10 +161,14 @@ class LivingCostMarkTest(PlaywrightBase):
         self.page.click('button:has-text("更新")')
         expect(self.page.locator('p[style="color: red;"]')).to_contain_text('開始年月が空のデータは1行だけ指定できます')
 
-        # Partial year/month input
-        while self.page.locator('.btn-delete-row:visible').count() > 1:
-            self.page.locator('.btn-delete-row:visible').last.click()
+    def test_error_partial_input(self):
+        self._login()
+        self.page.goto(self.live_server_url + reverse('moneybook:living_cost_mark_edit'))
 
+        while self.page.locator('.btn-delete-row:visible').count() > 0:
+            self.page.locator('.btn-delete-row:visible').first.click()
+
+        self.page.click('#btn_add_row')
         row = self.page.locator('#mark_table_body tr').first
         row.locator('input[name^="start_year_"]').fill('2024')
         row.locator('input[name^="start_month_"]').clear()
@@ -150,7 +176,10 @@ class LivingCostMarkTest(PlaywrightBase):
         self.page.click('button:has-text("更新")')
         expect(self.page.locator('p[style="color: red;"]')).to_contain_text('開始年月の入力が不完全です')
 
-        # Overlap/gaps
+    def test_error_overlap_gaps(self):
+        self._login()
+        self.page.goto(self.live_server_url + reverse('moneybook:living_cost_mark_edit'))
+
         while self.page.locator('.btn-delete-row:visible').count() > 0:
             self.page.locator('.btn-delete-row:visible').first.click()
 
@@ -171,7 +200,10 @@ class LivingCostMarkTest(PlaywrightBase):
         self.page.click('button:has-text("更新")')
         expect(self.page.locator('p[style="color: red;"]')).to_contain_text('期間に隙間または重複があります')
 
-        # Missing end date in intermediate row
+    def test_error_missing_intermediate_end_date(self):
+        self._login()
+        self.page.goto(self.live_server_url + reverse('moneybook:living_cost_mark_edit'))
+
         while self.page.locator('.btn-delete-row:visible').count() > 0:
             self.page.locator('.btn-delete-row:visible').first.click()
 
@@ -186,4 +218,32 @@ class LivingCostMarkTest(PlaywrightBase):
         r2.locator('input[name^="price_"]').fill('200')
 
         self.page.click('button:has-text("更新")')
+        expect(self.page.locator('p[style="color: red;"]')).to_contain_text('途中のデータの終了年月は必須です')
+
+    def test_error_multiple_null_end_date(self):
+        self._login()
+        self.page.goto(self.live_server_url + reverse('moneybook:living_cost_mark_edit'))
+
+        while self.page.locator('.btn-delete-row:visible').count() > 0:
+            self.page.locator('.btn-delete-row:visible').first.click()
+
+        self.page.click('#btn_add_row')
+        r1 = self.page.locator('#mark_table_body tr').last
+        r1.locator('input[name^="start_year_"]').fill('2024')
+        r1.locator('input[name^="start_month_"]').fill('1')
+        r1.locator('input[name^="price_"]').fill('100')  # Start 2024/01, End null
+
+        self.page.click('#btn_add_row')
+        r2 = self.page.locator('#mark_table_body tr').last
+        r2.locator('input[name^="start_year_"]').fill('2024')
+        r2.locator('input[name^="start_month_"]').fill('5')
+        r2.locator('input[name^="price_"]').fill('200')  # Start 2024/05, End null
+
+        self.page.click('button:has-text("更新")')
+        # This will trigger either '途中のデータの終了年月は必須です' or '期間に隙間または重複があります'
+        # depending on sort order and which one is checked first.
+        # Marks are sorted by start_date.
+        # r1 (2024-01) comes before r2 (2024-05).
+        # r1.end_date is None, and it is not the last one in the list.
+        # So '途中のデータの終了年月は必須です' should be returned.
         expect(self.page.locator('p[style="color: red;"]')).to_contain_text('途中のデータの終了年月は必須です')
