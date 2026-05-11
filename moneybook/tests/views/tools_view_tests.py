@@ -28,8 +28,7 @@ class ToolsViewTestCase(BaseTestCase):
 
     def test_get_guest(self):
         response = self.client.get(reverse('moneybook:tools'))
-        self.assertEqual(response.status_code, HTTPStatus.FOUND)
-        self.assertEqual(response.url, reverse('moneybook:login'))
+        self.assertRedirects(response, reverse('moneybook:login'), status_code=HTTPStatus.FOUND)
 
 
 class ActualCashApiViewTestCase(BaseTestCase):
@@ -334,8 +333,7 @@ class SeveralCheckedDateViewTestCase(BaseTestCase):
 
     def test_get_guest(self):
         response = self.client.get(reverse('moneybook:several_checked_date'))
-        self.assertEqual(response.status_code, HTTPStatus.FOUND)
-        self.assertEqual(response.url, reverse('moneybook:login'))
+        self.assertRedirects(response, reverse('moneybook:login'), status_code=HTTPStatus.FOUND)
 
 
 class CreditCheckedDateApiViewTestCase(BaseTestCase):
@@ -517,8 +515,7 @@ class UncheckedDataViewTestCase(BaseTestCase):
 
     def test_get_guest(self):
         response = self.client.get(reverse('moneybook:unchecked_data'))
-        self.assertEqual(response.status_code, HTTPStatus.FOUND)
-        self.assertEqual(response.url, reverse('moneybook:login'))
+        self.assertRedirects(response, reverse('moneybook:login'), status_code=HTTPStatus.FOUND)
 
 
 class NowBankApiViewTestCase(BaseTestCase):

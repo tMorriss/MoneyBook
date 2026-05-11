@@ -21,8 +21,7 @@ class IndexViewTestCase(BaseTestCase):
 
     def test_get_guest(self):
         response = self.client.get(reverse('moneybook:index'))
-        self.assertEqual(response.status_code, HTTPStatus.FOUND)
-        self.assertEqual(response.url, reverse('moneybook:login'))
+        self.assertRedirects(response, reverse('moneybook:login'), status_code=HTTPStatus.FOUND)
 
 
 class IndexMonthViewTestCase(BaseTestCase):
@@ -65,13 +64,11 @@ class IndexMonthViewTestCase(BaseTestCase):
     def test_get_out_of_range(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 13}))
-        self.assertEqual(response.status_code, HTTPStatus.FOUND)
-        self.assertEqual(response.url, reverse('moneybook:index'))
+        self.assertRedirects(response, reverse('moneybook:index'), status_code=HTTPStatus.FOUND)
 
     def test_get_guest(self):
         response = self.client.get(reverse('moneybook:index_month', kwargs={'year': 2000, 'month': 1}))
-        self.assertEqual(response.status_code, HTTPStatus.FOUND)
-        self.assertEqual(response.url, reverse('moneybook:login'))
+        self.assertRedirects(response, reverse('moneybook:login'), status_code=HTTPStatus.FOUND)
 
 
 class IndexBalanceStatisticMiniViewTestCase(BaseTestCase):
@@ -140,8 +137,7 @@ class IndexBalanceStatisticMiniViewTestCase(BaseTestCase):
 
     def test_get_guest(self):
         response = self.client.get(reverse('moneybook:balance_statistic_mini'), {'year': 2000, 'month': 1})
-        self.assertEqual(response.status_code, HTTPStatus.FOUND)
-        self.assertEqual(response.url, reverse('moneybook:login'))
+        self.assertRedirects(response, reverse('moneybook:login'), status_code=HTTPStatus.FOUND)
 
 
 class IndexChartDataViewTestCase(BaseTestCase):
@@ -185,8 +181,7 @@ class IndexChartDataViewTestCase(BaseTestCase):
 
     def test_get_guest(self):
         response = self.client.get(reverse('moneybook:chart_container_data'), {'year': 2000, 'month': 1})
-        self.assertEqual(response.status_code, HTTPStatus.FOUND)
-        self.assertEqual(response.url, reverse('moneybook:login'))
+        self.assertRedirects(response, reverse('moneybook:login'), status_code=HTTPStatus.FOUND)
 
 
 class DataTableViewTestCase(BaseTestCase):
@@ -238,5 +233,4 @@ class DataTableViewTestCase(BaseTestCase):
 
     def test_get_guest(self):
         response = self.client.get(reverse('moneybook:data_table'), {'year': 2000, 'month': 1})
-        self.assertEqual(response.status_code, HTTPStatus.FOUND)
-        self.assertEqual(response.url, reverse('moneybook:login'))
+        self.assertRedirects(response, reverse('moneybook:login'), status_code=HTTPStatus.FOUND)

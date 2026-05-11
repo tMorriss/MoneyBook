@@ -33,5 +33,4 @@ class AddViewTestCase(BaseTestCase):
 
     def test_get_guest(self):
         response = self.client.get(reverse('moneybook:add'))
-        self.assertEqual(response.status_code, HTTPStatus.FOUND)
-        self.assertRedirects(response, reverse('moneybook:login'))
+        self.assertRedirects(response, reverse('moneybook:login'), status_code=HTTPStatus.FOUND)
