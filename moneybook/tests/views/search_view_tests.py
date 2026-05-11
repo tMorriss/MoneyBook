@@ -94,8 +94,7 @@ class SearchViewTestCase(BaseTestCase):
 
     def test_get_guest(self):
         response = self.client.get(reverse('moneybook:search'))
-        self.assertEqual(response.status_code, HTTPStatus.FOUND)
-        self.assertEqual(response.url, reverse('moneybook:login'))
+        self.assertRedirects(response, reverse('moneybook:login'), status_code=HTTPStatus.FOUND)
 
     def test_get_new_only_is_query(self):
         """is_queryだけ指定すると全データ表示される"""
