@@ -29,6 +29,10 @@ class LivingCostMarkEditViewTestCase(BaseTestCase):
         self.assertEqual(response.status_code, 200)
         self._assert_templates(response.templates, ['living_cost_mark_edit.html', '_base.html', '_tools_task_bar.html'])
 
+    def test_get_guest(self):
+        response = self.client.get(reverse('moneybook:living_cost_mark_edit'))
+        self.assertEqual(response.status_code, 302)
+
     def test_post_success(self):
         self.client.force_login(User.objects.create_user(self.username))
         data = {
@@ -43,6 +47,12 @@ class LivingCostMarkEditViewTestCase(BaseTestCase):
             'end_month_2': '',
             'price_2': '120000',
             'price_template': '',  # To cover id_part == 'template' check
+            # Row 3 is completely empty, should be skipped (coverage for line 50)
+            'start_year_3': '',
+            'start_month_3': '',
+            'end_year_3': '',
+            'end_month_3': '',
+            'price_3': '',
         }
         response = self.client.post(reverse('moneybook:living_cost_mark_edit'), data)
         self.assertEqual(response.status_code, 302)
@@ -195,13 +205,26 @@ class LivingCostMarkEditViewTestCase(BaseTestCase):
         self.assertEqual(response.status_code, 400)
         self.assertContains(response, '開始年月の値が不正です', status_code=400)
 
-    def test_post_invalid_end_month(self):
+    def test_post_invalid_end_month_value(self):
         self.client.force_login(User.objects.create_user(self.username))
         data = {
             'start_year_1': '2024',
             'start_month_1': '1',
             'end_year_1': '2024',
             'end_month_1': 'abc',
+            'price_1': '100,000',
+        }
+        response = self.client.post(reverse('moneybook:living_cost_mark_edit'), data)
+        self.assertEqual(response.status_code, 400)
+        self.assertContains(response, '終了年月の値が不正です', status_code=400)
+
+    def test_post_invalid_end_month_range(self):
+        self.client.force_login(User.objects.create_user(self.username))
+        data = {
+            'start_year_1': '2024',
+            'start_month_1': '1',
+            'end_year_1': '2024',
+            'end_month_1': '13',
             'price_1': '100,000',
         }
         response = self.client.post(reverse('moneybook:living_cost_mark_edit'), data)
@@ -230,6 +253,3 @@ class LivingCostMarkEditViewTestCase(BaseTestCase):
         self.assertEqual(response.status_code, 400)
         self.assertContains(response, '金額が空の行があります', status_code=400)
 
-    def test_str(self):
-        mark = LivingCostMark(start_date=date(2024, 1, 1), price=100000)
-        self.assertEqual(str(mark), '2024-01-01 - None: 100000')

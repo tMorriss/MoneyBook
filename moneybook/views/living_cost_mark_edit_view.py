@@ -116,8 +116,7 @@ class LivingCostMarkEditView(LoginRequiredMixin, View):
                         error_message = (
                             f'期間に隙間または重複があります: '
                             f'{prev_mark.end_date.year}/{prev_mark.end_date.month} と '
-                            f'{mark.start_date.year if mark.start_date else ""}/'
-                            f'{mark.start_date.month if mark.start_date else ""}'
+                            f'{mark.start_date.year}/{mark.start_date.month}'
                         )
                         break
 
