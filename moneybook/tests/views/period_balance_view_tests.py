@@ -22,15 +22,15 @@ class PeriodBalanceViewTestCase(BaseTestCase):
         ]
         self._assert_templates(response.templates, expects)
 
-    def _assert_now(self, response):
+    def _assert_now(self, response, expected_value=0):
         now = datetime.now()
         self.assertEqual(response.status_code, 200)
         period_balances = response.context['period_balances']
         expects = []
         for i in range(12):
-            expects.append({'label': str(now.year - 1) + '-' + str(i + 1).zfill(2), 'value': 46694})
+            expects.append({'label': str(now.year - 1) + '-' + str(i + 1).zfill(2), 'value': expected_value})
         for i in range(now.month):
-            expects.append({'label': str(now.year) + '-' + str(i + 1).zfill(2), 'value': 46694})
+            expects.append({'label': str(now.year) + '-' + str(i + 1).zfill(2), 'value': expected_value})
         self.assertEqual(len(period_balances), len(expects))
         for i in range(len(expects)):
             self.assertEqual(period_balances[i].label, expects[i]['label'])
@@ -50,6 +50,10 @@ class PeriodBalanceViewTestCase(BaseTestCase):
 
     def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
+        self._create_data(date='2000-01-01', item='Income', price=1000, direction_id=1)
+        self._create_data(date='2000-02-01', item='Income', price=2000, direction_id=1)
+        self._create_data(date='2000-03-01', item='Outgo', price=500, direction_id=2)
+
         response = self.client.get(
             reverse('moneybook:period_balances'),
             {
@@ -60,11 +64,11 @@ class PeriodBalanceViewTestCase(BaseTestCase):
         self.assertEqual(response.status_code, 200)
         period_balances = response.context['period_balances']
         expects = [
-            {'label': '2000-01', 'value': 24073},
-            {'label': '2000-02', 'value': 47994},
-            {'label': '2000-03', 'value': 47094},
-            {'label': '2000-04', 'value': 46694},
-            {'label': '2000-05', 'value': 46694},
+            {'label': '2000-01', 'value': 1000},
+            {'label': '2000-02', 'value': 3000},
+            {'label': '2000-03', 'value': 2500},
+            {'label': '2000-04', 'value': 2500},
+            {'label': '2000-05', 'value': 2500},
         ]
         self.assertEqual(len(period_balances), len(expects))
         for i in range(len(expects)):
@@ -85,6 +89,9 @@ class PeriodBalanceViewTestCase(BaseTestCase):
 
     def test_get_start_zero(self):
         self.client.force_login(User.objects.create_user(self.username))
+        self._create_data(date='1999-12-31', item='Outgo', price=500, direction_id=2)
+        self._create_data(date='2000-01-01', item='Income', price=1000, direction_id=1)
+
         response = self.client.get(
             reverse('moneybook:period_balances'),
             {
@@ -98,7 +105,7 @@ class PeriodBalanceViewTestCase(BaseTestCase):
             {'label': '1999-10', 'value': 0},
             {'label': '1999-11', 'value': 0},
             {'label': '1999-12', 'value': -500},
-            {'label': '2000-01', 'value': 24073},
+            {'label': '2000-01', 'value': 500},
         ]
         self.assertEqual(len(period_balances), len(expects))
         for i in range(len(expects)):
@@ -119,11 +126,13 @@ class PeriodBalanceViewTestCase(BaseTestCase):
 
     def test_get_without_draw(self):
         self.client.force_login(User.objects.create_user(self.username))
+        self._create_data(date='2000-01-01', item='Income', price=100, direction_id=1)
         response = self.client.get(reverse('moneybook:period_balances'))
-        self._assert_now(response)
+        self._assert_now(response, expected_value=100)
 
     def test_get_missing_param(self):
         self.client.force_login(User.objects.create_user(self.username))
+        self._create_data(date='2000-01-01', item='Income', price=100, direction_id=1)
         body = [
             {'start_month': 1, 'end_year': 2000, 'end_month': 5},
             {'start_year': 2000, 'end_year': 2000, 'end_month': 5},
@@ -133,7 +142,7 @@ class PeriodBalanceViewTestCase(BaseTestCase):
         for b in body:
             with self.subTest(b=b):
                 response = self.client.get(reverse('moneybook:period_balances'), b)
-                self._assert_now(response)
+                self._assert_now(response, expected_value=100)
 
     def test_get_str_param(self):
         self.client.force_login(User.objects.create_user(self.username))
