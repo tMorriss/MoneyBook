@@ -1,4 +1,5 @@
 from datetime import datetime
+from http import HTTPStatus
 
 from django.contrib.auth.models import User
 from django.urls import reverse
@@ -10,7 +11,7 @@ class AddViewTestCase(BaseTestCase):
         now = datetime.now()
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:add'))
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertEqual(response.context['app_name'], 'test-MoneyBook')
         self.assertEqual(response.context['username'].username, self.username)
         self.assertEqual(response.context['year'], now.year)
@@ -32,5 +33,5 @@ class AddViewTestCase(BaseTestCase):
 
     def test_get_guest(self):
         response = self.client.get(reverse('moneybook:add'))
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, HTTPStatus.FOUND)
         self.assertRedirects(response, reverse('moneybook:login'))

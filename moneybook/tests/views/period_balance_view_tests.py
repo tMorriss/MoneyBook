@@ -1,4 +1,5 @@
 from datetime import datetime
+from http import HTTPStatus
 
 from django.contrib.auth.models import User
 from django.urls import reverse
@@ -7,7 +8,7 @@ from moneybook.tests.base import BaseTestCase
 
 class PeriodBalanceViewTestCase(BaseTestCase):
     def _assert_without_draw(self, response):
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertFalse('period_balances' in response.context)
         self.assertFalse(response.context['draw_graph'])
         self.assertFalse('start_year' in response.context)
@@ -24,7 +25,7 @@ class PeriodBalanceViewTestCase(BaseTestCase):
 
     def _assert_now(self, response):
         now = datetime.now()
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
         period_balances = response.context['period_balances']
         expects = []
         for i in range(12):
@@ -57,7 +58,7 @@ class PeriodBalanceViewTestCase(BaseTestCase):
                 'end_year': 2000, 'end_month': 5
             }
         )
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
         period_balances = response.context['period_balances']
         expects = [
             {'label': '2000-01', 'value': 24073},
@@ -92,7 +93,7 @@ class PeriodBalanceViewTestCase(BaseTestCase):
                 'end_year': 2000, 'end_month': 1
             }
         )
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
         period_balances = response.context['period_balances']
         expects = [
             {'label': '1999-10', 'value': 0},

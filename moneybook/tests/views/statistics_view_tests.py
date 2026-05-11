@@ -1,4 +1,5 @@
 from datetime import datetime
+from http import HTTPStatus
 from unittest.mock import patch
 
 from django.contrib.auth.models import User
@@ -19,7 +20,7 @@ class StatisticsViewTestCase(BaseTestCase):
 
     def test_get_guest(self):
         response = self.client.get(reverse('moneybook:statistics'))
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, HTTPStatus.FOUND)
         self.assertEqual(response.url, reverse('moneybook:login'))
 
 
@@ -29,7 +30,7 @@ class StatisticsMonthViewTestCase(BaseTestCase):
         response = self.client.get(
             reverse('moneybook:statistics_month', kwargs={'year': 2000}))
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertEqual(response.context['app_name'], 'test-MoneyBook')
         self.assertEqual(response.context['username'].username, self.username)
         self.assertEqual(response.context['year'], 2000)
@@ -115,7 +116,7 @@ class StatisticsMonthViewTestCase(BaseTestCase):
     def test_get_december_water(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:statistics_month', kwargs={'year': 1999}))
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
 
         monthly_context = response.context['monthly_context']
         self.assertEqual(len(monthly_context), 12)
@@ -123,5 +124,5 @@ class StatisticsMonthViewTestCase(BaseTestCase):
 
     def test_get_guest(self):
         response = self.client.get(reverse('moneybook:statistics_month', kwargs={'year': 2000}))
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, HTTPStatus.FOUND)
         self.assertEqual(response.url, reverse('moneybook:login'))
