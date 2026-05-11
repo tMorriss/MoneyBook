@@ -219,7 +219,7 @@ class LivingCostMarkEditViewTestCase(BaseTestCase):
         self.assertEqual(response.status_code, 400)
         self.assertContains(response, '金額が不正です', status_code=400)
 
-    def test_post_empty_price_skip(self):
+    def test_post_empty_price_error(self):
         self.client.force_login(User.objects.create_user(self.username))
         data = {
             'start_year_1': '2024',
@@ -227,8 +227,8 @@ class LivingCostMarkEditViewTestCase(BaseTestCase):
             'price_1': '',
         }
         response = self.client.post(reverse('moneybook:living_cost_mark_edit'), data)
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(LivingCostMark.objects.count(), 0)
+        self.assertEqual(response.status_code, 400)
+        self.assertContains(response, '金額が空の行があります', status_code=400)
 
     def test_str(self):
         mark = LivingCostMark(start_date=date(2024, 1, 1), price=100000)

@@ -18,9 +18,21 @@ class LivingCostMark(models.Model):
             models.Q(start_date__isnull=True) | models.Q(start_date__lte=target_date)
         ).filter(
             models.Q(end_date__isnull=True) | models.Q(end_date__gte=target_date)
-        ).order_by('-start_date').first()
+        ).annotate(
+            start_date_null=models.Case(
+                models.When(start_date__isnull=True, then=models.Value(1)),
+                default=models.Value(0),
+                output_field=models.IntegerField(),
+            )
+        ).order_by('start_date_null', '-start_date').first()
         return mark.price if mark else 0
 
     @staticmethod
     def get_all():
-        return LivingCostMark.objects.all().order_by('start_date')
+        return LivingCostMark.objects.annotate(
+            start_date_null=models.Case(
+                models.When(start_date__isnull=True, then=models.Value(1)),
+                default=models.Value(0),
+                output_field=models.IntegerField(),
+            )
+        ).order_by('-start_date_null', 'start_date')

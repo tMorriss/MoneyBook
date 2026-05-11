@@ -172,6 +172,7 @@ class LivingCostMarkTest(PlaywrightBase):
         row = self.page.locator('#mark_table_body tr').first
         row.locator('input[name^="start_year_"]').fill('2024')
         row.locator('input[name^="start_month_"]').clear()
+        row.locator('input[name^="price_"]').fill('10000')
 
         self.page.click('button:has-text("更新")')
         expect(self.page.locator('p[style="color: red;"]')).to_contain_text('開始年月の入力が不完全です')

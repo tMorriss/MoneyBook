@@ -28,62 +28,69 @@ class LivingCostMarkEditView(LoginRequiredMixin, View):
         """設定を更新して一覧にリダイレクト"""
         new_marks = []
         error_message = None
+
+        # 1. データの収集
+        ids = set()
         for key in request.POST.keys():
-            if key.startswith('price_'):
-                id_part = key[len('price_'):]
-                if id_part == 'template':
-                    continue
+            for prefix in ['start_year_', 'start_month_', 'end_year_', 'end_month_', 'price_']:
+                if key.startswith(prefix):
+                    id_part = key[len(prefix):]
+                    if id_part != 'template':
+                        ids.add(id_part)
 
-                start_year = request.POST.get(f'start_year_{id_part}')
-                start_month = request.POST.get(f'start_month_{id_part}')
-                end_year = request.POST.get(f'end_year_{id_part}')
-                end_month = request.POST.get(f'end_month_{id_part}')
-                price_str = request.POST.get(f'price_{id_part}').replace(',', '')
+        for id_part in ids:
+            start_year = request.POST.get(f'start_year_{id_part}')
+            start_month = request.POST.get(f'start_month_{id_part}')
+            end_year = request.POST.get(f'end_year_{id_part}')
+            end_month = request.POST.get(f'end_month_{id_part}')
+            price_str = request.POST.get(f'price_{id_part}', '').replace(',', '')
 
-                if not price_str:
-                    continue
+            # 全項目空ならスキップ
+            if not any([start_year, start_month, end_year, end_month, price_str]):
+                continue
 
-                # 開始日の処理
-                start_date = None
-                if start_year or start_month:
-                    if not start_year or not start_month:
-                        error_message = '開始年月の入力が不完全です'
-                        break
+            start_date = None
+            end_date = None
+            price = 0
+
+            # バリデーション (個別の行)
+            if not price_str:
+                error_message = error_message or '金額が空の行があります'
+            else:
+                try:
+                    price = int(price_str)
+                except ValueError:
+                    error_message = error_message or '金額が不正です'
+
+            if start_year or start_month:
+                if not start_year or not start_month:
+                    error_message = error_message or '開始年月の入力が不完全です'
+                else:
                     try:
                         start_date = datetime(int(start_year), int(start_month), 1).date()
                     except ValueError:
-                        error_message = '開始年月の値が不正です'
-                        break
+                        error_message = error_message or '開始年月の値が不正です'
 
-                # 終了日の処理
-                end_date = None
-                if end_year or end_month:
-                    if not end_year or not end_month:
-                        error_message = '終了年月の入力が不完全です'
-                        break
+            if end_year or end_month:
+                if not end_year or not end_month:
+                    error_message = error_message or '終了年月の入力が不完全です'
+                else:
                     try:
                         ey, em = int(end_year), int(end_month)
                         last_day = calendar.monthrange(ey, em)[1]
                         end_date = datetime(ey, em, last_day).date()
                     except ValueError:
-                        error_message = '終了年月の値が不正です'
-                        break
+                        error_message = error_message or '終了年月の値が不正です'
 
-                try:
-                    price = int(price_str)
-                except ValueError:
-                    error_message = '金額が不正です'
-                    break
-
-                new_marks.append(LivingCostMark(start_date=start_date, end_date=end_date, price=price))
+            new_marks.append(LivingCostMark(start_date=start_date, end_date=end_date, price=price))
 
         if error_message:
             return self._render_error(request, new_marks, error_message, status=HTTPStatus.BAD_REQUEST)
 
+        # 2. 全体のバリデーション
         # ソート (Noneは最小として扱う)
         new_marks.sort(key=lambda x: x.start_date if x.start_date else datetime.min.date())
 
-        # バリデーション
         null_start_count = sum(1 for m in new_marks if m.start_date is None)
         if null_start_count > 1:
             error_message = '開始年月が空のデータは1行だけ指定できます'
@@ -117,7 +124,7 @@ class LivingCostMarkEditView(LoginRequiredMixin, View):
         if error_message:
             return self._render_error(request, new_marks, error_message, status=HTTPStatus.BAD_REQUEST)
 
-        # 保存
+        # 3. 保存
         with transaction.atomic():
             LivingCostMark.objects.all().delete()
             LivingCostMark.objects.bulk_create(new_marks)
