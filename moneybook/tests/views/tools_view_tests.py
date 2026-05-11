@@ -641,5 +641,4 @@ class PreCheckedSummaryViewTestCase(BaseTestCase):
 
     def test_get_guest(self):
         response = self.client.get(reverse('moneybook:pre_checked_summary'))
-        self.assertEqual(response.status_code, HTTPStatus.FOUND)
-        self.assertEqual(response.url, reverse('moneybook:login'))
+        self.assertRedirects(response, reverse('moneybook:login'), status_code=HTTPStatus.FOUND)

@@ -91,8 +91,7 @@ class PeriodicEditViewPostTestCase(BaseTestCase):
         response = self.client.post(reverse('moneybook:periodic_edit'), data=post_data)
 
         # periodicにリダイレクトされること
-        self.assertEqual(response.status_code, HTTPStatus.FOUND)
-        self.assertEqual(response.url, reverse('moneybook:periodic'))
+        self.assertRedirects(response, reverse('moneybook:periodic'), status_code=HTTPStatus.FOUND)
 
         # データが更新されていること
         after_count = PeriodicData.objects.count()
@@ -119,7 +118,7 @@ class PeriodicEditViewPostTestCase(BaseTestCase):
     def test_post_guest(self):
         """ログインしていない場合はログインページにリダイレクトされること"""
         response = self.client.post(reverse('moneybook:periodic_edit'), data={})
-        self.assertEqual(response.status_code, HTTPStatus.FOUND)
+        self.assertRedirects(response, reverse('moneybook:login'), status_code=HTTPStatus.FOUND)
 
     def test_post_missing_required_field(self):
         """必須フィールド欠落時は行をスキップしてperiodicにリダイレクト"""
@@ -135,8 +134,7 @@ class PeriodicEditViewPostTestCase(BaseTestCase):
         response = self.client.post(reverse('moneybook:periodic_edit'), data=post_data)
 
         # 必須フィールドがないので何も登録されず、periodicにリダイレクト
-        self.assertEqual(response.status_code, HTTPStatus.FOUND)
-        self.assertEqual(response.url, reverse('moneybook:periodic'))
+        self.assertRedirects(response, reverse('moneybook:periodic'), status_code=HTTPStatus.FOUND)
 
         # データが登録されていないこと
         self.assertEqual(PeriodicData.objects.count(), 0)
@@ -159,8 +157,7 @@ class PeriodicEditViewPostTestCase(BaseTestCase):
         response = self.client.post(reverse('moneybook:periodic_edit'), data=post_data)
 
         # フォームがinvalidなので何も登録されず、periodicにリダイレクト
-        self.assertEqual(response.status_code, HTTPStatus.FOUND)
-        self.assertEqual(response.url, reverse('moneybook:periodic'))
+        self.assertRedirects(response, reverse('moneybook:periodic'), status_code=HTTPStatus.FOUND)
 
         # データが登録されていないこと
         self.assertEqual(PeriodicData.objects.count(), 0)
