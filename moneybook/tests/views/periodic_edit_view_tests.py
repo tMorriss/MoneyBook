@@ -1,3 +1,5 @@
+from http import HTTPStatus
+
 from django.contrib.auth.models import User
 from django.urls import reverse
 from moneybook.models import Category, Direction, Method, PeriodicData
@@ -22,7 +24,7 @@ class PeriodicEditViewGetTestCase(BaseTestCase):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:periodic_edit'))
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertEqual(response.context['app_name'], 'test-MoneyBook')
 
         # 定期取引データが含まれていること
@@ -44,7 +46,7 @@ class PeriodicEditViewGetTestCase(BaseTestCase):
     def test_get_guest(self):
         """ログインしていない場合はログインページにリダイレクトされること"""
         response = self.client.get(reverse('moneybook:periodic_edit'))
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, HTTPStatus.FOUND)
 
 
 class PeriodicEditViewPostTestCase(BaseTestCase):
@@ -89,8 +91,7 @@ class PeriodicEditViewPostTestCase(BaseTestCase):
         response = self.client.post(reverse('moneybook:periodic_edit'), data=post_data)
 
         # periodicにリダイレクトされること
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.url, reverse('moneybook:periodic'))
+        self.assertRedirects(response, reverse('moneybook:periodic'), status_code=HTTPStatus.FOUND)
 
         # データが更新されていること
         after_count = PeriodicData.objects.count()
@@ -117,7 +118,7 @@ class PeriodicEditViewPostTestCase(BaseTestCase):
     def test_post_guest(self):
         """ログインしていない場合はログインページにリダイレクトされること"""
         response = self.client.post(reverse('moneybook:periodic_edit'), data={})
-        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse('moneybook:login'), status_code=HTTPStatus.FOUND)
 
     def test_post_missing_required_field(self):
         """必須フィールド欠落時は行をスキップしてperiodicにリダイレクト"""
@@ -133,8 +134,7 @@ class PeriodicEditViewPostTestCase(BaseTestCase):
         response = self.client.post(reverse('moneybook:periodic_edit'), data=post_data)
 
         # 必須フィールドがないので何も登録されず、periodicにリダイレクト
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.url, reverse('moneybook:periodic'))
+        self.assertRedirects(response, reverse('moneybook:periodic'), status_code=HTTPStatus.FOUND)
 
         # データが登録されていないこと
         self.assertEqual(PeriodicData.objects.count(), 0)
@@ -157,8 +157,11 @@ class PeriodicEditViewPostTestCase(BaseTestCase):
         response = self.client.post(reverse('moneybook:periodic_edit'), data=post_data)
 
         # フォームがinvalidなので何も登録されず、periodicにリダイレクト
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.url, reverse('moneybook:periodic'))
+        self.assertRedirects(response, reverse('moneybook:periodic'), status_code=HTTPStatus.FOUND)
 
         # データが登録されていないこと
         self.assertEqual(PeriodicData.objects.count(), 0)
+
+    def test_get_guest(self):
+        response = self.client.get(reverse('moneybook:periodic_edit'))
+        self.assertRedirects(response, reverse('moneybook:login'), status_code=HTTPStatus.FOUND)

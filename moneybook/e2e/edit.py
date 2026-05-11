@@ -1,4 +1,5 @@
 from datetime import datetime
+from http import HTTPStatus
 
 from django.urls import reverse
 from moneybook.e2e.base import PlaywrightBase
@@ -47,7 +48,7 @@ class Edit(PlaywrightBase):
             self.page.click(f'label[for="a_category-{category_id}"]')
 
         # 追加ボタンをクリック。APIのレスポンスを待つ
-        with self.page.expect_response(lambda r: '_data_table' in r.url and r.status == 200):
+        with self.page.expect_response(lambda r: '_data_table' in r.url and r.status == HTTPStatus.OK):
             self.page.click('input[value="追加"]')
 
         # テーブルの更新完了を待つ (追加した品目が表示されるまで)

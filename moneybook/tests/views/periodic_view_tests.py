@@ -1,4 +1,5 @@
 from datetime import datetime
+from http import HTTPStatus
 
 from dateutil.relativedelta import relativedelta
 from django.contrib.auth.models import User
@@ -26,7 +27,7 @@ class PeriodicViewGetTestCase(BaseTestCase):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:periodic'))
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertEqual(response.context['app_name'], 'test-MoneyBook')
         self.assertEqual(response.context['username'].username, self.username)
 
@@ -49,4 +50,4 @@ class PeriodicViewGetTestCase(BaseTestCase):
     def test_get_guest(self):
         """ログインしていない場合はログインページにリダイレクトされること"""
         response = self.client.get(reverse('moneybook:periodic'))
-        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse('moneybook:login'), status_code=HTTPStatus.FOUND)
