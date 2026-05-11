@@ -50,4 +50,4 @@ class PeriodicViewGetTestCase(BaseTestCase):
     def test_get_guest(self):
         """ログインしていない場合はログインページにリダイレクトされること"""
         response = self.client.get(reverse('moneybook:periodic'))
-        self.assertEqual(response.status_code, HTTPStatus.FOUND)
+        self.assertRedirects(response, reverse('moneybook:login'), status_code=HTTPStatus.FOUND)

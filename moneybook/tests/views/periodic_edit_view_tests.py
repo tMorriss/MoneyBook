@@ -164,3 +164,7 @@ class PeriodicEditViewPostTestCase(BaseTestCase):
 
         # データが登録されていないこと
         self.assertEqual(PeriodicData.objects.count(), 0)
+
+    def test_get_guest(self):
+        response = self.client.get(reverse('moneybook:periodic_edit'))
+        self.assertRedirects(response, reverse('moneybook:login'), status_code=HTTPStatus.FOUND)

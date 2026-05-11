@@ -157,3 +157,7 @@ class PeriodBalanceViewTestCase(BaseTestCase):
             with self.subTest(b=b):
                 response = self.client.get(reverse('moneybook:period_balances'), b)
                 self._assert_without_draw(response)
+
+    def test_get_guest(self):
+        response = self.client.get(reverse('moneybook:period_balances'))
+        self.assertRedirects(response, reverse('moneybook:login'), status_code=HTTPStatus.FOUND)
