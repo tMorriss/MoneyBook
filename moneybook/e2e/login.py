@@ -40,13 +40,13 @@ class Logout(PlaywrightBase):
         self._login()
 
         # CSRFトークンを削除してPOSTリクエストを送信する
-        self.page.evaluate('''() => {
+        self.page.evaluate("""() => {
             const form = document.querySelector('form[action$="/logout"]');
             const csrfInput = form.querySelector('input[name="csrfmiddlewaretoken"]');
             if (csrfInput) {
                 csrfInput.remove();
             }
-        }''')
+        }""")
 
         # ログアウトボタンをクリック
         self.page.click('button.link-button:has-text("ログアウト")')
