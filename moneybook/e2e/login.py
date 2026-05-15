@@ -28,8 +28,29 @@ class Login(PlaywrightBase):
         self.page.press('#id_password', 'Enter')
         self._assert_login_success()
 
+
+class Logout(PlaywrightBase):
     def test_logout(self):
         self._login()
         self.page.click('button.link-button:has-text("ログアウト")')
         # ログアウト後はログイン画面に遷移することを確認
         expect(self.page).to_have_url(self.live_server_url + reverse('moneybook:login'))
+
+    def test_logout_csrf_failure(self):
+        self._login()
+
+        # CSRFトークンを削除してPOSTリクエストを送信する
+        self.page.evaluate('''() => {
+            const form = document.querySelector('form[action$="/logout"]');
+            const csrfInput = form.querySelector('input[name="csrfmiddlewaretoken"]');
+            if (csrfInput) {
+                csrfInput.remove();
+            }
+        }''')
+
+        # ログアウトボタンをクリック
+        self.page.click('button.link-button:has-text("ログアウト")')
+
+        # CSRF検証エラー（403 Forbidden）が発生することを確認
+        # Djangoのデフォルトの403ページが表示されるはず
+        expect(self.page.locator('body')).to_contain_text('403')
