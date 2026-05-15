@@ -83,8 +83,8 @@ class PlaywrightBase(StaticLiveServerTestCase):
         self.page.fill('#id_password', self.password)
         # ログインボタンをクリック。遷移を待つ。
         self.page.click('input[value="ログイン"]')
-        # ログイン成功の証拠（ログアウトリンクの存在）を待つ。
-        self.page.wait_for_selector('a[href="' + reverse('moneybook:logout') + '"]')
+        # ログイン成功の証拠（ログアウトボタンの存在）を待つ。
+        self.page.wait_for_selector('button.link-button:has-text("ログアウト")')
 
     def _assert_common(self):
         # アプリ名
