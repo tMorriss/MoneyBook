@@ -109,9 +109,10 @@
     is_variable_cost: 1
     default_direction: 2
 
-- model: moneybook.SeveralCosts
+- model: moneybook.LivingCostMark
+  pk: 1
   fields:
-    name: LivingCostMark
+    start_date: 2000-01-01
     price: 1000
 - model: moneybook.SeveralCosts
   fields:

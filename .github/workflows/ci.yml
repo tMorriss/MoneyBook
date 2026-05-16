@@ -80,9 +80,9 @@ jobs:
             index,
             login,
             period_balances,
-            tools,
             periodic,
             search,
+            tools,
           ]
     services:
       postgres:

@@ -6,7 +6,7 @@ from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.views import View
-from moneybook.models import Category, Data, Direction, InOutBalance, Method, SeveralCosts
+from moneybook.models import Category, Data, Direction, InOutBalance, LivingCostMark, Method
 from moneybook.utils import is_valid_date
 
 
@@ -107,7 +107,7 @@ class IndexBalanceStatisticMiniView(View):
         # 変動費
         variable_cost = Data.get_variable_cost(monthly_data)
         # 生活費目標額
-        living_cost_mark = SeveralCosts.get_living_cost_mark()
+        living_cost_mark = LivingCostMark.get_mark(year, month)
         # 内部移動以外
         monthly_data_without_inmove = Data.filter_without_intra_move(
             monthly_data)
@@ -121,8 +121,9 @@ class IndexBalanceStatisticMiniView(View):
             'deposit': monthly_deposit_sum,
             'living_cost': living_cost,
             'variable_cost': variable_cost,
+            'living_cost_mark': living_cost_mark,
             'living_remain': living_cost_mark - living_cost,
-            'variable_remain': monthly_income - max(SeveralCosts.get_living_cost_mark(), living_cost) - variable_cost,
+            'variable_remain': monthly_income - max(living_cost_mark, living_cost) - variable_cost,
             'monthly_all_income': Data.get_income_sum(monthly_data_without_inmove),
             'monthly_all_outgo': Data.get_outgo_sum(monthly_data_without_inmove),
             'methods_monthly_iob': methods_monthly_iob,
