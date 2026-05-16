@@ -1,3 +1,5 @@
+from http import HTTPStatus
+
 from django.urls import reverse
 from moneybook.e2e.base import PlaywrightBase
 from playwright.sync_api import expect
@@ -53,4 +55,4 @@ class Logout(PlaywrightBase):
 
         # CSRF検証エラー（403 Forbidden）が発生することを確認
         # Djangoのデフォルトの403ページが表示されるはず
-        expect(self.page.locator('body')).to_contain_text('403')
+        expect(self.page.locator('body')).to_contain_text(str(HTTPStatus.FORBIDDEN.value))
