@@ -1,4 +1,5 @@
 from datetime import date
+from http import HTTPStatus
 
 from django.contrib.auth.models import User
 from django.urls import reverse
@@ -22,7 +23,7 @@ class AddIntraMoveApiViewTestCase(BaseTestCase):
                 'after_method': 3,
             }
         )
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertEqual(response.content.decode(), '{}')
         after_count = Data.get_all_data().count()
         self.assertEqual(after_count, before_count + 2)
@@ -60,7 +61,7 @@ class AddIntraMoveApiViewTestCase(BaseTestCase):
                 'after_method': 3,
             }
         )
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
         self.assertEqual(response.content.decode(), '{}')
         after_count = Data.get_all_data().count()
         self.assertEqual(after_count, before_count)
@@ -80,7 +81,7 @@ class AddIntraMoveApiViewTestCase(BaseTestCase):
                 'after_method': 3,
             }
         )
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
         self.assertEqual(response.content.decode(), '{}')
         after_count = Data.get_all_data().count()
         self.assertEqual(after_count, before_count)
@@ -99,7 +100,7 @@ class AddIntraMoveApiViewTestCase(BaseTestCase):
                 'after_method': 3,
             }
         )
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
         self.assertEqual(response.content.decode(), '{}')
         after_count = Data.get_all_data().count()
         self.assertEqual(after_count, before_count)
@@ -118,7 +119,7 @@ class AddIntraMoveApiViewTestCase(BaseTestCase):
                 'after_method': 3,
             }
         )
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
         self.assertEqual(response.content.decode(), '{}')
         after_count = Data.get_all_data().count()
         self.assertEqual(after_count, before_count)
@@ -137,7 +138,7 @@ class AddIntraMoveApiViewTestCase(BaseTestCase):
                 'after_method': 3,
             }
         )
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
         self.assertEqual(response.content.decode(), '{}')
         after_count = Data.get_all_data().count()
         self.assertEqual(after_count, before_count)
@@ -156,7 +157,7 @@ class AddIntraMoveApiViewTestCase(BaseTestCase):
                 'before_method': 2,
             }
         )
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
         self.assertEqual(response.content.decode(), '{}')
         after_count = Data.get_all_data().count()
         self.assertEqual(after_count, before_count)
@@ -175,6 +176,6 @@ class AddIntraMoveApiViewTestCase(BaseTestCase):
                 'after_method': 3,
             }
         )
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, HTTPStatus.FORBIDDEN)
         after_count = Data.get_all_data().count()
         self.assertEqual(after_count, before_count)

@@ -1,5 +1,6 @@
 import json
 from datetime import date
+from http import HTTPStatus
 
 from django.contrib.auth.models import User
 from django.urls import reverse
@@ -11,7 +12,7 @@ class EditViewTestCase(BaseTestCase):
     def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:edit', kwargs={'pk': 1}))
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertEqual(response.context['app_name'], 'test-MoneyBook')
         self.assertEqual(response.context['username'].username, self.username)
         data = response.context['data']
@@ -30,13 +31,11 @@ class EditViewTestCase(BaseTestCase):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(
             reverse('moneybook:edit', kwargs={'pk': 10000}))
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.url, reverse('moneybook:index'))
+        self.assertRedirects(response, reverse('moneybook:index'), status_code=HTTPStatus.FOUND)
 
     def test_get_guest(self):
         response = self.client.get(reverse('moneybook:edit', kwargs={'pk': 1}))
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.url, reverse('moneybook:login'))
+        self.assertRedirects(response, reverse('moneybook:login'), status_code=HTTPStatus.FOUND)
 
 
 class EditApiViewTestCase(BaseTestCase):
@@ -66,7 +65,7 @@ class EditApiViewTestCase(BaseTestCase):
                 'checked': False
             }
         )
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
 
         # 更新されていることを確認
         data = Data.get(1)
@@ -103,7 +102,7 @@ class EditApiViewTestCase(BaseTestCase):
                 'checked': False
             }
         )
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
         content_json = json.loads(response.content.decode())
         self.assertEqual(content_json['ErrorList'], ['date', 'price'])
 
@@ -133,7 +132,7 @@ class EditApiViewTestCase(BaseTestCase):
                 'checked': False
             }
         )
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
 
     def test_post_guest(self):
         # 更新前の値を確認
@@ -159,7 +158,7 @@ class EditApiViewTestCase(BaseTestCase):
                 'checked': False
             }
         )
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, HTTPStatus.FORBIDDEN)
 
         # 更新されていないことを確認
         data = Data.get(1)
@@ -192,7 +191,7 @@ class ApplyCheckApiViewTestCase(BaseTestCase):
 
         # ApplyCheckApiViewを実行
         response = self.client.post(reverse('moneybook:apply_check_api'))
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
 
         # 事前チェック済みデータがチェック済みになっていることを確認
         for pk in test_pks:
@@ -203,7 +202,7 @@ class ApplyCheckApiViewTestCase(BaseTestCase):
     def test_post_guest(self):
         response = self.client.post(reverse('moneybook:apply_check_api'))
         # apply_check_api is in the API list, so it should return 403
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, HTTPStatus.FORBIDDEN)
 
 
 class PreCheckApiViewTestCase(BaseTestCase):
@@ -217,7 +216,7 @@ class PreCheckApiViewTestCase(BaseTestCase):
             reverse('moneybook:pre_check_api'),
             {'id': 4, 'status': '1'}
         )
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
 
         data = Data.get(4)
         self.assertEqual(data.pre_checked, True)
@@ -233,7 +232,7 @@ class PreCheckApiViewTestCase(BaseTestCase):
             reverse('moneybook:pre_check_api'),
             {'id': 4, 'status': '0'}
         )
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
 
         data = Data.get(4)
         self.assertEqual(data.pre_checked, False)
@@ -244,7 +243,7 @@ class PreCheckApiViewTestCase(BaseTestCase):
             reverse('moneybook:pre_check_api'),
             {'id': 99999, 'status': '1'}
         )
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
 
     def test_post_guest(self):
         response = self.client.post(
@@ -252,4 +251,4 @@ class PreCheckApiViewTestCase(BaseTestCase):
             {'id': 4, 'status': '1'}
         )
         # pre_check_api is in the API list, so it should return 403
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, HTTPStatus.FORBIDDEN)

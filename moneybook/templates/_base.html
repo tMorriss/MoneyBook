@@ -25,7 +25,12 @@
             <h1><a href="{% url 'moneybook:index' %}" class="logo">{{ app_name }}</a></h1>
         </div>
         <div class="header-cont2">
-            {{ username }}さん(<a href="{% url 'moneybook:logout' %}">ログアウト</a>)
+            {{ username }}さん(
+            <form action="{% url 'moneybook:logout' %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="link-button">ログアウト</button>
+            </form>
+            )
         </div>
     </header>
     <nav class="task_bar">

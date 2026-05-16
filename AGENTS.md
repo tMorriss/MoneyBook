@@ -355,6 +355,10 @@ HEADLESS=0 tox -e e2e
 
 1. **設定の分離**: 環境別設定を`config/settings/`で管理
 2. **静的ファイル**: `{% static %}`タグを使用してパスを生成
+3. **HTTPステータスコード**: ステータスコードを指定または検証する際は、数値（例: 200, 400）を直接使用せず、`http.HTTPStatus`を使用してください。
+   - インポート形式: `from http import HTTPStatus`
+   - 利用方法: `HTTPStatus.OK`, `HTTPStatus.BAD_REQUEST` など
+   - ただし、Djangoが提供する特定のステータスコード用クラス（例: `HttpResponseRedirect`）が利用可能な場合は、それらを使用しても構いません。
 
 ### CSS/スタイル規約
 

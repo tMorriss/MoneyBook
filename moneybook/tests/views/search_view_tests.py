@@ -1,3 +1,5 @@
+from http import HTTPStatus
+
 from django.contrib.auth.models import User
 from django.urls import reverse
 from moneybook.tests.base import BaseTestCase
@@ -5,7 +7,7 @@ from moneybook.tests.base import BaseTestCase
 
 class SearchViewTestCase(BaseTestCase):
     def _search_common(self, response):
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertEqual(response.context['app_name'], 'test-MoneyBook')
         self.assertEqual(response.context['username'].username, self.username)
         self._assert_all_directions(response)
@@ -92,8 +94,7 @@ class SearchViewTestCase(BaseTestCase):
 
     def test_get_guest(self):
         response = self.client.get(reverse('moneybook:search'))
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.url, reverse('moneybook:login'))
+        self.assertRedirects(response, reverse('moneybook:login'), status_code=HTTPStatus.FOUND)
 
     def test_get_new_only_is_query(self):
         """is_queryだけ指定すると全データ表示される"""

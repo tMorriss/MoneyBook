@@ -1,5 +1,6 @@
 import json
 from datetime import date, datetime
+from http import HTTPStatus
 
 from django.contrib.auth.models import User
 from django.urls import reverse
@@ -13,7 +14,7 @@ class ToolsViewTestCase(BaseTestCase):
 
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:tools'))
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertEqual(response.context['app_name'], 'test-MoneyBook')
         self.assertEqual(response.context['username'].username, self.username)
         self.assertEqual(response.context['cash_balance'], -3930)
@@ -26,8 +27,7 @@ class ToolsViewTestCase(BaseTestCase):
 
     def test_get_guest(self):
         response = self.client.get(reverse('moneybook:tools'))
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.url, reverse('moneybook:login'))
+        self.assertRedirects(response, reverse('moneybook:login'), status_code=HTTPStatus.FOUND)
 
 
 class ActualCashApiViewTestCase(BaseTestCase):
@@ -35,27 +35,27 @@ class ActualCashApiViewTestCase(BaseTestCase):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(SeveralCosts.get_actual_cash_balance(), 2000)
         response = self.client.post(reverse('moneybook:actual_cash_api'), {'price': 1200})
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertEqual(SeveralCosts.get_actual_cash_balance(), 1200)
 
     def test_post_str(self):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(SeveralCosts.get_actual_cash_balance(), 2000)
         response = self.client.post(reverse('moneybook:actual_cash_api'), {'price': 'a'})
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
         self.assertEqual(SeveralCosts.get_actual_cash_balance(), 2000)
 
     def test_post_missing(self):
         self.client.force_login(User.objects.create_user(self.username))
         self.assertEqual(SeveralCosts.get_actual_cash_balance(), 2000)
         response = self.client.post(reverse('moneybook:actual_cash_api'))
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
         self.assertEqual(SeveralCosts.get_actual_cash_balance(), 2000)
 
     def test_post_guest(self):
         self.assertEqual(SeveralCosts.get_actual_cash_balance(), 2000)
         response = self.client.post(reverse('moneybook:actual_cash_api'), {'price': 1200})
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, HTTPStatus.FORBIDDEN)
         self.assertEqual(SeveralCosts.get_actual_cash_balance(), 2000)
 
 
@@ -63,7 +63,7 @@ class CheckedDateApiViewTestCase(BaseTestCase):
     def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:checked_date_api'))
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
         content_json = json.loads(response.content.decode())
         methods_bd = content_json['methods_bd']
         expects = [
@@ -115,7 +115,7 @@ class CheckedDateApiViewTestCase(BaseTestCase):
             reverse('moneybook:checked_date_api'),
             {'year': 2001, 'month': 2, 'day': 20, 'method': 2}
         )
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertEqual(CheckedDate.get(2).date, date(2001, 2, 20))
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
         self._assert_list(unchecked_data, expects)
@@ -131,7 +131,7 @@ class CheckedDateApiViewTestCase(BaseTestCase):
             reverse('moneybook:checked_date_api'),
             {'year': 2000, 'month': 1, 'day': 20, 'method': 2, 'check_all': 1}
         )
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 20))
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
         expects = ['スーパー', 'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
@@ -148,7 +148,7 @@ class CheckedDateApiViewTestCase(BaseTestCase):
             reverse('moneybook:checked_date_api'),
             {'year': 2000, 'month': 1, 'day': 20, 'method': 2, 'check_all': 2}
         )
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 20))
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
         self._assert_list(unchecked_data, expects)
@@ -164,7 +164,7 @@ class CheckedDateApiViewTestCase(BaseTestCase):
             reverse('moneybook:checked_date_api'),
             {'year': 2000, 'month': 1, 'day': 40, 'method': 2}
         )
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
         self._assert_list(unchecked_data, expects)
@@ -180,7 +180,7 @@ class CheckedDateApiViewTestCase(BaseTestCase):
             reverse('moneybook:checked_date_api'),
             {'month': 1, 'day': 40, 'method': 2}
         )
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
         self._assert_list(unchecked_data, expects)
@@ -196,7 +196,7 @@ class CheckedDateApiViewTestCase(BaseTestCase):
             reverse('moneybook:checked_date_api'),
             {'year': 2000, 'month': 1, 'method': 2}
         )
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
         self._assert_list(unchecked_data, expects)
@@ -212,7 +212,7 @@ class CheckedDateApiViewTestCase(BaseTestCase):
             reverse('moneybook:checked_date_api'),
             {'year': 2000, 'month': 1, 'day': 20}
         )
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
         self._assert_list(unchecked_data, expects)
@@ -228,7 +228,7 @@ class CheckedDateApiViewTestCase(BaseTestCase):
             reverse('moneybook:checked_date_api'),
             {'year': 'a', 'month': 1, 'day': 40, 'method': 2}
         )
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
         self._assert_list(unchecked_data, expects)
@@ -244,7 +244,7 @@ class CheckedDateApiViewTestCase(BaseTestCase):
             reverse('moneybook:checked_date_api'),
             {'year': 2000, 'month': 'a', 'day': 40, 'method': 2}
         )
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
         self._assert_list(unchecked_data, expects)
@@ -260,7 +260,7 @@ class CheckedDateApiViewTestCase(BaseTestCase):
             reverse('moneybook:checked_date_api'),
             {'year': 2000, 'month': 1, 'day': 'a', 'method': 2}
         )
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
         self._assert_list(unchecked_data, expects)
@@ -276,7 +276,7 @@ class CheckedDateApiViewTestCase(BaseTestCase):
             reverse('moneybook:checked_date_api'),
             {'year': 2000, 'month': 1, 'day': 20, 'method': 1000000}
         )
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
         self._assert_list(unchecked_data, expects)
@@ -290,7 +290,7 @@ class CheckedDateApiViewTestCase(BaseTestCase):
             reverse('moneybook:checked_date_api'),
             {'year': 2001, 'month': 2, 'day': 20, 'method': 2}
         )
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, HTTPStatus.FORBIDDEN)
 
         self.assertEqual(CheckedDate.get(2).date, date(2000, 1, 5))
         unchecked_data = Data.get_unchecked_data(Data.get_all_data())
@@ -302,7 +302,7 @@ class SeveralCheckedDateViewTestCase(BaseTestCase):
         now = datetime.now()
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:several_checked_date'))
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertEqual(response.context['year'], now.year)
 
         banks = response.context['banks']
@@ -332,8 +332,7 @@ class SeveralCheckedDateViewTestCase(BaseTestCase):
 
     def test_get_guest(self):
         response = self.client.get(reverse('moneybook:several_checked_date'))
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.url, reverse('moneybook:login'))
+        self.assertRedirects(response, reverse('moneybook:login'), status_code=HTTPStatus.FOUND)
 
 
 class CreditCheckedDateApiViewTestCase(BaseTestCase):
@@ -348,7 +347,7 @@ class CreditCheckedDateApiViewTestCase(BaseTestCase):
             reverse('moneybook:credit_checked_date_api'),
             {'year': 2001, 'month': 3, 'day': 10, 'pk': 2}
         )
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
         d = CreditCheckedDate.objects.get(pk=2)
         self.assertEqual(d.name, 'AmexGold')
         self.assertEqual(d.date, date(2001, 3, 10))
@@ -365,7 +364,7 @@ class CreditCheckedDateApiViewTestCase(BaseTestCase):
             reverse('moneybook:credit_checked_date_api'),
             {'month': 3, 'day': 10, 'pk': 2}
         )
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
         d = CreditCheckedDate.objects.get(pk=2)
         self.assertEqual(d.name, 'AmexGold')
         self.assertEqual(d.date, date(2000, 2, 4))
@@ -382,7 +381,7 @@ class CreditCheckedDateApiViewTestCase(BaseTestCase):
             reverse('moneybook:credit_checked_date_api'),
             {'year': 2001, 'day': 10, 'pk': 2}
         )
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
         d = CreditCheckedDate.objects.get(pk=2)
         self.assertEqual(d.name, 'AmexGold')
         self.assertEqual(d.date, date(2000, 2, 4))
@@ -399,7 +398,7 @@ class CreditCheckedDateApiViewTestCase(BaseTestCase):
             reverse('moneybook:credit_checked_date_api'),
             {'year': 2001, 'month': 3, 'pk': 2}
         )
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
         d = CreditCheckedDate.objects.get(pk=2)
         self.assertEqual(d.name, 'AmexGold')
         self.assertEqual(d.date, date(2000, 2, 4))
@@ -416,7 +415,7 @@ class CreditCheckedDateApiViewTestCase(BaseTestCase):
             reverse('moneybook:credit_checked_date_api'),
             {'year': 2001, 'month': 3, 'day': 10}
         )
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
         d = CreditCheckedDate.objects.get(pk=2)
         self.assertEqual(d.name, 'AmexGold')
         self.assertEqual(d.date, date(2000, 2, 4))
@@ -433,7 +432,7 @@ class CreditCheckedDateApiViewTestCase(BaseTestCase):
             reverse('moneybook:credit_checked_date_api'),
             {'year': 'a', 'month': 3, 'day': 10, 'pk': 2}
         )
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
         d = CreditCheckedDate.objects.get(pk=2)
         self.assertEqual(d.name, 'AmexGold')
         self.assertEqual(d.date, date(2000, 2, 4))
@@ -445,7 +444,7 @@ class CreditCheckedDateApiViewTestCase(BaseTestCase):
             reverse('moneybook:credit_checked_date_api'),
             {'year': 2001, 'month': 3, 'day': 10, 'pk': 1000000}
         )
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
 
     def test_post_guest(self):
         d = CreditCheckedDate.objects.get(pk=2)
@@ -456,7 +455,7 @@ class CreditCheckedDateApiViewTestCase(BaseTestCase):
             reverse('moneybook:credit_checked_date_api'),
             {'year': 2001, 'month': 3, 'day': 10, 'pk': 2}
         )
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, HTTPStatus.FORBIDDEN)
         d = CreditCheckedDate.objects.get(pk=2)
         self.assertEqual(d.name, 'AmexGold')
         self.assertEqual(d.date, date(2000, 2, 4))
@@ -467,7 +466,7 @@ class UncheckedDataViewTestCase(BaseTestCase):
     def test_get(self):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:unchecked_data'))
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
         expects = ['必需品1', 'スーパー', '計算外', '貯金', 'PayPayチャージ', '立替分1', '内部移動1', '内部移動2']
         self._assert_list(response.context['unchecked_data'], expects)
         self._assert_templates(
@@ -477,8 +476,7 @@ class UncheckedDataViewTestCase(BaseTestCase):
 
     def test_get_guest(self):
         response = self.client.get(reverse('moneybook:unchecked_data'))
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.url, reverse('moneybook:login'))
+        self.assertRedirects(response, reverse('moneybook:login'), status_code=HTTPStatus.FOUND)
 
 
 class NowBankApiViewTestCase(BaseTestCase):
@@ -492,7 +490,7 @@ class NowBankApiViewTestCase(BaseTestCase):
             reverse('moneybook:now_bank_api'),
             {'bank-1': 50000, 'bank-2': 10000, 'credit-1': 20000, 'credit-2': 3000}
         )
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertEqual(BankBalance.get_price(1), 50000)
         self.assertEqual(BankBalance.get_price(2), 10000)
         self.assertEqual(CreditCheckedDate.get_price(1), 20000)
@@ -510,7 +508,7 @@ class NowBankApiViewTestCase(BaseTestCase):
             reverse('moneybook:now_bank_api'),
             {'bank-1': 50000, 'credit-2': 3000}
         )
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertEqual(BankBalance.get_price(1), 50000)
         self.assertEqual(BankBalance.get_price(2), 20000)
         self.assertEqual(CreditCheckedDate.get_price(1), 30000)
@@ -525,7 +523,7 @@ class NowBankApiViewTestCase(BaseTestCase):
         self.assertEqual(CreditCheckedDate.get_price(2), 2000)
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.post(reverse('moneybook:now_bank_api'))
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
         response_json = json.loads(response.content.decode())
         self.assertEqual(response_json['balance'], 54054 - (40000 + 20000 - 30000 - 2000))
         self.assertEqual(BankBalance.get_price(1), 40000)
@@ -543,7 +541,7 @@ class NowBankApiViewTestCase(BaseTestCase):
             reverse('moneybook:now_bank_api'),
             {'bank-1': 'a', 'bank-2': 10000, 'credit-1': 20000, 'credit-2': 3000}
         )
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
         self.assertEqual(BankBalance.get_price(1), 40000)
         self.assertEqual(BankBalance.get_price(2), 20000)
         self.assertEqual(CreditCheckedDate.get_price(1), 30000)
@@ -559,7 +557,7 @@ class NowBankApiViewTestCase(BaseTestCase):
             reverse('moneybook:now_bank_api'),
             {'bank-1': 50000, 'bank-2': 10000, 'credit-1': 'a', 'credit-2': 3000}
         )
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
         self.assertEqual(BankBalance.get_price(1), 40000)
         self.assertEqual(BankBalance.get_price(2), 20000)
         self.assertEqual(CreditCheckedDate.get_price(1), 30000)
@@ -574,7 +572,7 @@ class NowBankApiViewTestCase(BaseTestCase):
             reverse('moneybook:now_bank_api'),
             {'bank-1': 50000, 'bank-2': 10000, 'credit-1': 20000, 'credit-2': 3000}
         )
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, HTTPStatus.FORBIDDEN)
         self.assertEqual(BankBalance.get_price(1), 40000)
         self.assertEqual(BankBalance.get_price(2), 20000)
         self.assertEqual(CreditCheckedDate.get_price(1), 30000)
@@ -592,7 +590,7 @@ class PreCheckedSummaryViewTestCase(BaseTestCase):
             data.save()
 
         response = self.client.get(reverse('moneybook:pre_checked_summary'))
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertEqual(response.context['income_sum'], 400)
         self.assertEqual(response.context['outgo_sum'], 3800)
         self.assertEqual(response.context['income_count'], 1)
@@ -604,5 +602,4 @@ class PreCheckedSummaryViewTestCase(BaseTestCase):
 
     def test_get_guest(self):
         response = self.client.get(reverse('moneybook:pre_checked_summary'))
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.url, reverse('moneybook:login'))
+        self.assertRedirects(response, reverse('moneybook:login'), status_code=HTTPStatus.FOUND)

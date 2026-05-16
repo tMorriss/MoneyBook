@@ -1,5 +1,6 @@
 import json
 from datetime import date
+from http import HTTPStatus
 
 from django.contrib.auth.models import User
 from django.urls import reverse
@@ -24,7 +25,7 @@ class AddApiViewTestCase(BaseTestCase):
                 'checked': False
             }
         )
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertEqual(response.content.decode(), '{}')
         after_count = Data.get_all_data().count()
         self.assertEqual(after_count, before_count + 1)
@@ -43,7 +44,7 @@ class AddApiViewTestCase(BaseTestCase):
                 'checked': False
             }
         )
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
         self.assertEqual(response.content.decode(), json.dumps(
             {'ErrorList': ['date', 'price']}))
         after_count = Data.get_all_data().count()
@@ -64,7 +65,7 @@ class AddApiViewTestCase(BaseTestCase):
                 'checked': False
             }
         )
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, HTTPStatus.FORBIDDEN)
         after_count = Data.get_all_data().count()
         self.assertEqual(after_count, before_count)
 
@@ -75,7 +76,7 @@ class SuggestApiViewTestCase(BaseTestCase):
         response = self.client.get(
             reverse('moneybook:suggest_api'), {'item': '必需品'})
 
-        self.assertEqual(response.status_code, 200, response.content)
+        self.assertEqual(response.status_code, HTTPStatus.OK, response.content)
         body = json.loads(response.content.decode())
 
         expects = {'suggests': [
@@ -90,7 +91,7 @@ class SuggestApiViewTestCase(BaseTestCase):
         response = self.client.get(
             reverse('moneybook:suggest_api'), {'item': 'PayPayチャージ'})
 
-        self.assertEqual(response.status_code, 200, response.content)
+        self.assertEqual(response.status_code, HTTPStatus.OK, response.content)
         body = json.loads(response.content.decode())
 
         expects = {'suggests': [
@@ -103,7 +104,7 @@ class SuggestApiViewTestCase(BaseTestCase):
         self.client.force_login(User.objects.create_user(self.username))
         response = self.client.get(reverse('moneybook:suggest_api'))
 
-        self.assertEqual(response.status_code, 400, response.content)
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST, response.content)
         body = json.loads(response.content.decode())
         self.assertEqual(body, {'message': 'missing item'})
 
@@ -112,7 +113,7 @@ class SuggestApiViewTestCase(BaseTestCase):
         response = self.client.get(
             reverse('moneybook:suggest_api'), {'item': ''})
 
-        self.assertEqual(response.status_code, 400, response.content)
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST, response.content)
         body = json.loads(response.content.decode())
         self.assertEqual(body, {'message': 'empty item'})
 
@@ -157,7 +158,7 @@ class AddPeriodicApiViewTestCase(BaseTestCase):
             'month': month
         })
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
 
         # データが2件追加されていること
         self.assertEqual(Data.objects.count(), initial_count + 2)
@@ -200,7 +201,7 @@ class AddPeriodicApiViewTestCase(BaseTestCase):
             'year': year,
             'month': month
         })
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
 
         # 31日が29日に調整されていること
         data = Data.objects.get(item='月末払い', date=date(2024, 2, 29))
@@ -212,32 +213,32 @@ class AddPeriodicApiViewTestCase(BaseTestCase):
             'year': 'invalid',
             'month': 2
         })
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
 
         response = self.client.post(reverse('moneybook:add_periodic_api'), {
             'year': 2024,
             'month': 'invalid'
         })
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
 
         # 13月などの範囲外
         response = self.client.post(reverse('moneybook:add_periodic_api'), {
             'year': 2024,
             'month': 13
         })
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
 
     def test_add_periodic_missing_params(self):
         """パラメータ不足でエラーになること"""
         response = self.client.post(reverse('moneybook:add_periodic_api'), {
             'year': 2024
         })
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
 
         response = self.client.post(reverse('moneybook:add_periodic_api'), {
             'month': 2
         })
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
 
     def test_add_periodic_guest(self):
         """未認証でエラーになること"""
@@ -246,4 +247,4 @@ class AddPeriodicApiViewTestCase(BaseTestCase):
             'year': 2024,
             'month': 4
         })
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, HTTPStatus.FORBIDDEN)
