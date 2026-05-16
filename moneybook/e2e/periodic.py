@@ -15,7 +15,7 @@ class Periodic(PlaywrightBase):
         self.page.fill('input[name^="day_new_0"]', str(day))
         self.page.fill('input[name^="item_new_0"]', item)
         self.page.fill('input[name^="price_new_0"]', str(price))
-        self.page.click('button[type="submit"]')
+        self.page.click('#periodic_edit_form button[type="submit"]')
         expect(self.page).to_have_url(self.live_server_url + reverse('moneybook:periodic'))
 
     def test_periodic_navigation_and_access(self):
@@ -73,7 +73,7 @@ class Periodic(PlaywrightBase):
         self.page.click('input[value="編集"]')
         # 編集対象の行を探して値を書き換え
         self.page.fill('input[name^="item_"]:not([name*="new"])', updated_item)
-        self.page.click('button[type="submit"]')
+        self.page.click('#periodic_edit_form button[type="submit"]')
 
         expect(self.page).to_have_url(self.live_server_url + reverse('moneybook:periodic'))
         expect(self.page.locator('#periodic_table')).to_contain_text(updated_item)
@@ -91,7 +91,7 @@ class Periodic(PlaywrightBase):
         self.page.click('button.btn-delete-row')
         # DOMから消えたことを確認
         expect(self.page.locator(f'input[value="{item_name}"]')).to_have_count(0)
-        self.page.click('button[type="submit"]')
+        self.page.click('#periodic_edit_form button[type="submit"]')
 
         expect(self.page).to_have_url(self.live_server_url + reverse('moneybook:periodic'))
         expect(self.page.locator('#periodic_table')).not_to_contain_text(item_name)
