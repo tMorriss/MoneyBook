@@ -34,14 +34,14 @@
                 {% for mark in living_cost_marks %}
                 <tr>
                     <td>
-                        <input type="text" name="start_year_{{ forloop.index }}" value="{{ mark.start_date.year|default_if_none:'' }}" style="width:6ex" class="righter">年
-                        <input type="text" name="start_month_{{ forloop.index }}" value="{{ mark.start_date.month|default_if_none:'' }}" style="width:3ex" class="righter">月
+                        <input type="text" name="start_year_{{ forloop.counter }}" value="{{ mark.start_date.year|default_if_none:'' }}" style="width:6ex" class="righter">年
+                        <input type="text" name="start_month_{{ forloop.counter }}" value="{{ mark.start_date.month|default_if_none:'' }}" style="width:3ex" class="righter">月
                     </td>
                     <td>
-                        <input type="text" name="end_year_{{ forloop.index }}" value="{{ mark.end_date.year|default_if_none:'' }}" style="width:6ex" class="righter">年
-                        <input type="text" name="end_month_{{ forloop.index }}" value="{{ mark.end_date.month|default_if_none:'' }}" style="width:3ex" class="righter">月
+                        <input type="text" name="end_year_{{ forloop.counter }}" value="{{ mark.end_date.year|default_if_none:'' }}" style="width:6ex" class="righter">年
+                        <input type="text" name="end_month_{{ forloop.counter }}" value="{{ mark.end_date.month|default_if_none:'' }}" style="width:3ex" class="righter">月
                     </td>
-                    <td><input type="text" name="price_{{ forloop.index }}" value="{{ mark.price }}" class="righter" style="width:12ex"></td>
+                    <td><input type="text" name="price_{{ forloop.counter }}" value="{{ mark.price }}" class="righter" style="width:12ex"></td>
                     <td><button type="button" class="btn-delete-row btn-red">削除</button></td>
                 </tr>
                 {% endfor %}
