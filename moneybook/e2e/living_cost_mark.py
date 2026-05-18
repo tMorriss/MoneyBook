@@ -98,7 +98,7 @@ class LivingCostMarkTest(PlaywrightBase):
 
     def test_living_cost_mark_delete_and_add_single(self):
         self._login()
-        # 6. 再度edit画面に遷移し、既存のデータを削除し別のデータを追加。
+        # 再度edit画面に遷移し、既存のデータを削除し別のデータを追加。
         self.page.goto(self.live_server_url + reverse('moneybook:living_cost_mark_edit'))
         while self.page.locator('.btn-delete-row:visible').count() > 0:
             self.page.locator('.btn-delete-row:visible').first.click()
@@ -117,7 +117,7 @@ class LivingCostMarkTest(PlaywrightBase):
         this_month = now
         next_month = now + relativedelta(months=1)
 
-        # 7. 再度edit画面に遷移し、時系列が逆順でデータを追加
+        # 再度edit画面に遷移し、時系列が逆順でデータを追加
         self.page.goto(self.live_server_url + reverse('moneybook:living_cost_mark_edit'))
         while self.page.locator('.btn-delete-row:visible').count() > 0:
             self.page.locator('.btn-delete-row:visible').first.click()
