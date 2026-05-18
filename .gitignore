@@ -20,3 +20,6 @@ playwright-artifact/
 
 # build
 staticfiles/
+
+# Logs (to exclude Jules' log files)
+*.log

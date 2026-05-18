@@ -4,26 +4,9 @@
 {% block title %}生活費目標編集 - {{ app_name }}{% endblock %}
 
 {% block header %}
+<script type="text/javascript" src="{% static 'living_cost_mark_edit.js' %}"></script>
 <script type="text/javascript">
-    $(function() {
-        // 行追加
-        $('#btn_add_row').click(function() {
-            var newId = new Date().getTime();
-            var row = $('#row_template').clone().removeAttr('id').show();
-            row.find('input, select').each(function() {
-                var name = $(this).attr('name');
-                if (name) {
-                    $(this).attr('name', name.replace('template', newId));
-                }
-            });
-            $('#mark_table_body').append(row);
-        });
-
-        // 行削除
-        $(document).on('click', '.btn-delete-row', function() {
-            $(this).closest('tr').remove();
-        });
-    });
+    living_cost_mark_url = "{% url 'moneybook:living_cost_mark' %}";
 </script>
 {% endblock %}
 
@@ -38,11 +21,11 @@
 
     <form method="post">
         {% csrf_token %}
-        <table class="tbl-data tbl-boarder">
+        <table class="tbl-common tbl-boarder">
             <thead>
                 <tr>
-                    <th>開始日</th>
-                    <th>終了日</th>
+                    <th>開始年月</th>
+                    <th>終了年月</th>
                     <th>金額</th>
                     <th>操作</th>
                 </tr>
@@ -50,9 +33,15 @@
             <tbody id="mark_table_body">
                 {% for mark in living_cost_marks %}
                 <tr>
-                    <td><input type="date" name="start_date_{{ forloop.index }}" value="{{ mark.start_date|date:'Y-m-d' }}" required></td>
-                    <td><input type="date" name="end_date_{{ forloop.index }}" value="{{ mark.end_date|date:'Y-m-d' }}"></td>
-                    <td><input type="text" name="price_{{ forloop.index }}" value="{{ mark.price }}" class="righter" style="width:12ex"></td>
+                    <td>
+                        <input type="text" name="start_year_{{ forloop.counter }}" value="{{ mark.start_date.year|default_if_none:'' }}" style="width:6ex" class="righter">年
+                        <input type="text" name="start_month_{{ forloop.counter }}" value="{{ mark.start_date.month|default_if_none:'' }}" style="width:3ex" class="righter">月
+                    </td>
+                    <td>
+                        <input type="text" name="end_year_{{ forloop.counter }}" value="{{ mark.end_date.year|default_if_none:'' }}" style="width:6ex" class="righter">年
+                        <input type="text" name="end_month_{{ forloop.counter }}" value="{{ mark.end_date.month|default_if_none:'' }}" style="width:3ex" class="righter">月
+                    </td>
+                    <td><input type="text" name="price_{{ forloop.counter }}" value="{{ mark.price }}" class="righter" style="width:12ex"></td>
                     <td><button type="button" class="btn-delete-row btn-red">削除</button></td>
                 </tr>
                 {% endfor %}
@@ -62,8 +51,14 @@
         <!-- テンプレート行 -->
         <table style="display: none;">
             <tr id="row_template">
-                <td><input type="date" name="start_date_template" required></td>
-                <td><input type="date" name="end_date_template"></td>
+                <td>
+                    <input type="text" name="start_year_template" value="" style="width:6ex" class="righter">年
+                    <input type="text" name="start_month_template" value="" style="width:3ex" class="righter">月
+                </td>
+                <td>
+                    <input type="text" name="end_year_template" value="" style="width:6ex" class="righter">年
+                    <input type="text" name="end_month_template" value="" style="width:3ex" class="righter">月
+                </td>
                 <td><input type="text" name="price_template" class="righter" style="width:12ex"></td>
                 <td><button type="button" class="btn-delete-row btn-red">削除</button></td>
             </tr>
@@ -81,9 +76,4 @@
     </form>
 </section>
 
-<script type="text/javascript">
-    document.getElementById('btn_cancel').addEventListener('click', function() {
-        location.href = "{% url 'moneybook:living_cost_mark' %}";
-    });
-</script>
 {% endblock %}
