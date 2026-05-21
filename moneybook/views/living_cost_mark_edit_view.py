@@ -51,7 +51,7 @@ class LivingCostMarkEditView(LoginRequiredMixin, View):
 
             start_date = None
             end_date = None
-            price = 0
+            price = None
 
             # バリデーション (個別の行)
             if not price_str:
