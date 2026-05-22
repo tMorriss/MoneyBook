@@ -63,16 +63,16 @@ class LivingCostMarkTest(PlaywrightBase):
 
         # Row 1: Start null, End last_month, Price 100,000
         expect(rows.nth(0).locator('td').nth(0)).to_have_text('')
-        expect(rows.nth(0).locator('td').nth(1)).to_have_text(last_month.strftime('%Y年%-m月'))
+        expect(rows.nth(0).locator('td').nth(1)).to_have_text(last_month.strftime('%Y年%m月'))
         expect(rows.nth(0).locator('td').nth(2)).to_have_text('100,000')
 
         # Row 2: Start this_month, End this_month, Price 110,000
-        expect(rows.nth(1).locator('td').nth(0)).to_have_text(this_month.strftime('%Y年%-m月'))
-        expect(rows.nth(1).locator('td').nth(1)).to_have_text(this_month.strftime('%Y年%-m月'))
+        expect(rows.nth(1).locator('td').nth(0)).to_have_text(this_month.strftime('%Y年%m月'))
+        expect(rows.nth(1).locator('td').nth(1)).to_have_text(this_month.strftime('%Y年%m月'))
         expect(rows.nth(1).locator('td').nth(2)).to_have_text('110,000')
 
         # Row 3: Start next_month, End null, Price 120,000
-        expect(rows.nth(2).locator('td').nth(0)).to_have_text(next_month.strftime('%Y年%-m月'))
+        expect(rows.nth(2).locator('td').nth(0)).to_have_text(next_month.strftime('%Y年%m月'))
         expect(rows.nth(2).locator('td').nth(1)).to_have_text('')
         expect(rows.nth(2).locator('td').nth(2)).to_have_text('120,000')
 
