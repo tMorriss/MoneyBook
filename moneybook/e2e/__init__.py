@@ -3,6 +3,7 @@ from .base import *
 from .delete import *
 from .edit import *
 from .index import *
+from .living_cost_mark import *
 from .login import *
 from .period_balances import *
 from .periodic import *

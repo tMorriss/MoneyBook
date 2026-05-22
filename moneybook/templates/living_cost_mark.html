@@ -20,8 +20,8 @@
         <tbody>
             {% for mark in living_cost_marks %}
             <tr>
-                <td>{{ mark.start_date|date:"Y/m" }}</td>
-                <td>{% if mark.end_date %}{{ mark.end_date|date:"Y/m" }}{% else %}-{% endif %}</td>
+                <td>{% if mark.start_date %}{{ mark.start_date|date:"Y年n月" }}{% endif %}</td>
+                <td>{% if mark.end_date %}{{ mark.end_date|date:"Y年n月" }}{% endif %}</td>
                 <td class="righter">{{ mark.price|intcomma }}</td>
             </tr>
             {% endfor %}
