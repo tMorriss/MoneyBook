@@ -78,11 +78,12 @@ jobs:
             delete,
             edit,
             index,
+            living_cost_mark,
             login,
             period_balances,
-            tools,
             periodic,
             search,
+            tools,
           ]
     services:
       postgres:

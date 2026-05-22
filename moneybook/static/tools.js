@@ -132,27 +132,6 @@ function keyPressUpdateSeveralCheckedDate(code, id) {
     }
 }
 
-function updateLivingCostMark() {
-    $.post({
-        url: living_cost_mark_api_url,
-        data: {
-            "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
-            "price": Number($("#txt_living_cost").val().replace(",", "")),
-        }
-    }).done(() => {
-        location.reload();
-    }).fail(() => {
-        // メッセージ表示
-        showResultMsg("Error...", empty);
-    });
-}
-function keyPressLiving(code) {
-    // エンターキーなら
-    if (code === 13) {
-        updateLivingCostMark();
-    }
-}
-
 function applyCheck() {
     $.post({
         url: apply_check_api_url,

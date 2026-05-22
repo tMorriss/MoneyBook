@@ -9,3 +9,4 @@ from .several_costs import *
 from .in_out_balance import *
 from .label_value import *
 from .periodic_data import *
+from .living_cost_mark import *
