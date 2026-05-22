@@ -146,6 +146,27 @@ class LivingCostMarkTest(PlaywrightBase):
         expect(rows.nth(0)).to_contain_text('110,000')
         expect(rows.nth(1)).to_contain_text('120,000')
 
+    def test_living_cost_mark_edit_cancel(self):
+        self._login()
+        self.page.goto(self.live_server_url + reverse('moneybook:living_cost_mark'))
+        initial_row_count = self.page.locator('table.tbl-data tbody tr').count()
+
+        # edit画面に遷移
+        self.page.click('#btn_edit')
+        expect(self.page.locator('section h1')).to_contain_text('生活費目標編集')
+
+        # データを変更
+        self.page.click('#btn_add_row')
+        self.page.locator('#mark_table_body tr').last.locator('input[name^="price_"]').fill('999999')
+
+        # キャンセル
+        self.page.click('#btn_cancel')
+
+        # 一覧画面に戻り、データが更新されていない
+        expect(self.page).to_have_url(self.live_server_url + reverse('moneybook:living_cost_mark'))
+        expect(self.page.locator('table.tbl-data tbody tr')).to_have_count(initial_row_count)
+        expect(self.page.locator('td:has-text("999,999")')).not_to_be_visible()
+
     def test_error_multiple_null_start_date(self):
         self._login()
         self.page.goto(self.live_server_url + reverse('moneybook:living_cost_mark_edit'))
