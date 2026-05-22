@@ -12,52 +12,95 @@ function key_press_update_range(code) {
     }
 }
 
+let root = null;
 function drawGraph() {
-    am4core.ready(function () {
-        // テーマ
-        am4core.useTheme(am4themes_animated);
-        am4core.useTheme(am4themes_kelly);
+    const divId = "lineplot_monthly_balance";
+    if (document.getElementById(divId) === null) {
+        return;
+    }
 
-        var chart = am4core.create("lineplot_monthly_balance", am4charts.XYChart);
+    if (root) {
+        root.dispose();
+    }
 
-        // データ収集
-        let balanceList = $("#monthly_balance li");
-        chart.data = [];
-        minValue = null;
-        for (var i = 0; i < balanceList.length; i++) {
-            data = balanceList[i].textContent.split(',');
-            chart.data.push({ month: data[0], balance: data[1] });
-            if (minValue == null || minValue > Number(data[1])) {
-                minValue = Number(data[1])
-            }
+    // データ収集
+    let balanceList = $("#monthly_balance li");
+    let chartData = [];
+    let minValue = null;
+    for (var i = 0; i < balanceList.length; i++) {
+        let data = balanceList[i].textContent.split(',');
+        let val = Number(data[1]);
+        chartData.push({ month: data[0], balance: val });
+        if (minValue == null || minValue > val) {
+            minValue = val;
         }
+    }
 
-        let categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
-        categoryAxis.dataFields.category = "month";
-        categoryAxis.renderer.minGridDistance = 1;
-        categoryAxis.renderer.labels.template.horizontalCenter = "right";
-        categoryAxis.renderer.labels.template.verticalCenter = "middle";
-        categoryAxis.renderer.labels.template.rotation = 270;
+    root = am5.Root.new(divId);
 
-        let valueAxis = new am4charts.ValueAxis();
-        if (minValue > 0) {
-            valueAxis.min = 0;
-        }
-        chart.yAxes.push(valueAxis);
+    // テーマ
+    root.setThemes([
+        am5themes_Animated.new(root),
+        am5themes_Kelly.new(root)
+    ]);
 
-        let series = chart.series.push(new am4charts.LineSeries());
-        series.stroke = am4core.color("#0f0");
-        series.strokeWidth = 3;
-        series.dataFields.valueY = "balance";
-        series.dataFields.categoryX = "month";
-        series.name = "残高"
+    let chart = root.container.children.push(am5xy.XYChart.new(root, {
+        panX: false,
+        panY: false,
+        wheelX: "none",
+        wheelY: "none",
+        layout: root.verticalLayout
+    }));
 
-        let bullet = series.bullets.push(new am4charts.Bullet());
-        bullet.fill = series.stroke;
-        bullet.tooltipText = "{categoryX}\n{valueY}円";
-        let circle = bullet.createChild(am4core.Circle);
-        circle.radius = 5;
-        circle.fill = series.stroke;
+    let xRenderer = am5xy.AxisRendererX.new(root, {
+        minGridDistance: 30
+    });
+    xRenderer.labels.template.setAll({
+        rotation: -90,
+        centerY: am5.p50,
+        centerX: am5.p100,
+        paddingRight: 15
     });
 
+    let xAxis = chart.xAxes.push(am5xy.CategoryAxis.new(root, {
+        categoryField: "month",
+        renderer: xRenderer
+    }));
+    xAxis.data.setAll(chartData);
+
+    let yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
+        min: (minValue > 0) ? 0 : undefined,
+        renderer: am5xy.AxisRendererY.new(root, {})
+    }));
+
+    let series = chart.series.push(am5xy.LineSeries.new(root, {
+        name: "残高",
+        xAxis: xAxis,
+        yAxis: yAxis,
+        valueYField: "balance",
+        categoryXField: "month",
+        stroke: am5.color("#0f0"),
+        tooltip: am5.Tooltip.new(root, {
+            labelText: "{categoryX}\n{valueY}円"
+        })
+    }));
+
+    series.strokes.template.setAll({
+        strokeWidth: 3
+    });
+
+    series.data.setAll(chartData);
+
+    series.bullets.push(function () {
+        return am5.Bullet.new(root, {
+            sprite: am5.Circle.new(root, {
+                radius: 5,
+                fill: am5.color("#0f0")
+            })
+        });
+    });
+
+    // アニメーション
+    series.appear(1000);
+    chart.appear(1000, 100);
 }
