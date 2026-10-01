@@ -127,7 +127,7 @@ class Add(PlaywrightBase):
         expect(self.page.locator('#s_day')).to_have_value('')
         expect(self.page.locator('#s_day')).to_have_attribute('placeholder', str(now.day))
         expect(self.page.locator('#s_price')).to_have_value('')
-        expect(self.page.locator('#s_price')).to_have_attribute('placeholder', '1000')
+        expect(self.page.locator('#s_price')).to_have_attribute('placeholder', '180')
         expect(self.page.locator('input[onclick*="Suicaチャージ"]')).to_have_value('Suicaチャージ')
 
         # 収入支出追加フォーム
@@ -399,7 +399,7 @@ class Add(PlaywrightBase):
         tds = rows.nth(1).locator('td')
         expect(tds.nth(0)).to_have_text(f'{now.year}/{str(now.month).zfill(2)}/05')
         expect(tds.nth(1)).to_have_text('Suicaチャージ')
-        expect(tds.nth(2)).to_have_text('1,000')
+        expect(tds.nth(2)).to_have_text('180')
         expect(tds.nth(3)).to_have_text('銀行')
         expect(tds.nth(4)).to_have_text('交通費')
 
@@ -418,7 +418,7 @@ class Add(PlaywrightBase):
         tds = rows.nth(1).locator('td')
         expect(tds.nth(0)).to_have_text(f'{now.year}/{str(now.month).zfill(2)}/{str(now.day).zfill(2)}')
         expect(tds.nth(1)).to_have_text('Suicaチャージ')
-        expect(tds.nth(2)).to_have_text('1,000')
+        expect(tds.nth(2)).to_have_text('180')
         expect(tds.nth(3)).to_have_text('銀行')
         expect(tds.nth(4)).to_have_text('交通費')
 
@@ -484,7 +484,7 @@ class Add(PlaywrightBase):
         tds = rows.nth(1).locator('td')
         expect(tds.nth(0)).to_have_text(f'{now.year}/{str(now.month).zfill(2)}/07')
         expect(tds.nth(1)).to_have_text('電車代')
-        expect(tds.nth(2)).to_have_text('1,000')
+        expect(tds.nth(2)).to_have_text('180')
         expect(tds.nth(3)).to_have_text('銀行')
         expect(tds.nth(4)).to_have_text('交通費')
 
@@ -503,7 +503,7 @@ class Add(PlaywrightBase):
         tds = rows.nth(1).locator('td')
         expect(tds.nth(0)).to_have_text(f'{now.year}/{str(now.month).zfill(2)}/{str(now.day).zfill(2)}')
         expect(tds.nth(1)).to_have_text('電車代')
-        expect(tds.nth(2)).to_have_text('1,000')
+        expect(tds.nth(2)).to_have_text('180')
         expect(tds.nth(3)).to_have_text('銀行')
         expect(tds.nth(4)).to_have_text('交通費')
 
