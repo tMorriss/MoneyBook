@@ -114,6 +114,9 @@ MoneyBook/
 │   ├── requirements_lint.txt  # コード品質チェック
 │   ├── requirements_e2e.txt   # e2eテスト（Playwright）
 │   └── requirements_dev.txt   # 開発ツール（tox等）
+├── docs/                        # ドキュメント
+│   ├── features/               # 機能ごとの仕様・説明
+│   └── plans/                  # 計画書
 ├── .github/                    # GitHub関連
 │   └── workflows/             # GitHub Actionsワークフロー
 ├── .vscode/                    # VSCode設定
@@ -185,44 +188,9 @@ MoneyBookの中核となるデータモデル：
 
 ---
 
-## 定期取引機能（Periodic）
+## 機能別ドキュメント
 
-### 概要
-
-家賃やサブスク支払い、貯金など、毎月定期的に発生する取引を一括登録する機能です。
-
-### 機能詳細
-
-#### 1. 一覧表示（`/periodic`）
-
-- 設定済みの定期取引を表形式で一覧表示（tbl-dataスタイル）
-- 年月を指定して「適用」ボタンで一括登録を実行
-- 年月のデフォルト値は来月（未入力時に使用、placeholderに表示）
-- 「編集」ボタンで編集画面に遷移
-
-#### 2. 編集画面（`/periodic/edit`）
-
-- 定期取引データの追加・編集・削除
-- tbl-commonスタイルを使用したテーブル形式で全項目を編集可能
-- 各入力フィールド:
-  - 日付・金額: type="text"、黄色背景（#fffacd）、spinnerなし
-  - 品目: type="text"、黄色背景
-  - select box: 緑色（#a1b91d）、オプションはhoverで緑（.select-greenクラス）
-- 「行を追加」ボタンで新規行を追加（中央配置）
-- 「削除」ボタンで行を削除（confirmダイアログなし、DOM上で即座に削除）
-- 「更新」ボタンで保存して一覧画面に戻る（form POST + リダイレクト）
-- 「キャンセル」ボタンで変更を破棄して一覧画面に戻る
-
-#### 3. 一括登録処理
-
-- 既存の`/api/add`エンドポイントを1件ずつ呼び出し
-- async/awaitとfor文による実装
-- 100ms間隔で順次登録
-- 日付の早いものから順に登録
-- 重複チェックなし（常に登録）
-- 月の日数を超える日付は最終日に自動調整
-- 成功時: `Success!`メッセージ（showResultMsg使用）
-- エラー時: `Error...`メッセージ（showResultMsg使用）
+個別機能の詳しい仕様や画面・処理の説明は `docs/features/` 配下に機能ごとのMarkdownファイルとして記載し、`AGENTS.md` には含めません。
 
 ---
 
