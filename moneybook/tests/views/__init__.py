@@ -3,6 +3,7 @@ from .add_intra_move_view_tests import *
 from .add_view_tests import *
 from .delete_api_view_tests import *
 from .edit_view_tests import *
+from .health_view_tests import *
 from .index_view_tests import *
 from .living_cost_mark_view_tests import *
 from .period_balance_view_tests import *

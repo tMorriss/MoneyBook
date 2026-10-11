@@ -4,6 +4,7 @@ from .custom_login_view import *
 from .delete_api_view import *
 from .edit_api_view import *
 from .edit_view import *
+from .health_view import *
 from .index_view import *
 from .living_cost_mark_edit_view import *
 from .living_cost_mark_view import *
