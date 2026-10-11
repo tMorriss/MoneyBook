@@ -5,7 +5,7 @@ from moneybook.views import (ActualCashApiView, AddApiView, AddIntraMoveApiView,
                              CheckedDateApiView, CreditCheckedDateApiView,
                              CustomLoginView, DataTableView, DeleteApiView,
                              EditApiView, EditView,
-                             IndexBalanceStatisticMiniView, IndexChartDataView,
+                             HealthView, IndexBalanceStatisticMiniView, IndexChartDataView,
                              IndexMonthView, IndexView, LivingCostMarkEditView,
                              LivingCostMarkView, NowBankApiView,
                              PeriodBalanceView, PeriodicEditView,
@@ -17,6 +17,7 @@ from moneybook.views import (ActualCashApiView, AddApiView, AddIntraMoveApiView,
 
 app_name = 'moneybook'
 urlpatterns = [
+    path('healthz', HealthView.as_view(), name='health'),
     path('', IndexView.as_view(), name='index'),
     path('<int:year>/<int:month>', IndexMonthView.as_view(), name='index_month'),
     path('_balance_statistic_mini', IndexBalanceStatisticMiniView.as_view(), name='balance_statistic_mini'),
