@@ -82,11 +82,16 @@ sudo -u "$PODMAN_USER" podman run \
 echo "[INFO] Enabling linger for $PODMAN_USER..."
 loginctl enable-linger "$PODMAN_USER" || true
 
-# Quadlet ユニットファイルの配置
+# Quadlet ユニットファイルの配置（プロジェクト用サブディレクトリに配置）
 USER_HOME=$(getent passwd "$PODMAN_USER" | cut -d: -f6)
-QUADLET_DIR="$USER_HOME/.config/containers/systemd"
+QUADLET_DIR="$USER_HOME/.config/containers/systemd/moneybook"
 echo "[INFO] Deploying Quadlet unit files to $QUADLET_DIR..."
 sudo -u "$PODMAN_USER" mkdir -p "$QUADLET_DIR"
+
+# ルート直下に旧ユニットファイルが存在する場合は削除
+sudo -u "$PODMAN_USER" rm -f "$USER_HOME/.config/containers/systemd/moneybook.pod" \
+  "$USER_HOME/.config/containers/systemd/moneybook-gunicorn.container" \
+  "$USER_HOME/.config/containers/systemd/moneybook-nginx.container" || true
 
 export BUILD_TAG=$BUILD_TAG
 envsubst '$BUILD_TAG $STATIC_VERSION' < build/quadlet/moneybook.pod.template | sudo -u "$PODMAN_USER" tee "$QUADLET_DIR/moneybook.pod" > /dev/null

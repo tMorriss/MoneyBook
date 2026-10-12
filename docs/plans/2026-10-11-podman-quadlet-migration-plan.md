@@ -21,7 +21,7 @@ Podman Pod を Podman Quadlet（systemd 管理）で運用するように移行�
    - `build/quadlet/moneybook-nginx.container.template`: Nginx コンテナ定義。`Pod=moneybook.pod`。
 
 2. **実行ユーザーと自動起動（Rootless + Linger）**:
-   - セキュリティと既存構成との親和性を重視し、一般ユーザー（`$PODMAN_USER`）配下の Rootless Quadlet (`~/.config/containers/systemd/`) で運用する。
+   - セキュリティと既存構成との親和性を重視し、一般ユーザー（`$PODMAN_USER`）配下の Rootless Quadlet (`~/.config/containers/systemd/moneybook/`) で運用する。
    - ホスト起動時にログインなしでユーザー systemd インスタンスおよび Pod が自動起動するよう、`loginctl enable-linger "$PODMAN_USER"` を有効化する。
    - コンテナ停止/障害時の再起動は、Quadlet ユニット内の `Restart=always`（`[Service]` セクション）で担保する。
 
@@ -33,7 +33,7 @@ Podman Pod を Podman Quadlet（systemd 管理）で運用するように移行�
 4. **デプロイスクリプト（`build/jenkins.sh`）の更新**:
    - 既存の `podman play kube` 処理を Quadlet のデプロイ処理へ置き換える。
    - Podman Secrets の設定/更新処理を追加。
-   - テンプレートから Quadlet ユニットファイルを生成し、`~/.config/containers/systemd/` へ配置。
+   - テンプレートから Quadlet ユニットファイルを生成し、`~/.config/containers/systemd/moneybook/` へ配置。
    - `loginctl enable-linger "$PODMAN_USER"` の実行確認。
    - `systemctl --user daemon-reload` および `systemctl --user restart moneybook-pod.service` により Quadlet サービスを起動・更新。
 

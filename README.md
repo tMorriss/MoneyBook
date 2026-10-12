@@ -6,7 +6,7 @@
 
 このアプリケーションはPodmanコンテナで実行されます。nginxとgunicornは同じPod内の別々のコンテナで実行されるサイドカーパターンを採用しています。
 
-Podおよびコンテナの管理には **Podman Quadlet**（systemd 連携）を使用しています。`build/quadlet/` 配下のテンプレートを元に生成された Quadlet ユニットファイルがユーザーの `~/.config/containers/systemd/` に配置され、systemd ユーザーサービス（`moneybook-pod.service`）として起動・管理されます。
+Podおよびコンテナの管理には **Podman Quadlet**（systemd 連携）を使用しています。`build/quadlet/` 配下のテンプレートを元に生成された Quadlet ユニットファイルがユーザーの `~/.config/containers/systemd/moneybook/` に配置され、systemd ユーザーサービス（`moneybook-pod.service`）として起動・管理されます。
 
 ホスト再起動時や障害発生時も `loginctl enable-linger` および systemd / Quadlet の `Restart=always` 設定により自動的に再起動します。
 
