@@ -96,11 +96,10 @@ envsubst '$BUILD_TAG $STATIC_VERSION' < build/quadlet/moneybook.pod.template | s
 envsubst '$BUILD_TAG $STATIC_VERSION' < build/quadlet/moneybook-gunicorn.container.template | sudo -u "$PODMAN_USER" tee "$QUADLET_DIR/moneybook-gunicorn.container"
 envsubst '$BUILD_TAG $STATIC_VERSION' < build/quadlet/moneybook-nginx.container.template | sudo -u "$PODMAN_USER" tee "$QUADLET_DIR/moneybook-nginx.container"
 
-# systemd ユーザーデーモンのリロードと Quadlet サービスの有効化・起動・再起動
+# systemd ユーザーデーモンのリロードと Quadlet サービスの再起動
 PODMAN_UID=$(id -u "$PODMAN_USER")
-echo "[INFO] Reloading systemd user daemon and enabling/restarting Quadlet services..."
+echo "[INFO] Reloading systemd user daemon and restarting Quadlet services..."
 sudo -u "$PODMAN_USER" XDG_RUNTIME_DIR="/run/user/$PODMAN_UID" systemctl --user daemon-reload
-sudo -u "$PODMAN_USER" XDG_RUNTIME_DIR="/run/user/$PODMAN_UID" systemctl --user enable moneybook-pod.service moneybook-gunicorn.service moneybook-nginx.service
 sudo -u "$PODMAN_USER" XDG_RUNTIME_DIR="/run/user/$PODMAN_UID" systemctl --user restart moneybook-pod.service
 
 # サービスの起動を待機
