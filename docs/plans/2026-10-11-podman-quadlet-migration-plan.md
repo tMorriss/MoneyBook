@@ -8,6 +8,7 @@ Podman Pod を Podman Quadlet（systemd 管理）で運用するように移行�
 ## 現状
 
 - `build/pod.yaml` に記載された Kubernetes 互換 YAML を元に、`jenkins.sh` から `podman play kube` を実行して Pod を起動している。
+- `jenkins.sh` で毎回 `podman pod stop` / `podman pod rm` して再作成している。
 - ホスト再起動時の自動起動設定（systemd 連携等）は未設定。
 - 環境変数は `jenkins.sh` の `envsubst` で `pod.yaml` に埋め込まれて展開されていた。
 
