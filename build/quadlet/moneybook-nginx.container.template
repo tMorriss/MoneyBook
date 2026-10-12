@@ -1,0 +1,14 @@
+[Unit]
+Description=MoneyBook Nginx Container
+After=network-online.target moneybook-gunicorn.service
+
+[Container]
+ContainerName=moneybook-nginx
+Image=localhost/moneybook_nginx:${BUILD_TAG}
+Pod=moneybook.pod
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target

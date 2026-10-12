@@ -6,11 +6,13 @@
 
 このアプリケーションはPodmanコンテナで実行されます。nginxとgunicornは同じPod内の別々のコンテナで実行されるサイドカーパターンを採用しています。
 
-Pod定義はKubernetes互換のYAML形式（`build/pod.yaml`）で管理されており、`podman play kube`コマンドで起動します。
+Podおよびコンテナの管理には **Podman Quadlet**（systemd 連携）を使用しています。`build/quadlet/` 配下のテンプレートを元に生成された Quadlet ユニットファイルがユーザーの `~/.config/containers/systemd/moneybook/` に配置され、systemd ユーザーサービス（`moneybook-pod.service`）として起動・管理されます。
+
+ホスト再起動時や障害発生時も `loginctl enable-linger` および systemd / Quadlet の `Restart=always` 設定により自動的に再起動します。
 
 ### 環境変数の設定
 
-以下の環境変数を設定する必要があります：
+デプロイ時（`build/jenkins.sh` 実行時）に以下の環境変数を指定します。データベース接続情報や Django シークレットキーなどの機密情報は **Podman Secrets** に安全に登録され、コンテナへ渡されます。
 
 - `PODMAN_USER`: Podmanを実行するユーザー名（必須）
 - `DB_NAME`: データベース名
@@ -19,6 +21,24 @@ Pod定義はKubernetes互換のYAML形式（`build/pod.yaml`）で管理され�
 - `DB_HOST`: データベースホスト
 - `HOST_NAME`: ホスト名（nginxのserver_nameとDjangoのALLOWED_HOSTSで使用）
 - `SECRET_KEY`: Djangoのシークレットキー
+
+### サービスの操作コマンド（ユーザー権限）
+
+```bash
+# サービスの状態確認
+systemctl --user status moneybook-pod.service
+
+# サービスの起動・再起動
+systemctl --user restart moneybook-pod.service
+
+# サービスの停止
+systemctl --user stop moneybook-pod.service
+
+# ログの確認
+journalctl --user -u moneybook-pod.service
+journalctl --user -u moneybook-gunicorn.service
+journalctl --user -u moneybook-nginx.service
+```
 
 ## lint 確認
 
