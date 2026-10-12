@@ -1,0 +1,21 @@
+[Unit]
+Description=MoneyBook Gunicorn Container
+After=network-online.target moneybook-pod.service
+
+[Container]
+ContainerName=moneybook-gunicorn
+Image=localhost/moneybook_gunicorn:${BUILD_TAG}
+Pod=moneybook.pod
+Secret=moneybook_db_name,type=env,target=DB_NAME
+Secret=moneybook_db_user,type=env,target=DB_USER
+Secret=moneybook_db_pass,type=env,target=DB_PASS
+Secret=moneybook_db_host,type=env,target=DB_HOST
+Secret=moneybook_host_name,type=env,target=HOST_NAME
+Secret=moneybook_secret_key,type=env,target=SECRET_KEY
+Environment=STATIC_VERSION=${STATIC_VERSION}
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target
