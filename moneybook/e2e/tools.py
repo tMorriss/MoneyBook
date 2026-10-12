@@ -54,7 +54,7 @@ class Tools(PlaywrightBase):
         self.page.click('input[value="計算"]')
 
         # 差額が更新されるのを待つ (内部的には $.post 完了後に更新される)
-        # 入力欄がカンマ区切りになるのを待つことでAJAX完了を確認
+        self._wait_for_ajax()
         expect(actual_cash_input).to_have_value('5,000')
 
         # ページをリロードして値が保持されていることを確認
