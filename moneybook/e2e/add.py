@@ -7,6 +7,7 @@ from playwright.sync_api import expect
 
 class Add(PlaywrightBase):
     def _assert_bank_charge_kyash(self, method):
+        expect(self.page.locator('#result_message')).to_be_visible()
         now = datetime.now()
         self._location(self.live_server_url + reverse('moneybook:index'))
         self._wait_for_ajax()
@@ -52,6 +53,7 @@ class Add(PlaywrightBase):
         expect(self.page.locator('input[name="direction"]').nth(1)).to_be_checked()
 
     def _assert_intra_move(self):
+        expect(self.page.locator('#result_message')).to_be_visible()
         now = datetime.now()
         self._location(self.live_server_url + reverse('moneybook:index'))
         self._wait_for_ajax()
@@ -317,6 +319,7 @@ class Add(PlaywrightBase):
         self.page.locator('input[name="m_before_method"] + label').nth(1).click()
         self.page.locator('input[name="m_after_method"] + label').nth(2).click()
         # 移動元のinputでEnter
+        self.page.locator('input[name="m_before_method"]').nth(1).focus()
         self.page.locator('input[name="m_before_method"]').nth(1).press('Enter')
 
         self._assert_intra_move()
@@ -331,6 +334,7 @@ class Add(PlaywrightBase):
         self.page.locator('input[name="m_before_method"] + label').nth(1).click()
         self.page.locator('input[name="m_after_method"] + label').nth(2).click()
         # 移動先のinputでEnter
+        self.page.locator('input[name="m_after_method"]').nth(2).focus()
         self.page.locator('input[name="m_after_method"]').nth(2).press('Enter')
 
         self._assert_intra_move()

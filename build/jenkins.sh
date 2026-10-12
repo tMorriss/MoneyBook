@@ -32,8 +32,6 @@ echo "[INFO] Pulling base images..."
 sudo -u "$PODMAN_USER" podman pull python:3.12-slim
 sudo -u "$PODMAN_USER" podman pull nginx:alpine
 
-# sed -i 's/DEBUG = False/DEBUG = True/' config/settings/prod.py
-
 # イメージのビルド
 echo "[INFO] Building images..."
 sudo -u "$PODMAN_USER" podman build \
@@ -46,35 +44,70 @@ sudo -u "$PODMAN_USER" podman build \
   -t moneybook_nginx:$BUILD_TAG \
   -f build/Dockerfile.nginx .
 
-# 既存のPodが存在する場合は停止・削除
-echo "[INFO] Stopping existing pod..."
-sudo -u "$PODMAN_USER" podman pod stop moneybook-pod || true
-sudo -u "$PODMAN_USER" podman pod rm moneybook-pod || true
+# Podman Secrets の更新関数
+create_or_update_secret() {
+  local name="$1"
+  local value="$2"
+  echo "[INFO] Updating Podman secret: $name"
+  if sudo -u "$PODMAN_USER" podman secret exists "$name"; then
+    sudo -u "$PODMAN_USER" podman secret rm "$name"
+  fi
+  echo -n "$value" | sudo -u "$PODMAN_USER" podman secret create "$name" -
+}
+
+# 秘匿情報を Podman Secrets に登録
+create_or_update_secret "moneybook_db_name" "$DB_NAME"
+create_or_update_secret "moneybook_db_user" "$DB_USER"
+create_or_update_secret "moneybook_db_pass" "$DB_PASS"
+create_or_update_secret "moneybook_db_host" "$DB_HOST"
+create_or_update_secret "moneybook_host_name" "$HOST_NAME"
+create_or_update_secret "moneybook_secret_key" "$SECRET_KEY"
 
 # DBマイグレーション実行
 echo "[INFO] Running DB migration..."
 sudo -u "$PODMAN_USER" podman run \
   --rm \
   --name moneybook_migration \
-  -e DB_NAME=$DB_NAME \
-  -e DB_USER=$DB_USER \
-  -e DB_PASS=$DB_PASS \
-  -e DB_HOST=$DB_HOST \
-  -e SECRET_KEY=$SECRET_KEY \
+  --secret moneybook_db_name,type=env,target=DB_NAME \
+  --secret moneybook_db_user,type=env,target=DB_USER \
+  --secret moneybook_db_pass,type=env,target=DB_PASS \
+  --secret moneybook_db_host,type=env,target=DB_HOST \
+  --secret moneybook_host_name,type=env,target=HOST_NAME \
+  --secret moneybook_secret_key,type=env,target=SECRET_KEY \
   -e STATIC_VERSION=$STATIC_VERSION \
   moneybook_gunicorn:$BUILD_TAG \
   python /MoneyBook/manage.py migrate --settings config.settings.prod
 
-# 環境変数を置換してPod定義YAMLを生成・起動
-echo "[INFO] Generating pod configuration with environment variables..."
+# Lingerの設定（ホスト再起動時の自動起動を許可）
+echo "[INFO] Enabling linger for $PODMAN_USER..."
+loginctl enable-linger "$PODMAN_USER" || true
+
+# Quadlet ユニットファイルの配置（プロジェクト用サブディレクトリに配置）
+USER_HOME=$(getent passwd "$PODMAN_USER" | cut -d: -f6)
+QUADLET_DIR="$USER_HOME/.config/containers/systemd/moneybook"
+echo "[INFO] Deploying Quadlet unit files to $QUADLET_DIR..."
+sudo -u "$PODMAN_USER" mkdir -p "$QUADLET_DIR"
+
+# 配置先サブディレクトリ内の既存ユニットファイルをクリーンアップ（旧ファイルの残留防止）
+sudo -u "$PODMAN_USER" rm -rf "${QUADLET_DIR:?}"/*
+
 export BUILD_TAG=$BUILD_TAG
-envsubst < build/pod.yaml | sudo -u "$PODMAN_USER" podman play kube -
+envsubst '$BUILD_TAG $STATIC_VERSION' < build/quadlet/moneybook.pod.template | sudo -u "$PODMAN_USER" tee "$QUADLET_DIR/moneybook.pod"
+envsubst '$BUILD_TAG $STATIC_VERSION' < build/quadlet/moneybook-gunicorn.container.template | sudo -u "$PODMAN_USER" tee "$QUADLET_DIR/moneybook-gunicorn.container"
+envsubst '$BUILD_TAG $STATIC_VERSION' < build/quadlet/moneybook-nginx.container.template | sudo -u "$PODMAN_USER" tee "$QUADLET_DIR/moneybook-nginx.container"
+
+# systemd ユーザーデーモンのリロードと Quadlet サービスの有効化・起動・再起動
+PODMAN_UID=$(id -u "$PODMAN_USER")
+echo "[INFO] Reloading systemd user daemon and enabling/restarting Quadlet services..."
+sudo -u "$PODMAN_USER" XDG_RUNTIME_DIR="/run/user/$PODMAN_UID" systemctl --user daemon-reload
+sudo -u "$PODMAN_USER" XDG_RUNTIME_DIR="/run/user/$PODMAN_UID" systemctl --user enable moneybook-pod.service moneybook-gunicorn.service moneybook-nginx.service
+sudo -u "$PODMAN_USER" XDG_RUNTIME_DIR="/run/user/$PODMAN_UID" systemctl --user restart moneybook-pod.service
 
 # サービスの起動を待機
 echo "[INFO] Waiting for services to be ready..."
 sleep 5
 
-# PodとコンテナのステータスをCLI表示
+# Podとコンテナのステータスを表示
 echo "[INFO] Pod status:"
 sudo -u "$PODMAN_USER" podman pod ps
 
@@ -83,7 +116,6 @@ sudo -u "$PODMAN_USER" podman ps --filter pod=moneybook-pod
 
 # 古いイメージの削除（moneybook関係のみ）
 echo "[INFO] Cleaning up old moneybook images..."
-# 現在のビルドタグ以外のmoneybookイメージを削除
 sudo -u "$PODMAN_USER" podman images --filter "reference=localhost/moneybook_gunicorn" --format "{{.Tag}}" | \
   grep -v "^$BUILD_TAG$" | \
   xargs -r -I {} sudo -u "$PODMAN_USER" podman rmi localhost/moneybook_gunicorn:{} || true
