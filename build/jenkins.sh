@@ -88,15 +88,13 @@ QUADLET_DIR="$USER_HOME/.config/containers/systemd/moneybook"
 echo "[INFO] Deploying Quadlet unit files to $QUADLET_DIR..."
 sudo -u "$PODMAN_USER" mkdir -p "$QUADLET_DIR"
 
-# ルート直下に旧ユニットファイルが存在する場合は削除
-sudo -u "$PODMAN_USER" rm -f "$USER_HOME/.config/containers/systemd/moneybook.pod" \
-  "$USER_HOME/.config/containers/systemd/moneybook-gunicorn.container" \
-  "$USER_HOME/.config/containers/systemd/moneybook-nginx.container" || true
+# 配置先サブディレクトリ内の既存ユニットファイルをクリーンアップ（旧ファイルの残留防止）
+sudo -u "$PODMAN_USER" rm -rf "${QUADLET_DIR:?}"/*
 
 export BUILD_TAG=$BUILD_TAG
-envsubst '$BUILD_TAG $STATIC_VERSION' < build/quadlet/moneybook.pod.template | sudo -u "$PODMAN_USER" tee "$QUADLET_DIR/moneybook.pod" > /dev/null
-envsubst '$BUILD_TAG $STATIC_VERSION' < build/quadlet/moneybook-gunicorn.container.template | sudo -u "$PODMAN_USER" tee "$QUADLET_DIR/moneybook-gunicorn.container" > /dev/null
-envsubst '$BUILD_TAG $STATIC_VERSION' < build/quadlet/moneybook-nginx.container.template | sudo -u "$PODMAN_USER" tee "$QUADLET_DIR/moneybook-nginx.container" > /dev/null
+envsubst '$BUILD_TAG $STATIC_VERSION' < build/quadlet/moneybook.pod.template | sudo -u "$PODMAN_USER" tee "$QUADLET_DIR/moneybook.pod"
+envsubst '$BUILD_TAG $STATIC_VERSION' < build/quadlet/moneybook-gunicorn.container.template | sudo -u "$PODMAN_USER" tee "$QUADLET_DIR/moneybook-gunicorn.container"
+envsubst '$BUILD_TAG $STATIC_VERSION' < build/quadlet/moneybook-nginx.container.template | sudo -u "$PODMAN_USER" tee "$QUADLET_DIR/moneybook-nginx.container"
 
 # systemd ユーザーデーモンのリロードと Quadlet サービスの有効化・起動・再起動
 PODMAN_UID=$(id -u "$PODMAN_USER")
