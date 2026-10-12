@@ -122,4 +122,8 @@ sudo -u "$PODMAN_USER" podman images --filter "reference=localhost/moneybook_ngi
   grep -v "^$BUILD_TAG$" | \
   xargs -r -I {} sudo -u "$PODMAN_USER" podman rmi localhost/moneybook_nginx:{} || true
 
+# 未使用イメージの削除
+echo "[INFO] Pruning unused images..."
+sudo -u "$PODMAN_USER" podman image prune -f || true
+
 echo "[INFO] done."
