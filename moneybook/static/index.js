@@ -194,54 +194,78 @@ function updateSuccess() {
     showResultMsg("Success!", empty);
 }
 
+let root = null;
 function drawChartContainer() {
-    am4core.ready(function () {
-        // テーマ
-        am4core.useTheme(am4themes_animated);
-        am4core.useTheme(am4themes_kelly);
+    if (root) {
+        root.dispose();
+    }
 
-        var chart = am4core.create("chart_container", am4charts.PieChart);
+    // データ収集
+    const chartDataLi = $("#chart_data li");
+    const data = [];
+    let dataSum = 0;
+    for (var i = 0; i < chartDataLi.length; i++) {
+        const item = chartDataLi[i].textContent.split(',');
+        const value = Number(item[1]);
+        data.push({ category: item[0], value: value });
+        dataSum += value;
+    }
 
-        // データ収集
-        const chartData = $("#chart_data li");
-        chart.data = [];
-        dataSum = 0;
-        for (var i = 0; i < chartData.length; i++) {
-            data = chartData[i].textContent.split(',');
-            chart.data.push({ category: data[0], value: data[1] });
-            dataSum += Number(data[1]);
-        }
+    // データが無いときは描画しない
+    if (dataSum == 0) {
+        return;
+    }
 
-        // データが無いときは描画しない
-        if (dataSum == 0) {
-            return;
-        }
+    root = am5.Root.new("chart_container");
 
-        chart.radius = am4core.percent(60);
-        chart.innerRadius = am4core.percent(30);
+    // テーマ
+    root.setThemes([
+        am5themes_Animated.new(root),
+        am5themes_Kelly.new(root)
+    ]);
 
-        // Series設定
-        var pieSeries = chart.series.push(new am4charts.PieSeries());
-        pieSeries.dataFields.value = "value";
-        pieSeries.dataFields.category = "category";
-        pieSeries.slices.template.strokeWidth = 0;
-        pieSeries.labels.template.text = "{category}\n{value.value}円";
-        pieSeries.slices.template.tooltipText = "{category}: {value.value}円 ({value.percent.formatNumber('#.')}%)";
+    var chart = root.container.children.push(
+        am5percent.PieChart.new(root, {
+            radius: am5.percent(60),
+            innerRadius: am5.percent(30)
+        })
+    );
 
-        // アニメーションの開始設定
-        pieSeries.hiddenState.properties.opacity = 1;
-        pieSeries.hiddenState.properties.endAngle = -90;
-        pieSeries.hiddenState.properties.startAngle = -90;
+    // Series設定
+    var series = chart.series.push(
+        am5percent.PieSeries.new(root, {
+            valueField: "value",
+            categoryField: "category",
+            alignLabels: false
+        })
+    );
 
-        var label = pieSeries.createChild(am4core.Label);
-        label.text = "支出内訳";
-        label.horizontalCenter = "middle";
-        label.verticalCenter = "middle";
-        label.fontSize = "1.7vw";
-
-        // スマホのとき
-        if ($('#is_pc').css("visibility") == 'hidden') {
-            label.fontSize = "7vw";
-        }
+    series.slices.template.setAll({
+        strokeWidth: 0,
+        tooltipText: "{category}: {value}円 ({valuePercentTotal.formatNumber('#.')}%)"
     });
+
+    series.labels.template.setAll({
+        text: "{category}\n{value}円",
+        textType: "circular",
+        centerX: am5.percent(100)
+    });
+
+    series.data.setAll(data);
+
+    // アニメーション
+    series.appear(1000, 100);
+
+    var label = chart.seriesContainer.children.push(am5.Label.new(root, {
+        text: "支出内訳",
+        fontSize: "1.7vw",
+        centerX: am5.percent(50),
+        centerY: am5.percent(50),
+        populateText: true
+    }));
+
+    // スマホのとき
+    if ($('#is_pc').css("visibility") == 'hidden') {
+        label.set("fontSize", "7vw");
+    }
 }
