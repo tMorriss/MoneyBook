@@ -93,11 +93,6 @@ envsubst '$BUILD_TAG $STATIC_VERSION' < build/quadlet/moneybook.pod.template | s
 envsubst '$BUILD_TAG $STATIC_VERSION' < build/quadlet/moneybook-gunicorn.container.template | sudo -u "$PODMAN_USER" tee "$QUADLET_DIR/moneybook-gunicorn.container" > /dev/null
 envsubst '$BUILD_TAG $STATIC_VERSION' < build/quadlet/moneybook-nginx.container.template | sudo -u "$PODMAN_USER" tee "$QUADLET_DIR/moneybook-nginx.container" > /dev/null
 
-# 既存の非Quadlet Podが存在する場合は停止・削除
-echo "[INFO] Stopping non-Quadlet legacy pod if running..."
-sudo -u "$PODMAN_USER" podman pod stop moneybook-pod || true
-sudo -u "$PODMAN_USER" podman pod rm moneybook-pod || true
-
 # systemd ユーザーデーモンのリロードと Quadlet サービスの起動・再起動
 PODMAN_UID=$(id -u "$PODMAN_USER")
 echo "[INFO] Reloading systemd user daemon and restarting Quadlet services..."
