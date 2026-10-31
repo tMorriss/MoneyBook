@@ -13,10 +13,10 @@ if grep -qiE "\\[(skip ci|ci skip)\\]" <<< "$COMMIT_MESSAGE"; then
 fi
 
 # 必須環境変数のチェック
-for VAR in PODMAN_USER DB_NAME DB_USER DB_PASS DB_HOST HOST_NAME SECRET_KEY; do
+for VAR in DB_NAME DB_USER DB_PASS DB_HOST HOST_NAME SECRET_KEY; do
   if [ -z "${!VAR:-}" ]; then
     echo "[ERROR] Required environment variables are not set."
-    echo "Please set: PODMAN_USER, DB_NAME, DB_USER, DB_PASS, DB_HOST, HOST_NAME, SECRET_KEY"
+    echo "Please set: DB_NAME, DB_USER, DB_PASS, DB_HOST, HOST_NAME, SECRET_KEY"
     exit 1
   fi
 done
@@ -29,16 +29,16 @@ echo "[INFO] Static version: $STATIC_VERSION"
 
 # ベースイメージのpull
 echo "[INFO] Pulling base images..."
-sudo -u "$PODMAN_USER" podman pull python:3.12-slim
-sudo -u "$PODMAN_USER" podman pull nginx:alpine
+podman pull python:3.12-slim
+podman pull nginx:alpine
 
 # イメージのビルド
 echo "[INFO] Building images..."
-sudo -u "$PODMAN_USER" podman build \
+podman build \
   --build-arg STATIC_VERSION=$STATIC_VERSION \
   -t moneybook_gunicorn:$BUILD_TAG \
   -f build/Dockerfile.gunicorn .
-sudo -u "$PODMAN_USER" podman build \
+podman build \
   --build-arg STATIC_VERSION=$STATIC_VERSION \
   --build-arg GUNICORN_IMAGE=moneybook_gunicorn:$BUILD_TAG \
   -t moneybook_nginx:$BUILD_TAG \
@@ -49,10 +49,10 @@ create_or_update_secret() {
   local name="$1"
   local value="$2"
   echo "[INFO] Updating Podman secret: $name"
-  if sudo -u "$PODMAN_USER" podman secret exists "$name"; then
-    sudo -u "$PODMAN_USER" podman secret rm "$name"
+  if podman secret exists "$name"; then
+    podman secret rm "$name"
   fi
-  echo -n "$value" | sudo -u "$PODMAN_USER" podman secret create "$name" -
+  echo -n "$value" | podman secret create "$name" -
 }
 
 # 秘匿情報を Podman Secrets に登録
@@ -65,7 +65,7 @@ create_or_update_secret "moneybook_secret_key" "$SECRET_KEY"
 
 # DBマイグレーション実行
 echo "[INFO] Running DB migration..."
-sudo -u "$PODMAN_USER" podman run \
+podman run \
   --rm \
   --name moneybook_migration \
   --secret moneybook_db_name,type=env,target=DB_NAME \
@@ -79,28 +79,29 @@ sudo -u "$PODMAN_USER" podman run \
   python /MoneyBook/manage.py migrate --settings config.settings.prod
 
 # Lingerの設定（ホスト再起動時の自動起動を許可）
-echo "[INFO] Enabling linger for $PODMAN_USER..."
-loginctl enable-linger "$PODMAN_USER" || true
+SCRIPT_USER=$(id -un)
+echo "[INFO] Enabling linger for $SCRIPT_USER..."
+loginctl enable-linger "$SCRIPT_USER" || true
 
 # Quadlet ユニットファイルの配置（プロジェクト用サブディレクトリに配置）
-USER_HOME=$(getent passwd "$PODMAN_USER" | cut -d: -f6)
-QUADLET_DIR="$USER_HOME/.config/containers/systemd/moneybook"
+QUADLET_DIR="$HOME/.config/containers/systemd/moneybook"
 echo "[INFO] Deploying Quadlet unit files to $QUADLET_DIR..."
-sudo -u "$PODMAN_USER" mkdir -p "$QUADLET_DIR"
+mkdir -p "$QUADLET_DIR"
 
 # 配置先サブディレクトリ内の既存ユニットファイルをクリーンアップ（旧ファイルの残留防止）
-sudo -u "$PODMAN_USER" rm -rf "${QUADLET_DIR:?}"/*
+rm -rf "${QUADLET_DIR:?}"/*
 
 export BUILD_TAG=$BUILD_TAG
-envsubst '$BUILD_TAG $STATIC_VERSION' < build/quadlet/moneybook.pod.template | sudo -u "$PODMAN_USER" tee "$QUADLET_DIR/moneybook.pod"
-envsubst '$BUILD_TAG $STATIC_VERSION' < build/quadlet/moneybook-gunicorn.container.template | sudo -u "$PODMAN_USER" tee "$QUADLET_DIR/moneybook-gunicorn.container"
-envsubst '$BUILD_TAG $STATIC_VERSION' < build/quadlet/moneybook-nginx.container.template | sudo -u "$PODMAN_USER" tee "$QUADLET_DIR/moneybook-nginx.container"
+envsubst '$BUILD_TAG $STATIC_VERSION' < build/quadlet/moneybook.pod.template > "$QUADLET_DIR/moneybook.pod"
+envsubst '$BUILD_TAG $STATIC_VERSION' < build/quadlet/moneybook-gunicorn.container.template > "$QUADLET_DIR/moneybook-gunicorn.container"
+envsubst '$BUILD_TAG $STATIC_VERSION' < build/quadlet/moneybook-nginx.container.template > "$QUADLET_DIR/moneybook-nginx.container"
 
 # systemd ユーザーデーモンのリロードと Quadlet サービスの再起動
-PODMAN_UID=$(id -u "$PODMAN_USER")
+SCRIPT_UID=$(id -u)
+export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$SCRIPT_UID}"
 echo "[INFO] Reloading systemd user daemon and restarting Quadlet services..."
-sudo -u "$PODMAN_USER" XDG_RUNTIME_DIR="/run/user/$PODMAN_UID" systemctl --user daemon-reload
-sudo -u "$PODMAN_USER" XDG_RUNTIME_DIR="/run/user/$PODMAN_UID" systemctl --user restart moneybook-pod.service
+systemctl --user daemon-reload
+systemctl --user restart moneybook-pod.service
 
 # サービスの起動を待機
 echo "[INFO] Waiting for services to be ready..."
@@ -108,22 +109,22 @@ sleep 5
 
 # Podとコンテナのステータスを表示
 echo "[INFO] Pod status:"
-sudo -u "$PODMAN_USER" podman pod ps
+podman pod ps
 
 echo "[INFO] Container status:"
-sudo -u "$PODMAN_USER" podman ps --filter pod=moneybook-pod
+podman ps --filter pod=moneybook-pod
 
 # 古いイメージの削除（moneybook関係のみ）
 echo "[INFO] Cleaning up old moneybook images..."
-sudo -u "$PODMAN_USER" podman images --filter "reference=localhost/moneybook_gunicorn" --format "{{.Tag}}" | \
+podman images --filter "reference=localhost/moneybook_gunicorn" --format "{{.Tag}}" | \
   grep -v "^$BUILD_TAG$" | \
-  xargs -r -I {} sudo -u "$PODMAN_USER" podman rmi localhost/moneybook_gunicorn:{} || true
-sudo -u "$PODMAN_USER" podman images --filter "reference=localhost/moneybook_nginx" --format "{{.Tag}}" | \
+  xargs -r -I {} podman rmi localhost/moneybook_gunicorn:{} || true
+podman images --filter "reference=localhost/moneybook_nginx" --format "{{.Tag}}" | \
   grep -v "^$BUILD_TAG$" | \
-  xargs -r -I {} sudo -u "$PODMAN_USER" podman rmi localhost/moneybook_nginx:{} || true
+  xargs -r -I {} podman rmi localhost/moneybook_nginx:{} || true
 
 # 未使用イメージの削除
 echo "[INFO] Pruning unused images..."
-sudo -u "$PODMAN_USER" podman image prune -f || true
+podman image prune -f || true
 
 echo "[INFO] done."
