@@ -8,7 +8,7 @@ FROM ${GUNICORN_IMAGE} AS collector
 RUN python /MoneyBook/manage.py collectstatic --noinput --settings config.settings.dev
 
 # Stage 2: nginx
-FROM nginx:alpine
+FROM nginx:stable-alpine
 
 # Build arg for static version
 ARG STATIC_VERSION
