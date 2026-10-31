@@ -78,11 +78,6 @@ podman run \
   moneybook_gunicorn:$BUILD_TAG \
   python /MoneyBook/manage.py migrate --settings config.settings.prod
 
-# Lingerの設定（ホスト再起動時の自動起動を許可）
-SCRIPT_USER=$(id -un)
-echo "[INFO] Enabling linger for $SCRIPT_USER..."
-loginctl enable-linger "$SCRIPT_USER" || true
-
 # Quadlet ユニットファイルの配置（プロジェクト用サブディレクトリに配置）
 QUADLET_DIR="$HOME/.config/containers/systemd/moneybook"
 echo "[INFO] Deploying Quadlet unit files to $QUADLET_DIR..."
