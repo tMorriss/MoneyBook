@@ -40,11 +40,11 @@
 
 ### バックエンド
 
-- **Python 3.14**: プログラミング言語
-- **Django 6.0.5+**: Webフレームワーク
+- **Python 3.15**: プログラミング言語
+- **Django 6.1.3+**: Webフレームワーク
 - **MySQL**: データベース
-- **mysqlclient**: MySQLデータベースアダプター
-- **Gunicorn**: WSGIサーバー
+- **mysqlclient 2.3.1+**: MySQLデータベースアダプター
+- **Gunicorn 27.0.1+**: WSGIサーバー
 
 ### フロントエンド
 
@@ -60,7 +60,7 @@
   - **flake8-quotes**: クオートスタイルチェック（シングルクオート強制）
   - **flake8-import-order**: インポート順序チェック
   - **pep8-naming**: 命名規則チェック
-- **python-dateutil**: 日付処理ユーティリティ
+- **python-dateutil 4.0.0+**: 日付処理ユーティリティ
 
 ### DevOps
 

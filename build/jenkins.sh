@@ -29,7 +29,7 @@ echo "[INFO] Static version: $STATIC_VERSION"
 
 # ベースイメージのpull
 echo "[INFO] Pulling base images..."
-podman pull python:3.14-slim
+podman pull python:3.15-slim
 podman pull nginx:alpine
 
 # イメージのビルド
