@@ -6,10 +6,10 @@
 {% block header %}
 <link rel="stylesheet" type="text/css" href="{% static 'index.css' %}">
 <script type="text/javascript" src="{% static 'index.js' %}"></script>
-<script src="https://cdn.amcharts.com/lib/4/core.js" crossorigin="anonymous"></script>
-<script src="https://cdn.amcharts.com/lib/4/charts.js" crossorigin="anonymous"></script>
-<script src="https://cdn.amcharts.com/lib/4/themes/animated.js" crossorigin="anonymous"></script>
-<script src="https://cdn.amcharts.com/lib/4/themes/kelly.js" crossorigin="anonymous"></script>
+<script src="https://cdn.amcharts.com/lib/5/index.js" crossorigin="anonymous"></script>
+<script src="https://cdn.amcharts.com/lib/5/percent.js" crossorigin="anonymous"></script>
+<script src="https://cdn.amcharts.com/lib/5/themes/Animated.js" crossorigin="anonymous"></script>
+<script src="https://cdn.amcharts.com/lib/5/themes/Kelly.js" crossorigin="anonymous"></script>
 <script type="text/javascript">
     index_url = "{% url 'moneybook:index' %}";
     add_api_url = "{% url 'moneybook:add_api' %}";
