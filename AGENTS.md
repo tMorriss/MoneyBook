@@ -40,8 +40,8 @@
 
 ### バックエンド
 
-- **Python 3.13**: プログラミング言語
-- **Django 4.2.27+**: Webフレームワーク
+- **Python 3.14**: プログラミング言語
+- **Django 6.0.5+**: Webフレームワーク
 - **MySQL**: データベース
 - **mysqlclient**: MySQLデータベースアダプター
 - **Gunicorn**: WSGIサーバー
